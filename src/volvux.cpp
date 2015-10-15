@@ -25,7 +25,8 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
-#include "MainWindow.h"
+#include "VolvuxMainWindow.h"
+
 #ifdef WIN32
 #include <windows.h>
 void EnableCrashingOnCrashes()
@@ -61,8 +62,8 @@ int main(int argc, char *argv[])
 	EnableCrashingOnCrashes();
 #endif
     QApplication app(argc, argv);
-    MainWindow window;
-    window.resize(window.sizeHint());
-    window.show();
+    VolvuxMainWindow window;
+    //window.resize(window.sizeHint());
+    //window.show();
     return app.exec();
 }

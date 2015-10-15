@@ -27,8 +27,8 @@
 #include <QListWidget>
 #include <QtGui>
 #include <QSlider>
-#include "MainWindow.h"
-#include "ui_MainWindow.h"
+#include "VolvuxMainWindow.h"
+#include "ui_VolvuxMainWindow.h"
 
 #ifdef COMPILE_GLFW
 #include <GLFW/glfw3.h>
@@ -41,12 +41,12 @@
 #endif
 
 /**
- * @brief MainWindow::MainWindow
+ * @brief VolvuxMainWindow::MainWindow
  * @param parent
  */
-MainWindow::MainWindow(QWidget *parent ):
+VolvuxMainWindow::VolvuxMainWindow(QWidget *parent ):
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::VolvuxMainWindow)
 {
     ui->setupUi(this);
     this->initializeTabSceneQConnections();
@@ -83,9 +83,9 @@ MainWindow::MainWindow(QWidget *parent ):
 }
 
 /**
- * @brief MainWindow::saveSettings
+ * @brief VolvuxMainWindow::saveSettings
  */
-void MainWindow::saveSettings()
+void VolvuxMainWindow::saveSettings()
 {
     QSettings settings("CNCSVision","QtVolumetrixALPExperiment");
 
@@ -135,9 +135,9 @@ void MainWindow::saveSettings()
 }
 
 /**
- * @brief MainWindow::loadSettings
+ * @brief VolvuxMainWindow::loadSettings
  */
-void MainWindow::loadSettings()
+void VolvuxMainWindow::loadSettings()
 {
 
     QSettings settings("CNCSVision","QtVolumetrixALPExperiment");
@@ -188,9 +188,9 @@ void MainWindow::loadSettings()
 }
 
 /**
- * @brief MainWindow::initializeTabCameraCalibrationQConnections
+ * @brief VolvuxMainWindow::initializeTabCameraCalibrationQConnections
  */
-void MainWindow::initializeTabCameraCalibrationQConnections()
+void VolvuxMainWindow::initializeTabCameraCalibrationQConnections()
 {
     QObject::connect(this->ui->doubleSpinBoxCameraFOV,SIGNAL(valueChanged(double)),this,SLOT(onCameraFOVChanged(double)));
     QObject::connect(this->ui->doubleSpinboxCameraZNear,SIGNAL(valueChanged(double)),this,SLOT(onCameraZNearChanged(double)));
@@ -199,9 +199,9 @@ void MainWindow::initializeTabCameraCalibrationQConnections()
 }
 
 /**
- * @brief MainWindow::initializeTabProjectorQConnections
+ * @brief VolvuxMainWindow::initializeTabProjectorQConnections
  */
-void MainWindow::initializeTabProjectorQConnections()
+void VolvuxMainWindow::initializeTabProjectorQConnections()
 {
     // Projector tab connections
     QObject::connect(this->ui->pushButtonProjectorStartProjection,SIGNAL(clicked()),this,SLOT(onPushButtonProjectorStartProjectionClicked()));
@@ -228,9 +228,9 @@ void MainWindow::initializeTabProjectorQConnections()
 }
 
 /**
- * @brief MainWindow::initializeTabSceneQConnections
+ * @brief VolvuxMainWindow::initializeTabSceneQConnections
  */
-void MainWindow::initializeTabSceneQConnections()
+void VolvuxMainWindow::initializeTabSceneQConnections()
 {
     // Scene tab connections
     QObject::connect(this->ui->doubleSpinBoxOffsetX,SIGNAL(valueChanged(double)),this,SLOT(onDoubleSpinboxOffsetXChanged(double)));
@@ -269,9 +269,9 @@ void MainWindow::initializeTabSceneQConnections()
 }
 
 /**
- * @brief MainWindow::initializeTabMotorQConnections
+ * @brief VolvuxMainWindow::initializeTabMotorQConnections
  */
-void MainWindow::initializeTabMotorQConnections()
+void VolvuxMainWindow::initializeTabMotorQConnections()
 {
     QObject::connect(this->ui->pushButtonMotorStart,SIGNAL(clicked(bool)),this,SLOT(onPushButtonMotorStartClicked()));
     QObject::connect(this->ui->pushButtonMotorStop,SIGNAL(clicked(bool)),this,SLOT(onPushButtonMotorStopClicked()));
@@ -280,9 +280,9 @@ void MainWindow::initializeTabMotorQConnections()
 }
 
 /**
- * @brief MainWindow::initializeTabExperimentQConnections
+ * @brief VolvuxMainWindow::initializeTabExperimentQConnections
  */
-void MainWindow::initializeTabExperimentQConnections()
+void VolvuxMainWindow::initializeTabExperimentQConnections()
 {
     // Experiment connections
     QObject::connect(this->ui->pushButtonStartExperiment,SIGNAL(clicked()),this,SLOT(onPushButtonExperimentStartClicked()));
@@ -293,9 +293,9 @@ void MainWindow::initializeTabExperimentQConnections()
 }
 
 /**
- * @brief MainWindow::onPushButtonMotorInitializeClicked
+ * @brief VolvuxMainWindow::onPushButtonMotorInitializeClicked
  */
-void MainWindow::onPushButtonMotorInitializeClicked()
+void VolvuxMainWindow::onPushButtonMotorInitializeClicked()
 {
 #if defined (SMI_SUPPORT) && (WIN32)
     CoInitialize(NULL);
@@ -378,9 +378,9 @@ void MainWindow::onPushButtonMotorInitializeClicked()
 }
 
 /**
- * @brief MainWindow::onPushButtonMotorStartClicked
+ * @brief VolvuxMainWindow::onPushButtonMotorStartClicked
  */
-void MainWindow::onPushButtonMotorStartClicked()
+void VolvuxMainWindow::onPushButtonMotorStartClicked()
 {
 #if defined (SMI_SUPPORT) && (WIN32)
     cerr << "[MainWindow] Starting motor" << endl;
@@ -399,9 +399,9 @@ void MainWindow::onPushButtonMotorStartClicked()
 }
 
 /**
- * @brief MainWindow::onPushButtonMotorStopClicked
+ * @brief VolvuxMainWindow::onPushButtonMotorStopClicked
  */
-void MainWindow::onPushButtonMotorStopClicked()
+void VolvuxMainWindow::onPushButtonMotorStopClicked()
 {
 #if defined (SMI_SUPPORT) && (WIN32)
     cerr << "[MainWindow] Stopping motor" << endl;
@@ -410,9 +410,9 @@ void MainWindow::onPushButtonMotorStopClicked()
 }
 
 /**
-* @brief MainWindow::onSpinBoxFlickerFrequencyChanged
+* @brief VolvuxMainWindow::onSpinBoxFlickerFrequencyChanged
 **/
-void MainWindow::onSpinBoxFlickerFrequencyChanged(double flickerFrequency)
+void VolvuxMainWindow::onSpinBoxFlickerFrequencyChanged(double flickerFrequency)
 {
     QComboBox *c = this->ui->comboBoxMotorUnitsToRevMin;
     // The persistence of the stimulus on the eye in microseconds
@@ -456,7 +456,7 @@ void MainWindow::onSpinBoxFlickerFrequencyChanged(double flickerFrequency)
     }
 }
 
-void MainWindow::startRotation(int speed)
+void VolvuxMainWindow::startRotation(int speed)
 {
 #if defined (SMI_SUPPORT) && (WIN32)
     try
@@ -493,10 +493,10 @@ void MainWindow::startRotation(int speed)
 #endif
 }
 /**
- * @brief MainWindow::onRandomizationMethodChanged
+ * @brief VolvuxMainWindow::onRandomizationMethodChanged
  * @param randomVal
  */
-void MainWindow::onRandomizationMethodChanged(int randomVal)
+void VolvuxMainWindow::onRandomizationMethodChanged(int randomVal)
 {
     if (randomVal == -6)
     {
@@ -509,9 +509,9 @@ void MainWindow::onRandomizationMethodChanged(int randomVal)
 }
 
 /**
- * @brief MainWindow::onPushButtonLoadBinVoxPressed
+ * @brief VolvuxMainWindow::onPushButtonLoadBinVoxPressed
  */
-void MainWindow::onPushButtonLoadBinVoxPressed()
+void VolvuxMainWindow::onPushButtonLoadBinVoxPressed()
 {
     QString binvoxfile = QFileDialog::getOpenFileName(this,"Select 2D points file",QDir::currentPath(),"*.binvox");
     if (binvoxfile.isEmpty())
@@ -527,28 +527,28 @@ void MainWindow::onPushButtonLoadBinVoxPressed()
 }
 
 /**
- * @brief MainWindow::onCameraFOVChanged
+ * @brief VolvuxMainWindow::onCameraFOVChanged
  * @param val
  */
-void MainWindow::onCameraFOVChanged(double val)
+void VolvuxMainWindow::onCameraFOVChanged(double val)
 {
     this->ui->volumetricGLWidget->setCameraParameters(val,ui->doubleSpinboxCameraZNear->value(),ui->doubleSpinboxCameraZFar->value());
 }
 
 /**
- * @brief MainWindow::onCameraZNearChanged
+ * @brief VolvuxMainWindow::onCameraZNearChanged
  * @param val
  */
-void MainWindow::onCameraZNearChanged(double val)
+void VolvuxMainWindow::onCameraZNearChanged(double val)
 {
     this->ui->volumetricGLWidget->setCameraParameters(ui->doubleSpinBoxCameraFOV->value(),val,ui->doubleSpinboxCameraZFar->value());
 }
 
 /**
- * @brief MainWindow::onCameraZFarChanged
+ * @brief VolvuxMainWindow::onCameraZFarChanged
  * @param val
  */
-void MainWindow::onCameraZFarChanged(double val)
+void VolvuxMainWindow::onCameraZFarChanged(double val)
 {
     this->ui->volumetricGLWidget->setCameraParameters(ui->doubleSpinBoxCameraFOV->value(),ui->doubleSpinboxCameraZNear->value(),val);
 }
@@ -557,7 +557,7 @@ void MainWindow::onCameraZFarChanged(double val)
 * @brief onSpinBoxProjectorMicrosecondsPerFrameChanged
 **/
 
-void MainWindow::onSpinBoxProjectorMicrosecondsPerFrameChanged(int value)
+void VolvuxMainWindow::onSpinBoxProjectorMicrosecondsPerFrameChanged(int value)
 {
     this->ui->spinBoxProjectorMicrosecondsPerRound->setValue( std::ceil( (double)value*this->ui->spinBoxProjectorNSlices->value()) );
     double flickerRate = 1E6/((double)(value*this->ui->spinBoxProjectorNSlices->value()));
@@ -567,15 +567,15 @@ void MainWindow::onSpinBoxProjectorMicrosecondsPerFrameChanged(int value)
 /**
 * @brief onSpinboxMicrosecondsPerRoundChanged
 **/
-void MainWindow::onSpinboxProjectorMicrosecondsPerRoundChanged(int value)
+void VolvuxMainWindow::onSpinboxProjectorMicrosecondsPerRoundChanged(int value)
 {
     this->ui->spinBoxProjectorMicrosecondsPerFrame->setValue( std::ceil( (double)value/this->ui->spinBoxProjectorNSlices->value()) );
 }
 
 /**
- * @brief MainWindow::~MainWindow
+ * @brief VolvuxMainWindow::~MainWindow
  */
-MainWindow::~MainWindow()
+VolvuxMainWindow::~MainWindow()
 {
     cerr << "[MAINWINDOW] Destructor" << endl;
     saveSettings();
@@ -586,16 +586,16 @@ MainWindow::~MainWindow()
  * @brief Window::eventFilter
  * @return
  */
-bool MainWindow::eventFilter(QObject *, QEvent *)
+bool VolvuxMainWindow::eventFilter(QObject *, QEvent *)
 {
     return false;
 }
 
 /**
- * @brief MainWindow::keyPressEvent
+ * @brief VolvuxMainWindow::keyPressEvent
  * @param e
  */
-void MainWindow::keyPressEvent(QKeyEvent *e)
+void VolvuxMainWindow::keyPressEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Escape || e->key() == Qt::Key_Q )
         close();
@@ -604,9 +604,9 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
 }
 
 /**
- * @brief MainWindow::onPushButtonGenerateFramesPressed
+ * @brief VolvuxMainWindow::onPushButtonGenerateFramesPressed
 */
-void MainWindow::onPushButtonGenerateFramesPressed()
+void VolvuxMainWindow::onPushButtonGenerateFramesPressed()
 {
     if (this->ui->checkBoxUseOffscreenRendering->isChecked())
     {
@@ -620,78 +620,78 @@ void MainWindow::onPushButtonGenerateFramesPressed()
 }
 
 /**
- * @brief MainWindow::onDoubleSpinboxOffsetXChanged
+ * @brief VolvuxMainWindow::onDoubleSpinboxOffsetXChanged
  * @param value
  */
-void MainWindow::onDoubleSpinboxOffsetXChanged(double value)
+void VolvuxMainWindow::onDoubleSpinboxOffsetXChanged(double value)
 {
     this->ui->volumetricGLWidget->setObjectOffset(value,ui->doubleSpinBoxOffsetY->value(),ui->doubleSpinBoxOffsetZ->value());
     this->ui->volumetricGLWidget->update();
 }
 
 /**
- * @brief MainWindow::onDoubleSpinboxOffsetYChanged
+ * @brief VolvuxMainWindow::onDoubleSpinboxOffsetYChanged
  * @param value
  */
-void MainWindow::onDoubleSpinboxOffsetYChanged(double value)
+void VolvuxMainWindow::onDoubleSpinboxOffsetYChanged(double value)
 {
     this->ui->volumetricGLWidget->setObjectOffset(ui->doubleSpinBoxOffsetX->value(),value,ui->doubleSpinBoxOffsetZ->value());
     this->ui->volumetricGLWidget->update();
 }
 
 /**
- * @brief MainWindow::onDoubleSpinboxOffsetZChanged
+ * @brief VolvuxMainWindow::onDoubleSpinboxOffsetZChanged
  * @param value
  */
-void MainWindow::onDoubleSpinboxOffsetZChanged(double value)
+void VolvuxMainWindow::onDoubleSpinboxOffsetZChanged(double value)
 {
     this->ui->volumetricGLWidget->setObjectOffset(ui->doubleSpinBoxOffsetX->value(),ui->doubleSpinBoxOffsetY->value(),value);
     this->ui->volumetricGLWidget->update();
 }
 
 /**
- * @brief MainWindow::onDoubleSpinboxHelicoidXChanged
+ * @brief VolvuxMainWindow::onDoubleSpinboxHelicoidXChanged
  * @param value
  */
-void MainWindow::onDoubleSpinboxHelicoidXChanged(double value)
+void VolvuxMainWindow::onDoubleSpinboxHelicoidXChanged(double value)
 {
     this->ui->volumetricGLWidget->setHelicoidOffset(value,ui->doubleSpinboxHelicoidCyMm->value(),ui->doubleSpinboxHelicoidCzMm->value());
     this->ui->volumetricGLWidget->update();
 }
 
 /**
- * @brief MainWindow::onDoubleSpinboxHelicoidYChanged
+ * @brief VolvuxMainWindow::onDoubleSpinboxHelicoidYChanged
  * @param value
  */
-void MainWindow::onDoubleSpinboxHelicoidYChanged(double value)
+void VolvuxMainWindow::onDoubleSpinboxHelicoidYChanged(double value)
 {
     this->ui->volumetricGLWidget->setHelicoidOffset(ui->doubleSpinboxHelicoidCxMm->value(),value,ui->doubleSpinboxHelicoidCzMm->value());
     this->ui->volumetricGLWidget->update();
 }
 
 /**
- * @brief MainWindow::onDoubleSpinboxHelicoidYChanged
+ * @brief VolvuxMainWindow::onDoubleSpinboxHelicoidYChanged
  * @param value
  */
-void MainWindow::onDoubleSpinboxHelicoidZChanged(double value)
+void VolvuxMainWindow::onDoubleSpinboxHelicoidZChanged(double value)
 {
     this->ui->volumetricGLWidget->setHelicoidOffset(ui->doubleSpinboxHelicoidCxMm->value(),ui->doubleSpinboxHelicoidCyMm->value(),value);
     this->ui->volumetricGLWidget->update();
 }
 
 /**
- * @brief MainWindow::onDoubleSpinboxObjectSizeChanged
+ * @brief VolvuxMainWindow::onDoubleSpinboxObjectSizeChanged
  * @param value
  */
-void MainWindow::onDoubleSpinboxObjectSizeChanged(double value)
+void VolvuxMainWindow::onDoubleSpinboxObjectSizeChanged(double value)
 {
     this->ui->volumetricGLWidget->setObjectScale(value);
 }
 
 /**
- * @brief MainWindow::onSpinboxNSlicesChanged
+ * @brief VolvuxMainWindow::onSpinboxNSlicesChanged
  */
-void MainWindow::onSpinboxProjectorNSlicesChanged(int value)
+void VolvuxMainWindow::onSpinboxProjectorNSlicesChanged(int value)
 {
     this->ui->volumetricGLWidget->setSlicesNumber(value);
     double flickerPersistenceMicroSec = this->ui->doubleSpinBoxFlickerRateHz->value()*1E-6;
@@ -705,19 +705,19 @@ void MainWindow::onSpinboxProjectorNSlicesChanged(int value)
 }
 
 /**
- * @brief MainWindow::onPushButtonRandomizeSpheresPressed
+ * @brief VolvuxMainWindow::onPushButtonRandomizeSpheresPressed
  */
-void MainWindow::onPushButtonRandomizeSpheresPressed()
+void VolvuxMainWindow::onPushButtonRandomizeSpheresPressed()
 {
     bool useRandomDots = this->ui->randomDotsCheckBox->isChecked();
     this->ui->volumetricGLWidget->randomizeSpheres(useRandomDots, ui->spinBoxStimulusNSpheres->value(),ui->spinBoxStimulusSpheresRadiusMin->value(),ui->spinBoxStimulusSpheresRadiusMax->value());
 }
 
 /**
- * @brief MainWindow::on_spinBoxSpheresRadiusMin_valueChanged
+ * @brief VolvuxMainWindow::on_spinBoxSpheresRadiusMin_valueChanged
  * @param arg1
  */
-void MainWindow::onSpinboxspheresradiusminValuechanged(int arg1)
+void VolvuxMainWindow::onSpinboxspheresradiusminValuechanged(int arg1)
 {
     if (arg1 >= this->ui->spinBoxStimulusSpheresRadiusMax->value() )
     {
@@ -727,10 +727,10 @@ void MainWindow::onSpinboxspheresradiusminValuechanged(int arg1)
 }
 
 /**
- * @brief MainWindow::on_spinBoxSpheresRadiusMax_valueChanged
+ * @brief VolvuxMainWindow::on_spinBoxSpheresRadiusMax_valueChanged
  * @param arg1
  */
-void MainWindow::onSpinboxspheresradiusmaxValuechanged(int arg1)
+void VolvuxMainWindow::onSpinboxspheresradiusmaxValuechanged(int arg1)
 {
     if (arg1 < this->ui->spinBoxStimulusSpheresRadiusMin->value() )
     {
@@ -739,25 +739,25 @@ void MainWindow::onSpinboxspheresradiusmaxValuechanged(int arg1)
 }
 
 /**
- * @brief MainWindow::on_checkBoxCameraViewMode_clicked
+ * @brief VolvuxMainWindow::on_checkBoxCameraViewMode_clicked
  * @param checked
  */
-void MainWindow::onCheckboxcameraviewmodeClicked(bool checked)
+void VolvuxMainWindow::onCheckboxcameraviewmodeClicked(bool checked)
 {
     this->ui->volumetricGLWidget->toggleStandardGL(checked);
 }
 
 
 /**
- * @brief MainWindow::on_checkBoxUseCalibratedView_clicked
+ * @brief VolvuxMainWindow::on_checkBoxUseCalibratedView_clicked
  * @param checked
  */
-void MainWindow::onCheckboxusecalibratedviewClicked(bool checked)
+void VolvuxMainWindow::onCheckboxusecalibratedviewClicked(bool checked)
 {
     this->ui->volumetricGLWidget->toggleUseCalibratedGLView();
 }
 
-void MainWindow::onPushButtonUploadSequenceClicked()
+void VolvuxMainWindow::onPushButtonUploadSequenceClicked()
 {
     this->ui->statusbar->showMessage("Uploading sequence...",500);
 #ifdef ALP_SUPPORT
@@ -786,7 +786,7 @@ void MainWindow::onPushButtonUploadSequenceClicked()
 /**
 * @brief onPushButtonProjectorSequenceChanged
 **/
-void MainWindow::onPushButtonProjectorSequenceChanged()
+void VolvuxMainWindow::onPushButtonProjectorSequenceChanged()
 {
     if( ui->listWidgetSequences->selectedItems().isEmpty() )
         return;
@@ -814,7 +814,7 @@ void MainWindow::onPushButtonProjectorSequenceChanged()
 /**
 * @brief onPushButtonProjectorRemoveSequencePressed
 **/
-void MainWindow::onPushButtonProjectorRemoveSequencePressed()
+void VolvuxMainWindow::onPushButtonProjectorRemoveSequencePressed()
 {
     if( ui->listWidgetSequences->selectedItems().isEmpty() )
         return;
@@ -840,9 +840,9 @@ void MainWindow::onPushButtonProjectorRemoveSequencePressed()
 }
 
 /**
- * @brief MainWindow::onPushButtonProjectorStartProjectionClicked
+ * @brief VolvuxMainWindow::onPushButtonProjectorStartProjectionClicked
  */
-void MainWindow::onPushButtonProjectorStartProjectionClicked()
+void VolvuxMainWindow::onPushButtonProjectorStartProjectionClicked()
 {
 #ifdef ALP_SUPPORT
     try
@@ -859,7 +859,7 @@ void MainWindow::onPushButtonProjectorStartProjectionClicked()
 #endif
 }
 
-void MainWindow::onPushButtonProjectorReleaseClicked()
+void VolvuxMainWindow::onPushButtonProjectorReleaseClicked()
 {
 #ifdef ALP_SUPPORT
     try
@@ -880,7 +880,7 @@ void MainWindow::onPushButtonProjectorReleaseClicked()
 /**
 * @brief onSpinBoxLEDpercentageChanged
 **/
-void MainWindow::onSpinBoxProjectorLEDpercentageChanged(double percentage)
+void VolvuxMainWindow::onSpinBoxProjectorLEDpercentageChanged(double percentage)
 {
 #ifdef ALP_SUPPORT
     if (alp.m_bAlpInit)
@@ -899,7 +899,7 @@ void MainWindow::onSpinBoxProjectorLEDpercentageChanged(double percentage)
 /**
 * @brief onspinBoxProjectorLEDcurrentChanged
 **/
-void MainWindow::onspinBoxProjectorLEDcurrentChanged(int current)
+void VolvuxMainWindow::onspinBoxProjectorLEDcurrentChanged(int current)
 {
 #ifdef ALP_SUPPORT
     if (alp.m_bAlpInit)
@@ -916,9 +916,9 @@ void MainWindow::onspinBoxProjectorLEDcurrentChanged(int current)
 }
 
 /**
- * @brief MainWindow::onPushButtonProjectorInitializeClicked
+ * @brief VolvuxMainWindow::onPushButtonProjectorInitializeClicked
  */
-void MainWindow::onPushButtonProjectorInitializeClicked()
+void VolvuxMainWindow::onPushButtonProjectorInitializeClicked()
 {
     this->ui->spinBoxProjectorLEDcurrent->setEnabled(true);
     this->ui->doubleSpinBoxProjectorLEDpercentage->setEnabled(true);
@@ -943,9 +943,9 @@ void MainWindow::onPushButtonProjectorInitializeClicked()
 }
 
 /**
- * @brief MainWindow::onPushButtonProjectorStopProjectionClicked
+ * @brief VolvuxMainWindow::onPushButtonProjectorStopProjectionClicked
  */
-void MainWindow::onPushButtonProjectorStopProjectionClicked()
+void VolvuxMainWindow::onPushButtonProjectorStopProjectionClicked()
 {
     try
     {
@@ -960,9 +960,9 @@ void MainWindow::onPushButtonProjectorStopProjectionClicked()
 }
 
 /**
- * @brief MainWindow::onPushButtonCalibrateClicked
+ * @brief VolvuxMainWindow::onPushButtonCalibrateClicked
  */
-void MainWindow::onPushButtonCalibrateClicked()
+void VolvuxMainWindow::onPushButtonCalibrateClicked()
 {
     QString points2Dfilename = QFileDialog::getOpenFileName(this,"Select 2D points file",QDir::currentPath(),"*.txt");
     QString points3Dfilename = QFileDialog::getOpenFileName(this,"Select 3D points file",QDir::currentPath(),"*.txt");
@@ -972,37 +972,37 @@ void MainWindow::onPushButtonCalibrateClicked()
 }
 
 /**
- * @brief MainWindow::onDoubleSpinBoxSurfaceFirstOrderCoefficientChanged
+ * @brief VolvuxMainWindow::onDoubleSpinBoxSurfaceFirstOrderCoefficientChanged
  * @param val
  */
-void MainWindow::onDoubleSpinBoxSurfaceFirstOrderCoefficientChanged(double val)
+void VolvuxMainWindow::onDoubleSpinBoxSurfaceFirstOrderCoefficientChanged(double val)
 {
     //this->ui->volumetricGLWidget->curvature = val;
 }
 
 /**
- * @brief MainWindow::onDoubleSpinBoxSurfaceZerothOrderCoefficientChanged
+ * @brief VolvuxMainWindow::onDoubleSpinBoxSurfaceZerothOrderCoefficientChanged
  * @param val
  */
-void MainWindow::onDoubleSpinBoxSurfaceZerothOrderCoefficientChanged(double val)
+void VolvuxMainWindow::onDoubleSpinBoxSurfaceZerothOrderCoefficientChanged(double val)
 {
 
 }
 
 /**
- * @brief MainWindow::onDoubleSpinBoxSurfaceSecondOrderCoefficientChanged
+ * @brief VolvuxMainWindow::onDoubleSpinBoxSurfaceSecondOrderCoefficientChanged
  * @param val
  */
-void MainWindow::onDoubleSpinBoxSurfaceSecondOrderCoefficientChanged(double val)
+void VolvuxMainWindow::onDoubleSpinBoxSurfaceSecondOrderCoefficientChanged(double val)
 {
 
 }
 
 /**
- * @brief MainWindow::triggerFramesGeneration
+ * @brief VolvuxMainWindow::triggerFramesGeneration
  * @param curvature
  */
-void MainWindow::triggerFramesGeneration(double curvature)
+void VolvuxMainWindow::triggerFramesGeneration(double curvature)
 {
     this->onPushButtonProjectorStopProjectionClicked();
     this->onDoubleSpinBoxSurfaceFirstOrderCoefficientChanged(curvature);
@@ -1013,10 +1013,10 @@ void MainWindow::triggerFramesGeneration(double curvature)
 }
 
 /**
- * @brief MainWindow::onPushButtonExperimentStartClicked
+ * @brief VolvuxMainWindow::onPushButtonExperimentStartClicked
  * @param clicked
  */
-void MainWindow::onPushButtonExperimentStartClicked()
+void VolvuxMainWindow::onPushButtonExperimentStartClicked()
 {
     this->ui->plainTextExperimentInfo->clear();
     QDate date = QDate::currentDate();
@@ -1085,7 +1085,7 @@ void MainWindow::onPushButtonExperimentStartClicked()
     exp->show();
 }
 
-void MainWindow::closeEvent(QCloseEvent *event)
+void VolvuxMainWindow::closeEvent(QCloseEvent *event)
 {
     // Ensure clean close of Experiment Widget
     if (exp)

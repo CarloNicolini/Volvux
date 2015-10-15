@@ -32,6 +32,7 @@
 #include <QWidget>
 #include <stdexcept>
 
+#include "../../build/src/ui_VolvuxMainWindow.h"
 #ifdef ALP_SUPPORT
 #include "ALPProjector.h"
 #endif
@@ -50,14 +51,14 @@
 
 namespace Ui
 {
-class MainWindow;
+class VolvuxMainWindow;
 }
 
-class MainWindow : public QMainWindow
+class VolvuxMainWindow : public QMainWindow
 {  Q_OBJECT
 public:
-    MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    VolvuxMainWindow(QWidget *parent = 0);
+    ~VolvuxMainWindow();
 protected:
     void keyPressEvent(QKeyEvent *event);
     bool eventFilter(QObject *, QEvent *);
@@ -127,7 +128,7 @@ private slots:
     void onRandomizationMethodChanged(int randomVal);
 
 private:
-    Ui::MainWindow *ui;
+    Ui::VolvuxMainWindow *ui;
     QPointer<VolvuxExpWidget> exp;
 #ifdef ALP_SUPPORT
     ALPProjector alp;

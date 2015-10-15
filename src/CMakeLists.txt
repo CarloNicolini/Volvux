@@ -30,17 +30,19 @@ Util.cpp
 #ALPProjector.cpp
 #SmartMotor.cpp
 
-set(VOLVUX_HDRS VolvuxExpWidget.h  VolvuxMainWindow.h  VolvuxWidget.h)
-set(VOLVUX_SRCS volvux.cpp  VolvuxExpWidget.cpp  VolvuxMainWindow.cpp  VolvuxWidget.cpp)
+set(VOLVUX_HDRS VolvuxMainWindow.h  VolvuxExpWidget.h  VolvuxWidget.h)
+set(VOLVUX_SRCS VolvuxMainWindow.cpp  VolvuxExpWidget.cpp  VolvuxWidget.cpp)
 set(VOLVUX_FORMS VolvuxMainWindow.ui)
-link_libraries(${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${Boost_LIBRARIES} VOLVUXHELPER)
+#link_libraries(${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${Boost_LIBRARIES} VOLVUXHELPER)
 QT4_WRAP_UI(VOLVUX_FORMS_HDRS ${VOLVUX_FORMS})
 QT4_WRAP_CPP(VOLVUX_SRCS_MOC ${VOLVUX_SRCS})
 
-add_executable(volvux ${VOLVUX_SRSC} ${VOLVUX_SRCS_MOC} ${VOLVUX_FORMS_HDRS})
+include_directories(${QT_INCLUDE_PATH} ${QT_QTGUI_INCLUDE_DIR} ${QT_QTCORE_INCLUDE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${QT_INCLUDES})
 
+add_executable(volvux volvux.cpp ${VOLVUX_SRSC} ${VOLVUX_SRCS_MOC} ${VOLVUX_FORMS_HDRS})
 target_link_libraries(volvux VOLVUXHELPER ${QT_LIBRARIES})
-#
+
 # if (WIN32)
 # set_target_properties(volvux PROPERTIES LINK_FLAGS_RELWITHDEBINFO "/SUBSYSTEM:CONSOLE")
 # set_target_properties(volvux PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:CONSOLE")
