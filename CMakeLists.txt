@@ -97,6 +97,9 @@ include_directories(${OPENGL_INCLUDE_DIR})
 # Include the FreeGLUT project for the necessary FreeGLUT implementation
 add_subdirectory(libs/freeglut)
 
+# Include Eigen
+include_directories(libs/eigen)
+
 # Finally add the project directory
 add_subdirectory(src)
 include_directories(src)
