@@ -144,3 +144,4 @@ endif(MSVC)
 
 # Finally add the project directory
 add_subdirectory(src)
+include_directories(src)
