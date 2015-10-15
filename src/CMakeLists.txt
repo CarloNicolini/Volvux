@@ -4,20 +4,31 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 
 add_library(VOLVUXHELPER
-GLUtils.cpp
-Screen.cpp
-VRCamera.cpp
-Mathcommon.cpp
-Grid.cpp
 Arcball.cpp
-Homography.cpp
-GLSL.cpp
-Icosphere.cpp
-ObjLoader2.cpp
 BinVoxReader.cpp
-VolumetricMeshIntersection.cpp
-VolumetricSurfaceIntersection.cpp
+Camera.cpp
+GL2DPainter.cpp
+GLee.cpp
+GLInfo.cpp
+GLMaterial.cpp
+GLSL.cpp
+GLText.cpp
+GLTexture.cpp
+GLUtils.cpp
+Grid.cpp
+Homography.cpp
+Icosphere.cpp
+Imageloader.cpp
+Mathcommon.cpp
+ObjLoader2.cpp
+ObjLoader.cpp
+ParametersLoader.cpp
+Screen.cpp
+TinyObjLoader.cpp
+Util.cpp
 )
+#ALPProjector.cpp
+#SmartMotor.cpp
 
 set(VOLVUX_HDRS VolvuxExpWidget.h  VolvuxMainWindow.h  VolvuxWidget.h)
 set(VOLVUX_SRCS volvux.cpp  VolvuxExpWidget.cpp  VolvuxMainWindow.cpp  VolvuxWidget.cpp)

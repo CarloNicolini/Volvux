@@ -23,8 +23,8 @@
 // License and a copy of the GNU General Public License along with
 // CNCSVision. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef EXPERIMENT_GL_WIDGET_H
-#define EXPERIMENT_GL_WIDGET_H
+#ifndef VOLVUX_EXP_WIDGET_H_
+#define VOLVUX_EXP_WIDGET_H_
 
 #include <QtGui>
 #include <QGLWidget>
@@ -40,12 +40,12 @@
 //#define EXPERIMENT_WINDOW_WIDTH 1024.0
 //#define EXPERIMENT_WINDOW_HEIGHT 768.0
 
-class ExperimentGLWidget : public QGLWidget
+class VolvuxExpWidget : public QGLWidget
 {
     Q_OBJECT
 public:
-    ExperimentGLWidget(QWidget *parent = 0);
-    ~ExperimentGLWidget();
+    VolvuxExpWidget(QWidget *parent = 0);
+    ~VolvuxExpWidget();
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
     void initializeExperiment();

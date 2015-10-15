@@ -63,12 +63,12 @@ class VolumetricMeshIntersection;
 class CameraDirectLinearTransformation;
 
 
-class VolumetricHelicoidWidget : public QGLWidget
+class VolvuxWidget : public QGLWidget
 {
     Q_OBJECT
 public:
-    VolumetricHelicoidWidget(QWidget *parent = 0);
-    ~VolumetricHelicoidWidget();
+    VolvuxWidget(QWidget *parent = 0);
+    ~VolvuxWidget();
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
 

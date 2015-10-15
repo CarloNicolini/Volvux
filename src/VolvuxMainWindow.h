@@ -23,8 +23,8 @@
 // License and a copy of the GNU General Public License along with
 // CNCSVision. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef MAINWINDOW_H_VOLUMETRIC_HELICOID_SIMULATOR_ALP_EXPERIMENT_
-#define MAINWINDOW_H_VOLUMETRIC_HELICOID_SIMULATOR_ALP_EXPERIMENT_
+#ifndef VOLVUX_MAIN_WINDOW_H_
+#define VOLVUX_MAIN_WINDOW_H_
 
 #include <QMainWindow>
 #include <QtGui>
@@ -128,7 +128,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QPointer<ExperimentGLWidget> exp;
+    QPointer<VolvuxExpWidget> exp;
 #ifdef ALP_SUPPORT
     ALPProjector alp;
 #endif

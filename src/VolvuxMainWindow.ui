@@ -20,7 +20,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Helicoid Simulator</string>
+   <string>Volvux</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -1376,7 +1376,7 @@
             <number>2</number>
            </property>
            <item>
-            <widget class="VolumetricHelicoidWidget" name="volumetricGLWidget" native="true">
+            <widget class="VolvuxWidget" name="volvuxWidget" native="true">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>1</horstretch>
@@ -1432,9 +1432,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>VolumetricHelicoidWidget</class>
+   <class>VolvuxWidget</class>
    <extends>QWidget</extends>
-   <header>VolumetricHelicoidWidgetALP.h</header>
+   <header>VolvuxWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
