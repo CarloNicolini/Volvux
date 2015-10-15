@@ -19,28 +19,38 @@ Grid.cpp
 Homography.cpp
 Icosphere.cpp
 Imageloader.cpp
+MainWindow.cpp
 Mathcommon.cpp
 ObjLoader2.cpp
 ObjLoader.cpp
 ParametersLoader.cpp
 Screen.cpp
+Timer.cpp
 TinyObjLoader.cpp
 Util.cpp
+VolumetricMeshIntersection.cpp
+VolumetricSurfaceIntersection.cpp
+volvux.cpp
+VRCamera.cpp
+
 )
+
+target_link_libraries(VOLVUXHELPER ${GLEW_LIBRARY} ${OPENGL_LIBRARIES} freeglut)
 #ALPProjector.cpp
 #SmartMotor.cpp
 
 set(VOLVUX_HDRS VolvuxMainWindow.h  VolvuxExpWidget.h  VolvuxWidget.h)
 set(VOLVUX_SRCS VolvuxMainWindow.cpp  VolvuxExpWidget.cpp  VolvuxWidget.cpp)
 set(VOLVUX_FORMS VolvuxMainWindow.ui)
+
 #link_libraries(${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${Boost_LIBRARIES} VOLVUXHELPER)
 QT4_WRAP_UI(VOLVUX_FORMS_HDRS ${VOLVUX_FORMS})
-QT4_WRAP_CPP(VOLVUX_SRCS_MOC ${VOLVUX_SRCS})
+QT4_WRAP_CPP(VOLVUX_HDRS_MOC ${VOLVUX_HDRS})
 
 include_directories(${QT_INCLUDE_PATH} ${QT_QTGUI_INCLUDE_DIR} ${QT_QTCORE_INCLUDE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${QT_INCLUDES})
 
-add_executable(volvux volvux.cpp ${VOLVUX_SRSC} ${VOLVUX_SRCS_MOC} ${VOLVUX_FORMS_HDRS})
+add_executable(volvux volvux.cpp ${VOLVUX_SRCS} ${VOLVUX_HDRS_MOC} ${VOLVUX_FORMS_HDRS})
 target_link_libraries(volvux VOLVUXHELPER ${QT_LIBRARIES})
 
 # if (WIN32)

@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 #endif
     QApplication app(argc, argv);
     VolvuxMainWindow window;
-    //window.resize(window.sizeHint());
-    //window.show();
+    window.resize(window.sizeHint());
+    window.show();
     return app.exec();
 }

@@ -575,7 +575,7 @@ void VolvuxMainWindow::onSpinboxProjectorMicrosecondsPerRoundChanged(int value)
 /**
  * @brief VolvuxMainWindow::~MainWindow
  */
-VolvuxMainWindow::~MainWindow()
+VolvuxMainWindow::~VolvuxMainWindow()
 {
     cerr << "[MAINWINDOW] Destructor" << endl;
     saveSettings();
@@ -1046,7 +1046,7 @@ void VolvuxMainWindow::onPushButtonExperimentStartClicked()
         return;
     }
 
-    exp = new ExperimentGLWidget(NULL);
+    exp = new VolvuxExpWidget(NULL);
     exp->setCameraParameters(this->ui->volumetricGLWidget->eyeZ,this->ui->volumetricGLWidget->FOV,this->ui->volumetricGLWidget->zNear,this->ui->volumetricGLWidget->zFar);
 
     exp->initMonitor(this->ui->monitorResolutionXSpinBox->value(),this->ui->monitorResolutionYSpinBox->value(),

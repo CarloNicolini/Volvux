@@ -25,17 +25,17 @@
 
 // Only include GLEW in this way in order to ensure compatibility with QT OpenGL widget
 #include <GL/glew.h>
-#include "ExperimentGLWidget.h"
+#include "VolvuxExpWidget.h"
 
 // For issues about OpenGL inclusion when glew conflicts with OpenGL I suggest to look:
 // http://stackoverflow.com/questions/15048729/where-is-glgenbuffers-in-qt5
 
 /**
- * @brief ExperimentGLWidget::ExperimentGLWidget
+ * @brief VolvuxExpWidget::VolvuxExpWidget
  * @param parent
  * @param shareWidget
  */
-ExperimentGLWidget::ExperimentGLWidget(QWidget *parent):
+VolvuxExpWidget::VolvuxExpWidget(QWidget *parent):
     QGLWidget( QGLFormat::defaultFormat(), parent)
 {
     // Create the timer for the widget
@@ -52,13 +52,13 @@ ExperimentGLWidget::ExperimentGLWidget(QWidget *parent):
 }
 
 /**
- * @brief ExperimentGLWidget::initMonitor
+ * @brief VolvuxExpWidget::initMonitor
  * @param EXPERIMENT_WINDOW_RESOLUTION_X
  * @param EXPERIMENT_WINDOW_RESOLUTION_Y
  * @param EXPERIMENT_WINDOW_PHYSICAL_SIZE_MM_X
  * @param EXPERIMENT_WINDOW_PHYSICAL_SIZE_MM_Y
  */
-void ExperimentGLWidget::initMonitor(int resX, int resY, int sizeX_mm, int sizeY_mm)
+void VolvuxExpWidget::initMonitor(int resX, int resY, int sizeX_mm, int sizeY_mm)
 {
     this->experimentWindowResolutionX = resX;
     this->experimentWindowResolutionY = resY;
@@ -75,7 +75,7 @@ void ExperimentGLWidget::initMonitor(int resX, int resY, int sizeX_mm, int sizeY
  * @param zNear
  * @param zFar
  */
-void ExperimentGLWidget::applyOpenGLCameraFOV()
+void VolvuxExpWidget::applyOpenGLCameraFOV()
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -85,39 +85,39 @@ void ExperimentGLWidget::applyOpenGLCameraFOV()
 }
 
 /**
- * @brief ExperimentGLWidget::~ExperimentGLWidget
+ * @brief VolvuxExpWidget::~VolvuxExpWidget
  */
-ExperimentGLWidget::~ExperimentGLWidget()
+VolvuxExpWidget::~VolvuxExpWidget()
 {
     //QMessageBox::information(this,"Experiment finished","The experiment is finished.");
-    cerr << "[ExperimentGLWidget] Destructor" << endl;
+    cerr << "[VolvuxExpWidget] Destructor" << endl;
 }
 
 /**
- * @brief ExperimentGLWidget::minimumSizeHint
+ * @brief VolvuxExpWidget::minimumSizeHint
  * @return
  */
-QSize ExperimentGLWidget::minimumSizeHint() const
+QSize VolvuxExpWidget::minimumSizeHint() const
 {
     return QSize(experimentWindowResolutionX,experimentWindowResolutionY);
 }
 
 /**
- * @brief ExperimentGLWidget::sizeHint
+ * @brief VolvuxExpWidget::sizeHint
  * @return
  */
-QSize ExperimentGLWidget::sizeHint() const
+QSize VolvuxExpWidget::sizeHint() const
 {
     return QSize(experimentWindowResolutionX,experimentWindowResolutionY);
 }
 
 /**
- * @brief ExperimentGLWidget::setCameraParameters
+ * @brief VolvuxExpWidget::setCameraParameters
  * @param FOV
  * @param zNear
  * @param zFar
  */
-void ExperimentGLWidget::setCameraParameters(GLfloat _eyeZ, GLfloat _FOV, GLfloat _zNear, GLfloat _zFar)
+void VolvuxExpWidget::setCameraParameters(GLfloat _eyeZ, GLfloat _FOV, GLfloat _zNear, GLfloat _zFar)
 {
     this->eyeZ = _eyeZ;
     this->FOV = _FOV;
@@ -126,11 +126,11 @@ void ExperimentGLWidget::setCameraParameters(GLfloat _eyeZ, GLfloat _FOV, GLfloa
 }
 
 /**
- * @brief ExperimentGLWidget::initializeGL
+ * @brief VolvuxExpWidget::initializeGL
  */
-void ExperimentGLWidget::initializeGL()
+void VolvuxExpWidget::initializeGL()
 {
-    cerr << "[ExperimentGLWidget] initializing GL context" << endl;
+    cerr << "[VolvuxExpWidget] initializing GL context" << endl;
     this->makeCurrent();
     qglClearColor(Qt::black);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -151,9 +151,9 @@ void ExperimentGLWidget::initializeGL()
 }
 
 /**
- * @brief ExperimentGLWidget::drawSideParabola
+ * @brief VolvuxExpWidget::drawSideParabola
  */
-void ExperimentGLWidget::drawSideParabola(double xRange, double curvature)
+void VolvuxExpWidget::drawSideParabola(double xRange, double curvature)
 {
     double yPosition = xRange;
     glPushAttrib(GL_ALL_ATTRIB_BITS);
@@ -169,9 +169,9 @@ void ExperimentGLWidget::drawSideParabola(double xRange, double curvature)
 }
 
 /**
- * @brief ExperimentGLWidget::paintGL
+ * @brief VolvuxExpWidget::paintGL
  */
-void ExperimentGLWidget::paintGL()
+void VolvuxExpWidget::paintGL()
 {
     qglClearColor(Qt::black);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -189,20 +189,20 @@ void ExperimentGLWidget::paintGL()
 }
 
 /**
- * @brief ExperimentGLWidget::resizeGL
+ * @brief VolvuxExpWidget::resizeGL
  * @param width
  * @param height
  */
-void ExperimentGLWidget::resizeGL(int width, int height)
+void VolvuxExpWidget::resizeGL(int width, int height)
 {
     glViewport(0, 0, (GLsizei) width, (GLsizei) height); // Set our viewport to the size of our window
     applyOpenGLCameraFOV();
 }
 
 /**
- * @brief ExperimentGLWidget::advanceTrial
+ * @brief VolvuxExpWidget::advanceTrial
 */
-void ExperimentGLWidget::advanceTrial()
+void VolvuxExpWidget::advanceTrial()
 {
     if ( bal.next() )
     {
@@ -227,19 +227,19 @@ void ExperimentGLWidget::advanceTrial()
 }
 
 /**
- * @brief ExperimentGLWidget::initializeExperiment
+ * @brief VolvuxExpWidget::initializeExperiment
  */
-void ExperimentGLWidget::initializeExperiment()
+void VolvuxExpWidget::initializeExperiment()
 {
     if (bal.getCurrent().empty())
         advanceTrial();
 }
 
 /**
- * @brief ExperimentGLWidget::keyPressEvent
+ * @brief VolvuxExpWidget::keyPressEvent
  * @param e
  */
-void ExperimentGLWidget::keyPressEvent(QKeyEvent *e)
+void VolvuxExpWidget::keyPressEvent(QKeyEvent *e)
 {
     switch ( e->key() )
     {

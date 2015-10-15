@@ -195,7 +195,7 @@ void circleMask2( double circleCenterX, double circleCenterY, double circleRadiu
     glBlendFunc(GL_ZERO , GL_SRC_COLOR);
     beginOrtho();
     glBegin(GL_TRIANGLE_FAN);
-    glColor3i(255,255,255);
+    glColor3f(255.0,255.0,255.0);
     glVertex2f(circleCenterX, circleCenterY);
     for( int n = 0; n <= 100; ++n )
     {  float t = 2*3.141592654*(float)n/(float)100;

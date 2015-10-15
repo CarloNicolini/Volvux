@@ -53,15 +53,15 @@ std::string baseDir("C:/workspace/cncsvisioncmake/");
 // http://stackoverflow.com/questions/15048729/where-is-glgenbuffers-in-qt5
 
 /**
- * @brief VolumetricHelicoidWidget::VolumetricHelicoidWidget
+ * @brief VolvuxWidget::VolvuxWidget
  * @param parent
  * @param shareWidget
  */
-VolumetricHelicoidWidget::VolumetricHelicoidWidget(QWidget *parent) :
+VolvuxWidget::VolvuxWidget(QWidget *parent) :
     //    QGLWidget(parent)
     QGLWidget( parent)
 {
-    //cerr << "[VolumetricHelicoidWidget] Constructor" << endl;
+    //cerr << "[VolvuxWidget] Constructor" << endl;
     currentGLColor = Qt::gray;
     // Create the timer for the widget
     QTimer *timer = new QTimer(this); timer->start(0);
@@ -110,11 +110,11 @@ VolumetricHelicoidWidget::VolumetricHelicoidWidget(QWidget *parent) :
 }
 
 /**
- * @brief VolumetricHelicoidWidget::~VolumetricHelicoidWidget
+ * @brief VolvuxWidget::~VolvuxWidget
  */
-VolumetricHelicoidWidget::~VolumetricHelicoidWidget()
+VolvuxWidget::~VolvuxWidget()
 {
-    cerr << "[VolumetricHelicoidWidget] Destructor" << endl;
+    cerr << "[VolvuxWidget] Destructor" << endl;
     delete fbo;
 
     if (volume)
@@ -129,7 +129,7 @@ VolumetricHelicoidWidget::~VolumetricHelicoidWidget()
  * @param zNear
  * @param zFar
 **/
-void VolumetricHelicoidWidget::setCameraParameters(double _fieldOfView, double _zNear, double _zFar)
+void VolvuxWidget::setCameraParameters(double _fieldOfView, double _zNear, double _zFar)
 {
     this->FOV=_fieldOfView;
     this->zNear = _zNear;
@@ -140,28 +140,28 @@ void VolumetricHelicoidWidget::setCameraParameters(double _fieldOfView, double _
 }
 
 /**
- * @brief VolumetricHelicoidWidget::onZFarChanged
+ * @brief VolvuxWidget::onZFarChanged
  * @param val
  */
-void VolumetricHelicoidWidget::onZFarChanged(double val)
+void VolvuxWidget::onZFarChanged(double val)
 {
     this->zFar = val;
 }
 
 /**
- * @brief VolumetricHelicoidWidget::onZNearChanged
+ * @brief VolvuxWidget::onZNearChanged
  * @param val
  */
-void VolumetricHelicoidWidget::onZNearChanged(double val)
+void VolvuxWidget::onZNearChanged(double val)
 {
     this->zNear = val;
 }
 
 /**
- * @brief VolumetricHelicoidWidget::setEyeZ
+ * @brief VolvuxWidget::setEyeZ
  * @param val
  */
-void VolumetricHelicoidWidget::onEyeZChanged(double val)
+void VolvuxWidget::onEyeZChanged(double val)
 {
     this->eyeZ=val;
 }
@@ -172,7 +172,7 @@ void VolumetricHelicoidWidget::onEyeZChanged(double val)
  * @param zNear
  * @param zFar
  */
-void VolumetricHelicoidWidget::applyOpenGLCameraFOV()
+void VolvuxWidget::applyOpenGLCameraFOV()
 {
 #ifdef MONA
     glMatrixMode(GL_PROJECTION);
@@ -202,31 +202,31 @@ void VolumetricHelicoidWidget::applyOpenGLCameraFOV()
 
 
 /**
- * @brief VolumetricHelicoidWidget::minimumSizeHint
+ * @brief VolvuxWidget::minimumSizeHint
  * @return
  */
-QSize VolumetricHelicoidWidget::minimumSizeHint() const
+QSize VolvuxWidget::minimumSizeHint() const
 {
     return QSize(PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT);
 
 }
 
 /**
- * @brief VolumetricHelicoidWidget::sizeHint
+ * @brief VolvuxWidget::sizeHint
  * @return
  */
-QSize VolumetricHelicoidWidget::sizeHint() const
+QSize VolvuxWidget::sizeHint() const
 {
     return QSize(PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT);
 }
 
 /**
- * @brief VolumetricHelicoidWidget::initializeGL
+ * @brief VolvuxWidget::initializeGL
  */
-void VolumetricHelicoidWidget::initializeGL()
+void VolvuxWidget::initializeGL()
 {
     this->makeCurrent();
-    cerr << "[VolumetricHelicoidWidget] initializing GL context" << endl;
+    cerr << "[VolvuxWidget] initializing GL context" << endl;
     int argc = 1;
     char *argv[] = {"1","2"};
     glutInit(&argc, argv);
@@ -250,7 +250,7 @@ void VolumetricHelicoidWidget::initializeGL()
     // Get the informations about the size of texture3D ram
     GLint result;
     glGetIntegerv(GL_MAX_3D_TEXTURE_SIZE, &result);
-    cerr << "[VolumetricHelicoidWidget] Available GPU memory for texture 3D is " << result << " [MB]" << endl;
+    cerr << "[VolvuxWidget] Available GPU memory for texture 3D is " << result << " [MB]" << endl;
 
     // VERY IMPORTANT TO INITIALIZE GLEW BEFORE THE GLSL SHADERS
     glewInit();
@@ -324,15 +324,15 @@ void VolumetricHelicoidWidget::initializeGL()
     fboFormat.setInternalTextureFormat(GL_LUMINANCE);
     //fboFormat.setAttachment(QGLFramebufferObject::Depth); // It makes Win32 version crash
     fbo = new QGLFramebufferObject(QSize(PROJECTOR_RESOLUTION_WIDTH, PROJECTOR_RESOLUTION_HEIGHT),fboFormat);
-    cerr << "[VolumetricHelicoidWidget] FBO depth= " << fbo->depth() << endl;
-    cerr << "[VolumetricHelicoidWidget] num colors= " << fbo->colorCount() << endl;
+    cerr << "[VolvuxWidget] FBO depth= " << fbo->depth() << endl;
+    cerr << "[VolvuxWidget] num colors= " << fbo->colorCount() << endl;
     getGLerrors();
 }
 
 /**
- * @brief VolumetricHelicoidWidget::draw
+ * @brief VolvuxWidget::draw
  */
-void VolumetricHelicoidWidget::draw()
+void VolvuxWidget::draw()
 {
     if ( useCalibratedGLView )
     {
@@ -389,18 +389,18 @@ void VolumetricHelicoidWidget::draw()
 }
 
 /**
- * @brief VolumetricHelicoidWidget::getVolume
+ * @brief VolvuxWidget::getVolume
  * @return
  */
-VolumetricMeshIntersection *VolumetricHelicoidWidget::getVolume() const
+VolumetricMeshIntersection *VolvuxWidget::getVolume() const
 {
     return volume;
 }
 
 /**
- * @brief VolumetricHelicoidWidget::paintGL
+ * @brief VolvuxWidget::paintGL
  */
-void VolumetricHelicoidWidget::paintGL()
+void VolvuxWidget::paintGL()
 {
     qglClearColor(this->currentGLColor);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -410,19 +410,19 @@ void VolumetricHelicoidWidget::paintGL()
 }
 
 /**
- * @brief VolumetricHelicoidWidget::setCurrentGLColor
+ * @brief VolvuxWidget::setCurrentGLColor
  * @param val
  */
-void VolumetricHelicoidWidget::setCurrentGLColor(Qt::GlobalColor val)
+void VolvuxWidget::setCurrentGLColor(Qt::GlobalColor val)
 {
     this->currentGLColor=val;
 }
 
 /**
- * @brief VolumetricHelicoidWidget::setHelicoidZeroColor
+ * @brief VolvuxWidget::setHelicoidZeroColor
  * @param value
  */
-void VolumetricHelicoidWidget::setHelicoidZeroColor(int value)
+void VolvuxWidget::setHelicoidZeroColor(int value)
 {
     volume->setTexture3DfillValue(value);
 }
@@ -439,9 +439,9 @@ size_t getTotalSystemMemory()
 #endif
 
 /**
- * @brief VolumetricHelicoidWidget::startFramesGeneration
+ * @brief VolvuxWidget::startFramesGeneration
  */
-void VolumetricHelicoidWidget::generateFrames()
+void VolvuxWidget::generateFrames()
 {
     this->drawTextureCube=false;
     this->setHelicoidZeroColor(0);
@@ -453,7 +453,7 @@ void VolumetricHelicoidWidget::generateFrames()
     // Reset space for all frames sequence
     allFrames.clear();
     emit memoryAllocatedMegaBytes(length*sizeof(unsigned char)/1E6);
-    //cerr << "[VolumetricHelicoidWidget] w,h,slicesNumber=" << w << "," << h << "," << slicesNumber << endl;
+    //cerr << "[VolvuxWidget] w,h,slicesNumber=" << w << "," << h << "," << slicesNumber << endl;
     //cerr << "Resizing to " << w*h*slicesNumber*sizeof(unsigned char)/1E6 << " [MB]" << endl;
     try
     {
@@ -462,7 +462,7 @@ void VolumetricHelicoidWidget::generateFrames()
     catch (const std::exception &e)
     {
         QString maximumVectorSize = QString::number(allFrames.max_size()/1E6);
-        QMessageBox::warning(this,QString("Error: ")+QString::fromStdString(e.what()),"Too much memory allocated, asked "+QString::number(length/1E6) + " [MB] but " + maximumVectorSize + " [MB] addressable" + "\n"+"User memory= "+QString::number((unsigned int)getTotalSystemMemory()/1E6)+" [MB]");
+        //QMessageBox::warning(this,QString("Error: ")+QString::fromStdString(e.what()),"Too much memory allocated, asked "+QString::number(length/1E6) + " [MB] but " + maximumVectorSize + " [MB] addressable" + "\n"+"User memory= "+QString::number((unsigned int)getTotalSystemMemory()/1E6)+" [MB]");
         return;
     }
 
@@ -496,7 +496,7 @@ void VolumetricHelicoidWidget::generateFrames()
     }
     getGLerrors();
 
-    cerr << "[VolumetricHelicoidWidget] " << slicesNumber <<" frames generated, [ms]/frame = " << timer.getElapsedTimeInMilliSec()/slicesNumber << endl;
+    cerr << "[VolvuxWidget] " << slicesNumber <<" frames generated, [ms]/frame = " << timer.getElapsedTimeInMilliSec()/slicesNumber << endl;
     this->setHelicoidZeroColor(volume->getTexture3DfillValue());
     glPopAttrib();
 
@@ -506,11 +506,11 @@ void VolumetricHelicoidWidget::generateFrames()
 }
 
 /**
- * @brief VolumetricHelicoidWidget::resizeGL
+ * @brief VolvuxWidget::resizeGL
  * @param width
  * @param height
  */
-void VolumetricHelicoidWidget::resizeGL(int width, int height)
+void VolvuxWidget::resizeGL(int width, int height)
 {
     glViewport(0, 0, (GLsizei) width, (GLsizei) height); // Set our viewport to the size of our window
     applyOpenGLCameraFOV();
@@ -518,20 +518,20 @@ void VolumetricHelicoidWidget::resizeGL(int width, int height)
 }
 
 /**
- * @brief VolumetricHelicoidWidget::wheelEvent
+ * @brief VolvuxWidget::wheelEvent
  * @param e
  */
-void VolumetricHelicoidWidget::wheelEvent(QWheelEvent *e)
+void VolvuxWidget::wheelEvent(QWheelEvent *e)
 {
     eyeZ+=e->delta()*0.1*eyeZ/100.0;
     emit eyeZChanged(eyeZ);
 }
 
 /**
- * @brief VolumetricHelicoidWidget::keyPressEvent
+ * @brief VolvuxWidget::keyPressEvent
  * @param e
  */
-void VolumetricHelicoidWidget::keyPressEvent(QKeyEvent *e)
+void VolvuxWidget::keyPressEvent(QKeyEvent *e)
 {
     switch ( e->key() )
     {
@@ -554,10 +554,10 @@ void VolumetricHelicoidWidget::keyPressEvent(QKeyEvent *e)
 }
 
 /**
- * @brief VolumetricHelicoidWidget::mousePressEvent
+ * @brief VolvuxWidget::mousePressEvent
  * @param event
  */
-void VolumetricHelicoidWidget::mousePressEvent(QMouseEvent *event)
+void VolvuxWidget::mousePressEvent(QMouseEvent *event)
 {
     this->setFocus();
     if (event->button() == Qt::LeftButton)
@@ -567,39 +567,39 @@ void VolumetricHelicoidWidget::mousePressEvent(QMouseEvent *event)
 }
 
 /**
- * @brief VolumetricHelicoidWidget::mouseDoubleClickEvent
+ * @brief VolvuxWidget::mouseDoubleClickEvent
  */
 
-void VolumetricHelicoidWidget::mouseDoubleClickEvent(QMouseEvent *)
+void VolvuxWidget::mouseDoubleClickEvent(QMouseEvent *)
 {
     arcball.reset();
 }
 
 /**
- * @brief VolumetricHelicoidWidget::mouseReleaseEvent
+ * @brief VolvuxWidget::mouseReleaseEvent
  * @param event
  */
-void VolumetricHelicoidWidget::mouseReleaseEvent(QMouseEvent *event)
+void VolvuxWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     arcball.stopRotation();
 }
 
 /**
- * @brief VolumetricHelicoidWidget::mouseMoveEvent
+ * @brief VolvuxWidget::mouseMoveEvent
  * @param event
  */
-void VolumetricHelicoidWidget::mouseMoveEvent(QMouseEvent *event)
+void VolvuxWidget::mouseMoveEvent(QMouseEvent *event)
 {
     arcball.updateRotation(event->x(),event->y());
 }
 
 /**
- * @brief VolumetricHelicoidWidget::setOffset
+ * @brief VolvuxWidget::setOffset
  * @param x
  * @param y
  * @param z
  */
-void VolumetricHelicoidWidget::setObjectOffset(double x, double y, double z)
+void VolvuxWidget::setObjectOffset(double x, double y, double z)
 {
     this->volume->meshStruct.offsetX=x;
     this->volume->meshStruct.offsetY=y;
@@ -607,12 +607,12 @@ void VolumetricHelicoidWidget::setObjectOffset(double x, double y, double z)
 }
 
 /**
- * @brief VolumetricHelicoidWidget::setHelicoidOffset
+ * @brief VolvuxWidget::setHelicoidOffset
  * @param x
  * @param y
  * @param z
  */
-void VolumetricHelicoidWidget::setHelicoidOffset(double x, double y, double z)
+void VolvuxWidget::setHelicoidOffset(double x, double y, double z)
 {
     this->volume->meshStruct.x = x;
     this->volume->meshStruct.y = y;
@@ -620,31 +620,31 @@ void VolumetricHelicoidWidget::setHelicoidOffset(double x, double y, double z)
 }
 
 /**
- * @brief VolumetricHelicoidWidget::setObjectScale
+ * @brief VolvuxWidget::setObjectScale
  * @param objScale
  */
-void VolumetricHelicoidWidget::setObjectScale(double objScale)
+void VolvuxWidget::setObjectScale(double objScale)
 {
     this->volume->meshStruct.radius=objScale;
 }
 
 /**
- * @brief VolumetricHelicoidWidget::setSlicesNumber
+ * @brief VolvuxWidget::setSlicesNumber
  * @param nSlices
  */
-void VolumetricHelicoidWidget::setSlicesNumber(int nSlices)
+void VolvuxWidget::setSlicesNumber(int nSlices)
 {
     // This avoids integer overflow when resizing vector!
     this->slicesNumber=static_cast<unsigned int>(nSlices);
 }
 
 /**
- * @brief VolumetricHelicoidWidget::randomizeSpheres
+ * @brief VolvuxWidget::randomizeSpheres
  * @param nSpheres
  * @param minRadius
  * @param maxRadius
  */
-void VolumetricHelicoidWidget::randomizeSpheres(bool useRandomDots, int nSpheres, int minRadius, int maxRadius)
+void VolvuxWidget::randomizeSpheres(bool useRandomDots, int nSpheres, int minRadius, int maxRadius)
 {
 
     volume->setTexture3DfillValue(0);
@@ -658,10 +658,10 @@ void VolumetricHelicoidWidget::randomizeSpheres(bool useRandomDots, int nSpheres
 }
 
 /**
- * @brief VolumetricHelicoidWidget::loadBinvox
+ * @brief VolvuxWidget::loadBinvox
  * @param filename
  */
-void VolumetricHelicoidWidget::loadBinvox(const string &filename)
+void VolvuxWidget::loadBinvox(const string &filename)
 {
     volume->setTexture3DfillValue(0);
     volume->loadTexture3DFile(filename);
@@ -672,51 +672,51 @@ void VolumetricHelicoidWidget::loadBinvox(const string &filename)
 }
 
 /**
- * @brief VolumetricHelicoidWidget::toggleStandardGL
+ * @brief VolvuxWidget::toggleStandardGL
  * @param val
  */
-void VolumetricHelicoidWidget::toggleStandardGL(bool val)
+void VolvuxWidget::toggleStandardGL(bool val)
 {
     isDrawingFrustum=!isDrawingFrustum;
     this->arcball.reset();
 }
 
 /**
- * @brief VolumetricHelicoidWidget::toggleUseCalibratedGLView
+ * @brief VolvuxWidget::toggleUseCalibratedGLView
  */
-void VolumetricHelicoidWidget::toggleUseCalibratedGLView()
+void VolvuxWidget::toggleUseCalibratedGLView()
 {
     useCalibratedGLView=!useCalibratedGLView;
     this->arcball.reset();
 }
 
 /**
- * @brief VolumetricHelicoidWidget::setOffscreenRendering
+ * @brief VolvuxWidget::setOffscreenRendering
  * @param val
  */
-void VolumetricHelicoidWidget::setOffscreenRendering(bool val)
+void VolvuxWidget::setOffscreenRendering(bool val)
 {
     this->useOffscreenRendering = val;
 }
 
 
-void VolumetricHelicoidWidget::onSurfaceThicknessChanged(double val)
+void VolvuxWidget::onSurfaceThicknessChanged(double val)
 {
     this->update();
     this->volume->meshStruct.thickness=val;
 }
 
-void VolumetricHelicoidWidget::onSurfaceCurvatureChanged(double val)
+void VolvuxWidget::onSurfaceCurvatureChanged(double val)
 {
     this->curvature=val;
 }
 
 /**
- * @brief VolumetricHelicoidWidget::computeCameraCalibrationMatrices
+ * @brief VolvuxWidget::computeCameraCalibrationMatrices
  * @param points2d
  * @param points3d
  */
-void VolumetricHelicoidWidget::computeCameraCalibrationMatrices(const QString &points2Dfilename,const QString &points3Dfilename)
+void VolvuxWidget::computeCameraCalibrationMatrices(const QString &points2Dfilename,const QString &points3Dfilename)
 {
     // First load the 2D and 3D points
     /*
