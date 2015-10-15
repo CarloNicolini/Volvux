@@ -68,7 +68,7 @@ if(QT4_SUPPORT)
     find_package(Qt4 ${QT_MIN_VERSION} COMPONENTS QtGui QtCore QtOpenGL REQUIRED )
     include(${QT_USE_FILE})
     include_directories(${QT_INCLUDE_PATH} ${QT_QTGUI_INCLUDE_DIR} ${QT_QTCORE_INCLUDE_DIR})
-endif(QT_SUPPORT)
+endif(QT4_SUPPORT)
 
 ####################### BOOST #######################
 find_package(Threads REQUIRED)
@@ -82,12 +82,16 @@ include_directories(${Boost_INCLUDE_DIRS})
 find_package(Boost COMPONENTS ${BOOST_LIBS} REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 
-##########  CROSS-PLATFORM OPENGL + GLUT + GLEW  ########################
-############################ FIND OPENGL EXTENSIONS GLEW ################
+# Find GLEW
 find_package(GLEW)
-message(WARNING "Please update the glew source dir with latest glew")
 if(NOT GLEW_FOUND)
   message (FATAL_ERROR "GLEW not found! CNCSVision needs GLEW libraries in order to support advanced rendering options.")
+endif()
+
+# Find GLFW
+find_package(GLFW)
+if (NOT GLFW_FOUND)
+  message(WARNING "GLFW libraries not installed or not found in the project")
 endif()
 
 if(Linux)
