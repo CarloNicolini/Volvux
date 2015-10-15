@@ -35,9 +35,9 @@ set(VOLVUX_SRCS volvux.cpp  VolvuxExpWidget.cpp  VolvuxMainWindow.cpp  VolvuxWid
 set(VOLVUX_FORMS VolvuxMainWindow.ui)
 link_libraries(${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${Boost_LIBRARIES} VOLVUXHELPER)
 QT4_WRAP_UI(VOLVUX_FORMS_HDRS ${VOLVUX_FORMS})
-QT4_WRAP_CPP(VOLVUX_HDRS_MOC ${VOLVUX_HDRS})
+QT4_WRAP_CPP(VOLVUX_SRCS_MOC ${VOLVUX_SRCS})
 
-add_executable(volvux ${VOLVUX_SRSC} ${VOLVUX_HDRS} ${VOLVUX_HDRS_MOC} ${VOLVUX_FORMS_HDRS})
+add_executable(volvux ${VOLVUX_SRSC} ${VOLVUX_SRCS_MOC} ${VOLVUX_FORMS_HDRS})
 
 target_link_libraries(volvux VOLVUXHELPER ${QT_LIBRARIES})
 #
