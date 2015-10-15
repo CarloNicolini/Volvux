@@ -30,7 +30,6 @@
 #include <QtGui>
 #include <QSlider>
 #include <QWidget>
-#include "ui_MainWindow.h"
 #include <stdexcept>
 
 #ifdef ALP_SUPPORT
@@ -47,7 +46,7 @@
 
 #endif
 
-#include "ExperimentGLWidget.h"
+#include "VolvuxExpWidget.h"
 
 namespace Ui
 {

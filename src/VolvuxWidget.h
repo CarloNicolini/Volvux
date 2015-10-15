@@ -33,7 +33,6 @@
 
 #include "Util.h"
 #include "GLUtils.h"
-#include "GLText.h"
 #include "Arcball.h"
 #include "VRCamera.h"
 #include "Screen.h"

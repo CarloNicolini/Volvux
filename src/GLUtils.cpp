@@ -29,6 +29,7 @@
 
 #include "Util.h"
 #include "Mathcommon.h"
+#include "Imageloader.h"
 #include "Grid.h"
 #include "Circle.h"
 #include "Circle3D.h"
@@ -399,7 +400,35 @@ void drawEllipse(double radiusX, double radiusY,double focalDistance, double min
     }
     glEnd();
 }
+/**
+ * @brief loadTexture
+ * @param imageNameFile
+ * @param internalFormat
+ * @return
+ */
+GLuint loadTexture(std::string &imageNameFile, GLint internalFormat)
+{
+    Image *image = loadBMP(imageNameFile.c_str());
+    GLuint textureId=-1;
+    glGenTextures(1, &textureId);
+    glBindTexture(GL_TEXTURE_2D, textureId);
 
+    glTexImage2D(GL_TEXTURE_2D,
+                 0,
+                 internalFormat,    //switch to GL_LUMINANCE for grayscale images
+                 image->width, image->height,
+                 0,
+                 GL_RGB,
+                 GL_UNSIGNED_BYTE,
+                 image->pixels);
+    gluBuild2DMipmaps(textureId, GL_LUMINANCE,  image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glGetError();
+    delete image;
+    return textureId;
+}
 
 /**
  * @brief generateCircles

@@ -26,9 +26,8 @@
 // Only include GLEW in this way in order to ensure compatibility with QT OpenGL widget
 #include <GL/glew.h>
 #include "Homography.h"
-#include "VolumetricHelicoidWidgetALP.h"
+#include "VolvuxWidget.h"
 #include "VolumetricMeshIntersection.h"
-#include "GLText.h"
 #include "Timer.h"
 
 #ifdef __APPLE__

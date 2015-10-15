@@ -116,6 +116,7 @@ void drawParaboloid(double c, double rMin, double rMax, int nStepsX, int nStepsZ
 #define getGLerrors() (glError(__FILE__,__LINE__))
 void glError(const char *file, int line);
 
+GLuint loadTexture(std::string &imageNameFile, GLint internalFormat=GL_RGB);
 GLubyte* generateCircles(int width, int height, int ncircles, int minRadius, int maxRadius, bool addRandomNoise=false, double noiseDensity=0, bool usePolkaDots=true);
 GLubyte* generateCheckerboard(int width, int height, int tileSquareSize);
 GLuint generateCirclesTexture(int width, int height,  int ncircles, int minRadius=10, int maxRadius=40, bool isSpaceFilling=false, bool addRandomNoise=false, double noiseDensity=0.0,bool usePolkaDots=true);
