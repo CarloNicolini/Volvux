@@ -91,7 +91,8 @@ endif()
 # Find GLFW
 find_package(GLFW)
 if (NOT GLFW_FOUND)
-  message(WARNING "GLFW libraries not installed or not found in the project")
+  message(WARNING "GLFW libraries not installed in the system. Looking for project GLFW")
+  add_subdirectory(libs/glfw)
 endif()
 
 if(Linux)
