@@ -88,64 +88,14 @@ if(NOT GLEW_FOUND)
   message (FATAL_ERROR "GLEW not found! CNCSVision needs GLEW libraries in order to support advanced rendering options.")
 endif()
 
-# Find GLFW
-find_package(GLFW)
-if (NOT GLFW_FOUND)
-  message(WARNING "GLFW libraries not installed in the system. Looking for project GLFW")
-  add_subdirectory(libs/glfw)
-endif()
+# Include the GLFW project for the necessary GLFW implementation
+add_subdirectory(libs/glfw)
 
-if(Linux)
-        find_package(OpenGL REQUIRED)
-        include_directories(${OPENGL_INCLUDE_DIR})
-        find_package(GLUT REQUIRED)
-        set(GL_LIBS ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES})
-endif(Linux)
-
-if(WIN32)
-        # Since typical Windows installation have OpenGL in system path but not GLUT
-        #  here we find the OpenGL package automatically but search for GLUT in the
-        # self provided directory deps/glutwin32 instead of copying files around in Windows/System32
-        find_package(OpenGL REQUIRED)
-    include_directories(${OPENGL_INCLUDE_DIR})
-        # Find GLUT in the supplied code (substitution for FindGLUT.cmake)
-        find_path( GLUT_INCLUDE_DIR
-                   NAMES glut.h
-                   PATHS ${CMAKE_SOURCE_DIR}/libs/glutwin32
-                   NO_DEFAULT_PATH NO_CMAKE_ENVIRONMENT_PATH
-                   NO_CMAKE_PATH NO_SYSTEM_ENVIRONMENT_PATH
-                   NO_CMAKE_SYSTEM_PATH
-                   )
-                # Here we include our glut header file provided in deps/glutwin32
-        include_directories(${GLUT_INCLUDE_DIR})
-                find_library( GLUT_LIBRARIES
-                      NAMES glut32
-                      PATHS  ${CMAKE_SOURCE_DIR}/deps/glutwin32
-                      NO_DEFAULT_PATH NO_CMAKE_ENVIRONMENT_PATH
-                      NO_CMAKE_PATH NO_SYSTEM_ENVIRONMENT_PATH
-                      NO_CMAKE_SYSTEM_PATH
-                      )
-        if( GLUT_INCLUDE_DIR AND GLUT_LIBRARIES )
-          set( GLUT_FOUND 1 )
-                else ( GLUT_INCLUDE_DIR AND GLUT_LIBRARIES )
-                  message(FATAL_ERROR "GLUT is not found on this system")
-        endif( GLUT_INCLUDE_DIR AND GLUT_LIBRARIES )
-                message(STATUS "GLUT headers found in: ${GLUT_INCLUDE_DIR}")
-                message(STATUS "GLUT libraries found in: ${GLUT_LIBRARIES}")
-                set(GL_LIBS ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES})
-endif(WIN32)
-################################## END OPENGL ##################################
-
-
-########################## if MICROSOFT COMPILER ###############################
-# Push more optimization options with Microsoft Compiler
-if(MSVC)
-# This set the following defines when compiling on windows
-add_definitions("-D_WIN32 -DNOMINMAX /EHsc /wd4127 /wd4129 /wd4505 /wd4714 /wd4800 /wd4181 /wd4244 /wd4996 /wd4250 -D_WIN32_WINNT=0x0501")
-# Specify to use multithreaded debug (non dynamic)
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_ITERATOR_DEBUG_LEVEL=2 /INCREMENTAL:NO")
-endif(MSVC)
-####################### END if MICROSOFT COMPILER #############################
+# Include OpenGL and FreeGLUT stuff
+find_package(OpenGL REQUIRED)
+include_directories(${OPENGL_INCLUDE_DIR})
+# Include the FreeGLUT project for the necessary FreeGLUT implementation
+add_subdirectory(libs/freeglut)
 
 # Finally add the project directory
 add_subdirectory(src)
