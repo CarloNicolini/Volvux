@@ -4,9 +4,6 @@
 [submodule "libs/glew"]
 	path = libs/glew
 	url = https://github.com/nigels-com/glew.git
-[submodule "libs/freeglut"]
-	path = libs/freeglut
-	url = https://github.com/LuaDist/freeglut.git
 [submodule "libs/eigen"]
 	path = libs/eigen
 	url = https://github.com/RLovelett/eigen.git
