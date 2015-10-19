@@ -43,9 +43,9 @@ set(VOLVUX_FORMS VolvuxMainWindow.ui)
 
 #set(CMAKE_AUTOMOC ON)
 #################### Dummy test #################### 
-set(DUMMY_HDRS MainWindow.h)
-set(DUMMY_SRCS MainWindow.cpp )
-set(DUMMY_FORMS MainWindow.ui)
+set(DUMMY_HDRS dummyMainWindow.h)
+set(DUMMY_SRCS dummyMainWindow.cpp )
+set(DUMMY_FORMS dummyMainWindow.ui)
 QT4_WRAP_UI(DUMMY_FORMS_HDRS ${DUMMY_FORMS})
 QT4_WRAP_CPP(DUMMY_HDRS_MOC ${DUMMY_HDRS})
 
@@ -59,7 +59,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${QT
 #add_executable(volvux volvux.cpp ${VOLVUX_SRCS} ${VOLVUX_HDRS_MOC} ${VOLVUX_FORMS_HDRS})
 add_executable(volvux volvux.cpp ${VOLVUX_SRCS} ${VOLVUX_HDRS_MOC} ${VOLVUX_FORMS_HDRS})
 #add_executable(volvux dummy.cpp ${VOLVUX_SRCS} ${VOLVUX_HDRS_MOC} ${VOLVUX_FORMS_HDRS}) -- just a test
-add_executable(dummy dummy.cpp MainWindow.cpp ${DUMMY_HDRS_MOC})
+add_executable(dummy dummy.cpp dummyMainWindow.cpp ${DUMMY_HDRS_MOC})
 target_link_libraries(dummy ${QT_LIBRARIES})
 target_link_libraries(volvux ${QT_LIBRARIES})
 
