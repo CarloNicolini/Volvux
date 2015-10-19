@@ -95,8 +95,11 @@ add_subdirectory(libs/glfw)
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
 # Include the FreeGLUT project for the necessary FreeGLUT implementation
-add_subdirectory(libs/freeglut)
 
+set(FREEGLUT_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/FreeGLUT/freeglut/freeglut")
+add_subdirectory(${FREEGLUT_INCLUDE_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/libs/FreeGLUT/freeglut/freeglut/include/GL/)
+message(STATUS "-----${PROJECT_SOURCE_DIR}/libs/FreeGLUT/freeglut/freeglut/include/GL/")
 # Include Eigen
 include_directories(libs/eigen)
 
