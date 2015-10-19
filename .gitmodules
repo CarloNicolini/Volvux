@@ -7,6 +7,3 @@
 [submodule "libs/eigen"]
 	path = libs/eigen
 	url = https://github.com/RLovelett/eigen.git
-[submodule "libs/FreeGLUT"]
-	path = libs/FreeGLUT
-	url = https://github.com/dcnieho/FreeGLUT.git
