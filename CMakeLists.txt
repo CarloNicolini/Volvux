@@ -1,5 +1,6 @@
 project(Volvux)
 cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
+
 ################################ CMAKE OPTIONS ###############################
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 set(PROJECT_BINARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build/")
