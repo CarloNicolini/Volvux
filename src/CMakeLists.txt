@@ -59,7 +59,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${QT
 #add_executable(volvux volvux.cpp ${VOLVUX_SRCS} ${VOLVUX_HDRS_MOC} ${VOLVUX_FORMS_HDRS})
 add_executable(volvux volvux.cpp ${VOLVUX_SRCS} ${VOLVUX_HDRS_MOC} ${VOLVUX_FORMS_HDRS})
 #add_executable(volvux dummy.cpp ${VOLVUX_SRCS} ${VOLVUX_HDRS_MOC} ${VOLVUX_FORMS_HDRS}) -- just a test
-add_executable(dummy dummy.cpp dummyMainWindow.cpp ${DUMMY_HDRS_MOC})
+add_executable(dummy Dummy.cpp dummyMainWindow.cpp ${DUMMY_HDRS_MOC})
 target_link_libraries(dummy ${QT_LIBRARIES})
 target_link_libraries(volvux ${QT_LIBRARIES})
 
