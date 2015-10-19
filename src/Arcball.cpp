@@ -124,7 +124,7 @@ void Arcball::applyRotationMatrix()
 
          // rotate around the current position
          applyTranslationMatrix(true);
-         glRotatef(rotationAngle * 2, -rotationAxis.x(),  -rotationAxis.y(),-rotationAxis.z());
+         glRotated(rotationAngle * 2, -rotationAxis.x(),  -rotationAxis.y(),-rotationAxis.z());
          applyTranslationMatrix(false);
       }
    }

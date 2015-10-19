@@ -54,6 +54,7 @@ void EnableCrashingOnCrashes()
 
 int main(int argc, char *argv[])
 {
+	/*
 #ifdef WIN32
     AllocConsole();  // Create Console Window
     freopen("CONIN$","rb",stdin);   // reopen stdin handle as console window input
@@ -61,9 +62,13 @@ int main(int argc, char *argv[])
     freopen("CONOUT$","wb",stderr); // reopen stderr handle as console window output
 	EnableCrashingOnCrashes();
 #endif
-    QApplication app(argc, argv);
-    VolvuxMainWindow window;
+*/
+	return 0;
+	//QApplication app(argc, argv);
+    /*
+	VolvuxMainWindow window;
     window.resize(window.sizeHint());
     window.show();
-    return app.exec();
+    */
+	//return app.exec();
 }

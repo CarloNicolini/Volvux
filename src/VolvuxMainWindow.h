@@ -32,12 +32,12 @@
 #include <QWidget>
 #include <stdexcept>
 
-#include "../../build/src/ui_VolvuxMainWindow.h"
+#include "ui_VolvuxMainWindow.h"
 #ifdef ALP_SUPPORT
 #include "ALPProjector.h"
 #endif
 
-#define SMI_SUPPORT
+//#define SMI_SUPPORT
 
 #if defined (SMI_SUPPORT) &&  (WIN32)
 //#include "stdafx.h"

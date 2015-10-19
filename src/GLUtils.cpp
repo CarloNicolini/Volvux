@@ -754,18 +754,18 @@ void drawEllipsoid(const Vector3d &p0, const Vector3d &p1)
 void drawFrustum(const double * projectionMatrix, const  double *inverseModelViewMatrix)
 {
     // Get near and far from the Projection matrix.
-    const double near = projectionMatrix[11] / (projectionMatrix[10] - 1.0);
-    const double far = projectionMatrix[11] / (1.0 + projectionMatrix[10]);
+    const double fnear = projectionMatrix[11] / (projectionMatrix[10] - 1.0);
+    const double ffar = projectionMatrix[11] / (1.0 + projectionMatrix[10]);
     // Get the sides of the near plane.
-    const double nLeft = near * (projectionMatrix[2] - 1.0) / projectionMatrix[0];
-    const double nRight = near * (1.0 + projectionMatrix[2]) / projectionMatrix[0];
-    const double nTop = near * (1.0 + projectionMatrix[6]) / projectionMatrix[5];
-    const double nBottom = near * (projectionMatrix[6] - 1.0) / projectionMatrix[5];
+    const double nLeft = fnear * (projectionMatrix[2] - 1.0) / projectionMatrix[0];
+    const double nRight = fnear * (1.0 + projectionMatrix[2]) / projectionMatrix[0];
+    const double nTop = fnear * (1.0 + projectionMatrix[6]) / projectionMatrix[5];
+    const double nBottom = fnear * (projectionMatrix[6] - 1.0) / projectionMatrix[5];
     // Get the sides of the far plane.
-    const double fLeft = far * (projectionMatrix[2] - 1.0) / projectionMatrix[0];
-    const double fRight = far * (1.0 + projectionMatrix[2]) / projectionMatrix[0];
-    const double fTop = far * (1.0 + projectionMatrix[6]) / projectionMatrix[5];
-    const double fBottom = far * (projectionMatrix[6] - 1.0) / projectionMatrix[5];
+    const double fLeft = ffar * (projectionMatrix[2] - 1.0) / projectionMatrix[0];
+    const double fRight = ffar * (1.0 + projectionMatrix[2]) / projectionMatrix[0];
+    const double fTop = ffar * (1.0 + projectionMatrix[6]) / projectionMatrix[5];
+    const double fBottom = ffar * (projectionMatrix[6] - 1.0) / projectionMatrix[5];
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
@@ -777,35 +777,35 @@ void drawFrustum(const double * projectionMatrix, const  double *inverseModelVie
     glLineWidth(2);
     glBegin(GL_LINES);
     glVertex3d(0.0f, 0.0f, 0.0f);
-    glVertex3d(fLeft, fBottom, -far);
+    glVertex3d(fLeft, fBottom, -ffar);
     glVertex3d(0.0f, 0.0f, 0.0f);
-    glVertex3d(fRight, fBottom, -far);
+    glVertex3d(fRight, fBottom, -ffar);
     glVertex3d(0.0f, 0.0f, 0.0f);
-    glVertex3d(fRight, fTop, -far);
+    glVertex3d(fRight, fTop, -ffar);
     glVertex3d(0.0f, 0.0f, 0.0f);
-    glVertex3d(fLeft, fTop, -far);
+    glVertex3d(fLeft, fTop, -ffar);
     //far
-    glVertex3d(fLeft, fBottom, -far);
-    glVertex3d(fRight, fBottom, -far);
-    glVertex3d(fRight, fTop, -far);
-    glVertex3d(fLeft, fTop, -far);
-    glVertex3d(fRight, fTop, -far);
-    glVertex3d(fRight, fBottom, -far);
-    glVertex3d(fLeft, fTop, -far);
-    glVertex3d(fLeft, fBottom, -far);
+    glVertex3d(fLeft, fBottom, -ffar);
+    glVertex3d(fRight, fBottom, -ffar);
+    glVertex3d(fRight, fTop, -ffar);
+    glVertex3d(fLeft, fTop, -ffar);
+    glVertex3d(fRight, fTop, -ffar);
+    glVertex3d(fRight, fBottom, -ffar);
+    glVertex3d(fLeft, fTop, -ffar);
+    glVertex3d(fLeft, fBottom, -ffar);
     //near
-    glVertex3d(nLeft, nBottom, -near);
-    glVertex3d(nRight, nBottom, -near);
-    glVertex3d(nRight, nTop, -near);
-    glVertex3d(nLeft, nTop, -near);
-    glVertex3d(nLeft, nTop, -near);
-    glVertex3d(nLeft, nBottom, -near);
-    glVertex3d(nRight, nTop, -near);
-    glVertex3d(nRight, nBottom, -near);
+    glVertex3d(nLeft, nBottom, -fnear);
+    glVertex3d(nRight, nBottom, -fnear);
+    glVertex3d(nRight, nTop, -fnear);
+    glVertex3d(nLeft, nTop, -fnear);
+    glVertex3d(nLeft, nTop, -fnear);
+    glVertex3d(nLeft, nBottom, -fnear);
+    glVertex3d(nRight, nTop, -fnear);
+    glVertex3d(nRight, nBottom, -fnear);
 
     // Central ray
     glVertex3d(0,0,0);
-    glVertex3d(0,0,-far);
+    glVertex3d(0,0,-ffar);
     glEnd();
     glLineWidth(1);
     glPopMatrix();
