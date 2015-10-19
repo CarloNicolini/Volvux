@@ -7,12 +7,14 @@ set(LIBRARY_OUTPUT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/" CACHE PATH "Single 
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/" CACHE PATH "Single directory for all executables")
 
 #add_definitions("-DCNCSVISION_BASE_DIRECTORY")
+
 ####################### COMPILE OPTIONS  ##################################
 option(BUILD_SHARED_LIBS OFF)
 option(QT4_SUPPORT "Compile the executable with Qt4 libraries" TRUE)
 option(QT5_SUPPORT "Compile the executable with Qt5 libraries" FALSE)
 option(COMPILE_GLFW "Compile the GLFW library for OpenGL context creation" OFF)
 ####################### FIND PACKAGES AND LIBRARIES ####################
+
 find_package(StandardMathLibrary)
 if(WIN32)
     option(ALP_SUPPORT "Include and link ALP projector libraries (Win32 only)" OFF)
@@ -100,6 +102,7 @@ set(FREEGLUT_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/FreeGLUT/freeglut/freeglut"
 add_subdirectory(${FREEGLUT_INCLUDE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/libs/FreeGLUT/freeglut/freeglut/include/GL/)
 message(STATUS "-----${PROJECT_SOURCE_DIR}/libs/FreeGLUT/freeglut/freeglut/include/GL/")
+
 # Include Eigen
 include_directories(libs/eigen)
 
