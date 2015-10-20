@@ -131,6 +131,8 @@ endif(WIN32)
 # set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -std=c++11)
 # endif(QT5_SUPPORT)
 
+# 9. Disable stupid warnings on GCC
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-write-strings")
 
 # 9. Finally add the project directory
 add_subdirectory(src)
