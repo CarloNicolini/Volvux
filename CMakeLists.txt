@@ -13,6 +13,8 @@ option(BUILD_SHARED_LIBS OFF)
 option(QT4_SUPPORT "Compile the executable with Qt4 libraries" TRUE)
 option(QT5_SUPPORT "Compile the executable with Qt5 libraries" FALSE)
 option(COMPILE_GLFW "Compile the GLFW library for OpenGL context creation" OFF)
+option(COMPILE_GLEW "Compile the glew library from source" OFF)
+option(COMPILE_FREEGLUT "Compile the FreeGLUT library from souce" OFF)
 ####################### FIND PACKAGES AND LIBRARIES ####################
 
 find_package(StandardMathLibrary)
@@ -36,15 +38,18 @@ if(WIN32)
 endif(WIN32)
 
 # # Support for GLW, please keep it up-to-date running a git pull on "src/glfw"
-# if(COMPILE_GLFW)
-#     # See http://www.glfw.org/docs/latest/build.html
-#     add_subdirectory("${PROJECT_SOURCE_DIR}/src/glfw")
-#     set(GLFW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/src/glfw/include")
-#     # "if The Xf86VidMode library and headers were not found"
-#     # On Ubuntu 12.04 LTS need to install
-#     # sudo apt-get install xorg-dev  libglu1-mesa-dev
-#     include_directories(${GLFW_INCLUDE_DIR})
-# endif(COMPILE_GLFW)
+if(COMPILE_GLFW)
+     # See http://www.glfw.org/docs/latest/build.html
+     # "if The Xf86VidMode library and headers were not found"
+     # On Ubuntu 12.04 LTS need to install
+     # sudo apt-get install xorg-dev  libglu1-mesa-dev
+     add_subdirectory("${PROJECT_SOURCE_DIR}/libs/glfw")
+     set(GLFW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/glfw/include")
+     include_directories(${GLFW_INCLUDE_DIR})
+ else()
+    find_package(GLFW)
+    include_directories(${GLFW_INCLUDE_DIR})
+endif(COMPILE_GLFW)
 if (QT5_SUPPORT)
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -64,7 +69,7 @@ endif(QT5_SUPPORT)
 
 ######################## QT4 ########################
 if(QT4_SUPPORT)
-    set(QT_MIN_VERSION "4.8.0")
+    set(QT_MIN_VERSION "4.7.0")
     set(QT_USE_QTMAIN TRUE)
     set(QT_USE_OPENGL TRUE)
     find_package(Qt4 ${QT_MIN_VERSION} COMPONENTS QtGui QtCore QtOpenGL REQUIRED )
@@ -75,33 +80,44 @@ endif(QT4_SUPPORT)
 ####################### BOOST #######################
 find_package(Threads REQUIRED)
 message(STATUS "Using ${CMAKE_THREAD_LIBS_INIT} threading library")
-set(BOOST_LIBS regex iostreams)
-set(Boost_USE_STATIC_LIBS        ON)
-set(Boost_USE_MULTITHREADED      ON)
-set(Boost_USE_STATIC_RUNTIME    OFF)
-link_directories(${Boost_LIBRARY_DIRS})
-include_directories(${Boost_INCLUDE_DIRS})
+#set(BOOST_LIBS regex iostreams)
+#set(Boost_USE_STATIC_LIBS        ON)
+#set(Boost_USE_MULTITHREADED      ON)
+#set(Boost_USE_STATIC_RUNTIME    OFF)
+#link_directories(${Boost_LIBRARY_DIRS})
 find_package(Boost COMPONENTS ${BOOST_LIBS} REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 
-# Find GLEW
-find_package(GLEW)
-if(NOT GLEW_FOUND)
-  message (FATAL_ERROR "GLEW not found! CNCSVision needs GLEW libraries in order to support advanced rendering options.")
+if(COMPILE_GLEW)
+    add_subdirectory(${PROJECT_SOURCE_DIR}/libs/glew)
+else()
+    # Find GLEW
+    find_package(GLEW)
+    if(NOT GLEW_FOUND)
+      message (FATAL_ERROR "GLEW not found! CNCSVision needs GLEW libraries in order to support advanced rendering options.")
+    endif()
 endif()
-
-# Include the GLFW project for the necessary GLFW implementation
-add_subdirectory(libs/glfw)
 
 # Include OpenGL and FreeGLUT stuff
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
-# Include the FreeGLUT project for the necessary FreeGLUT implementation
 
-set(FREEGLUT_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/FreeGLUT/freeglut/freeglut")
-add_subdirectory(${FREEGLUT_INCLUDE_DIR})
-include_directories(${PROJECT_SOURCE_DIR}/libs/FreeGLUT/freeglut/freeglut/include/GL/)
-message(STATUS "-----${PROJECT_SOURCE_DIR}/libs/FreeGLUT/freeglut/freeglut/include/GL/")
+if (COMPILE_FREEGLUT)
+    # Include the FreeGLUT project for the necessary FreeGLUT implementation
+    set(FREEGLUT_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/FreeGLUT/freeglut/freeglut")
+    add_subdirectory(${FREEGLUT_INCLUDE_DIR})
+    include_directories(${PROJECT_SOURCE_DIR}/libs/FreeGLUT/freeglut/freeglut/include/GL/)
+else()
+    if(APPLE)
+        # Set the architectures to both i386 and x86_64 so the generated
+        # libraries have both and can interface with both of them
+        #set(CMAKE_OSX_ARCHITECTURES "i386;x86_64")
+        message(STATUS "Building on Apple for the following architectures: ${CMAKE_OSX_ARCHITECTURES}")
+        include_directories ( /System/Library/Frameworks )
+        find_package(GLUT REQUIRED)
+        find_library(GLUT_LIBRARY GLUT )
+endif(APPLE)
+endif()
 
 # Include Eigen
 include_directories(libs/eigen)
