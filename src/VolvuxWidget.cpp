@@ -383,7 +383,7 @@ void VolvuxWidget::draw()
         arcball.applyRotationMatrix();
         glRotated(90,1,0,0);
         glTranslated(volume->meshStruct.offsetX, volume->meshStruct.offsetY, volume->meshStruct.offsetZ);
-        glutWireCube(volume->meshStruct.radius*2);
+        //glutWireCube(volume->meshStruct.radius*2);
         glPopMatrix();
     }
 }
