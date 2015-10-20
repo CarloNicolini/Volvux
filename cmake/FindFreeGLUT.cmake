@@ -16,10 +16,10 @@
 #  FREEGLUT_FOUND        - True if FreeGLUT found.
 
 # Look for the header file.
-FIND_PATH(FREEGLUT_INCLUDE_DIR NAMES freeglut PATH ${PROJECT_SOURCE_DIR}/libs/FreeGLUT/freeglut/freeglut/include/GL/)
+FIND_PATH(FREEGLUT_INCLUDE_DIR NAMES GL/freeglut.h)
 
 # Look for the library.
-FIND_LIBRARY(FREEGLUT_LIBRARY NAMES PATH ${PROJECT_SOURCE_DIR}/libs/FreeGLUT/freeglut/freeglut/include/GL)
+FIND_LIBRARY(FREEGLUT_LIBRARY NAMES freeglut)
 
 # Handle the QUIETLY and REQUIRED arguments and set FREEGLUT_FOUND to TRUE if all listed variables are TRUE.
 INCLUDE(FindPackageHandleStandardArgs)
@@ -35,4 +35,3 @@ ELSE(FREEGLUT_FOUND)
 ENDIF(FREEGLUT_FOUND)
 
 MARK_AS_ADVANCED(FREEGLUT_INCLUDE_DIRS FREEGLUT_LIBRARIES)
-

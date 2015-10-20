@@ -1,5 +1,5 @@
 add_definitions(${QT_DEFINITIONS})
-add_definitions("/DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED")  
+add_definitions("/DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
     "${CMAKE_SOURCE_DIR}/libs/eigen/unsupported"
     ${QT_INCLUDE_PATH}

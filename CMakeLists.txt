@@ -33,7 +33,7 @@ if (NOT COMPILE_FREEGLUT)
     endif(APPLE)
     find_package(GLUT REQUIRED)
     find_library(GLUT_LIBRARY GLUT)
-    #find_package(FreeGLUT REQUIRED)
+    find_package(FreeGLUT REQUIRED)
 else()
     # Include the FreeGLUT project for the necessary FreeGLUT implementation
     set(FREEGLUT_SRC_DIR "${PROJECT_SOURCE_DIR}/libs/FreeGLUT/freeglut/freeglut")
@@ -142,7 +142,9 @@ endif(WIN32)
 # endif(QT5_SUPPORT)
 
 # 9. Disable stupid warnings on GCC
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-write-strings")
+if (UNIX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-write-strings")
+endif()
 
 # 9. Finally add the project directory
 add_subdirectory(src)
