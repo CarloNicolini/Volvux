@@ -24,7 +24,7 @@
 // CNCSVision. If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef _OBJLOADER_H
-#define _OBJLOADER_H_
+#define _OBJLOADER_H
 
 #define POINTS_PER_VERTEX 3
 #define TOTAL_FLOATS_IN_TRIANGLE 9
