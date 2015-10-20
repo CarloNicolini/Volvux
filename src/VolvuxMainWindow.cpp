@@ -1061,19 +1061,19 @@ void VolvuxMainWindow::onPushButtonExperimentStartClicked()
         QMessageBox::warning(this,"Warning",QString("Please select a randomization method"));
         return;
     }
-    exp->bal.init(nRepetitions,-randomize-2);
+	//exp->bal.init(nRepetitions,-randomize-2);
     // Get the list of factors
     vector<double> factorsDepth;
     try
     {
-        factorsDepth = util::str2num<double>(this->ui->factorCurvatureLineEdit->text().toStdString()," ");
+        //factorsDepth = util::str2num<double>(this->ui->factorCurvatureLineEdit->text().toStdString()," ");
     }
     catch (std::exception &e)
     {
         QMessageBox::warning(this,"Error",e.what());
         return;
     }
-    exp->bal.addFactor("Curvature",factorsDepth);
+    //exp->bal.addFactor("Curvature",factorsDepth);
 
     //Establish connections
     connect(exp,SIGNAL(trialAdvanced(double)),this->ui->volumetricGLWidget,SLOT(onSurfaceCurvatureChanged(double)));

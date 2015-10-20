@@ -64,7 +64,9 @@ if(NOT COMPILE_GLEW)
     endif()
 else()
     # Add the GLEW subdirectory to compile it
-    add_subdirectory(${PROJECT_SOURCE_DIR}/libs/glew)
+    #add_subdirectory(${PROJECT_SOURCE_DIR}/libs/glew)
+	find_package(GLEW)
+	include_directories(GLFW_INCLUDE_DIR)
 endif()
 
 # 5. Try to find Qt4 
@@ -87,7 +89,7 @@ endif(QT4_SUPPORT)
 #link_directories(${Boost_LIBRARY_DIRS})
 find_package(Boost)# COMPONENTS ${BOOST_LIBS} REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
-add_definitions("DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED")
+#add_definitions("DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED")
 
 
 # 7. Include Eigen
@@ -95,6 +97,12 @@ include_directories(libs/eigen)
 
 # 8. Include the Smart Motor interfaces and ALP support *ONLY* on Windows
 if(WIN32)
+	# This set the following defines when compiling on windows
+	add_definitions("-D_WIN32 -DNOMINMAX /EHsc /wd4127 /wd4129 /wd4505 /wd4714 /wd4800 /wd4181 /wd4244 /wd4996 /wd4250 -D_WIN32_WINNT=0x0501")
+
+	if( NOT SMI_SUPPORT)
+		add_definitions("/MP") #disable multiprocessor compilation when including Smart Motor
+	endif(NOT SMI_SUPPORT)
     option(ALP_SUPPORT "Include and link ALP projector libraries (Win32 only)" OFF)
     option(SMI_SUPPORT "Include and link Smart Motor Interface" OFF)
     # ALP Support
@@ -134,7 +142,7 @@ endif(WIN32)
 # endif(QT5_SUPPORT)
 
 # 9. Disable stupid warnings on GCC
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-write-strings")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-write-strings")
 
 # 9. Finally add the project directory
 add_subdirectory(src)

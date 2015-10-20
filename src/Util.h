@@ -41,9 +41,17 @@
 #include <iostream>
 
 #include <sys/stat.h>
+
+#ifndef Q_MOC_RUN
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/math/special_functions.hpp>
+#endif
+
+/*
+#include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string/trim.hpp>
+#include <boost/math/special_functions.hpp> */
 //#include <boost/filesystem.hpp>
 
 #define STATIC_STRINGIFY(A)  #A

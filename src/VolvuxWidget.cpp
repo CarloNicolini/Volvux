@@ -39,7 +39,7 @@ std::string baseDir("/home/carlo/workspace/cncsvisioncmake/");
 #endif
 
 #ifdef WIN32
-std::string baseDir("C:/workspace/cncsvisioncmake/");
+std::string baseDir("C:/Users/Guenda/Documents/GitHub/Volvux/");
 #endif
 
 #ifndef GL_MULTISAMPLE

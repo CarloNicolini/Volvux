@@ -1,4 +1,5 @@
 add_definitions(${QT_DEFINITIONS})
+add_definitions("/DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED")  
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
     "${CMAKE_SOURCE_DIR}/libs/eigen/unsupported"
     ${QT_INCLUDE_PATH}
@@ -44,7 +45,7 @@ VRCamera.cpp
 #SmartMotor.cpp
 
 #link_libraries(${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${Boost_LIBRARIES} VOLVUXHELPER)
-target_link_libraries(VOLVUXHELPER ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARY} ${GLFW_LIBRARY})
+target_link_libraries(VOLVUXHELPER ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARY} ${GLFW_LIBRARY} freeglut)
 
 # Volvux Main files
 set(VOLVUX_HDRS VolvuxMainWindow.h VolvuxExpWidget.h VolvuxWidget.h)
@@ -61,9 +62,6 @@ if (WIN32)
     set_target_properties(volvux PROPERTIES LINK_FLAGS_RELWITHDEBINFO "/SUBSYSTEM:CONSOLE")
     set_target_properties(volvux PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:CONSOLE")
     set_target_properties(volvux PROPERTIES LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE")
-    set_target_properties(dummy PROPERTIES LINK_FLAGS_RELWITHDEBINFO "/SUBSYSTEM:CONSOLE")
-    set_target_properties(dummy PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:CONSOLE")
-    set_target_properties(dummy PROPERTIES LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE")
     if (SMI_SUPPORT)
     target_link_libraries(volvux SMI) #volvux SMI
     endif(SMI_SUPPORT)

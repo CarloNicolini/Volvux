@@ -31,14 +31,16 @@
 #include <QGLFramebufferObject>
 #include <Eigen/Core>
 
-#include "Util.h"
+//#include "Util.h"
 #include "GLUtils.h"
 #include "VRCamera.h"
 #include "Screen.h"
-#include "BalanceFactor.h"
+//#include "BalanceFactor.h"
+
 
 //#define EXPERIMENT_WINDOW_WIDTH 1024.0
 //#define EXPERIMENT_WINDOW_HEIGHT 768.0
+template<class T> class BalanceFactor;
 
 class VolvuxExpWidget : public QGLWidget
 {
@@ -78,7 +80,7 @@ protected:
     VRCamera cam;
 
 public:
-    BalanceFactor<double> bal;
+    //BalanceFactor<double> bal;
     double displayedCurvature;
     double xRange;
 
