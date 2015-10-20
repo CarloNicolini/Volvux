@@ -87,6 +87,8 @@ endif(QT4_SUPPORT)
 #link_directories(${Boost_LIBRARY_DIRS})
 find_package(Boost)# COMPONENTS ${BOOST_LIBS} REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
+add_definitions("DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED")
+
 
 # 7. Include Eigen
 include_directories(libs/eigen)
