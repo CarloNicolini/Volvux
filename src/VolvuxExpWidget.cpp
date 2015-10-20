@@ -79,7 +79,7 @@ void VolvuxExpWidget::applyOpenGLCameraFOV()
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    cam.setEye(Vector3d(0,0,0));
+    cam.setEye(Eigen::Vector3d(0,0,0));
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
@@ -204,6 +204,7 @@ void VolvuxExpWidget::resizeGL(int width, int height)
 */
 void VolvuxExpWidget::advanceTrial()
 {
+	/*
     if ( bal.next() )
     {
         int minRand = 0;
@@ -224,6 +225,7 @@ void VolvuxExpWidget::advanceTrial()
         emit experimentFinished();
         this->close();
     }
+	*/
 }
 
 /**
@@ -231,8 +233,10 @@ void VolvuxExpWidget::advanceTrial()
  */
 void VolvuxExpWidget::initializeExperiment()
 {
+	/*
     if (bal.getCurrent().empty())
         advanceTrial();
+	*/
 }
 
 /**

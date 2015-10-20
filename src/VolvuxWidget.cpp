@@ -39,7 +39,7 @@ std::string baseDir("/home/carlo/workspace/cncsvisioncmake/");
 #endif
 
 #ifdef WIN32
-std::string baseDir("C:/workspace/cncsvisioncmake/");
+std::string baseDir("C:/Users/Guenda/Documents/GitHub/Volvux/");
 #endif
 
 #ifndef GL_MULTISAMPLE
@@ -383,7 +383,7 @@ void VolvuxWidget::draw()
         arcball.applyRotationMatrix();
         glRotated(90,1,0,0);
         glTranslated(volume->meshStruct.offsetX, volume->meshStruct.offsetY, volume->meshStruct.offsetZ);
-        glutWireCube(volume->meshStruct.radius*2);
+        //glutWireCube(volume->meshStruct.radius*2);
         glPopMatrix();
     }
 }
