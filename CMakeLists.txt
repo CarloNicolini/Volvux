@@ -37,6 +37,8 @@ if (NOT COMPILE_FREEGLUT)
 else()
     # Include the FreeGLUT project for the necessary FreeGLUT implementation
     set(FREEGLUT_SRC_DIR "${PROJECT_SOURCE_DIR}/libs/FreeGLUT/freeglut/freeglut")
+    # Override demos building http://stackoverflow.com/questions/3766740/overriding-a-default-option-value-in-cmake-from-a-parent-cmakelists-txt
+    set(FREEGLUT_BUILD_DEMOS OFF CACHE BOOL "Disable freeglut demos building")
     add_subdirectory(${FREEGLUT_SRC_DIR})
     include_directories(${FREEGLUT_SRC_DIR}/include/GL)
     set(GLUT_LIBRARIES "freeglut;${GLUT_LIBRARIES}")
@@ -50,15 +52,29 @@ if(NOT COMPILE_GLFW)
         message(FATAL_ERROR "GLFW not found in system. Please select compile GLFW from scratch.Set COMPILE_GLFW=True option.")
     endif()
 else()
-     add_subdirectory("${PROJECT_SOURCE_DIR}/libs/glfw")
-     set(GLFW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/glfw/include")
-     include_directories(${GLFW_INCLUDE_DIR})
-     set(GLFW_BUILD_EXAMPLES "Build GLFW examples" OFF)
+    # Override demos building http://stackoverflow.com/questions/3766740/overriding-a-default-option-value-in-cmake-from-a-parent-cmakelists-txt
+    set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Disable glfw examples building")
+    set(GLFW_BUILD_DOCS OFF CACHE BOOL "Disable glfw documentation building")
+    set(GLFW_INSTALL OFF CACHE BOOL "Disable glfw installation")
+    set(GLFW_DOCUMENT_INTERNALS OFF CACHE BOOL "Disable glfw internal documentation")
+    # Now add glfw
+    add_subdirectory("${PROJECT_SOURCE_DIR}/libs/glfw")
+    set(GLFW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/glfw/include")
+    include_directories(${GLFW_INCLUDE_DIR})
 endif(NOT COMPILE_GLFW)
 
 # 4. Try to find GLEW
-find_package(GLEW)
-include_directories(GLEW_INCLUDE_DIR)
+if(NOT COMPILE_GLEW)
+    find_package(GLEW) #Looks for system-wise installed GLFW
+    include_directories(${GLEW_INCLUDE_DIR})
+    if (NOT GLEW_FOUND)
+        message(FATAL_ERROR "GLEW not found in system. Please select compile GLEW from scratch.Set COMPILE_GLEW=True option.")
+    endif()
+else() # compile glew 1.10 from cmake project source
+     add_subdirectory("${PROJECT_SOURCE_DIR}/libs/glew-1.10.0-src/")
+     set(GLFW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/glew-1.10.0-src/include")
+     include_directories(${GLEW_INCLUDE_DIR})
+endif(NOT COMPILE_GLEW)
 
 # 5. Try to find Qt4 
 if(QT4_SUPPORT)
@@ -136,8 +152,7 @@ add_definitions(${Qt5Widgets_DEFINITIONS})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 # Enable the C++11 standard
 #set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} --std=c++11)
-message(STATUS "Found ${Qt5Widgets_INCLUDE_DIRS}")
-message(STATUS "Found ${Qt5OpenGL_INCLUDE_DIRS}")
+message(STATUS "Found Qt5 include directories: ${Qt5Widgets_INCLUDE_DIRS}")
 endif(QT5_SUPPORT)
 
 # 9. Disable stupid warnings on GCC
