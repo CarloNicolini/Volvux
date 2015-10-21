@@ -54,6 +54,7 @@ if(NOT COMPILE_GLFW)
 else()
     # Override demos building http://stackoverflow.com/questions/3766740/overriding-a-default-option-value-in-cmake-from-a-parent-cmakelists-txt
     set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Disable glfw examples building")
+	set(GLFW_BUILD_TESTS OFF CACHE BOOL "Disable glfw tests building")
     set(GLFW_BUILD_DOCS OFF CACHE BOOL "Disable glfw documentation building")
     set(GLFW_INSTALL OFF CACHE BOOL "Disable glfw installation")
     set(GLFW_DOCUMENT_INTERNALS OFF CACHE BOOL "Disable glfw internal documentation")
@@ -72,7 +73,7 @@ if(NOT COMPILE_GLEW)
     endif()
 else() # compile glew 1.10 from cmake project source
      add_subdirectory("${PROJECT_SOURCE_DIR}/libs/glew-1.10.0-src/")
-     set(GLFW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/glew-1.10.0-src/include")
+     set(GLEW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/glew-1.10.0-src/include")
      include_directories(${GLEW_INCLUDE_DIR})
 endif(NOT COMPILE_GLEW)
 
