@@ -63,9 +63,9 @@ public:
     VolvuxMainWindow(QWidget *parent = 0);
     ~VolvuxMainWindow();
 protected:
-    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
-    bool eventFilter(QObject *, QEvent *) Q_DECL_OVERRIDE;
-    void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
+    void keyPressEvent(QKeyEvent *event) ;
+    bool eventFilter(QObject *, QEvent *) ;
+    void closeEvent(QCloseEvent *event) ;
 
 private slots:
     // Scene slots

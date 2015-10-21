@@ -39,7 +39,7 @@ else()
     set(FREEGLUT_SRC_DIR "${PROJECT_SOURCE_DIR}/libs/FreeGLUT/freeglut/freeglut")
     add_subdirectory(${FREEGLUT_SRC_DIR})
     include_directories(${FREEGLUT_SRC_DIR}/include/GL)
-    set(GLUT_LIBRARIES "freeglut ${GLUT_LIBRARIES}")
+    set(GLUT_LIBRARIES "freeglut;${GLUT_LIBRARIES}")
 endif()
 
 # 3. Try to find GLFW
