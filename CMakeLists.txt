@@ -75,6 +75,7 @@ else() # compile glew 1.10 from cmake project source
      add_subdirectory("${PROJECT_SOURCE_DIR}/libs/glew-1.10.0-src/")
      set(GLEW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/glew-1.10.0-src/include")
      include_directories(${GLEW_INCLUDE_DIR})
+     set(GLEW_LIBRARY glew64s)
 endif(NOT COMPILE_GLEW)
 
 # 5. Try to find Qt4 
