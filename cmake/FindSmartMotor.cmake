@@ -26,5 +26,4 @@ include_directories(${SMI_INCLUDE_DIR})
 add_definitions(-D_AFXDLL)
 set(CMAKE_MFC_FLAG 2) 
 
-
 ######################### END SMI PACKAGE SEARCH #################
