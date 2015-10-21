@@ -60,10 +60,10 @@ elseif( MSVC )
 endif()
 
 # Build the library name from the project and databus width (pointer size)
-set( LIBNAME "${CMAKE_PROJECT_NAME}${PSIZE}" )
+set( LIBNAME "glew${PSIZE}" )
 
 # Include directories for all targets
-include_directories( "${PROJECT_SOURCE_DIR}/include" )
+include_directories( "${CMAKE_CURRENT_SOURCE_DIR}/include" )
 
 # C Pre-processor definitions for all targets
 add_definitions( -DGLEW_BUILD )
@@ -71,52 +71,52 @@ add_definitions( -DGLEW_NO_GLU )
 
 # The shared GLEW library
 add_library( ${LIBNAME} SHARED
-    "${PROJECT_SOURCE_DIR}/src/glew.c"
-    "${PROJECT_SOURCE_DIR}/build/glew.rc" )
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/glew.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/build/glew.rc" )
 
 target_link_libraries( ${LIBNAME}
     ${MLIBS} )
 
 # The static GLEW library
 add_library( ${LIBNAME}s STATIC
-    "${PROJECT_SOURCE_DIR}/src/glew.c"
-    "${PROJECT_SOURCE_DIR}/build/glew.rc" )
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/glew.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/build/glew.rc" )
 
 set_target_properties( ${LIBNAME}s PROPERTIES
     COMPILE_DEFINITIONS "GLEW_STATIC" )
 
-# The mx shared GLEW library
-add_library( ${LIBNAME}mx SHARED
-    "${PROJECT_SOURCE_DIR}/src/glew.c"
-    "${PROJECT_SOURCE_DIR}/build/glew.rc" )
+# # The mx shared GLEW library
+# add_library( ${LIBNAME}mx SHARED
+    # "${CMAKE_CURRENT_SOURCE_DIR}/src/glew.c"
+    # "${CMAKE_CURRENT_SOURCE_DIR}/build/glew.rc" )
 
-set_target_properties( ${LIBNAME}mx PROPERTIES
-    COMPILE_DEFINITIONS "GLEW_MX" )
+# set_target_properties( ${LIBNAME}mx PROPERTIES
+    # COMPILE_DEFINITIONS "GLEW_MX" )
 
-target_link_libraries( ${LIBNAME}mx
-    ${MLIBS} )
+# target_link_libraries( ${LIBNAME}mx
+    # ${MLIBS} )
 
-# The mx static GLEW library
-add_library( ${LIBNAME}mxs STATIC
-    "${PROJECT_SOURCE_DIR}/src/glew.c"
-    "${PROJECT_SOURCE_DIR}/build/glew.rc" )
+# # The mx static GLEW library
+# add_library( ${LIBNAME}mxs STATIC
+    # "${CMAKE_CURRENT_SOURCE_DIR}/src/glew.c"
+    # "${CMAKE_CURRENT_SOURCE_DIR}/build/glew.rc" )
 
-set_target_properties( ${LIBNAME}mxs PROPERTIES
-    COMPILE_DEFINTIIONS "GLEW_STATIC GLEW_MX" )
+# set_target_properties( ${LIBNAME}mxs PROPERTIES
+    # COMPILE_DEFINTIIONS "GLEW_STATIC GLEW_MX" )
 
 install( TARGETS ${LIBNAME} ${LIBNAME}s
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib )
 
-install( TARGETS ${LIBNAME}mx ${LIBNAME}mxs
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-    COMPONENT mx )
+# install( TARGETS ${LIBNAME}mx ${LIBNAME}mxs
+    # RUNTIME DESTINATION bin
+    # LIBRARY DESTINATION lib
+    # ARCHIVE DESTINATION lib
+    # COMPONENT mx )
 
 # Header files need to be included in the install!
-install( DIRECTORY ${PROJECT_SOURCE_DIR}/include/GL
+install( DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/GL
     DESTINATION include )
 
 # --- CPack Packaging
