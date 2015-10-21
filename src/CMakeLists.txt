@@ -13,17 +13,11 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Building VOLVUXHELPER library that consists
-add_library(VOLVUXHELPER 
+
+set(VOLVUXHELPER_SRCS
 Arcball.cpp
 BinVoxReader.cpp
-#Camera.cpp
-#GL2DPainter.cpp
-#GLee.cpp
-#GLInfo.cpp
-#GLMaterial.cpp
 GLSL.cpp
-#GLText.cpp
-#GLTexture.cpp
 GLUtils.cpp
 Grid.cpp
 Homography.cpp
@@ -31,7 +25,6 @@ Icosphere.cpp
 Imageloader.cpp
 Mathcommon.cpp
 ObjLoader2.cpp
-#ObjLoader.cpp
 ParametersLoader.cpp
 Screen.cpp
 Timer.cpp
@@ -39,13 +32,27 @@ TinyObjLoader.cpp
 Util.cpp
 VolumetricMeshIntersection.cpp
 VolumetricSurfaceIntersection.cpp
-VRCamera.cpp
-)
-#ALPProjector.cpp
-#SmartMotor.cpp
+VRCamera.cpp)
+
+if(ALP_SUPPORT)
+set(VOLVUXHELPER_SRCS ${VOLVUXHELPER_SRCS} ALPProjector.cpp)
+endif(ALP_SUPPORT)
+
+if(SMI_SUPPORT)
+set(VOLVUXHELPER_SRCS ${VOLVUXHELPER_SRCS} SmartMotor.cpp)
+endif(SMI_SUPPORT)
+
+add_library(VOLVUXHELPER ${VOLVUXHELPER_SRCS})
 
 #link_libraries(${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${Boost_LIBRARIES} VOLVUXHELPER)
-target_link_libraries(VOLVUXHELPER ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARY} ${GLFW_LIBRARY} )
+target_link_libraries(VOLVUXHELPER ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARY} ${GLFW_LIBRARY} ${ALP_LIBRARY})
+if(ALP_SUPPORT)
+target_link_libraries(VOLVUXHELPER ${ALP_LIBRARY})
+endif(ALP_SUPPORT)
+
+if(SMI_SUPPORT)
+target_link_libraries(VOLVUXHELPER ${SMI_LIBRARY})
+endif(SMI_SUPPORT)
 
 # Volvux Main files
 set(VOLVUX_HDRS VolvuxExpWidget.h  VolvuxMainWindow.h VolvuxWidget.h)
@@ -62,10 +69,7 @@ target_link_libraries(volvux ${QT_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY}
 if (WIN32)
     set_target_properties(volvux PROPERTIES LINK_FLAGS_RELWITHDEBINFO "/SUBSYSTEM:CONSOLE")
     set_target_properties(volvux PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:CONSOLE")
-    set_target_properties(volvux PROPERTIES LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE")
-    if (SMI_SUPPORT)
-    target_link_libraries(volvux SMI) #volvux SMI
-    endif(SMI_SUPPORT)
+    set_target_properties(volvux PROPERTIES LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE")    
 endif(WIN32)
 endif(QT4_SUPPORT)
 
