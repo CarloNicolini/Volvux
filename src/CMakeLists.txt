@@ -13,17 +13,17 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Building VOLVUXHELPER library that consists
-add_library(VOLVUXHELPER
+add_library(VOLVUXHELPER SHARED
 Arcball.cpp
 BinVoxReader.cpp
-Camera.cpp
-GL2DPainter.cpp
-GLee.cpp
-GLInfo.cpp
-GLMaterial.cpp
+#Camera.cpp
+#GL2DPainter.cpp
+#GLee.cpp
+#GLInfo.cpp
+#GLMaterial.cpp
 GLSL.cpp
-GLText.cpp
-GLTexture.cpp
+#GLText.cpp
+#GLTexture.cpp
 GLUtils.cpp
 Grid.cpp
 Homography.cpp
@@ -31,7 +31,7 @@ Icosphere.cpp
 Imageloader.cpp
 Mathcommon.cpp
 ObjLoader2.cpp
-ObjLoader.cpp
+#ObjLoader.cpp
 ParametersLoader.cpp
 Screen.cpp
 Timer.cpp
@@ -45,13 +45,14 @@ VRCamera.cpp
 #SmartMotor.cpp
 
 #link_libraries(${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${Boost_LIBRARIES} VOLVUXHELPER)
-target_link_libraries(VOLVUXHELPER ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARY} ${GLFW_LIBRARY} freeglut)
+target_link_libraries(VOLVUXHELPER ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARY} ${GLFW_LIBRARY} )
 
 # Volvux Main files
-set(VOLVUX_HDRS VolvuxMainWindow.h VolvuxExpWidget.h VolvuxWidget.h)
-set(VOLVUX_SRCS VolvuxMainWindow.cpp VolvuxExpWidget.cpp VolvuxWidget.cpp)
+set(VOLVUX_HDRS VolvuxExpWidget.h  VolvuxMainWindow.h VolvuxWidget.h)
+set(VOLVUX_SRCS VolvuxExpWidget.cpp  VolvuxMainWindow.cpp VolvuxWidget.cpp)
 set(VOLVUX_FORMS VolvuxMainWindow.ui)
 
+if(QT4_SUPPORT)
 QT4_WRAP_UI(VOLVUX_FORMS_HDRS ${VOLVUX_FORMS})
 QT4_WRAP_CPP(VOLVUX_HDRS_MOC ${VOLVUX_HDRS})
 
@@ -66,3 +67,24 @@ if (WIN32)
     target_link_libraries(volvux SMI) #volvux SMI
     endif(SMI_SUPPORT)
 endif(WIN32)
+endif(QT4_SUPPORT)
+
+if(QT5_SUPPORT)
+# Tell CMake to run moc when necessary:
+set(CMAKE_AUTOMOC ON)
+# As moc files are generated in the binary dir, tell CMake
+# to always look for includes there:
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+QT5_WRAP_UI(VOLVUX_FORMS_HDRS ${VOLVUX_FORMS})
+QT5_WRAP_CPP(VOLVUX_HDRS_MOC ${VOLVUX_HDRS})
+
+#add_executable(volvux volvux.cpp ${VOLVUX_SRCS} ${VOLVUX_FORMS_HDRS})
+#target_link_libraries(volvux Qt5::Widgets Qt5::OpenGL VOLVUXHELPER)
+# Tell CMake to create the helloworld executable
+add_executable(volvux volvux.cpp ${VOLVUX_SRCS} ${VOLVUX_HDRS} ${VOLVUX_FORMS_HDRS})
+
+#Link the helloworld executable to the Qt 5 widgets library.
+target_link_libraries(volvux Qt5::Widgets Qt5::OpenGL VOLVUXHELPER)
+qt5_use_modules(volvux Widgets OpenGL)
+endif(QT5_SUPPORT)

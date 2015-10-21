@@ -31,7 +31,7 @@
 #include "Timer.h"
 
 #ifdef __APPLE__
-std::string baseDir("/Users/rs/cncsvisioncmake/");
+std::string baseDir("/Users/rs/workspace/Volvux/");
 #endif
 
 #ifdef __linux__
@@ -348,12 +348,12 @@ void VolvuxWidget::draw()
 
     glEnable(GL_TEXTURE_3D);
     volume->meshStruct.shader->begin();
-    volume->meshStruct.shader->setUniform4f(static_cast<GLcharARB*>("uniformColor"),1.0f,1.0f,1.0f,1.0f);
-    volume->meshStruct.shader->setUniform1f(static_cast<GLcharARB*>("step"),volume->meshStruct.rotationAngle);
-    volume->meshStruct.shader->setUniform3f(static_cast<GLcharARB*>("objOffset"),volume->meshStruct.offsetX,volume->meshStruct.offsetY,volume->meshStruct.offsetZ);
-    volume->meshStruct.shader->setUniform1f(static_cast<GLcharARB*>("objSize"),volume->meshStruct.radius);
-    volume->meshStruct.shader->setUniform1f(static_cast<GLcharARB*>("thickness"),volume->meshStruct.thickness);
-    volume->meshStruct.shader->setUniform1f(static_cast<GLcharARB*>("curvature"),this->curvature);
+    volume->meshStruct.shader->setUniform4f(static_cast<GLcharARB*>((char*)"uniformColor"),1.0f,1.0f,1.0f,1.0f);
+    volume->meshStruct.shader->setUniform1f(static_cast<GLcharARB*>((char*)"step"),volume->meshStruct.rotationAngle);
+    volume->meshStruct.shader->setUniform3f(static_cast<GLcharARB*>((char*)"objOffset"),volume->meshStruct.offsetX,volume->meshStruct.offsetY,volume->meshStruct.offsetZ);
+    volume->meshStruct.shader->setUniform1f(static_cast<GLcharARB*>((char*)"objSize"),volume->meshStruct.radius);
+    volume->meshStruct.shader->setUniform1f(static_cast<GLcharARB*>((char*)"thickness"),volume->meshStruct.thickness);
+    volume->meshStruct.shader->setUniform1f(static_cast<GLcharARB*>((char*)"curvature"),this->curvature);
 
     glPushMatrix();
     glLoadIdentity();

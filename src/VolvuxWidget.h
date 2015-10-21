@@ -29,6 +29,7 @@
 #include <QtGui>
 #include <QGLWidget>
 #include <QGLFramebufferObject>
+#include <QApplication>
 #include <Eigen/Core>
 
 #include "Util.h"
@@ -46,7 +47,6 @@
 #define TEXTURE_RESOLUTION_Y 512
 #define TEXTURE_RESOLUTION_Z 512
 
-//ffff
 #define VOLUME_N_SPHERES 1000
 #define SPHERES_MIN_RADIUS 5
 #define SPHERES_MAX_RADIUS 50

@@ -2,14 +2,14 @@ project(Volvux)
 cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 
 ################################ CMAKE OPTIONS ###############################
-set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+set(CMAKE_MODULE_PATH "${CMAKE_ROOT}/Modules/;${PROJECT_SOURCE_DIR}/cmake")
 set(PROJECT_BINARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build/")
 set(LIBRARY_OUTPUT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/" CACHE PATH "Single directory for all libraries")
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/" CACHE PATH "Single directory for all executables")
 
 ####################### COMPILE OPTIONS  ##################################
-option(QT4_SUPPORT "Compile the executable with Qt4 libraries" TRUE)
-option(QT5_SUPPORT "Compile the executable with Qt5 libraries" FALSE)
+option(QT4_SUPPORT "Compile the executable with Qt4 libraries" OFF)
+option(QT5_SUPPORT "Compile the executable with Qt5 libraries" ON)
 option(COMPILE_GLFW "Compile the GLFW library for OpenGL context creation" OFF)
 option(COMPILE_GLEW "Compile the glew library from source" OFF)
 option(COMPILE_FREEGLUT "Compile the FreeGLUT library from souce" OFF)
@@ -39,6 +39,7 @@ else()
     set(FREEGLUT_SRC_DIR "${PROJECT_SOURCE_DIR}/libs/FreeGLUT/freeglut/freeglut")
     add_subdirectory(${FREEGLUT_SRC_DIR})
     include_directories(${FREEGLUT_SRC_DIR}/include/GL)
+    set(GLUT_LIBRARIES "freeglut ${GLUT_LIBRARIES}")
 endif()
 
 # 3. Try to find GLFW
@@ -124,22 +125,25 @@ endif(WIN32)
 
 
 ## Experimental Qt5 support
-# if (QT5_SUPPORT)
-# # Find includes in corresponding build directories
-# set(CMAKE_INCLUDE_CURRENT_DIR ON)
-# # Find the QtWidgets library
-# find_package(Qt5Widgets)
-# find_package(Qt5OpenGL)
-# # Add the include directories for the Qt 5 Widgets module to
-# # the compile lines.
-# include_directories(${Qt5Widgets_INCLUDE_DIRS})
-# # Use the compile definitions defined in the Qt 5 Widgets module
-# add_definitions(${Qt5Widgets_DEFINITIONS})
-# # Add compiler flags for building executables (-fPIE)
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
-# # Enable the C++11 standard
-# set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -std=c++11)
-# endif(QT5_SUPPORT)
+if (QT5_SUPPORT)
+    if(NOT CMAKE_PREFIX_PATH)
+        message(FATAL_ERROR "Must specify where Qt5 modules are to be found. Use cmake -DCMAKE_PREFIX_PATH=/path/to/cmakeqt5modules")
+    endif()
+# Find includes in corresponding build directories
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+# Find the QtWidgets library
+find_package(Qt5Widgets)
+find_package(Qt5OpenGL)
+# Add the include directories for the Qt 5 Widgets module to
+# the compile lines.
+include_directories(${Qt5Widgets_INCLUDE_DIRS})
+# Use the compile definitions defined in the Qt 5 Widgets module
+add_definitions(${Qt5Widgets_DEFINITIONS})
+# Add compiler flags for building executables (-fPIE)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+# Enable the C++11 standard
+#set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} --std=c++11)
+endif(QT5_SUPPORT)
 
 # 9. Disable stupid warnings on GCC
 if (UNIX)

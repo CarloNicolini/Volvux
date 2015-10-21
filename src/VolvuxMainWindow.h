@@ -26,25 +26,26 @@
 #ifndef VOLVUX_MAIN_WINDOW_H_
 #define VOLVUX_MAIN_WINDOW_H_
 
-#include <QMainWindow>
 #include <QtGui>
-#include <QSlider>
+#include <QMainWindow>
 #include <QWidget>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QInputDialog>
 #include <stdexcept>
 
 #include "ui_VolvuxMainWindow.h"
+
 #ifdef ALP_SUPPORT
-#include "ALPProjector.h"
+    #include "ALPProjector.h"
 #endif
 
 //#define SMI_SUPPORT
 
-#if defined (SMI_SUPPORT) &&  (WIN32)
-//#include "stdafx.h"
+#ifdef SMI_SUPPORT
 #import "IntegMotorInterface.tlb"
-#include "../../workspace/cncsvisioncmake/deps/drivers/SMI/SMIDefs.h"
+#include <libs/drivers/SMI/SMIDefs.h>
 #include <comdef.h>
-
 #endif
 
 #include "VolvuxExpWidget.h"
@@ -55,23 +56,17 @@ class VolvuxMainWindow;
 }
 
 class VolvuxMainWindow : public QMainWindow
-{  Q_OBJECT
+{
+    Q_OBJECT
+
 public:
     VolvuxMainWindow(QWidget *parent = 0);
     ~VolvuxMainWindow();
 protected:
-    void keyPressEvent(QKeyEvent *event);
-    bool eventFilter(QObject *, QEvent *);
-	void closeEvent(QCloseEvent *event);
+    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *, QEvent *) Q_DECL_OVERRIDE;
+    void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
 
-private:
-    void initializeTabProjectorQConnections();
-    void initializeTabSceneQConnections();
-    void initializeTabCameraCalibrationQConnections();
-    void initializeTabExperimentQConnections();
-    void initializeTabMotorQConnections();
-    void loadSettings();
-    void saveSettings();
 private slots:
     // Scene slots
     void onDoubleSpinboxObjectSizeChanged(double value);
@@ -106,7 +101,7 @@ private slots:
     void onSpinBoxProjectorLEDpercentageChanged(double percentage);
     void onSpinBoxProjectorMicrosecondsPerFrameChanged(int value);
     void onSpinboxProjectorMicrosecondsPerRoundChanged(int value);
-	
+
     // Camera calibration slots
     void onCameraFOVChanged(double fov);
     void onCameraZNearChanged(double znear);
@@ -119,15 +114,23 @@ private slots:
     void onPushButtonMotorInitializeClicked();
     void onPushButtonMotorStartClicked();
     void onPushButtonMotorStopClicked();
-	void onSpinBoxFlickerFrequencyChanged(double flickerFrequency);
-	void startRotation(int speed);
-	
+    void onSpinBoxFlickerFrequencyChanged(double flickerFrequency);
+    void startRotation(int speed);
+
     // Experiment slots
     void onPushButtonExperimentStartClicked();
     void triggerFramesGeneration(double curvature);
     void onRandomizationMethodChanged(int randomVal);
 
 private:
+    void initializeTabProjectorQConnections();
+    void initializeTabSceneQConnections();
+    void initializeTabCameraCalibrationQConnections();
+    void initializeTabExperimentQConnections();
+    void initializeTabMotorQConnections();
+    void loadSettings();
+    void saveSettings();
+
     Ui::VolvuxMainWindow *ui;
     QPointer<VolvuxExpWidget> exp;
 #ifdef ALP_SUPPORT
