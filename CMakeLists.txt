@@ -75,7 +75,7 @@ else() # compile glew 1.10 from cmake project source
      add_subdirectory("${PROJECT_SOURCE_DIR}/libs/glew-1.10.0-src/")
      set(GLEW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/glew-1.10.0-src/include")
      include_directories(${GLEW_INCLUDE_DIR})
-     set(GLEW_LIBRARY glew64s)
+     set(GLEW_LIBRARY glew32)
 endif(NOT COMPILE_GLEW)
 
 # 5. Try to find Qt4 
@@ -135,7 +135,7 @@ endif(WIN32)
 ## Experimental Qt5 support
 if (QT5_SUPPORT)
 	if (WIN32)
-		set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};C:/Qt/5.5/msvc2013_64/lib/cmake/")
+		set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};C:/Qt/5.5/msvc2012/lib/cmake/")
 	endif()
     if(NOT CMAKE_PREFIX_PATH)
         message(FATAL_ERROR "Must specify where Qt5 modules are to be found. Use cmake -DCMAKE_PREFIX_PATH=/path/to/cmakeqt5modules")

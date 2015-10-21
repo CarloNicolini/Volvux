@@ -24,7 +24,7 @@ elseif( CMAKE_SIZEOF_VOID_P EQUAL 8 )
 else()
     message( FATAL_ERROR "Data width could not be determined!" )
 endif()
-
+message (STATUS "-----${PSIZE}")
 if( CMAKE_BUILD_TYPE STREQUAL "Debug" )
     set( DBG "-debug" )
 endif()

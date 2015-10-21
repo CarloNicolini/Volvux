@@ -36,7 +36,8 @@
 #endif
 */
 #include "stdafx.h"
-#import "IntegMotorInterface.tlb"
+#include <afx.h>
+#import "IntegMotorInterface.tbl"
 #include "SMIDefs.h"
 #include <comdef.h>
 
@@ -47,6 +48,7 @@
 #define STR2BSTR(X) _com_util::ConvertStringToBSTR(const_cast<const char*>(X.c_str()))
 #endif
 using namespace INTEGMOTORINTERFACELib;
+
 
 class SmartMotor
 {
