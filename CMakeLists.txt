@@ -2,7 +2,7 @@ project(Volvux)
 cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 
 ################################ CMAKE OPTIONS ###############################
-set(CMAKE_MODULE_PATH "${CMAKE_ROOT}/Modules/;${PROJECT_SOURCE_DIR}/cmake")
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 set(PROJECT_BINARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build/")
 set(LIBRARY_OUTPUT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/" CACHE PATH "Single directory for all libraries")
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/" CACHE PATH "Single directory for all executables")
@@ -17,7 +17,7 @@ option(COMPILE_FREEGLUT "Compile the FreeGLUT library from souce" OFF)
 ####################### FIND PACKAGES AND LIBRARIES ####################
 
 # 1. Try to find the StandardMathLibrary standard package
-find_package(StandardMathLibrary)
+#find_package(StandardMathLibrary)
 
 # 1. Try to find OpenGL
 find_package(OpenGL REQUIRED)
@@ -30,9 +30,9 @@ endif()
 if (NOT COMPILE_FREEGLUT)
     if(APPLE) # On Apple use the system provided GLUT
         include_directories( /System/Library/Frameworks )
+		find_package(GLUT REQUIRED)
+		find_library(GLUT_LIBRARY GLUT)
     endif(APPLE)
-    find_package(GLUT REQUIRED)
-    find_library(GLUT_LIBRARY GLUT)
     find_package(FreeGLUT REQUIRED)
 else()
     # Include the FreeGLUT project for the necessary FreeGLUT implementation
@@ -57,18 +57,8 @@ else()
 endif(NOT COMPILE_GLFW)
 
 # 4. Try to find GLEW
-if(NOT COMPILE_GLEW)
-    find_package(GLEW) # Looks for system-wise installed glew
-    include_directories(GLFW_INCLUDE_DIR)
-    if(NOT GLEW_FOUND)
-        message(FATAL_ERROR "GLEW not found in system. Please select compile GLEW from scratch.Set COMPILE_GLEW=True option.")
-    endif()
-else()
-    # Add the GLEW subdirectory to compile it
-    #add_subdirectory(${PROJECT_SOURCE_DIR}/libs/glew)
-	find_package(GLEW)
-	include_directories(GLFW_INCLUDE_DIR)
-endif()
+find_package(GLEW)
+include_directories(GLEW_INCLUDE_DIR)
 
 # 5. Try to find Qt4 
 if(QT4_SUPPORT)
@@ -126,6 +116,9 @@ endif(WIN32)
 
 ## Experimental Qt5 support
 if (QT5_SUPPORT)
+	if (WIN32)
+		set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};C:/Qt/5.5/msvc2013_64/lib/cmake/")
+	endif()
     if(NOT CMAKE_PREFIX_PATH)
         message(FATAL_ERROR "Must specify where Qt5 modules are to be found. Use cmake -DCMAKE_PREFIX_PATH=/path/to/cmakeqt5modules")
     endif()
@@ -143,6 +136,8 @@ add_definitions(${Qt5Widgets_DEFINITIONS})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 # Enable the C++11 standard
 #set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} --std=c++11)
+message(STATUS "Found ${Qt5Widgets_INCLUDE_DIRS}")
+message(STATUS "Found ${Qt5OpenGL_INCLUDE_DIRS}")
 endif(QT5_SUPPORT)
 
 # 9. Disable stupid warnings on GCC

@@ -6,13 +6,10 @@
 #  GLEW_LIBRARY_DIR  - where the libraries are
 #  GLEW_LIBRARY      - Link these to use GLEW
 #
-
-IF (GLEW_INCLUDE_DIR)
-  SET(GLEW_FIND_QUIETLY TRUE)
-ENDIF (GLEW_INCLUDE_DIR)
-
+message (STATUS "-------- ${GLEW_INCLUDE_DIR}")
 if( WIN32 )
    set( GLEW_INCLUDE_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/libs/glew-1.13-win32" )
+   
    include_directories(${GLEW_INCLUDE_DIR})
    include_directories(${GLEW_INCLUDE_DIR}/include)
    include_directories(${GLEW_INCLUDE_DIR}/bin)
@@ -27,7 +24,7 @@ if( WIN32 )
 	SET( GLEW_NAMES glew32 )
 	find_library( GLEW_LIBRARY
                       NAMES ${GLEW_NAMES}
-                      PATHS libs/glew-1.13-win32/lib/Release/Win32
+                      PATHS libs/glew-1.13-win32/lib/Release/x64
                       NO_DEFAULT_PATH NO_CMAKE_ENVIRONMENT_PATH
                       NO_CMAKE_PATH NO_SYSTEM_ENVIRONMENT_PATH
                       NO_CMAKE_SYSTEM_PATH

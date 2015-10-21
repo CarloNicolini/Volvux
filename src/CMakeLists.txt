@@ -13,7 +13,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Building VOLVUXHELPER library that consists
-add_library(VOLVUXHELPER SHARED
+add_library(VOLVUXHELPER 
 Arcball.cpp
 BinVoxReader.cpp
 #Camera.cpp
