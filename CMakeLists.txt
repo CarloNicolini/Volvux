@@ -106,12 +106,16 @@ include_directories(libs/eigen)
 
 # 8. Include the Smart Motor interfaces and ALP support *ONLY* on Windows
 if(WIN32)
+	MESSAGE(STATUS "MSVC_VERSION=${MSVC_VERSION}")
 	# This set the following defines when compiling on windows
-	add_definitions("-D_WIN32 -DNOMINMAX /EHsc /wd4127 /wd4129 /wd4505 /wd4714 /wd4800 /wd4181 /wd4244 /wd4996 /wd4250 -D_WIN32_WINNT=0x0501")
-
+        if(MSVC)
+        add_definitions("-D_WIN32 -DNOMINMAX /EHsc /wd4127 /wd4129 /wd4505 /wd4714 /wd4800 /wd4181 /wd4244 /wd4996 /wd4250 -D_WIN32_WINNT=0x0501")
+        endif(MSVC)
 	if( NOT SMI_SUPPORT)
+        if(MSVC)
 		add_definitions("/MP") #disable multiprocessor compilation when including Smart Motor
-	endif(NOT SMI_SUPPORT)
+        endif(MSVC)
+    endif(NOT SMI_SUPPORT)
     option(ALP_SUPPORT "Include and link ALP projector libraries (Win32 only)" OFF)
     option(SMI_SUPPORT "Include and link Smart Motor Interface" OFF)
     # ALP Support
@@ -145,16 +149,20 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Find the QtWidgets library
 find_package(Qt5Widgets)
 find_package(Qt5OpenGL)
+find_package(Qt5Gui)
 # Add the include directories for the Qt 5 Widgets module to
 # the compile lines.
+include_directories(${Qt5Gui_INCLUDE_DIRS})
 include_directories(${Qt5Widgets_INCLUDE_DIRS})
 # Use the compile definitions defined in the Qt 5 Widgets module
 add_definitions(${Qt5Widgets_DEFINITIONS})
+add_definitions(${Qt5Gui_DEFINITIONS})
 # Add compiler flags for building executables (-fPIE)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 # Enable the C++11 standard
 #set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} --std=c++11)
 message(STATUS "Found Qt5 include directories: ${Qt5Widgets_INCLUDE_DIRS}")
+message(STATUS "Found Qt5 libs directories: ${Qt5Widgets_LIBRARIES}")
 endif(QT5_SUPPORT)
 
 # 9. Disable stupid warnings on GCC

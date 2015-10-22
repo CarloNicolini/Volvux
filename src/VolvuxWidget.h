@@ -90,7 +90,7 @@ public:
     {
         // Camera calibrations done on the flight
         this->cam.init(Screen(projAreaHorizontalSize,projAreaVerticalSize,0,0,eyeZ));
-        this->cam.setNearFarPlanes(0.01,1E5);
+        this->cam.setNearFarPlanes(0.01f,1E5f);
     }
     // Non inherited methods for various other computations
     void computeCameraCalibrationMatrices(const QString &points2Dfilename,const QString &points3Dfilename);

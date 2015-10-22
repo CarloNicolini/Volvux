@@ -66,7 +66,7 @@ void VolvuxExpWidget::initMonitor(int resX, int resY, int sizeX_mm, int sizeY_mm
     this->resize(resX,resY);
     // Camera calibrations done on the flight
     this->cam.init(Screen(sizeX_mm,sizeY_mm,0,0,eyeZ));
-    this->cam.setNearFarPlanes(0.01,1E5);
+    this->cam.setNearFarPlanes(0.01f,1E5f);
 }
 
 /**

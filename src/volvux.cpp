@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
     freopen("CONOUT$","wb",stderr); // reopen stderr handle as console window output
 	EnableCrashingOnCrashes();
 #endif
-
+	QCoreApplication::addLibraryPath("./");
     QApplication app(argc, argv);
 
 	VolvuxMainWindow window;

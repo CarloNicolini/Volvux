@@ -89,6 +89,10 @@ QT5_WRAP_CPP(VOLVUX_HDRS_MOC ${VOLVUX_HDRS})
 add_executable(volvux volvux.cpp ${VOLVUX_SRCS} ${VOLVUX_HDRS} ${VOLVUX_FORMS_HDRS})
 
 #Link the helloworld executable to the Qt 5 widgets library.
-target_link_libraries(volvux Qt5::Widgets Qt5::OpenGL VOLVUXHELPER)
-qt5_use_modules(volvux Widgets OpenGL)
+target_link_libraries(volvux Qt5::Gui Qt5::Widgets Qt5::OpenGL VOLVUXHELPER)
+if (WIN32)
+# http://stackoverflow.com/questions/16773789/qt5-static-build-yields-failed-to-load-platform-plugin-windows/17271172#17271172
+target_link_libraries(volvux Qt5::WinMain)
+endif(WIN32)
+qt5_use_modules(volvux Gui Widgets OpenGL)
 endif(QT5_SUPPORT)
