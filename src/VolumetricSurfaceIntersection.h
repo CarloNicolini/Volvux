@@ -105,7 +105,7 @@ public:
         glsl::glShader *shader;
         double edge;
     } cubeSurface;
-
+	/*
     struct PotatoParameters
     {
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -122,7 +122,7 @@ public:
         Eigen::Vector3f specularColor;//(0.6,0.6,0.6);
         Eigen::Matrix<GLfloat,3,1> axis;
     } potatoSurface;
-
+	*/
     const int getTextureSizeX() const;
     const int getTextureSizeY() const;
     const int getTextureSizeZ() const;

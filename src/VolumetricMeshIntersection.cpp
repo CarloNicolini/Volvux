@@ -41,7 +41,7 @@ VolumetricMeshIntersection::VolumetricMeshIntersection()
  */
 VolumetricMeshIntersection::VolumetricMeshIntersection(unsigned int textureSizeX, unsigned int textureSizeY, unsigned int textureSizeZ)
 {
-    VolumetricSurfaceIntersection::resize(textureSizeX,textureSizeY,textureSizeZ);
+    this->resize(textureSizeX,textureSizeY,textureSizeZ);
     obj=NULL;
 }
 

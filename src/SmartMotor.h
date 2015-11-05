@@ -37,9 +37,11 @@
 */
 #include "stdafx.h"
 #include <afx.h>
-#import "IntegMotorInterface.tbl"
+#import "..\\libs\\drivers\\SMI\\IntegMotorInterface.tlb" rename_namespace("INTEGMOTORINTERFACELib")
 #include "SMIDefs.h"
 #include <comdef.h>
+
+ 
 
 #ifndef BSTR2STR
 #define BSTR2STR(X) std::string(const_cast<char *>(_com_util::ConvertBSTRToString( X )))

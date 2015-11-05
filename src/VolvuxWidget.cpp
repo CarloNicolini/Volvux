@@ -32,14 +32,17 @@
 
 #ifdef __APPLE__
 std::string baseDir("/Users/rs/workspace/Volvux/");
+std::string objPath("/Users/rs/workspace/Volvux/data/objmodels/helicoid.obj");
 #endif
 
 #ifdef __linux__
-std::string baseDir("/home/carlo/workspace/cncsvisioncmake/");
+std::string baseDir("/home/carlo/workspace/Volvux/");
+std::string objPath("/home/carlo/workspace/Volvux/data/objmodels/helicoid.obj");
 #endif
 
 #ifdef WIN32
-std::string baseDir("C:/Users/Guenda/Documents/GitHub/Volvux/");
+std::string baseDir("C:/workspace/Volvux/");
+std::string objPath("C:\\workspace\\Volvux\\data\\objmodels\\helicoid.obj");
 #endif
 
 #ifndef GL_MULTISAMPLE
@@ -256,7 +259,8 @@ void VolvuxWidget::initializeGL()
     glewInit();
 
     volume->resize(TEXTURE_RESOLUTION_X,TEXTURE_RESOLUTION_Y,TEXTURE_RESOLUTION_Z);
-    volume->loadObj(baseDir+"/data/objmodels/helicoid.obj");
+	//volume->loadObj("C:\workspace\Volvux\data\objmodels\helicoid.obj");
+	volume->loadObj(objPath);
     volume->setTexture3DfillValue(0);
     volume->fillVolumeWithSpheres(VOLUME_N_SPHERES,SPHERES_MIN_RADIUS,SPHERES_MAX_RADIUS);
     volume->meshStruct.showMesh=false;

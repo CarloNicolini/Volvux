@@ -55,9 +55,9 @@ VolumetricSurfaceIntersection::VolumetricSurfaceIntersection(unsigned int _sizeX
     ellipsoidSurface.shader=NULL;
     coneSurface.shader=NULL;
     ellipticCylinderSurface.shader=NULL;
-    potatoSurface.shader = NULL;
+    //potatoSurface.shader = NULL;
 
-    potatoSurface.sphere = new IcoSphere(ICOSPHERE_LEVEL);
+    //potatoSurface.sphere = new IcoSphere(ICOSPHERE_LEVEL);
 }
 
 /**
@@ -84,18 +84,18 @@ VolumetricSurfaceIntersection::VolumetricSurfaceIntersection() : volume3DTexture
     this->ellipticCylinderSurface.height=1.0;
     this->ellipticCylinderSurface.axisZ=1.0;
     this->cubeSurface.edge=1.0;
-
+	/*
     this->potatoSurface.seed = 1.0;
     this->potatoSurface.scale=1.0f;
     this->potatoSurface.normalScale = 0.25f;
     this->potatoSurface.sphere = new IcoSphere(ICOSPHERE_LEVEL);
-
+	*/
     parabolaSurface.shader=NULL;
     cubeSurface.shader=NULL;
     ellipsoidSurface.shader=NULL;
     coneSurface.shader=NULL;
     ellipticCylinderSurface.shader=NULL;
-    potatoSurface.shader=NULL;
+   // potatoSurface.shader=NULL;
 }
 
 /**
@@ -169,6 +169,7 @@ VolumetricSurfaceIntersection::~VolumetricSurfaceIntersection()
             delete cubeSurface.shader;
         break;
     }
+	/*
     case SurfacePotato:
     {
         if (potatoSurface.shader)
@@ -177,6 +178,7 @@ VolumetricSurfaceIntersection::~VolumetricSurfaceIntersection()
             delete potatoSurface.sphere;
         break;
     }
+	*/
     }
 
 }
@@ -459,6 +461,7 @@ void VolumetricSurfaceIntersection::initializeSurfaceShaders(int surface)
         cubeSurface.shader = new glsl::glShader;
         break;
     }
+	/*
     case SurfacePotato:
     {
         if (potatoSurface.shader)
@@ -466,6 +469,7 @@ void VolumetricSurfaceIntersection::initializeSurfaceShaders(int surface)
         potatoSurface.shader = new glsl::glShader;
         break;
     }
+	*/
     }
 
     glsl::glShaderManager SM;
@@ -627,7 +631,7 @@ void VolumetricSurfaceIntersection::initializeSurfaceShaders(int surface)
         char fragmentShaderFile[] = "../../experiments/texturing/potato_perlin_deformed.frag";
 #endif
 
-        potatoSurface.shader = SM.loadfromFile(vertexShaderFile,fragmentShaderFile);
+        //potatoSurface.shader = SM.loadfromFile(vertexShaderFile,fragmentShaderFile);
         break;
     }
     }
@@ -735,6 +739,7 @@ void VolumetricSurfaceIntersection::draw()
         cubeSurface.shader->end();
         break;
     }
+	/*
     case SurfacePotato:
     {
         glPushMatrix();
@@ -768,6 +773,7 @@ void VolumetricSurfaceIntersection::draw()
         glPopMatrix();
         break;
     }
+	*/
     }
     glBindTexture(GL_TEXTURE_3D, 0);
     glPopAttrib();

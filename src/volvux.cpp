@@ -55,19 +55,27 @@ void EnableCrashingOnCrashes()
 int main(int argc, char *argv[])
 {
 
-#ifdef WIN32
-    AllocConsole();  // Create Console Window
-    freopen("CONIN$","rb",stdin);   // reopen stdin handle as console window input
-    freopen("CONOUT$","wb",stdout);  // reopen stout handle as console window output
-    freopen("CONOUT$","wb",stderr); // reopen stderr handle as console window output
-	EnableCrashingOnCrashes();
-#endif
-	QCoreApplication::addLibraryPath("./");
+//#ifdef WIN32
+//    AllocConsole();  // Create Console Window
+//    freopen("CONIN$","rb",stdin);   // reopen stdin handle as console window input
+//    freopen("CONOUT$","wb",stdout);  // reopen stout handle as console window output
+//    freopen("CONOUT$","wb",stderr); // reopen stderr handle as console window output
+//	EnableCrashingOnCrashes();
+//#endif
+//	QCoreApplication::addLibraryPath("./");
     QApplication app(argc, argv);
-
+//
 	VolvuxMainWindow window;
-    window.resize(window.sizeHint());
-    window.show();
-
+	try
+	{
+		window.resize(window.sizeHint());
+		window.show();
+	}
+	catch (std::exception &e)
+	{
+		cerr << e.what() << endl;
+	}
+// 
     return app.exec();
+	//return 0;
 }
