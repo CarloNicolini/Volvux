@@ -1,15 +1,15 @@
 #include "VolvuxWizard.h"
-#include "ProjectorPage.h"
-#include "SmiPage.h"
-#include "ExpPage.h"
+#include "ProjectorPageWidget.h"
+#include "SMIPageWidget.h"
+#include "ExpPageWidget.h"
 #include <QApplication>
 
 VolvuxWizard::VolvuxWizard(QWidget *parent) :
     QWizard(parent)
 {
     setWindowTitle("Volvux Wizard");
-    addPage(new ProjectorPage);
-    //addPage(new SMIPage);
+    addPage(new ProjectorPageWidget);
+    addPage(new SMIPageWidget);
     //addPage(new ExpPage);
 
     QList<QWizard::WizardButton> buttonLayout;

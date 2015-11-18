@@ -1,13 +1,14 @@
-#include "ProjectorPage.h"
+#include "ProjectorPageWidget.h"
 
 
 
 //Constructor
-ProjectorPage::ProjectorPage(QWidget *parent) :
+ProjectorPageWidget::ProjectorPageWidget(QWidget *parent) :
     QWizardPage(parent)
 {
     //WizardPage Title
     setTitle("Projector Initialization");
+
 
     //Layout initialization
     projectorLayout = new QGridLayout(this);
@@ -75,6 +76,7 @@ ProjectorPage::ProjectorPage(QWidget *parent) :
     projectorNSlices->setRange(0,1000);
     projectorNSlices->setValue(400);
     projectorNSlices->setEnabled(false);
+    registerField("NSlices",projectorNSlices);
     //Projector LED percentage settings
     projectorLEDPercentage->setEnabled(false);
 
@@ -86,7 +88,7 @@ ProjectorPage::ProjectorPage(QWidget *parent) :
 
 
     //Vertical layout buttons
-    verticalLayout->addWidget(initilizeProjector);
+    microsecondsPerRound_label =  verticalLayout->addWidget(initilizeProjector);
     verticalLayout->addWidget(releaseProjector);
 
     //Form layout
@@ -135,7 +137,7 @@ ProjectorPage::ProjectorPage(QWidget *parent) :
 //                      SLOTS
 
 
-void ProjectorPage::onPushButtonProjectorInitializeClicked() {
+void ProjectorPageWidget::onPushButtonProjectorInitializeClicked() {
     //Enables other buttons
     this->releaseProjector->setEnabled(true);
     //Enables spinboxes
@@ -169,7 +171,7 @@ void ProjectorPage::onPushButtonProjectorInitializeClicked() {
 }
 
 
-void ProjectorPage::onPushButtonProjectorReleaseClicked() {
+void ProjectorPageWidget::onPushButtonProjectorReleaseClicked() {
     #ifdef ALP_SUPPORT
         try
         {
@@ -188,7 +190,7 @@ void ProjectorPage::onPushButtonProjectorReleaseClicked() {
     projectorNSlices->setEnabled(false);
 }
 
-void ProjectorPage::onSpinboxProjectorNSlicesChanged(int){
+void ProjectorPageWidget::onSpinboxProjectorNSlicesChanged(int){
     //To implement AFTER creating SMIPage
     //Do a WizardPage Field so that the value of
     //Nslices is passed to the next page
@@ -208,7 +210,7 @@ void ProjectorPage::onSpinboxProjectorNSlicesChanged(int){
 
 }
 
-void ProjectorPage::onspinBoxProjectorLEDcurrentChanged(int) {
+void ProjectorPageWidget::onspinBoxProjectorLEDcurrentChanged(int) {
     #ifdef ALP_SUPPORT
         if (alp.m_bAlpInit)
         {
@@ -223,7 +225,7 @@ void ProjectorPage::onspinBoxProjectorLEDcurrentChanged(int) {
     #endif
 }
 
-void ProjectorPage::onSpinBoxProjectorLEDpercentageChanged(double){
+void ProjectorPageWidget::onSpinBoxProjectorLEDpercentageChanged(double){
 
     #ifdef ALP_SUPPORT
         if (alp.m_bAlpInit)
