@@ -26,6 +26,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include "VolvuxMainWindow.h"
+#include "volvuxwizard.h"
 
 #ifdef WIN32
 #include <windows.h>
@@ -65,6 +66,8 @@ int main(int argc, char *argv[])
 //	QCoreApplication::addLibraryPath("./");
     QApplication app(argc, argv);
 //
+
+    
 	VolvuxMainWindow window;
 	try
 	{
@@ -75,7 +78,10 @@ int main(int argc, char *argv[])
 	{
 		cerr << e.what() << endl;
 	}
+    
 // 
+//    VolvuxWizard w;
+ //   w.show();
     return app.exec();
 	//return 0;
 }

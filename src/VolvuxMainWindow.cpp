@@ -418,7 +418,7 @@ void VolvuxMainWindow::onSpinBoxFlickerFrequencyChanged(double flickerFrequency)
     // The persistence of the stimulus on the eye in microseconds
     double flickerPersistence_microSec = 1E6/flickerFrequency;
     double nSlices = this->ui->spinBoxProjectorNSlices->value();
-    double motorUnitsToRevMin = 65536;//c->itemData(c->currentIndex()).toInt();
+    double motorUnitsToRevMin = 65536;//c->itemData(c->currentIndex()).toInt(); //XXX useless combobox units to rev min check page 22 SMI manual
     cerr << c->itemData(c->currentIndex()).toDouble() << endl;
     double microSecPerFrame = flickerPersistence_microSec/nSlices;
     if ( std::fmod(microSecPerFrame,1.0) == 0.0)
@@ -461,12 +461,11 @@ void VolvuxMainWindow::startRotation(int speed)
 #if defined (SMI_SUPPORT) && (WIN32)
     try
     {
-        string speedstring("VT=");
-        speedstring+=util::stringify<int>(speed);
         CommInterface->ClearBuffer();
         CommInterface->WriteCommand("EIGN(W,0)");
         CommInterface->WriteCommand("O=0");
         CommInterface->WriteCommand("ZS");
+        // Remove limits
         CommInterface->WriteCommand("EL=-1");
         // Set the PID settings
         CommInterface->WriteCommand("KP=560");
@@ -483,7 +482,11 @@ void VolvuxMainWindow::startRotation(int speed)
         CommInterface->WriteCommand("F");
         CommInterface->WriteCommand("MV");
         CommInterface->WriteCommand("ADT=1");
+        // Convert the speed to the "VT=speed" command
+        string speedstring("VT=");
+        speedstring+=util::stringify<int>(speed);
         CommInterface->WriteCommand(STR2BSTR(speedstring));
+        // Terminate communication
         CommInterface->WriteCommand("G");
     }
     catch (_com_error e )
