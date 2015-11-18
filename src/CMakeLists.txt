@@ -35,23 +35,23 @@ VolumetricSurfaceIntersection.cpp
 VRCamera.cpp)
 
 if(ALP_SUPPORT)
-set(VOLVUXHELPER_SRCS ${VOLVUXHELPER_SRCS} ALPProjector.cpp)
+    set(VOLVUXHELPER_SRCS ${VOLVUXHELPER_SRCS} ALPProjector.cpp)
 endif(ALP_SUPPORT)
 
 if(SMI_SUPPORT)
-set(VOLVUXHELPER_SRCS ${VOLVUXHELPER_SRCS} SmartMotor.cpp)
+    set(VOLVUXHELPER_SRCS ${VOLVUXHELPER_SRCS} SmartMotor.cpp)
 endif(SMI_SUPPORT)
 
 add_library(VOLVUXHELPER ${VOLVUXHELPER_SRCS})
 
 #link_libraries(${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${Boost_LIBRARIES} VOLVUXHELPER)
-target_link_libraries(VOLVUXHELPER ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARY} ${GLFW_LIBRARY} ${ALP_LIBRARY})
+target_link_libraries(VOLVUXHELPER ${OPENGL_LIBRARIES} ${FREEGLUT_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARY} ${GLFW_LIBRARY} ${ALP_LIBRARY})
 if(ALP_SUPPORT)
 target_link_libraries(VOLVUXHELPER ${ALP_LIBRARY})
 endif(ALP_SUPPORT)
 
 if(SMI_SUPPORT)
-target_link_libraries(VOLVUXHELPER ${SMI_LIBRARY})
+    target_link_libraries(VOLVUXHELPER ${SMI_LIBRARY})
 endif(SMI_SUPPORT)
 
 # Volvux Main files
@@ -59,40 +59,41 @@ set(VOLVUX_HDRS VolvuxExpWidget.h  VolvuxMainWindow.h VolvuxWidget.h )#VolvuxWiz
 set(VOLVUX_SRCS VolvuxExpWidget.cpp  VolvuxMainWindow.cpp VolvuxWidget.cpp )#VolvuxWizard.cpp ProjectorPage.cpp)
 set(VOLVUX_FORMS VolvuxMainWindow.ui)
 
-if(QT4_SUPPORT)
-QT4_WRAP_UI(VOLVUX_FORMS_HDRS ${VOLVUX_FORMS})
-QT4_WRAP_CPP(VOLVUX_HDRS_MOC ${VOLVUX_HDRS})
-
-add_executable(volvux volvux.cpp ${VOLVUX_SRCS} ${VOLVUX_HDRS} ${VOLVUX_HDRS_MOC} ${VOLVUX_FORMS_HDRS})
-target_link_libraries(volvux ${QT_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${GLFW_LIBRARY} VOLVUXHELPER)
-
-if (WIN32)
-    set_target_properties(volvux PROPERTIES LINK_FLAGS_RELWITHDEBINFO "/SUBSYSTEM:CONSOLE")
-    set_target_properties(volvux PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:CONSOLE")
-    set_target_properties(volvux PROPERTIES LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE")    
-endif(WIN32)
-endif(QT4_SUPPORT)
-
 if(QT5_SUPPORT)
-# Tell CMake to run moc when necessary:
-set(CMAKE_AUTOMOC ON)
-# As moc files are generated in the binary dir, tell CMake
-# to always look for includes there:
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+    # Tell CMake to run moc when necessary:
+    set(CMAKE_AUTOMOC ON)
+    # As moc files are generated in the binary dir, tell CMake
+    # to always look for includes there:
+    set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-QT5_WRAP_UI(VOLVUX_FORMS_HDRS ${VOLVUX_FORMS})
-QT5_WRAP_CPP(VOLVUX_HDRS_MOC ${VOLVUX_HDRS})
+    QT5_WRAP_UI(VOLVUX_FORMS_HDRS ${VOLVUX_FORMS})
+    QT5_WRAP_CPP(VOLVUX_HDRS_MOC ${VOLVUX_HDRS})
 
-#add_executable(volvux volvux.cpp ${VOLVUX_SRCS} ${VOLVUX_FORMS_HDRS})
-#target_link_libraries(volvux Qt5::Widgets Qt5::OpenGL VOLVUXHELPER)
-# Tell CMake to create the helloworld executable
-add_executable(volvux volvux.cpp ${VOLVUX_SRCS} ${VOLVUX_HDRS} ${VOLVUX_FORMS_HDRS})
+    #add_executable(volvux volvux.cpp ${VOLVUX_SRCS} ${VOLVUX_FORMS_HDRS})
+    #target_link_libraries(volvux Qt5::Widgets Qt5::OpenGL VOLVUXHELPER)
+    # Tell CMake to create the helloworld executable
+    add_executable(volvux volvux.cpp ${VOLVUX_SRCS} ${VOLVUX_HDRS} ${VOLVUX_FORMS_HDRS})
 
-#Link the helloworld executable to the Qt 5 widgets library.
-target_link_libraries(volvux Qt5::Gui Qt5::Widgets Qt5::OpenGL VOLVUXHELPER)
-if (WIN32)
-# http://stackoverflow.com/questions/16773789/qt5-static-build-yields-failed-to-load-platform-plugin-windows/17271172#17271172
-target_link_libraries(volvux Qt5::WinMain)
-endif(WIN32)
-qt5_use_modules(volvux Gui Widgets OpenGL)
+    #Link the helloworld executable to the Qt 5 widgets library.
+    target_link_libraries(volvux Qt5::Gui Qt5::Widgets Qt5::OpenGL VOLVUXHELPER)
+    if (WIN32)
+    # http://stackoverflow.com/questions/16773789/qt5-static-build-yields-failed-to-load-platform-plugin-windows/17271172#17271172
+    target_link_libraries(volvux Qt5::WinMain)
+    endif(WIN32)
+    qt5_use_modules(volvux Gui Widgets OpenGL)
 endif(QT5_SUPPORT)
+
+
+#if(QT4_SUPPORT)
+#QT4_WRAP_UI(VOLVUX_FORMS_HDRS ${VOLVUX_FORMS})
+#QT4_WRAP_CPP(VOLVUX_HDRS_MOC ${VOLVUX_HDRS})
+
+#add_executable(volvux volvux.cpp ${VOLVUX_SRCS} ${VOLVUX_HDRS} ${VOLVUX_HDRS_MOC} ${VOLVUX_FORMS_HDRS})
+#target_link_libraries(volvux ${QT_LIBRARIES} ${OPENGL_LIBRARIES} ${FREEGLUT_LIBRARIES} ${GLEW_LIBRARY} ${GLFW_LIBRARY} VOLVUXHELPER)
+
+#if (WIN32)
+#    set_target_properties(volvux PROPERTIES LINK_FLAGS_RELWITHDEBINFO "/SUBSYSTEM:CONSOLE")
+#    set_target_properties(volvux PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:CONSOLE")
+#    set_target_properties(volvux PROPERTIES LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE")
+#endif(WIN32)
+#endif(QT4_SUPPORT)
