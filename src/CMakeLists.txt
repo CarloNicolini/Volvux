@@ -55,8 +55,8 @@ target_link_libraries(VOLVUXHELPER ${SMI_LIBRARY})
 endif(SMI_SUPPORT)
 
 # Volvux Main files
-set(VOLVUX_HDRS VolvuxExpWidget.h  VolvuxMainWindow.h VolvuxWidget.h )#volvuxwizard.h projectorwizard.h)
-set(VOLVUX_SRCS VolvuxExpWidget.cpp  VolvuxMainWindow.cpp VolvuxWidget.cpp )#volvuxwizard.cpp projectorwizard.cpp)
+set(VOLVUX_HDRS VolvuxExpWidget.h  VolvuxMainWindow.h VolvuxWidget.h )#VolvuxWizard.h ProjectorPage.h)
+set(VOLVUX_SRCS VolvuxExpWidget.cpp  VolvuxMainWindow.cpp VolvuxWidget.cpp )#VolvuxWizard.cpp ProjectorPage.cpp)
 set(VOLVUX_FORMS VolvuxMainWindow.ui)
 
 if(QT4_SUPPORT)
