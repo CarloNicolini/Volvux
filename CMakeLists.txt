@@ -136,7 +136,7 @@ if(WIN32)
 endif(WIN32)
 
 
-## Experimental Qt5 support
+## 9. Qt5 support
 if (QT5_SUPPORT)
 	if (WIN32)
 		set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};C:/Qt/5.5/msvc2012/lib/cmake/")
@@ -144,25 +144,25 @@ if (QT5_SUPPORT)
     if(NOT CMAKE_PREFIX_PATH)
         message(FATAL_ERROR "Must specify where Qt5 modules are to be found. Use cmake -DCMAKE_PREFIX_PATH=/path/to/cmakeqt5modules")
     endif()
-# Find includes in corresponding build directories
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-# Find the QtWidgets library
-find_package(Qt5Widgets)
-find_package(Qt5OpenGL)
-find_package(Qt5Gui)
-# Add the include directories for the Qt 5 Widgets module to
-# the compile lines.
-include_directories(${Qt5Gui_INCLUDE_DIRS})
-include_directories(${Qt5Widgets_INCLUDE_DIRS})
-# Use the compile definitions defined in the Qt 5 Widgets module
-add_definitions(${Qt5Widgets_DEFINITIONS})
-add_definitions(${Qt5Gui_DEFINITIONS})
-# Add compiler flags for building executables (-fPIE)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
-# Enable the C++11 standard
-#set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} --std=c++11)
-message(STATUS "Found Qt5 include directories: ${Qt5Widgets_INCLUDE_DIRS}")
-message(STATUS "Found Qt5 libs directories: ${Qt5Widgets_LIBRARIES}")
+    # Find includes in corresponding build directories
+    set(CMAKE_INCLUDE_CURRENT_DIR ON)
+    # Find the QtWidgets library
+    find_package(Qt5Widgets)
+    find_package(Qt5OpenGL)
+    find_package(Qt5Gui)
+    # Add the include directories for the Qt 5 Widgets module to
+    # the compile lines.
+    include_directories(${Qt5Gui_INCLUDE_DIRS})
+    include_directories(${Qt5Widgets_INCLUDE_DIRS})
+    # Use the compile definitions defined in the Qt 5 Widgets module
+    add_definitions(${Qt5Widgets_DEFINITIONS})
+    add_definitions(${Qt5Gui_DEFINITIONS})
+    # Add compiler flags for building executables (-fPIE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+    # Enable the C++11 standard
+    #set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} --std=c++11)
+    message(STATUS "Found Qt5 include directories: ${Qt5Widgets_INCLUDE_DIRS}")
+    message(STATUS "Found Qt5 libs directories: ${Qt5Widgets_LIBRARIES}")
 endif(QT5_SUPPORT)
 
 # 9. Disable stupid warnings on GCC
