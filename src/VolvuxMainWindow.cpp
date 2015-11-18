@@ -198,6 +198,9 @@ void VolvuxMainWindow::initializeTabCameraCalibrationQConnections()
     QObject::connect(this->ui->pushButtonCalibrate,SIGNAL(clicked()),this,SLOT(onPushButtonCalibrateClicked()));
 }
 
+
+
+
 /**
  * @brief VolvuxMainWindow::initializeTabProjectorQConnections
  */
