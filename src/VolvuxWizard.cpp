@@ -1,7 +1,7 @@
-#include "volvuxwizard.h"
-#include "projectorpage.h"
-#include "smipage.h"
-#include "exppage.h"
+#include "VolvuxWizard.h"
+#include "ProjectorPage.h"
+#include "SmiPage.h"
+#include "ExpPage.h"
 #include <QApplication>
 
 VolvuxWizard::VolvuxWizard(QWidget *parent) :
@@ -9,8 +9,8 @@ VolvuxWizard::VolvuxWizard(QWidget *parent) :
 {
     setWindowTitle("Volvux Wizard");
     addPage(new ProjectorPage);
-    addPage(new SMIPage);
-    addPage(new ExpPage);
+    //addPage(new SMIPage);
+    //addPage(new ExpPage);
 
     QList<QWizard::WizardButton> buttonLayout;
     buttonLayout.append(QWizard::BackButton);

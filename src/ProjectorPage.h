@@ -11,6 +11,7 @@
 #include <QSpinBox>
 #include <QDoubleSpinBox>
 #include <QSpacerItem>
+#include <QMessageBox>
 
 
 
@@ -21,6 +22,7 @@ class ProjectorPage : public QWizardPage
 
 public:
     ProjectorPage(QWidget *parent=0);
+    //~ProjectorPage();
 
 private:
     //Buttons
@@ -63,6 +65,10 @@ private:
 
 private slots:
     void onPushButtonProjectorInitializeClicked();
+    void onPushButtonProjectorReleaseClicked();
+    void onSpinboxProjectorNSlicesChanged(int);
+    void onspinBoxProjectorLEDcurrentChanged(int);
+    void onSpinBoxProjectorLEDpercentageChanged(double);
 
 
 };
