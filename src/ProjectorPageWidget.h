@@ -1,5 +1,5 @@
-#ifndef ProjectorPage_H
-#define ProjectorPage_H
+#ifndef ProjectorPageWidget_H
+#define ProjectorPageWidget_H
 
 #include <QWizardPage>
 #include <QGridLayout>
@@ -16,13 +16,13 @@
 
 
 
-class ProjectorPage : public QWizardPage
+class ProjectorPageWidget : public QWizardPage
 {
     Q_OBJECT
 
 public:
-    ProjectorPage(QWidget *parent=0);
-    //~ProjectorPage();
+    ProjectorPageWidget(QWidget *parent=0);
+    //~ProjectorPageWidget();
 
 private:
     //Buttons
@@ -73,4 +73,4 @@ private slots:
 
 };
 
-#endif // ProjectorPage_H
+#endif // ProjectorPageWidget_H

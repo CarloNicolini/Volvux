@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 //
 
-    
+    /*
 	VolvuxMainWindow window;
 	try
 	{
@@ -77,11 +77,11 @@ int main(int argc, char *argv[])
 	catch (std::exception &e)
 	{
 		cerr << e.what() << endl;
-	}
+	} */
     
 // 
-//    VolvuxWizard w;
- //   w.show();
+     VolvuxWizard w;
+     w.show();
     return app.exec();
 	//return 0;
 }
