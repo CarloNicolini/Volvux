@@ -1,5 +1,0 @@
-/home/hololab/workspace/Volvux/build/src/CMakeFiles/volvux.dir
-/home/hololab/workspace/Volvux/build/src/CMakeFiles/VOLVUXHELPER.dir
-/home/hololab/workspace/Volvux/build/libs/FreeGLUT/freeglut/freeglut/CMakeFiles/freeglut_static.dir
-/home/hololab/workspace/Volvux/build/src/CMakeFiles/volvux_automoc.dir
-/home/hololab/workspace/Volvux/build/libs/FreeGLUT/freeglut/freeglut/CMakeFiles/freeglut.dir
