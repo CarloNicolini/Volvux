@@ -55,9 +55,9 @@ if(SMI_SUPPORT)
 endif(SMI_SUPPORT)
 
 # Volvux Main files
-set(VOLVUX_HDRS VolvuxExpWidget.h  VolvuxMainWindow.h VolvuxWidget.h)# VolvuxWizard.h SMIPageWidget.h)
-set(VOLVUX_SRCS VolvuxExpWidget.cpp  VolvuxMainWindow.cpp VolvuxWidget.cpp )#VolvuxWizard.cpp SMIPageWidget.cpp)
-set(VOLVUX_FORMS VolvuxMainWindow.ui)
+set(VOLVUX_HDRS VolvuxExpWidget.h  VolvuxMainWindow.h VolvuxWidget.h VolvuxCalibrationWidget.h)# VolvuxWizard.h SMIPageWidget.h)
+set(VOLVUX_SRCS VolvuxExpWidget.cpp  VolvuxMainWindow.cpp VolvuxWidget.cpp VolvuxCalibrationWidget.cpp)#VolvuxWizard.cpp SMIPageWidget.cpp)
+set(VOLVUX_FORMS VolvuxMainWindow.ui VolvuxCalibrationMainWindow.ui)
 
 if(QT5_SUPPORT)
     # Tell CMake to run moc when necessary:

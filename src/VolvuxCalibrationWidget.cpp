@@ -25,7 +25,7 @@
 
 #include <QtGui>
 #include <QtOpenGL>
-#include "CalibrationWidget.h"
+#include "VolvuxCalibrationWidget.h"
 #ifdef __APPLE__
 QString CNCSVISION_BASE_DIRECTORY("/Users/rs/workspace/");
 #endif
@@ -43,7 +43,7 @@ QString CNCSVISION_BASE_DIRECTORY("/Users/rs/workspace/");
  * @param parent
  * @param shareWidget
  */
-CalibrationWidget::CalibrationWidget(QWidget *parent) :
+VolvuxCalibrationWidget::VolvuxCalibrationWidget(QWidget *parent) :
     QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
 
@@ -61,18 +61,21 @@ CalibrationWidget::CalibrationWidget(QWidget *parent) :
 
 
     drawingText=true;
+
+    // Prepare the writing buffer to send to the projector
+    currentFrame.resize(PROJECTOR_RESOLUTION_WIDTH*PROJECTOR_RESOLUTION_HEIGHT);
 }
 
-void CalibrationWidget::moveCursor(int x, int y)
+void VolvuxCalibrationWidget::moveCursor(int x, int y)
 {
-	this->lastPoint.setX(this->lastPoint.x()+x);
-	this->lastPoint.setY(this->lastPoint.y()+y);
+    this->lastPoint.setX(this->lastPoint.x()+x);
+    this->lastPoint.setY(this->lastPoint.y()+y);
 }
 
 /**
  * @brief ShaderWidget::~ShaderWidget
  */
-CalibrationWidget::~CalibrationWidget()
+VolvuxCalibrationWidget::~VolvuxCalibrationWidget()
 {
 }
 
@@ -80,7 +83,7 @@ CalibrationWidget::~CalibrationWidget()
  * @brief ShaderWidget::minimumSizeHint
  * @return
  */
-QSize CalibrationWidget::minimumSizeHint() const
+QSize VolvuxCalibrationWidget::minimumSizeHint() const
 {
     return QSize(PROJECTOR_WIDTH, PROJECTOR_HEIGHT);
 }
@@ -90,7 +93,7 @@ QSize CalibrationWidget::minimumSizeHint() const
  * @brief ShaderWidget::sizeHint
  * @return
  */
-QSize CalibrationWidget::sizeHint() const
+QSize VolvuxCalibrationWidget::sizeHint() const
 {
     return QSize(PROJECTOR_WIDTH, PROJECTOR_HEIGHT);
 }
@@ -98,7 +101,7 @@ QSize CalibrationWidget::sizeHint() const
 /**
  * @brief ShaderWidget::initializeGL
  */
-void CalibrationWidget::initializeGL()
+void VolvuxCalibrationWidget::initializeGL()
 {
     glEnable(GL_MULTISAMPLE);
     qglClearColor(Qt::black);
@@ -111,25 +114,25 @@ void CalibrationWidget::initializeGL()
 /**
  * @brief ShaderWidget::saveData
  */
-void CalibrationWidget::saveData()
+void VolvuxCalibrationWidget::saveData()
 {
     QString filename = QFileDialog::getSaveFileName(this,"Select points output file name", QDir::currentPath());
     QFileInfo outputfile(filename);
 
-	filename.replace("."+outputfile.suffix(),"");
-	QString pointsOutputFileName = filename + ".txt";
+    filename.replace("."+outputfile.suffix(),"");
+    QString pointsOutputFileName = filename + ".txt";
     QString imageOutputFileName  = filename + ".bmp";
 
-	QImage frame = this->grabFrameBuffer();
+    QImage frame = this->grabFrameBuffer();
 
     if ( !frame.save(imageOutputFileName,NULL,-1) )
-	{
-		QMessageBox::warning(this,"Error saving image","Can't save image");
-	}
-	
-	QFile outputFile(pointsOutputFileName);
-	outputFile.open(QIODevice::WriteOnly | QIODevice::Text);
-	QTextStream out(&outputFile);
+    {
+        QMessageBox::warning(this,"Error saving image","Can't save image");
+    }
+
+    QFile outputFile(pointsOutputFileName);
+    outputFile.open(QIODevice::WriteOnly | QIODevice::Text);
+    QTextStream out(&outputFile);
 
     //outputPoints.open(pointsOutputFileName.toStdString().c_str());
     out << "# Calibration points" << endl;
@@ -143,7 +146,7 @@ void CalibrationWidget::saveData()
  * @brief CalibrationWidget::mouseMoveEvent
  * @param event
  */
-void CalibrationWidget::mouseMoveEvent(QMouseEvent *event)
+void VolvuxCalibrationWidget::mouseMoveEvent(QMouseEvent *event)
 {
     lastPoint = QPoint(event->x() ,event->y());
 }
@@ -152,20 +155,20 @@ void CalibrationWidget::mouseMoveEvent(QMouseEvent *event)
  * @brief CalibrationWidget::mouseMoveEvent
  * @param event
  */
-void CalibrationWidget::mousePressEvent(QMouseEvent *event)
+void VolvuxCalibrationWidget::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::RightButton )
     {
         // Search if the point already exists remove it
         lastPoint = QPoint(event->x() ,event->y());
-		addPoint();
+        addPoint();
     }
 }
 
 /**
  * @brief ShaderWidget::paintGL
  */
-void CalibrationWidget::paintGL()
+void VolvuxCalibrationWidget::paintGL()
 {
     //makeCurrent();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -187,19 +190,19 @@ void CalibrationWidget::paintGL()
         painter.drawPoint(points2D.at(i));
     }
 
-	painter.drawPoint(PROJECTOR_WIDTH/2,PROJECTOR_HEIGHT/2);
-		
+    painter.drawPoint(PROJECTOR_WIDTH/2,PROJECTOR_HEIGHT/2);
+
     if ( drawingText )
     {
         painter.setPen(Qt::white);
-		painter.drawText(40,PROJECTOR_HEIGHT-20,QString("(x,y)=(")+ QString::number(lastPoint.x())+","+QString::number(lastPoint.y())+")");
+        painter.drawText(40,PROJECTOR_HEIGHT-20,QString("(x,y)=(")+ QString::number(lastPoint.x())+","+QString::number(lastPoint.y())+")");
         //painter.drawText(80,PROJECTOR_HEIGHT-20,QString::number(lastPoint.y()));
         painter.drawText(120,PROJECTOR_HEIGHT-40,"Press F to toggle Fullscreen");
         painter.drawText(120,PROJECTOR_HEIGHT-60,"Press S to select the output file name");
         painter.drawText(120,PROJECTOR_HEIGHT-80,"Press Q to quit and save");
         painter.drawText(120,PROJECTOR_HEIGHT-100,"RightMouse to save/erase points");
         painter.drawText(120,PROJECTOR_HEIGHT-120,"Press T to toggle this text");
-		painter.drawText(120,PROJECTOR_HEIGHT-140,"Press R to save this point");
+        painter.drawText(120,PROJECTOR_HEIGHT-140,"Press R to save this point");
 
         QRect rect;
         QPen pen; pen.setWidth(1);pen.setColor(Qt::white);
@@ -209,9 +212,28 @@ void CalibrationWidget::paintGL()
         painter.drawRect(rect);
     }
     painter.end();
+
+    // Copy the current frame to the projector so that it can display it
+#ifdef ALP_SUPPORT
+    QImage frame = this->grabFrameBuffer();
+    try
+    {
+        alp.stop();
+        alp.cleanAllSequences();
+        alp.loadSequence(1, frame.convertToFormat(QImage::Format_Mono).bits());
+        alp.start();
+    }
+    catch (std::exception &e)
+    {
+        QMessageBox::warning(this,"Error streaming data to projector", e.what());
+    }
+#endif
 }
 
-void CalibrationWidget::toggleText()
+/**
+ * @brief VolvuxCalibrationWidget::toggleText
+ */
+void VolvuxCalibrationWidget::toggleText()
 {
     this->drawingText = !this->drawingText;
 }
@@ -221,7 +243,7 @@ void CalibrationWidget::toggleText()
  * @param width
  * @param height
  */
-void CalibrationWidget::resizeGL(int width, int height)
+void VolvuxCalibrationWidget::resizeGL(int width, int height)
 {
     glViewport(0, 0, (GLsizei) width, (GLsizei) height); // Set our viewport to the size of our window
     glMatrixMode(GL_PROJECTION);
@@ -231,17 +253,17 @@ void CalibrationWidget::resizeGL(int width, int height)
     glMatrixMode(GL_MODELVIEW);
 }
 
-void CalibrationWidget::addPoint()
+void VolvuxCalibrationWidget::addPoint()
 {
-	for (int i=0; i<points2D.size();i++)
+    for (int i=0; i<points2D.size();i++)
     {
-		if (lastPoint == points2D.at(i))
+        if (lastPoint == points2D.at(i))
         {
-                points2D.remove(i);
-                qDebug() << "Removed  " << lastPoint ;
-                return;
-            }
+            points2D.remove(i);
+            qDebug() << "Removed  " << lastPoint ;
+            return;
         }
-      qDebug() << "Added " << lastPoint ;
-      this->points2D.push_back(lastPoint);
+    }
+    qDebug() << "Added " << lastPoint ;
+    this->points2D.push_back(lastPoint);
 }

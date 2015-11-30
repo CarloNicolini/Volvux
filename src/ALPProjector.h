@@ -61,60 +61,60 @@ public:
     ALPProjector();
     ~ALPProjector();
 
-	// Generic methods for ALP interface
+    // Generic methods for ALP interface
     void init();
     void initLED();
-	void inquire();
-	void cleanup();
+    void inquire();
+    void cleanup();
 
-	// Setter methods
-	void setLED(long int ledCurrentMilliAmperes, long int ledBrightnessPercent);
-	void setPicturesTimeus(long int pictureTime);
-	void setSequenceQueueMode();
+    // Setter methods
+    void setLED(long int ledCurrentMilliAmperes, long int ledBrightnessPercent);
+    void setPicturesTimeus(long int pictureTime);
+    void setSequenceQueueMode();
 
-	// Getter methods
-	long int getMinimumPictureTime() const;
-	
-	// Sequence methods
-	long int loadSequence(unsigned int picturesNumber, unsigned char *imageSequence=NULL);
-	void changeSequence(long int sequenceID);
-	void removeSequence(long int sequenceID);
-	void cleanAllSequences();
-	
-	// Projector methods
+    // Getter methods
+    long int getMinimumPictureTime() const;
+
+    // Sequence methods
+    long int loadSequence(unsigned int picturesNumber, unsigned char *imageSequence=NULL);
+    void changeSequence(long int sequenceID);
+    void removeSequence(long int sequenceID);
+    void cleanAllSequences();
+
+    // Projector methods
     void start();
     void stop();
-	void loopAllSequences();
+    void loopAllSequences();
     
     // Member variables as in the AlpSample example
-    bool		m_bAlpInit;				// ALP initialization status
-	bool		m_bAlpLEDInit;			// ALP LED initialization status
-	bool		m_bDisp;				// display active
+    bool        m_bAlpInit;                // ALP initialization status
+    bool        m_bAlpLEDInit;            // ALP LED initialization status
+    bool        m_bDisp;                // display active
     
-	ALP_ID		m_AlpId;				// ALP device ID
-	ALP_ID      m_AlpLED_id;
-	std::vector<ALP_ID> m_AlpSeqId;
+    ALP_ID        m_AlpId;                // ALP device ID
+    ALP_ID      m_AlpLED_id;
+    std::vector<ALP_ID> m_AlpSeqId;
 
-    long int	m_nDmdType;				// DMD type (ALP_DMDTYPE_...)
-    long int	m_nSizeX, m_nSizeY;		// DMD size (pixels X*Y)
-	long int	m_AlpSeqDisp;			// ALP sequence selected for display
-    long int	m_FrameMemory;			// number of binary frames
-    long int	m_BitNum;				// number of bits
-    long int	m_PicNum;				// number of pictures
+    long int    m_nDmdType;                // DMD type (ALP_DMDTYPE_...)
+    long int    m_nSizeX, m_nSizeY;        // DMD size (pixels X*Y)
+    long int    m_AlpSeqDisp;            // ALP sequence selected for display
+    long int    m_FrameMemory;            // number of binary frames
+    long int    m_BitNum;                // number of bits
+    long int    m_PicNum;                // number of pictures
     
-	long int sequenceID;
+    long int sequenceID;
 
-	// Data to display
-	unsigned char*		m_pData;			// sequence data
+    // Data to display
+    unsigned char*        m_pData;            // sequence data
 
-	// Timing parameters, selected to default settings
-	static const long m_Timing_IlluminateTime=ALP_DEFAULT;
+    // Timing parameters, selected to default settings
+    static const long m_Timing_IlluminateTime=ALP_DEFAULT;
     static const long m_Timing_SynchDelay = ALP_DEFAULT;  //delay of the display start with respect to the trigger output (master mode)
     static const long m_Timing_SynchPulseWidth = ALP_DEFAULT; //length of the trigger signal, the maximum value is ALP_PICTURE_TIME
     static const long m_Timing_TriggerInDelay = ALP_DEFAULT; //delay of the start of the display with respect to the trigger input signal (slave mode)
     long int m_Timing_PictureTime;
 
-	// Helper and secondary methods
+    // Helper and secondary methods
     void initWheel(unsigned char *buf, int num);
 
 };
