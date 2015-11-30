@@ -55,8 +55,8 @@ if(SMI_SUPPORT)
 endif(SMI_SUPPORT)
 
 # Volvux Main files
-set(VOLVUX_HDRS VolvuxExpWidget.h  VolvuxMainWindow.h VolvuxWidget.h )#VolvuxWizard.h ProjectorPage.h)
-set(VOLVUX_SRCS VolvuxExpWidget.cpp  VolvuxMainWindow.cpp VolvuxWidget.cpp )#VolvuxWizard.cpp ProjectorPage.cpp)
+set(VOLVUX_HDRS VolvuxExpWidget.h  VolvuxMainWindow.h VolvuxWidget.h VolvuxWizard.h ProjectorPage.h)
+set(VOLVUX_SRCS VolvuxExpWidget.cpp  VolvuxMainWindow.cpp VolvuxWidget.cpp VolvuxWizard.cpp ProjectorPage.cpp)
 set(VOLVUX_FORMS VolvuxMainWindow.ui)
 
 if(QT5_SUPPORT)
