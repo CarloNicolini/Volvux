@@ -15,6 +15,14 @@ public:
     explicit StackedWidget(QWidget *parent = 0);
     ~StackedWidget();
 
+private slots:
+    void onPushButtonNextStackedWidget(bool value);
+    void onPushButtonPreviousStackedWidget(bool value);
+    void onCancelPressed(bool value);
+
+protected:
+    void keyPressEvent(QKeyEvent *e);
+
 private:
     Ui::StackedWidget *ui;
 };

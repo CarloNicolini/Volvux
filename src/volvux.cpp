@@ -65,16 +65,19 @@ int main(int argc, char *argv[])
     //#endif
     //	QCoreApplication::addLibraryPath("./");
     QApplication app(argc, argv);
-    //
-    VolvuxMainWindow window;
-    try
-    {
-        window.resize(window.sizeHint());
-        window.show();
-    }
-    catch (std::exception &e)
-    {
-        cerr << e.what() << endl;
-    }
+    StackedWidget stacked;
+    stacked.show();
+
+//    VolvuxMainWindow window;
+//    try
+//    {
+//        window.resize(window.sizeHint());
+//        window.show();
+//    }
+//    catch (std::exception &e)
+//    {
+//        cerr << e.what() << endl;
+//    }
+
     return app.exec();
 }

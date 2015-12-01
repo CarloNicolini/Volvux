@@ -50,7 +50,7 @@
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>3</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tabScene">
         <attribute name="title">
@@ -1451,9 +1451,63 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionFileLoadExperiment"/>
+    <addaction name="actionFileSaveExperiment"/>
+   </widget>
+   <widget class="QMenu" name="menuSettings">
+    <property name="title">
+     <string>Settings</string>
+    </property>
+    <addaction name="actionSettingsProjector"/>
+    <addaction name="actionSettingsMotor"/>
+    <addaction name="actionSettingsCalibration"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionHelpProjector"/>
+    <addaction name="actionHelpMotor"/>
    </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuSettings"/>
+   <addaction name="menuHelp"/>
   </widget>
+  <action name="actionSettingsProjector">
+   <property name="text">
+    <string>Projector...</string>
+   </property>
+  </action>
+  <action name="actionSettingsMotor">
+   <property name="text">
+    <string>Motor...</string>
+   </property>
+  </action>
+  <action name="actionSettingsCalibration">
+   <property name="text">
+    <string>Calibration...</string>
+   </property>
+  </action>
+  <action name="actionFileLoadExperiment">
+   <property name="text">
+    <string>Load experiment...</string>
+   </property>
+  </action>
+  <action name="actionFileSaveExperiment">
+   <property name="text">
+    <string>Save experiment...</string>
+   </property>
+  </action>
+  <action name="actionHelpProjector">
+   <property name="text">
+    <string>Projector</string>
+   </property>
+  </action>
+  <action name="actionHelpMotor">
+   <property name="text">
+    <string>Motor</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

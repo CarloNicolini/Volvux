@@ -43,12 +43,11 @@ QString CNCSVISION_BASE_DIRECTORY("/Users/rs/workspace/");
  * @param parent
  * @param shareWidget
  */
-VolvuxCalibrationWidget::VolvuxCalibrationWidget(QWidget *parent) :
-    QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
+VolvuxCalibrationWidget::VolvuxCalibrationWidget(QWidget *parent)
 {
 
     // Get the 2D points and 3D points
-    this->setAutoBufferSwap(true);
+    //this->setAutoBufferSwap(true);
     this->setMouseTracking(true);
     this->setAutoFillBackground(false);
     this->setCursor(Qt::BlankCursor);
@@ -58,8 +57,6 @@ VolvuxCalibrationWidget::VolvuxCalibrationWidget(QWidget *parent) :
     timer->start(15);
     QObject::connect(timer,SIGNAL(timeout()),this,SLOT(repaint()));
     this->setFocus();
-
-
     drawingText=true;
 }
 
@@ -85,7 +82,6 @@ QSize VolvuxCalibrationWidget::minimumSizeHint() const
     return QSize(PROJECTOR_RESOLUTION_WIDTH, PROJECTOR_RESOLUTION_HEIGHT);
 }
 
-
 /**
  * @brief ShaderWidget::sizeHint
  * @return
@@ -93,19 +89,6 @@ QSize VolvuxCalibrationWidget::minimumSizeHint() const
 QSize VolvuxCalibrationWidget::sizeHint() const
 {
     return QSize(PROJECTOR_RESOLUTION_WIDTH, PROJECTOR_RESOLUTION_HEIGHT);
-}
-
-/**
- * @brief ShaderWidget::initializeGL
- */
-void VolvuxCalibrationWidget::initializeGL()
-{
-    glEnable(GL_MULTISAMPLE);
-    qglClearColor(Qt::black);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT  );
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
 }
 
 /**
@@ -120,23 +103,23 @@ void VolvuxCalibrationWidget::saveData()
     QString pointsOutputFileName = filename + ".txt";
     QString imageOutputFileName  = filename + ".bmp";
 
-    QImage frame = this->grabFrameBuffer();
 
-    if ( !frame.save(imageOutputFileName,NULL,-1) )
-    {
-        QMessageBox::warning(this,"Error saving image","Can't save image");
-    }
+//    QImage frame = this->grabFrameBuffer();
+//    if ( !frame.save(imageOutputFileName,NULL,-1) )
+//    {
+//        QMessageBox::warning(this,"Error saving image","Can't save image");
+//    }
 
-    QFile outputFile(pointsOutputFileName);
-    outputFile.open(QIODevice::WriteOnly | QIODevice::Text);
-    QTextStream out(&outputFile);
+//    QFile outputFile(pointsOutputFileName);
+//    outputFile.open(QIODevice::WriteOnly | QIODevice::Text);
+//    QTextStream out(&outputFile);
 
-    //outputPoints.open(pointsOutputFileName.toStdString().c_str());
-    out << "# Calibration points" << endl;
-    for (int i=0; i<points2D.size();i++)
-    {
-        out << points2D.at(i).x() << "\t" << points2D.at(i).y() << endl;
-    }
+//    //outputPoints.open(pointsOutputFileName.toStdString().c_str());
+//    out << "# Calibration points" << endl;
+//    for (int i=0; i<points2D.size();i++)
+//    {
+//        out << points2D.at(i).x() << "\t" << points2D.at(i).y() << endl;
+//    }
 }
 
 /**
@@ -165,36 +148,31 @@ void VolvuxCalibrationWidget::mousePressEvent(QMouseEvent *event)
 /**
  * @brief ShaderWidget::paintGL
  */
-void VolvuxCalibrationWidget::paintGL()
+void VolvuxCalibrationWidget::paintEvent(QPaintEvent *event)
 {
-    //makeCurrent();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    qglClearColor(Qt::black);
-    glPushAttrib(GL_ALL_ATTRIB_BITS);
-    glShadeModel(GL_FLAT);
-    glDisable(GL_CULL_FACE);
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_LIGHTING);
 
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.setPen(Qt::green);
+    painter.fillRect(QRect(QPoint(0,0),QPoint(PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT)),Qt::black);
+    painter.setPen(Qt::white);
+
     painter.drawPoint(lastPoint);
-    painter.setPen(Qt::red);
+    painter.drawLine(lastPoint-QPoint(3,0),lastPoint+QPoint(3,0));
+    painter.drawLine(lastPoint-QPoint(0,3),lastPoint+QPoint(0,3));
+
     for (int i=0; i< this->points2D.size();i++)
     {
-        painter.setPen(Qt::red);
         painter.drawPoint(points2D.at(i));
+        painter.drawEllipse(points2D.at(i),6,6);
+        painter.drawLine(points2D.at(i)-QPoint(3,0),points2D.at(i)+QPoint(3,0));
+        painter.drawLine(points2D.at(i)-QPoint(0,3),points2D.at(i)+QPoint(0,3));
     }
 
     painter.drawPoint(PROJECTOR_RESOLUTION_WIDTH/2,PROJECTOR_RESOLUTION_HEIGHT/2);
 
     if ( drawingText )
     {
-        painter.setPen(Qt::white);
         painter.drawText(40,PROJECTOR_RESOLUTION_HEIGHT-20,QString("(x,y)=(")+ QString::number(lastPoint.x())+","+QString::number(lastPoint.y())+")");
         //painter.drawText(80,PROJECTOR_RESOLUTION_HEIGHT-20,QString::number(lastPoint.y()));
-        painter.drawText(120,PROJECTOR_RESOLUTION_HEIGHT-40,"Press F to toggle Fullscreen");
         painter.drawText(120,PROJECTOR_RESOLUTION_HEIGHT-60,"Press S to select the output file name");
         painter.drawText(120,PROJECTOR_RESOLUTION_HEIGHT-80,"Press Q to quit and save");
         painter.drawText(120,PROJECTOR_RESOLUTION_HEIGHT-100,"RightMouse to save/erase points");
@@ -235,20 +213,20 @@ void VolvuxCalibrationWidget::toggleText()
     this->drawingText = !this->drawingText;
 }
 
-/**
- * @brief ShaderWidget::resizeGL
- * @param width
- * @param height
- */
-void VolvuxCalibrationWidget::resizeGL(int width, int height)
-{
-    glViewport(0, 0, (GLsizei) width, (GLsizei) height); // Set our viewport to the size of our window
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    float FOV=90;
-    gluPerspective(FOV, (float)width / (float)height, 0.1, 200.0);
-    glMatrixMode(GL_MODELVIEW);
-}
+///**
+// * @brief ShaderWidget::resizeGL
+// * @param width
+// * @param height
+// */
+//void VolvuxCalibrationWidget::resizeGL(int width, int height)
+//{
+//    glViewport(0, 0, (GLsizei) width, (GLsizei) height); // Set our viewport to the size of our window
+//    glMatrixMode(GL_PROJECTION);
+//    glLoadIdentity();
+//    float FOV=90;
+//    //gluPerspective(FOV, (float)width / (float)height, 0.1, 200.0);
+//    glMatrixMode(GL_MODELVIEW);
+//}
 
 void VolvuxCalibrationWidget::addPoint()
 {

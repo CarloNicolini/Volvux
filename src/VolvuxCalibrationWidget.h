@@ -31,23 +31,17 @@
 #include <QtGui>
 #include <QGLWidget>
 
-#include "VRCamera.h"
-#include "ObjLoader.h"
-#include "QGLFramebufferObject"
-
 #ifdef ALP_SUPPORT
 #include "ALPProjector.h"
 #endif
 
 #define PROJECTOR_RESOLUTION_WIDTH 1024
 #define PROJECTOR_RESOLUTION_HEIGHT 768
-//#define ALP_SUPPORT
-class QGLShaderProgram;
-using Eigen::Vector3d;
-#define PROGRAM_VERTEX_ATTRIBUTE 0
-#define PROGRAM_TEXCOORD_ATTRIBUTE 1
 
-class VolvuxCalibrationWidget : public QGLWidget
+//#define ALP_SUPPORT
+using Eigen::Vector3d;
+
+class VolvuxCalibrationWidget : public QWidget
 {
     Q_OBJECT
 
@@ -62,9 +56,9 @@ public:
     void addPoint();
 
 protected:
-    void initializeGL();
-    void paintGL();
-    void resizeGL(int width, int height);
+    //void initializeGL();
+    void paintEvent(QPaintEvent *event);
+    //void resizeGL(int width, int height);
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
 
@@ -75,7 +69,7 @@ private:
     bool drawingText;
     QString folderName,pointsFileName;
     QPoint lastPoint;
-    ofstream outputPoints;
+    std::ofstream outputPoints;
 
 #ifdef ALP_SUPPORT
     ALPProjector *alp;
