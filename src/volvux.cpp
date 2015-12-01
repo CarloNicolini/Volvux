@@ -26,7 +26,6 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include "VolvuxMainWindow.h"
-#include "VolvuxWizard.h"
 #include "StackedWidget.h"
 
 #ifdef WIN32
@@ -64,20 +63,24 @@ int main(int argc, char *argv[])
     //	EnableCrashingOnCrashes();
     //#endif
     //	QCoreApplication::addLibraryPath("./");
+
+
     QApplication app(argc, argv);
+    ///*
     StackedWidget stacked;
     stacked.show();
-
-//    VolvuxMainWindow window;
-//    try
-//    {
-//        window.resize(window.sizeHint());
-//        window.show();
-//    }
-//    catch (std::exception &e)
-//    {
-//        cerr << e.what() << endl;
-//    }
-
+    //*/
+    /*
+    VolvuxMainWindow window;
+    try
+    {
+        window.resize(window.sizeHint());
+        window.show();
+    }
+    catch (std::exception &e)
+    {
+        cerr << e.what() << endl;
+    }
+    */
     return app.exec();
 }

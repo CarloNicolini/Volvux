@@ -3,6 +3,8 @@
 
 #include <QStackedWidget>
 
+#define UNITS_TO_REV_MIN 65536
+
 namespace Ui {
 class StackedWidget;
 }
@@ -19,6 +21,13 @@ private slots:
     void onPushButtonNextStackedWidget(bool value);
     void onPushButtonPreviousStackedWidget(bool value);
     void onCancelPressed(bool value);
+    //Projector Slots
+    void onPushButtonProjectorInitializeClicked(bool value);
+    void onPushButtonProjectorReleaseClicked(bool value);
+    void onSpinboxProjectorMicrosecondsPerFrameChanged(int value);
+    void onSpinboxProjectorNSlicesChanged(int value);
+    void onSpinboxProjectorLEDCurrentChanged(int current);
+    void onSpinboxProjectorLEDPercentageChanged(double percentage);
 
 protected:
     void keyPressEvent(QKeyEvent *e);

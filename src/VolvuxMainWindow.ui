@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1600</width>
-    <height>1049</height>
+    <width>1612</width>
+    <height>1058</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -50,7 +50,7 @@
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="tabScene">
         <attribute name="title">
@@ -1443,8 +1443,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1600</width>
-     <height>21</height>
+     <width>1612</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -1520,7 +1520,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroupRandomizationMethod"/>
   <buttongroup name="buttonGroupMotorStartStop"/>
+  <buttongroup name="buttonGroupRandomizationMethod"/>
  </buttongroups>
 </ui>
