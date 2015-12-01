@@ -34,6 +34,8 @@
 #include <QInputDialog>
 #include <stdexcept>
 
+#include "VolvuxExpWidget.h"
+
 #include "ui_VolvuxMainWindow.h"
 
 #ifdef ALP_SUPPORT
@@ -48,7 +50,6 @@
 #include <comdef.h>
 #endif
 
-#include "VolvuxExpWidget.h"
 
 namespace Ui
 {
@@ -60,7 +61,7 @@ class VolvuxMainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    VolvuxMainWindow(QWidget *parent = 0);
+    explicit VolvuxMainWindow(QWidget *parent = 0);
     ~VolvuxMainWindow();
 protected:
     void keyPressEvent(QKeyEvent *event) ;

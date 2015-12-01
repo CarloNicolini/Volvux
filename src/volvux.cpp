@@ -27,6 +27,7 @@
 #include <QDesktopWidget>
 #include "VolvuxMainWindow.h"
 #include "VolvuxWizard.h"
+#include "StackedWidget.h"
 
 #ifdef WIN32
 #include <windows.h>
@@ -55,7 +56,6 @@ void EnableCrashingOnCrashes()
 
 int main(int argc, char *argv[])
 {
-
     //#ifdef WIN32
     //    AllocConsole();  // Create Console Window
     //    freopen("CONIN$","rb",stdin);   // reopen stdin handle as console window input
@@ -77,10 +77,4 @@ int main(int argc, char *argv[])
         cerr << e.what() << endl;
     }
     return app.exec();
-    
-#ifdef USE_WIZARD_UI
-    //VolvuxWizard w;
-    //w.show();
-    //return 0;
-#endif
 }
