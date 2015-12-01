@@ -52,7 +52,7 @@ VolvuxCalibrationWidget::VolvuxCalibrationWidget(QWidget *parent) :
     this->setMouseTracking(true);
     this->setAutoFillBackground(false);
     this->setCursor(Qt::BlankCursor);
-    this->resize(PROJECTOR_WIDTH,PROJECTOR_HEIGHT);
+    this->resize(PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT);
     glPointSize(0.1);
     QTimer *timer = new QTimer(this);
     timer->start(15);
@@ -61,9 +61,6 @@ VolvuxCalibrationWidget::VolvuxCalibrationWidget(QWidget *parent) :
 
 
     drawingText=true;
-
-    // Prepare the writing buffer to send to the projector
-    currentFrame.resize(PROJECTOR_RESOLUTION_WIDTH*PROJECTOR_RESOLUTION_HEIGHT);
 }
 
 void VolvuxCalibrationWidget::moveCursor(int x, int y)
@@ -85,7 +82,7 @@ VolvuxCalibrationWidget::~VolvuxCalibrationWidget()
  */
 QSize VolvuxCalibrationWidget::minimumSizeHint() const
 {
-    return QSize(PROJECTOR_WIDTH, PROJECTOR_HEIGHT);
+    return QSize(PROJECTOR_RESOLUTION_WIDTH, PROJECTOR_RESOLUTION_HEIGHT);
 }
 
 
@@ -95,7 +92,7 @@ QSize VolvuxCalibrationWidget::minimumSizeHint() const
  */
 QSize VolvuxCalibrationWidget::sizeHint() const
 {
-    return QSize(PROJECTOR_WIDTH, PROJECTOR_HEIGHT);
+    return QSize(PROJECTOR_RESOLUTION_WIDTH, PROJECTOR_RESOLUTION_HEIGHT);
 }
 
 /**
@@ -190,25 +187,25 @@ void VolvuxCalibrationWidget::paintGL()
         painter.drawPoint(points2D.at(i));
     }
 
-    painter.drawPoint(PROJECTOR_WIDTH/2,PROJECTOR_HEIGHT/2);
+    painter.drawPoint(PROJECTOR_RESOLUTION_WIDTH/2,PROJECTOR_RESOLUTION_HEIGHT/2);
 
     if ( drawingText )
     {
         painter.setPen(Qt::white);
-        painter.drawText(40,PROJECTOR_HEIGHT-20,QString("(x,y)=(")+ QString::number(lastPoint.x())+","+QString::number(lastPoint.y())+")");
-        //painter.drawText(80,PROJECTOR_HEIGHT-20,QString::number(lastPoint.y()));
-        painter.drawText(120,PROJECTOR_HEIGHT-40,"Press F to toggle Fullscreen");
-        painter.drawText(120,PROJECTOR_HEIGHT-60,"Press S to select the output file name");
-        painter.drawText(120,PROJECTOR_HEIGHT-80,"Press Q to quit and save");
-        painter.drawText(120,PROJECTOR_HEIGHT-100,"RightMouse to save/erase points");
-        painter.drawText(120,PROJECTOR_HEIGHT-120,"Press T to toggle this text");
-        painter.drawText(120,PROJECTOR_HEIGHT-140,"Press R to save this point");
+        painter.drawText(40,PROJECTOR_RESOLUTION_HEIGHT-20,QString("(x,y)=(")+ QString::number(lastPoint.x())+","+QString::number(lastPoint.y())+")");
+        //painter.drawText(80,PROJECTOR_RESOLUTION_HEIGHT-20,QString::number(lastPoint.y()));
+        painter.drawText(120,PROJECTOR_RESOLUTION_HEIGHT-40,"Press F to toggle Fullscreen");
+        painter.drawText(120,PROJECTOR_RESOLUTION_HEIGHT-60,"Press S to select the output file name");
+        painter.drawText(120,PROJECTOR_RESOLUTION_HEIGHT-80,"Press Q to quit and save");
+        painter.drawText(120,PROJECTOR_RESOLUTION_HEIGHT-100,"RightMouse to save/erase points");
+        painter.drawText(120,PROJECTOR_RESOLUTION_HEIGHT-120,"Press T to toggle this text");
+        painter.drawText(120,PROJECTOR_RESOLUTION_HEIGHT-140,"Press R to save this point");
 
         QRect rect;
         QPen pen; pen.setWidth(1);pen.setColor(Qt::white);
         painter.setPen(pen);
         rect.setTopLeft(QPoint(0,0));
-        rect.setBottomRight(QPoint(PROJECTOR_WIDTH-1,PROJECTOR_HEIGHT-1));
+        rect.setBottomRight(QPoint(PROJECTOR_RESOLUTION_WIDTH-1,PROJECTOR_RESOLUTION_HEIGHT-1));
         painter.drawRect(rect);
     }
     painter.end();

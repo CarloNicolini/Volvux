@@ -66,7 +66,6 @@ int main(int argc, char *argv[])
     //	QCoreApplication::addLibraryPath("./");
     QApplication app(argc, argv);
     //
-
     VolvuxMainWindow window;
     try
     {

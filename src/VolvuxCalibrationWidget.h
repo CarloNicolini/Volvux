@@ -41,7 +41,7 @@
 
 #define PROJECTOR_RESOLUTION_WIDTH 1024
 #define PROJECTOR_RESOLUTION_HEIGHT 768
-#define ALP_SUPPORT
+//#define ALP_SUPPORT
 class QGLShaderProgram;
 using Eigen::Vector3d;
 #define PROGRAM_VERTEX_ATTRIBUTE 0

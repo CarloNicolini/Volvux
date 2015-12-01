@@ -55,9 +55,9 @@ if(SMI_SUPPORT)
 endif(SMI_SUPPORT)
 
 # Volvux Main files
-set(VOLVUX_HDRS VolvuxExpWidget.h  VolvuxMainWindow.h VolvuxWidget.h VolvuxCalibrationWidget.h)# VolvuxWizard.h SMIPageWidget.h)
-set(VOLVUX_SRCS VolvuxExpWidget.cpp  VolvuxMainWindow.cpp VolvuxWidget.cpp VolvuxCalibrationWidget.cpp)#VolvuxWizard.cpp SMIPageWidget.cpp)
-set(VOLVUX_FORMS VolvuxMainWindow.ui VolvuxCalibrationMainWindow.ui)
+set(VOLVUX_HDRS VolvuxExpWidget.h  VolvuxMainWindow.h VolvuxWidget.h VolvuxCalibrationWidget.h StackedWidget.h)# VolvuxWizard.h SMIPageWidget.h)
+set(VOLVUX_SRCS VolvuxExpWidget.cpp  VolvuxMainWindow.cpp VolvuxWidget.cpp VolvuxCalibrationWidget.cpp StackedWidget.cpp)#VolvuxWizard.cpp SMIPageWidget.cpp)
+set(VOLVUX_FORMS VolvuxMainWindow.ui VolvuxCalibrationMainWindow.ui VolvuxWelcomeWidget.ui StackedWidget.ui)
 
 if(QT5_SUPPORT)
     # Tell CMake to run moc when necessary:
@@ -81,6 +81,17 @@ if(QT5_SUPPORT)
     target_link_libraries(volvux Qt5::WinMain)
     endif(WIN32)
     qt5_use_modules(volvux Gui Widgets OpenGL)
+
+
+    add_executable(welcomevolvux welcomevolvux.cpp ${VOLVUX_SRCS} ${VOLVUX_HDRS} ${VOLVUX_FORMS_HDRS})
+    #Link the helloworld executable to the Qt 5 widgets library.
+    target_link_libraries(welcomevolvux Qt5::Gui Qt5::Widgets Qt5::OpenGL VOLVUXHELPER)
+    if (WIN32)
+    # http://stackoverflow.com/questions/16773789/qt5-static-build-yields-failed-to-load-platform-plugin-windows/17271172#17271172
+    target_link_libraries(welcomevolvux Qt5::WinMain)
+    endif(WIN32)
+    qt5_use_modules(welcomevolvux Gui Widgets OpenGL)
+
 endif(QT5_SUPPORT)
 
 

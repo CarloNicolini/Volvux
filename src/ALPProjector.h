@@ -27,7 +27,7 @@
 #ifndef _ALP_PROJECTOR_H_
 #define _ALP_PROJECTOR_H_
 
-#define ALP_SUPPORT 1
+//#define ALP_SUPPORT 1
 
 #include <windows.h>
 #include <iostream>
