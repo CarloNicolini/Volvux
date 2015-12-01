@@ -150,7 +150,6 @@ void VolvuxCalibrationWidget::mousePressEvent(QMouseEvent *event)
  */
 void VolvuxCalibrationWidget::paintEvent(QPaintEvent *event)
 {
-
     QPainter painter(this);
     painter.fillRect(QRect(QPoint(0,0),QPoint(PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT)),Qt::black);
     painter.setPen(Qt::white);
