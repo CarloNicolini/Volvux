@@ -14,7 +14,7 @@
    <string>Volvux Welcome Wizard</string>
   </property>
   <property name="currentIndex">
-   <number>3</number>
+   <number>0</number>
   </property>
   <widget class="QWidget" name="pageProjector">
    <layout class="QGridLayout" name="gridLayout">
@@ -123,7 +123,7 @@
           <item>
            <widget class="QGroupBox" name="projectorSettingsGroupbox">
             <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Initialize projector to enable&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="title">
              <string>Projector Settings</string>
@@ -272,6 +272,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="pushButtonNextProjector">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Next</string>
             </property>
@@ -357,7 +360,7 @@
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_6">
              <item>
-              <widget class="QPushButton" name="pushButtonMotorstart">
+              <widget class="QPushButton" name="pushButtonMotorStart">
                <property name="text">
                 <string>Start</string>
                </property>
@@ -391,81 +394,110 @@
             <property name="title">
              <string>Motor Settings</string>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_5">
-             <item>
-              <layout class="QFormLayout" name="formLayout_2">
-               <item row="0" column="0">
-                <widget class="QLabel" name="labelNumSlicesProjector_2">
-                 <property name="text">
-                  <string># Slices</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QSpinBox" name="spinBoxProjectorNSlices_2">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                 <property name="minimum">
-                  <number>1</number>
-                 </property>
-                 <property name="maximum">
-                  <number>500</number>
-                 </property>
-                 <property name="value">
-                  <number>400</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="flickerRatelabel">
-                 <property name="text">
-                  <string>Flicker Rate [Hz]</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QSpinBox" name="spinBoxProjectorLEDcurrent_2">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                 <property name="maximum">
-                  <number>15000</number>
-                 </property>
-                 <property name="singleStep">
-                  <number>100</number>
-                 </property>
-                 <property name="value">
-                  <number>2000</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QLabel" name="unitsRevMinLabel">
-                 <property name="text">
-                  <string>Units to rev/min</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QLabel" name="revmindefaultValue">
-                 <property name="font">
-                  <font>
-                   <weight>75</weight>
-                   <bold>true</bold>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>65536</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-            </layout>
+            <widget class="QWidget" name="">
+             <property name="geometry">
+              <rect>
+               <x>13</x>
+               <y>33</y>
+               <width>207</width>
+               <height>115</height>
+              </rect>
+             </property>
+             <layout class="QFormLayout" name="formLayout_2">
+              <item row="0" column="0">
+               <widget class="QLabel" name="labelNumSlicesMotor">
+                <property name="text">
+                 <string># Slices</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QSpinBox" name="spinBoxMotorNSlices">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>500</number>
+                </property>
+                <property name="value">
+                 <number>400</number>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="labelMotorSpeed">
+                <property name="text">
+                 <string>Speed [Units/min]</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QSpinBox" name="spinBoxMotorSpeed">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>999</number>
+                </property>
+                <property name="value">
+                 <number>1</number>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="labelFlickerRate">
+                <property name="text">
+                 <string>Flicker Rate [Hz]</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QDoubleSpinBox" name="doubleSpinBoxMotorFlickerRate">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimum">
+                 <double>1.000000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>300.000000000000000</double>
+                </property>
+                <property name="value">
+                 <double>30.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="labelUnitsToRevMin">
+                <property name="text">
+                 <string>Units to rev/min</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QLabel" name="labelMotorDefaultUnitsToRevMin">
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>65536</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
            </widget>
           </item>
          </layout>
@@ -484,7 +516,7 @@
         <item>
          <widget class="QPushButton" name="pushButtonPreviousMotor">
           <property name="text">
-           <string>Previous</string>
+           <string>Back</string>
           </property>
          </widget>
         </item>
@@ -525,7 +557,7 @@
       <item>
        <widget class="QPushButton" name="pushButtonPreviousCalibration">
         <property name="text">
-         <string>Previous</string>
+         <string>Back</string>
         </property>
        </widget>
       </item>
