@@ -54,7 +54,7 @@ VolvuxCalibrationWidget::VolvuxCalibrationWidget(QWidget *parent)
     this->resize(PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT);
     glPointSize(0.1);
     QTimer *timer = new QTimer(this);
-    timer->start(15);
+    timer->start(100);
     QObject::connect(timer,SIGNAL(timeout()),this,SLOT(repaint()));
     this->setFocus();
     drawingText=true;
@@ -213,21 +213,9 @@ void VolvuxCalibrationWidget::toggleText()
     this->drawingText = !this->drawingText;
 }
 
-///**
-// * @brief ShaderWidget::resizeGL
-// * @param width
-// * @param height
-// */
-//void VolvuxCalibrationWidget::resizeGL(int width, int height)
-//{
-//    glViewport(0, 0, (GLsizei) width, (GLsizei) height); // Set our viewport to the size of our window
-//    glMatrixMode(GL_PROJECTION);
-//    glLoadIdentity();
-//    float FOV=90;
-//    //gluPerspective(FOV, (float)width / (float)height, 0.1, 200.0);
-//    glMatrixMode(GL_MODELVIEW);
-//}
-
+/**
+ * @brief VolvuxCalibrationWidget::addPoint
+ */
 void VolvuxCalibrationWidget::addPoint()
 {
     for (int i=0; i<points2D.size();i++)
