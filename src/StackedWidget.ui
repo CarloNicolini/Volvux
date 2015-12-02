@@ -14,7 +14,7 @@
    <string>Volvux Welcome Wizard</string>
   </property>
   <property name="currentIndex">
-   <number>0</number>
+   <number>2</number>
   </property>
   <widget class="QWidget" name="pageProjector">
    <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -93,10 +93,6 @@
           </spacer>
          </item>
         </layout>
-        <zorder>pushButtonProjectorInitialize</zorder>
-        <zorder>pushButtonProjectorRelease</zorder>
-        <zorder>projectorSettingsGroupbox</zorder>
-        <zorder>verticalSpacer_2</zorder>
        </widget>
       </item>
       <item>
@@ -364,7 +360,7 @@
             <double>1.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>30.000000000000000</double>
+            <double>50.000000000000000</double>
            </property>
            <property name="singleStep">
             <double>0.010000000000000</double>
@@ -477,15 +473,19 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="page">
-   <layout class="QHBoxLayout" name="horizontalLayout_8"/>
-  </widget>
+  <widget class="VolvuxMainWindow" name="pageMainWindow"/>
  </widget>
  <customwidgets>
   <customwidget>
    <class>VolvuxCalibrationWidget</class>
    <extends>QWidget</extends>
    <header>VolvuxCalibrationWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>VolvuxMainWindow</class>
+   <extends>QWidget</extends>
+   <header>VolvuxMainWindow.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

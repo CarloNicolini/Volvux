@@ -5,9 +5,16 @@
 
 #include "StackedWidget.h"
 
-class StackedWidgetHelper : public StackedWidget
+class StackedWidgetHelper
 {
 public:
+    StackedWidgetHelper(StackedWidget *parent)
+    {
+        _parent = parent;
+        ui = parent->getUi();
+    }
+    ~StackedWidgetHelper(){};
+
     void updateMotorRate(int nSlices, double tFrameMicroSeconds);
 
 #ifdef ALP_SUPPORT
@@ -17,6 +24,9 @@ public:
 #if defined (SMI_SUPPORT) && (WIN32)
     INTEGMOTORINTERFACELib::ISMICommPtr CommInterface;
 #endif
+protected:
+    StackedWidget *_parent;
+    Ui::StackedWidget *ui;
 };
 
 #endif // STACKEDWIDGETHELPER_H

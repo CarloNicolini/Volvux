@@ -3,8 +3,9 @@
 
 #include <QStackedWidget>
 
-namespace Ui{
-class StackedWidget;
+namespace Ui
+{
+    class StackedWidget;
 }
 
 class StackedWidgetHelper; // forward declaration
@@ -13,9 +14,9 @@ class StackedWidget : public QStackedWidget
 {
     Q_OBJECT
 public:
-    //friend class StackedWidgetHelper;
-    explicit StackedWidget(QWidget *parent = 0);
+    StackedWidget(QWidget *parent = 0);
     ~StackedWidget();
+    Ui::StackedWidget* getUi(){return this->ui;}
 
 private slots:
     void onPushButtonNextStackedWidget(bool value);

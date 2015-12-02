@@ -10,7 +10,7 @@ StackedWidget::StackedWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setCurrentIndex(0);
-
+    helper = new StackedWidgetHelper(this);
     // Projector navigation buttons
     QObject::connect(ui->pushButtonNextProjector,SIGNAL(clicked(bool)),this,SLOT(onPushButtonNextStackedWidget(bool)));
     QObject::connect(ui->pushButtonCancelProjector,SIGNAL(clicked(bool)),this,SLOT(onCancelPressed(bool)));
@@ -45,6 +45,7 @@ StackedWidget::StackedWidget(QWidget *parent) :
 
 StackedWidget::~StackedWidget()
 {
+    delete helper;
     delete ui;
 }
 

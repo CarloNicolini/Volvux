@@ -15,7 +15,7 @@ option(COMPILE_GLEW "Compile the glew library from source" OFF)
 option(COMPILE_FREEGLUT "Compile the FreeGLUT library from souce" OFF)
 
 ####################### FIND PACKAGES AND LIBRARIES ####################
-
+set(CMAKE_CXX_COMPILER_FLAGS "${CMAKE_CXX_COMPILER_FLAGS} -Wall")
 # 1. Try to find the StandardMathLibrary standard package
 #find_package(StandardMathLibrary)
 
