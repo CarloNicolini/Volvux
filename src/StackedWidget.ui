@@ -525,6 +525,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="pushButtonNextMotor">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="text">
            <string>Next</string>
           </property>

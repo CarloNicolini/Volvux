@@ -236,6 +236,7 @@ void StackedWidget::onSpinboxProjectorLEDPercentageChanged(double percentage){
     //Start
 void StackedWidget::onPushButtonMotorStartClicked(bool value){
     ui->pushButtonMotorStop->setEnabled(true);
+    ui->pushButtonNextMotor->setEnabled(true);
     #if defined (SMI_SUPPORT) && (WIN32)
         cerr << "[MainWindow] Starting motor" << endl;
         long Version = 0;
