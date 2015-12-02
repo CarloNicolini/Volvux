@@ -34,6 +34,9 @@ StackedWidget::StackedWidget(QWidget *parent) :
         //LED settings
     QObject::connect(ui->spinBoxProjectorLEDcurrent,SIGNAL(valueChanged(int)),this,SLOT(onSpinboxProjectorLEDCurrentChanged(int)));
     QObject::connect(ui->doubleSpinBoxProjectorLEDpercentage,SIGNAL(valueChanged(double)),this,SLOT(onSpinboxProjectorLEDPercentageChanged(double)));
+
+    //Motor control buttons
+    QObject::connect(ui->pushButtonMotorStart,SIGNAL(clicked(bool)),this,SLOT(onPushButtonMotorStartClicked(bool)));
 }
 
 //Methods
@@ -177,7 +180,7 @@ void StackedWidget::onPushButtonProjectorReleaseClicked(bool value){
     ui->pushButtonProjectorInitialize->setEnabled(true);
 }
 
-//Projector spinbox
+//Projector settings
     //us per frame
 void StackedWidget::onSpinboxProjectorMicrosecondsPerFrameChanged(int value){
     double flickerRate = 1E6/((double)(value*ui->spinBoxProjectorNSlices->value()));
@@ -188,12 +191,12 @@ void StackedWidget::onSpinboxProjectorMicrosecondsPerFrameChanged(int value){
 void StackedWidget::onSpinboxProjectorNSlicesChanged(int value){
     ui->spinBoxMotorNSlices->setValue(value);
     double flickerPersistenceMicroSec = ui->doubleSpinBoxMotorFlickerRate->value();//*1E-6;
-    //qDebug("%d FlickerPersistence - Flicker Rate",flickerPersistenceMicroSec);
+    qDebug("%d FlickerPersistence - Flicker Rate",flickerPersistenceMicroSec);
     int usPerFrame = flickerPersistenceMicroSec/value;
-    //qDebug("%d usPerFrame",usPerFrame);
+    qDebug("%d usPerFrame",usPerFrame);
     ui->spinBoxProjectorMicrosecondsPerFrame->setValue(usPerFrame);
-    double motorRate = (1E-6/((double)value*usPerFrame))*UNITS_TO_REV_MIN;
-    //qDebug("%d Motor speed",motorRate);
+    double motorRate = (1E-6/((double)value*usPerFrame))*MOTOR_UNITS_TO_REV_MIN;
+    qDebug("%d Motor speed",motorRate);
     ui->spinBoxMotorSpeed->setValue(motorRate);
 }
 
@@ -227,5 +230,72 @@ void StackedWidget::onSpinboxProjectorLEDPercentageChanged(double percentage){
             alp.setLED(ui->spinBoxProjectorLEDcurrent->value(),static_cast<long int>(std::ceil(percentage)));
     }
     #endif
+}
+
+//Motor buttons
+    //Start
+void StackedWidget::onPushButtonMotorStartClicked(bool value){
+    ui->pushButtonMotorStop->setEnabled(true);
+    #if defined (SMI_SUPPORT) && (WIN32)
+        cerr << "[MainWindow] Starting motor" << endl;
+        long Version = 0;
+        Version = CommInterface->EngineVersion;
+        if ( this->ui->spinBoxMotorSpeed->isEnabled() )
+        {
+            int speed = this->ui->spinBoxMotorSpeed->value();
+            this->startRotation(speed);
+        }
+        else
+        {
+            QMessageBox::warning(this,"!!! WARNING !!!","This speed is not safe for the system");
+        }
+    #endif
+    ui->pushButtonMotorStart->setEnabled(false);
+}
+    //Stop
+void StackedWidget::onPushButtonMotorStopClicked(bool value){
+    #if defined (SMI_SUPPORT) && (WIN32)
+        cerr << "[MainWindow] Stopping motor" << endl;
+        this->startRotation(0);
+    #endif
+}
+//Motor settings
+    //Flicker Rate
+void StackedWidget::onSpinboxFlickerRateChanged(double flickerRate){
+    // The persistence of the stimulus on the eye in microseconds
+    double flickerPersistence_microSec = 1E6/flickerRate;
+    double nSlices = ui->spinBoxProjectorNSlices->value();
+    double microSecPerFrame = flickerPersistence_microSec/nSlices;
+    if ( std::fmod(microSecPerFrame,1.0) == 0.0)
+    {
+        //cerr << "consistent frame per microsecond" << endl;
+        this->ui->spinBoxProjectorMicrosecondsPerFrame->setValue((int)microSecPerFrame);
+    }
+    else
+    {
+        //cerr << "inconsistent frame per microsecond" << endl;
+    }
+
+    double motorRate = (1E6/(nSlices*std::floor(microSecPerFrame))) * MOTOR_UNITS_TO_REV_MIN;
+    if ( motorRate > this->ui->spinBoxMotorSpeed->maximum() )
+    {
+        this->ui->spinBoxMotorSpeed->setValue((int)motorRate);
+        this->ui->spinBoxMotorSpeed->setEnabled(false);
+    }
+    else
+    {
+        //if ( std::fmod(motorRate,1.0) == 0)
+        if (true)
+        {
+            this->ui->spinBoxMotorSpeed->setEnabled(true);
+            this->ui->spinBoxMotorSpeed->setValue((int)motorRate);
+            //this->onPushButtonMotorStartClicked();
+        }
+        else
+        {
+            this->ui->spinBoxMotorSpeed->setEnabled(false);
+        }
+        //this->ui->spinBoxMotorRevMin->setValue(motorRate/8000);
+    }
 }
 
