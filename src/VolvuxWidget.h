@@ -26,10 +26,11 @@
 #ifndef VOLUMETRIC_HELICOID_WIDGET_ALP_EXPERIMENT_H
 #define VOLUMETRIC_HELICOID_WIDGET_ALP_EXPERIMENT_H
 
+#include <QApplication>
 #include <QtGui>
 #include <QGLWidget>
+#include <QGLFunctions>
 #include <QGLFramebufferObject>
-#include <QApplication>
 #include <Eigen/Core>
 
 #include "Util.h"
@@ -64,7 +65,7 @@ class VolumetricMeshIntersection;
 class CameraDirectLinearTransformation;
 
 
-class VolvuxWidget : public QGLWidget
+class VolvuxWidget : public QGLWidget, protected QGLFunctions
 {
     Q_OBJECT
 public:

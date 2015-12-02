@@ -3,17 +3,17 @@
 
 #include <QStackedWidget>
 
-#define MOTOR_UNITS_TO_REV_MIN 65536
-
-namespace Ui {
+namespace Ui{
 class StackedWidget;
 }
+
+class StackedWidgetHelper; // forward declaration
 
 class StackedWidget : public QStackedWidget
 {
     Q_OBJECT
-
 public:
+    //friend class StackedWidgetHelper;
     explicit StackedWidget(QWidget *parent = 0);
     ~StackedWidget();
 
@@ -24,8 +24,8 @@ private slots:
     //Projector Slots
     void onPushButtonProjectorInitializeClicked(bool value);
     void onPushButtonProjectorReleaseClicked(bool value);
-    void onSpinboxProjectorMicrosecondsPerFrameChanged(int value);
-    void onSpinboxProjectorNSlicesChanged(int value);
+
+    void onSpinboxProjectorNSlicesChanged(int nSlices);
     void onSpinboxProjectorLEDCurrentChanged(int current);
     void onSpinboxProjectorLEDPercentageChanged(double percentage);
     //Motor Slots
@@ -35,9 +35,8 @@ private slots:
 
 protected:
     void keyPressEvent(QKeyEvent *e);
-
-private:
     Ui::StackedWidget *ui;
+    StackedWidgetHelper *helper;
 };
 
 #endif // STACKEDWIDGET_H

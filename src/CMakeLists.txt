@@ -58,6 +58,7 @@ endif(SMI_SUPPORT)
 set(VOLVUX_HDRS VolvuxExpWidget.h  VolvuxMainWindow.h VolvuxWidget.h VolvuxCalibrationWidget.h StackedWidget.h)
 set(VOLVUX_SRCS VolvuxExpWidget.cpp  VolvuxMainWindow.cpp VolvuxWidget.cpp VolvuxCalibrationWidget.cpp StackedWidget.cpp)
 set(VOLVUX_FORMS VolvuxMainWindow.ui StackedWidget.ui)
+set(VOLVUX_HELPERS StackedWidgetHelper.cpp StackedWidgetHelper.h)
 
 if(QT5_SUPPORT)
     # Tell CMake to run moc when necessary:
@@ -72,7 +73,7 @@ if(QT5_SUPPORT)
     #add_executable(volvux volvux.cpp ${VOLVUX_SRCS} ${VOLVUX_FORMS_HDRS})
     #target_link_libraries(volvux Qt5::Widgets Qt5::OpenGL VOLVUXHELPER)
     # Tell CMake to create the helloworld executable
-    add_executable(volvux volvux.cpp ${VOLVUX_SRCS} ${VOLVUX_HDRS} ${VOLVUX_FORMS_HDRS})
+    add_executable(volvux volvux.cpp ${VOLVUX_SRCS} ${VOLVUX_HDRS} ${VOLVUX_FORMS_HDRS} ${VOLVUX_HELPERS})
 
     #Link the helloworld executable to the Qt 5 widgets library.
     target_link_libraries(volvux Qt5::Gui Qt5::Widgets Qt5::OpenGL VOLVUXHELPER ${FREEGLUT_LIBRARIES} ${GLUT_LIBRARIES})

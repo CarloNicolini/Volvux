@@ -54,7 +54,7 @@ VolvuxCalibrationWidget::VolvuxCalibrationWidget(QWidget *parent)
     this->resize(PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT);
     glPointSize(0.1);
     QTimer *timer = new QTimer(this);
-    timer->start(100);
+    timer->start(10);
     QObject::connect(timer,SIGNAL(timeout()),this,SLOT(repaint()));
     this->setFocus();
     drawingText=true;

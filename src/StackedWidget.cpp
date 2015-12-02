@@ -2,6 +2,7 @@
 #include "StackedWidget.h"
 #include "VolvuxCalibrationWidget.h"
 #include "ui_StackedWidget.h"
+#include "StackedWidgetHelper.h"
 
 StackedWidget::StackedWidget(QWidget *parent) :
     QStackedWidget(parent),
@@ -14,11 +15,6 @@ StackedWidget::StackedWidget(QWidget *parent) :
     QObject::connect(ui->pushButtonNextProjector,SIGNAL(clicked(bool)),this,SLOT(onPushButtonNextStackedWidget(bool)));
     QObject::connect(ui->pushButtonCancelProjector,SIGNAL(clicked(bool)),this,SLOT(onCancelPressed(bool)));
 
-    // Motor navigation buttons
-    QObject::connect(ui->pushButtonNextMotor,SIGNAL(clicked(bool)),this,SLOT(onPushButtonNextStackedWidget(bool)));
-    QObject::connect(ui->pushButtonPreviousMotor,SIGNAL(clicked(bool)),this,SLOT(onPushButtonPreviousStackedWidget(bool)));
-    QObject::connect(ui->pushButtonCancelMotor,SIGNAL(clicked(bool)),this,SLOT(onCancelPressed(bool)));
-
     // Calibration navigation buttons
     QObject::connect(ui->pushButtonNextCalibration,SIGNAL(clicked(bool)),this,SLOT(onPushButtonNextStackedWidget(bool)));
     QObject::connect(ui->pushButtonPreviousCalibration,SIGNAL(clicked(bool)),this,SLOT(onPushButtonPreviousStackedWidget(bool)));
@@ -29,14 +25,20 @@ StackedWidget::StackedWidget(QWidget *parent) :
     QObject::connect(ui->pushButtonProjectorRelease,SIGNAL(clicked(bool)),this,SLOT(onPushButtonProjectorReleaseClicked(bool)));
 
     //Projector settings
-    QObject::connect(ui->spinBoxProjectorMicrosecondsPerFrame,SIGNAL(valueChanged(int)),this,SLOT(onSpinboxProjectorMicrosecondsPerFrameChanged(int)));
     QObject::connect(ui->spinBoxProjectorNSlices,SIGNAL(valueChanged(int)),this,SLOT(onSpinboxProjectorNSlicesChanged(int)));
-        //LED settings
+    //LED settings
     QObject::connect(ui->spinBoxProjectorLEDcurrent,SIGNAL(valueChanged(int)),this,SLOT(onSpinboxProjectorLEDCurrentChanged(int)));
     QObject::connect(ui->doubleSpinBoxProjectorLEDpercentage,SIGNAL(valueChanged(double)),this,SLOT(onSpinboxProjectorLEDPercentageChanged(double)));
 
     //Motor control buttons
     QObject::connect(ui->pushButtonMotorStart,SIGNAL(clicked(bool)),this,SLOT(onPushButtonMotorStartClicked(bool)));
+    QObject::connect(ui->doubleSpinBoxMotorFlickerRate,SIGNAL(valueChanged(double)),this,SLOT(onSpinboxFlickerRateChanged(double)));
+
+    ui->spinBoxProjectorMicrosecondsPerFrame->setReadOnly(true);
+
+    // Call the slots as methods to set default parameters as defined in the corresponding .ui
+    onSpinboxFlickerRateChanged(ui->doubleSpinBoxMotorFlickerRate->value());
+    onSpinboxProjectorNSlicesChanged(ui->spinBoxProjectorNSlices->value());
 }
 
 //Methods
@@ -101,7 +103,7 @@ void StackedWidget::keyPressEvent(QKeyEvent *e)
 //SLOTS
 
 //Navigation buttons
-    //Next
+//Next
 void StackedWidget::onPushButtonNextStackedWidget(bool value)
 {
     int curIndex = this->currentIndex();
@@ -110,14 +112,14 @@ void StackedWidget::onPushButtonNextStackedWidget(bool value)
     this->setCurrentIndex(curIndex+1);
 }
 
-    //Previous
+//Previous
 void StackedWidget::onPushButtonPreviousStackedWidget(bool value)
 {
     int curIndex = this->currentIndex();
     this->setCurrentIndex(curIndex-1);
 }
 
-    //Cancel
+//Cancel
 void StackedWidget::onCancelPressed(bool value)
 {
     QMessageBox::warning(this,"Leaving Volvux","You are now exiting...");
@@ -125,18 +127,17 @@ void StackedWidget::onCancelPressed(bool value)
 }
 
 //Projector buttons
-    //Initilize
+//Initilize
 void StackedWidget::onPushButtonProjectorInitializeClicked(bool value){
     //Enables other buttons
     ui->pushButtonProjectorRelease->setEnabled(true);
     ui->spinBoxProjectorNSlices->setEnabled(true);
     ui->spinBoxProjectorLEDcurrent->setEnabled(true);
     ui->doubleSpinBoxProjectorLEDpercentage->setEnabled(true);
-    ui->spinBoxProjectorMicrosecondsPerFrame->setEnabled(true);
     ui->pushButtonProjectorInitialize->setEnabled(false);
 
     //Initialize ALP projector
-    #ifdef ALP_SUPPORT
+#ifdef ALP_SUPPORT
     if (alp.m_bAlpInit)
         return;
     int nSlices = ui->spinBoxProjectorNSlices->value();
@@ -152,15 +153,15 @@ void StackedWidget::onPushButtonProjectorInitializeClicked(bool value){
     {
         QMessageBox::warning(this,"Error in ALP initialization",QString(e.what()));
     }
-    #endif
+#endif
 
     //Enables next button
     ui->pushButtonNextProjector->setEnabled(true);
 }
 
-    //Release
+//Release
 void StackedWidget::onPushButtonProjectorReleaseClicked(bool value){
-    #ifdef ALP_SUPPORT
+#ifdef ALP_SUPPORT
     try
     {
         alp.cleanup();
@@ -170,7 +171,7 @@ void StackedWidget::onPushButtonProjectorReleaseClicked(bool value){
     {
         QMessageBox::warning(this,"Error in ALP projector",QString(e.what()));
     }
-    #endif
+#endif
     //this->ui->listWidgetSequences->clear();
     ui->spinBoxProjectorNSlices->setEnabled(false);
     ui->spinBoxProjectorLEDcurrent->setEnabled(false);
@@ -180,29 +181,33 @@ void StackedWidget::onPushButtonProjectorReleaseClicked(bool value){
     ui->pushButtonProjectorInitialize->setEnabled(true);
 }
 
-//Projector settings
-    //us per frame
-void StackedWidget::onSpinboxProjectorMicrosecondsPerFrameChanged(int value){
-    double flickerRate = 1E6/((double)(value*ui->spinBoxProjectorNSlices->value()));
-    this->ui->doubleSpinBoxMotorFlickerRate->setValue(flickerRate);
+
+/**
+ * @brief StackedWidget::onSpinboxProjectorNSlicesChanged
+ * @param nSlices
+ */
+void StackedWidget::onSpinboxProjectorNSlicesChanged(int nSlices)
+{
+    double flickerRateHz = ui->doubleSpinBoxMotorFlickerRate->value();
+    double tFrameSec = 1.0/(nSlices*flickerRateHz);
+    double tFrameMicroSeconds = 1E6*tFrameSec;
+    ui->spinBoxProjectorMicrosecondsPerFrame->setValue( static_cast<int>(tFrameMicroSeconds) );
+
+    if ( std::fabs(fmod(tFrameMicroSeconds,1.0)) <= std::numeric_limits<double>::epsilon() )
+    {
+        ui->spinBoxProjectorMicrosecondsPerFrame->setEnabled(true);
+    }
+    else
+    {
+        ui->spinBoxProjectorMicrosecondsPerFrame->setDisabled(true);
+    }
+    this->helper->updateMotorRate(nSlices,tFrameMicroSeconds);
 }
 
-    //n slices
-void StackedWidget::onSpinboxProjectorNSlicesChanged(int value){
-    ui->spinBoxMotorNSlices->setValue(value);
-    double flickerPersistenceMicroSec = ui->doubleSpinBoxMotorFlickerRate->value();//*1E-6;
-    qDebug("%d FlickerPersistence - Flicker Rate",flickerPersistenceMicroSec);
-    int usPerFrame = flickerPersistenceMicroSec/value;
-    qDebug("%d usPerFrame",usPerFrame);
-    ui->spinBoxProjectorMicrosecondsPerFrame->setValue(usPerFrame);
-    double motorRate = (1E-6/((double)value*usPerFrame))*MOTOR_UNITS_TO_REV_MIN;
-    qDebug("%d Motor speed",motorRate);
-    ui->spinBoxMotorSpeed->setValue(motorRate);
-}
-
-    //LED current
-void StackedWidget::onSpinboxProjectorLEDCurrentChanged(int current){
-    #ifdef ALP_SUPPORT
+//LED current
+void StackedWidget::onSpinboxProjectorLEDCurrentChanged(int current)
+{
+#ifdef ALP_SUPPORT
     if (alp.m_bAlpInit)
     {
         if (!alp.m_bAlpLEDInit)
@@ -212,13 +217,14 @@ void StackedWidget::onSpinboxProjectorLEDCurrentChanged(int current){
         }
         else
             alp.setLED(current,ui->doubleSpinBoxProjectorLEDpercentage->value());
-        }
-    #endif
+    }
+#endif
 }
 
-    //LED percentage
-void StackedWidget::onSpinboxProjectorLEDPercentageChanged(double percentage){
-    #ifdef ALP_SUPPORT
+//LED percentage
+void StackedWidget::onSpinboxProjectorLEDPercentageChanged(double percentage)
+{
+#ifdef ALP_SUPPORT
     if (alp.m_bAlpInit)
     {
         if (!alp.m_bAlpLEDInit)
@@ -229,73 +235,55 @@ void StackedWidget::onSpinboxProjectorLEDPercentageChanged(double percentage){
         else
             alp.setLED(ui->spinBoxProjectorLEDcurrent->value(),static_cast<long int>(std::ceil(percentage)));
     }
-    #endif
+#endif
 }
 
 //Motor buttons
-    //Start
-void StackedWidget::onPushButtonMotorStartClicked(bool value){
+//Start
+void StackedWidget::onPushButtonMotorStartClicked(bool value)
+{
     ui->pushButtonMotorStop->setEnabled(true);
-    #if defined (SMI_SUPPORT) && (WIN32)
-        cerr << "[MainWindow] Starting motor" << endl;
-        long Version = 0;
-        Version = CommInterface->EngineVersion;
-        if ( this->ui->spinBoxMotorSpeed->isEnabled() )
-        {
-            int speed = this->ui->spinBoxMotorSpeed->value();
-            this->startRotation(speed);
-        }
-        else
-        {
-            QMessageBox::warning(this,"!!! WARNING !!!","This speed is not safe for the system");
-        }
-    #endif
+#if defined (SMI_SUPPORT) && (WIN32)
+    cerr << "[MainWindow] Starting motor" << endl;
+    long Version = 0;
+    Version = CommInterface->EngineVersion;
+    if ( this->ui->spinBoxMotorSpeed->isEnabled() )
+    {
+        int speed = this->ui->spinBoxMotorSpeed->value();
+        this->startRotation(speed);
+    }
+    else
+    {
+        QMessageBox::warning(this,"!!! WARNING !!!","This speed is not safe for the system");
+    }
+#endif
     ui->pushButtonMotorStart->setEnabled(false);
 }
-    //Stop
+//Stop
 void StackedWidget::onPushButtonMotorStopClicked(bool value){
-    #if defined (SMI_SUPPORT) && (WIN32)
-        cerr << "[MainWindow] Stopping motor" << endl;
-        this->startRotation(0);
-    #endif
+#if defined (SMI_SUPPORT) && (WIN32)
+    cerr << "[MainWindow] Stopping motor" << endl;
+    this->startRotation(0);
+#endif
 }
+
 //Motor settings
-    //Flicker Rate
-void StackedWidget::onSpinboxFlickerRateChanged(double flickerRate){
-    // The persistence of the stimulus on the eye in microseconds
-    double flickerPersistence_microSec = 1E6/flickerRate;
-    double nSlices = ui->spinBoxProjectorNSlices->value();
-    double microSecPerFrame = flickerPersistence_microSec/nSlices;
-    if ( std::fmod(microSecPerFrame,1.0) == 0.0)
-    {
-        //cerr << "consistent frame per microsecond" << endl;
-        this->ui->spinBoxProjectorMicrosecondsPerFrame->setValue((int)microSecPerFrame);
-    }
-    else
-    {
-        //cerr << "inconsistent frame per microsecond" << endl;
-    }
+//Flicker Rate
+void StackedWidget::onSpinboxFlickerRateChanged(double flickerRate)
+{
+    int nSlices = ui->spinBoxProjectorNSlices->value();
+    double tFrameSeconds = 1.0/(nSlices*flickerRate);
+    double tFrameMicroSeconds = tFrameSeconds*1E6;
 
-    double motorRate = (1E6/(nSlices*std::floor(microSecPerFrame))) * MOTOR_UNITS_TO_REV_MIN;
-    if ( motorRate > this->ui->spinBoxMotorSpeed->maximum() )
+    ui->spinBoxProjectorMicrosecondsPerFrame->setValue( static_cast<int>(tFrameMicroSeconds) );
+    // Check the remainder
+    if ( std::fabs(fmod(tFrameMicroSeconds,1.0)) <= std::numeric_limits<double>::epsilon() )
     {
-        this->ui->spinBoxMotorSpeed->setValue((int)motorRate);
-        this->ui->spinBoxMotorSpeed->setEnabled(false);
+        ui->spinBoxProjectorMicrosecondsPerFrame->setEnabled(true);
     }
     else
     {
-        //if ( std::fmod(motorRate,1.0) == 0)
-        if (true)
-        {
-            this->ui->spinBoxMotorSpeed->setEnabled(true);
-            this->ui->spinBoxMotorSpeed->setValue((int)motorRate);
-            //this->onPushButtonMotorStartClicked();
-        }
-        else
-        {
-            this->ui->spinBoxMotorSpeed->setEnabled(false);
-        }
-        //this->ui->spinBoxMotorRevMin->setValue(motorRate/8000);
+        ui->spinBoxProjectorMicrosecondsPerFrame->setDisabled(true);
     }
+    this->helper->updateMotorRate(nSlices,tFrameMicroSeconds);
 }
-

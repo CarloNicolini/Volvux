@@ -257,7 +257,7 @@ void VolvuxWidget::initializeGL()
 
     // VERY IMPORTANT TO INITIALIZE GLEW BEFORE THE GLSL SHADERS
     glewInit();
-
+    initializeGLFunctions();
     volume->resize(TEXTURE_RESOLUTION_X,TEXTURE_RESOLUTION_Y,TEXTURE_RESOLUTION_Z);
 	//volume->loadObj("C:\workspace\Volvux\data\objmodels\helicoid.obj");
 	volume->loadObj(objPath);
