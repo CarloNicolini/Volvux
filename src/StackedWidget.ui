@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>355</width>
-    <height>444</height>
+    <width>1226</width>
+    <height>844</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Volvux Welcome Wizard</string>
   </property>
   <property name="currentIndex">
-   <number>2</number>
+   <number>1</number>
   </property>
   <widget class="QWidget" name="pageProjector">
    <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -277,7 +277,17 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
+          <widget class="QPushButton" name="pushButtonMotorInitialize">
+           <property name="text">
+            <string>Address Motor</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="pushButtonMotorStart">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>Start</string>
            </property>
@@ -435,41 +445,116 @@
    </layout>
   </widget>
   <widget class="QWidget" name="pageCalibration">
-   <layout class="QVBoxLayout" name="verticalLayout_10">
+   <layout class="QVBoxLayout" name="verticalLayout_9">
     <item>
-     <widget class="QLabel" name="labelInstructrionCalibration">
-      <property name="text">
-       <string>Follow calibration procedure</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="VolvuxCalibrationWidget" name="volvuxCalibrationWidget" native="true"/>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_6">
+     <layout class="QVBoxLayout" name="verticalLayout_8">
       <item>
-       <widget class="QPushButton" name="pushButtonCancelCalibration">
-        <property name="text">
-         <string>Cancel</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QGroupBox" name="groupBox_2">
+            <property name="title">
+             <string>3D Points</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_7">
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_5"/>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_3">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox_3">
+            <property name="title">
+             <string>2D Points</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_6">
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_4"/>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_4">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="VolvuxCalibrationWidget" name="volvuxCalibrationWidget" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>1024</width>
+            <height>768</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButtonPreviousCalibration">
-        <property name="text">
-         <string>Back</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButtonNextCalibration">
-        <property name="text">
-         <string>Next</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QPushButton" name="pushButtonCancelCalibration">
+          <property name="text">
+           <string>Cancel</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButtonPreviousCalibration">
+          <property name="text">
+           <string>Back</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButtonNextCalibration">
+          <property name="text">
+           <string>Next</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
+    </item>
+    <item>
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>1209</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
     </item>
    </layout>
   </widget>

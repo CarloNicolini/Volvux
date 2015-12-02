@@ -15,3 +15,16 @@ void StackedWidgetHelper::updateMotorRate(int nSlices, double tFrameMicroSeconds
         ui->spinBoxMotorSpeed->setEnabled(true);
     }
 }
+
+void StackedWidgetHelper::fillWorldCoordinates()
+{
+    worldCalibrationCoordinates.push_back(Vector4d(0,0,0,1));
+    worldCalibrationCoordinates.push_back(Vector4d(1,0,0,1));
+    worldCalibrationCoordinates.push_back(Vector4d(0,1,0,1));
+    worldCalibrationCoordinates.push_back(Vector4d(0,0,1,1));
+    worldCalibrationCoordinates.push_back(Vector4d(1,1,0,1));
+    worldCalibrationCoordinates.push_back(Vector4d(0,1,1,1));
+    worldCalibrationCoordinates.push_back(Vector4d(1,0,1,1));
+    worldCalibrationCoordinates.push_back(Vector4d(1,0,1,1));
+    worldCalibrationCoordinates.push_back(Vector4d(1,0,1,1));
+}

@@ -31,7 +31,11 @@ StackedWidget::StackedWidget(QWidget *parent) :
     QObject::connect(ui->doubleSpinBoxProjectorLEDpercentage,SIGNAL(valueChanged(double)),this,SLOT(onSpinboxProjectorLEDPercentageChanged(double)));
 
     //Motor control buttons
+    QObject::connect(ui->pushButtonMotorInitialize,SIGNAL(clicked(bool)),this->ui->spinBoxMotorSpeed,SLOT(setEnabled(bool)));
+    QObject::connect(ui->pushButtonMotorInitialize,SIGNAL(clicked(bool)),this,SLOT(onPushButtonMotorInitializeClicked()));
+    QObject::connect(this,SIGNAL(motorInitialized(bool)),this->ui->pushButtonMotorStart,SLOT(setEnabled(bool)));
     QObject::connect(ui->pushButtonMotorStart,SIGNAL(clicked(bool)),this,SLOT(onPushButtonMotorStartClicked(bool)));
+    QObject::connect(this->ui->pushButtonMotorStop,SIGNAL(clicked(bool)),this,SLOT(onPushButtonMotorStopClicked(bool)));
     QObject::connect(ui->doubleSpinBoxMotorFlickerRate,SIGNAL(valueChanged(double)),this,SLOT(onSpinboxFlickerRateChanged(double)));
 
     ui->spinBoxProjectorMicrosecondsPerFrame->setReadOnly(true);
@@ -39,6 +43,14 @@ StackedWidget::StackedWidget(QWidget *parent) :
     // Call the slots as methods to set default parameters as defined in the corresponding .ui
     onSpinboxFlickerRateChanged(ui->doubleSpinBoxMotorFlickerRate->value());
     onSpinboxProjectorNSlicesChanged(ui->spinBoxProjectorNSlices->value());
+
+    for (int i=0; i<8; i++)
+    {
+        QLabel *x = new QLabel(ui->pageCalibration);
+        x->setText(QString::number(helper->) + QString::number() + QString::number());
+        x->setEnabled(true);
+        ui->verticalLayout_5->addWidget(x);
+    }
 }
 
 //Methods
@@ -243,7 +255,7 @@ void StackedWidget::onSpinboxProjectorLEDPercentageChanged(double percentage)
 //Start
 void StackedWidget::onPushButtonMotorStartClicked(bool value)
 {
-    ui->pushButtonMotorStop->setEnabled(true);
+    ui->pushButtonMotorStart->setEnabled(false);
 #if defined (SMI_SUPPORT) && (WIN32)
     cerr << "[MainWindow] Starting motor" << endl;
     long Version = 0;
@@ -258,14 +270,18 @@ void StackedWidget::onPushButtonMotorStartClicked(bool value)
         QMessageBox::warning(this,"!!! WARNING !!!","This speed is not safe for the system");
     }
 #endif
-    ui->pushButtonMotorStart->setEnabled(false);
+    ui->pushButtonMotorStop->setEnabled(true);
 }
+
 //Stop
-void StackedWidget::onPushButtonMotorStopClicked(bool value){
+void StackedWidget::onPushButtonMotorStopClicked(bool value)
+{
+    ui->pushButtonMotorStart->setEnabled(true);
 #if defined (SMI_SUPPORT) && (WIN32)
     cerr << "[MainWindow] Stopping motor" << endl;
     this->startRotation(0);
 #endif
+    ui->pushButtonMotorStop->setEnabled(false);
 }
 
 //Motor settings
@@ -287,4 +303,104 @@ void StackedWidget::onSpinboxFlickerRateChanged(double flickerRate)
         ui->spinBoxProjectorMicrosecondsPerFrame->setDisabled(true);
     }
     this->helper->updateMotorRate(nSlices,tFrameMicroSeconds);
+}
+
+
+
+/**
+ * @brief VolvuxMainWindow::onPushButtonMotorInitializeClicked
+ */
+void StackedWidget::onPushButtonMotorInitializeClicked()
+{
+    if (ui->pushButtonMotorInitialize->isEnabled())
+    {
+#if defined (SMI_SUPPORT) && (WIN32)
+        CoInitialize(NULL);
+        /*
+    if(!AfxOleInit())
+    {
+        throw std::runtime_error("OLE initialization failed.  Make sure that the OLE libraries are the correct version.");
+    }
+    AfxEnableControlContainer();
+    */
+        HRESULT hr = CommInterface.CreateInstance(__uuidof(INTEGMOTORINTERFACELib::SMIHost));
+        if(FAILED(hr))
+        {
+            QMessageBox::warning(this,"Error","Cannot create an instance of \"SMIHost\" class!");
+            return;
+        }
+
+        cerr << "[MainWindow] Starting motor" << endl;
+        long portResult=-1;
+        try
+        {
+            CommInterface->BaudRate = 9600;
+            portResult = CommInterface->OpenPort("Com4");
+        }
+        catch (_com_error e)
+        {
+            throw std::exception("Error opening COM4 port");
+        }
+        // Detect RS232
+        cerr << "[Smart Motor] Detecting RS232...";
+        UINT x= 10;//GetDlgItemInt(IDC_MAXADDRESS);
+        long MaxAddress=10;
+        long flags=0;
+        long result = CommInterface->DetectRS232(MaxAddress,flags);
+        switch(result)
+        {
+        case CER_SOMEADDRESSED:
+            cerr << "Some Motors are not addressed!"<<" IntegMotorInterface Error!"<< endl;
+            break;
+
+        case CER_BIGADDRESS:
+            cerr << "Some Motors have big addresses!" <<" IntegMotorInterface Error!" << endl;
+            break;
+
+        case CER_DUPLICATEADDR:
+            cerr << "Some Motors have duplicate addresses!"<<" IntegMotorInterface Error!"<< endl;
+            break;
+
+        case CER_NOTADDRESSED:
+            cerr << "Motors are not addressed!"<<" IntegMotorInterface Error!"<< endl;
+            break;
+
+        case CER_COMMERROR:
+            cerr << "Communication Error!"<<" IntegMotorInterface Error!"<< endl;
+            break;
+
+        case CER_NOMOTOR:
+            cerr << "No Motor Found!"<<" IntegMotorInterface Error!" << endl;
+            break;
+        default:
+            cerr << CommInterface->NoOfMotors << endl;
+            //cerr << CommInterface->DefaultMotor = long(1);//GetDlgItemInt(IDC_CURRENTMOTOR);
+        }
+
+        // Establish chain
+        cerr << "[Smart Motor] Addressing motor chain...";
+        try
+        {
+            // Establish chain
+            CommInterface->AddressMotorChain();
+            CommInterface->DefaultMotor = 1;
+        }
+        catch (_com_error e )
+        {
+            //AfxMessageBox(e.Description());
+            throw std::runtime_error(BSTR2STR(e.Description()));
+        }
+        cerr << "DONE" << endl;
+#endif
+        emit motorInitialized(true);
+        ui->pushButtonMotorInitialize->setEnabled(false);
+    }
+    else
+    {
+        qDebug("already enabled");
+    }
+}
+
+void StackedWidget::onPoint2DEmitted(const QPoint &point)
+{
 }

@@ -46,6 +46,7 @@ EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Vector4d)
 class CameraDirectLinearTransformation
 {
 public:
+    CameraDirectLinearTransformation(const Eigen::MatrixXd &images2D, const Eigen::MatrixXd &world3D, bool decomposeProjectionMatrix=false, bool computeOpenGLMatrices=false, double x0=0.0, double y0=0.0, int width=640, int height=480, double znear=0.1, double zfar=1000.0);
     CameraDirectLinearTransformation(const std::vector<Eigen::Vector3d> &x, const std::vector<Eigen::Vector4d> &X, bool decomposeProjectionMatrix=false, bool computeOpenGLMatrices=false, double x0=0.0, double y0=0.0, int width=640, int height=480, double znear=0.1, double zfar=1000.0);
 
         CameraDirectLinearTransformation(const std::string &imagesFileName, const std::string &worldCoordsFileName, bool decomposeProjectionMatrix=false, bool computeOpenGLMatrices=false, double x0=0.0, double y0=0.0, int width=640, int height=480, double znear=0.1, double zfar=1000.0);

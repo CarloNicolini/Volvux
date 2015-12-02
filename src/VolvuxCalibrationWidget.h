@@ -55,19 +55,18 @@ public:
     void moveCursor(int x,int y);
     void addPoint();
 
+signals:
+    void lastPointPressed(const QPoint &p);
+
 protected:
-    //void initializeGL();
     void paintEvent(QPaintEvent *event);
-    //void resizeGL(int width, int height);
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
 
 private:
     QVector<QPoint> points2D;
-    std::vector<Eigen::Vector3d> scaleAndTranslate( const std::vector<Eigen::Vector3d> &vertices,double scale);
 
     bool drawingText;
-    QString folderName,pointsFileName;
     QPoint lastPoint;
     std::ofstream outputPoints;
 

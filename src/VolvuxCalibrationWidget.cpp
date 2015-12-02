@@ -226,6 +226,8 @@ void VolvuxCalibrationWidget::addPoint()
             return;
         }
     }
-    qDebug() << "Added " << lastPoint ;
+    qDebug() << "Added " << lastPoint;
+                ;
+    emit lastPointPressed(lastPoint);
     this->points2D.push_back(lastPoint);
 }

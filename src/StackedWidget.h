@@ -33,6 +33,13 @@ private slots:
     void onPushButtonMotorStartClicked(bool value);
     void onPushButtonMotorStopClicked(bool value);
     void onSpinboxFlickerRateChanged(double flickerRate);
+    void onPushButtonMotorInitializeClicked();
+
+    // Calibration slots
+    void onPoint2DEmitted(const QPoint &point);
+
+signals:
+    void motorInitialized(bool);
 
 protected:
     void keyPressEvent(QKeyEvent *e);
