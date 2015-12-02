@@ -47,7 +47,7 @@ StackedWidget::StackedWidget(QWidget *parent) :
     for (int i=0; i<8; i++)
     {
         QLabel *x = new QLabel(ui->pageCalibration);
-        x->setText(QString::number(helper->) + QString::number() + QString::number());
+        //x->setText(QString::number(helper->) + QString::number() + QString::number());
         x->setEnabled(true);
         ui->verticalLayout_5->addWidget(x);
     }
