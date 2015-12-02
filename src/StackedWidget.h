@@ -3,7 +3,7 @@
 
 #include <QStackedWidget>
 
-#define UNITS_TO_REV_MIN 65536
+#define MOTOR_UNITS_TO_REV_MIN 65536
 
 namespace Ui {
 class StackedWidget;
@@ -28,6 +28,10 @@ private slots:
     void onSpinboxProjectorNSlicesChanged(int value);
     void onSpinboxProjectorLEDCurrentChanged(int current);
     void onSpinboxProjectorLEDPercentageChanged(double percentage);
+    //Motor Slots
+    void onPushButtonMotorStartClicked(bool value);
+    void onPushButtonMotorStopClicked(bool value);
+    void onSpinboxFlickerRateChanged(double flickerRate);
 
 protected:
     void keyPressEvent(QKeyEvent *e);
