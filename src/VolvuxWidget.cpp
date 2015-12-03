@@ -32,16 +32,16 @@
 
 #ifdef __APPLE__
 std::string baseDir("/Users/rs/workspace/Volvux/");
-std::string objPath("/Users/rs/workspace/Volvux/data/objmodels/helicoid.obj");
+std::string objPath("/Users/rs/workspace/VolvobjPatux/data/objmodels/helicoid.obj");
 #endif
 
 #ifdef __linux__
-std::string baseDir("/home/carlo/workspace/Volvux/");
-std::string objPath("/home/carlo/workspace/Volvux/data/objmodels/helicoid.obj");
+std::string baseDir("~/workspace/Volvux/");
+std::string objPath("../data/objmodels/helicoid.obj");
 #endif
 
 #ifdef WIN32
-std::string baseDir("C:/workspace/Volvux/");
+std::string baseDir("C:\\workspace\\Volvux\\");
 std::string objPath("C:\\workspace\\Volvux\\data\\objmodels\\helicoid.obj");
 #endif
 
@@ -257,7 +257,7 @@ void VolvuxWidget::initializeGL()
 
     // VERY IMPORTANT TO INITIALIZE GLEW BEFORE THE GLSL SHADERS
     glewInit();
-
+    initializeGLFunctions();
     volume->resize(TEXTURE_RESOLUTION_X,TEXTURE_RESOLUTION_Y,TEXTURE_RESOLUTION_Z);
 	//volume->loadObj("C:\workspace\Volvux\data\objmodels\helicoid.obj");
 	volume->loadObj(objPath);

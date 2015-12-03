@@ -28,6 +28,20 @@
 #include <stdexcept>
 #include "Homography.h"
 
+// utility constructor
+CameraDirectLinearTransformation::CameraDirectLinearTransformation(const MatrixXd &images2D, const MatrixXd &world3D, bool decomposeProjectionMatrix, bool computeOpenGLMatrices, double x0, double y0, int width, int height, double znear, double zfar)
+{
+    std::vector<Vector3d> imagesVector;
+    std::vector<Vector4d> worldVector;
+
+    for (int i=0; i<images2D.rows();i++)
+        imagesVector.push_back(Vector3d(images2D(i,0),images2D(i,1),1));
+
+    for (int i=0; i<world3D.rows();i++)
+        worldVector.push_back(Vector4d(world3D(i,0),world3D(i,1),world3D(i,2),1));
+    this->init(imagesVector,worldVector,decomposeProjectionMatrix,computeOpenGLMatrices,x0,y0,width,height,znear,zfar);
+}
+
 CameraDirectLinearTransformation::CameraDirectLinearTransformation(const std::vector<Eigen::Vector3d> &x, const std::vector<Eigen::Vector4d> &X, bool decomposeProjectionMatrix, bool computeOpenGLMatrices, double x0, double y0, int width, int height, double znear, double zfar)
     : ModelViewProjectionInitialized(false),DecompositionComputed(false)
 {

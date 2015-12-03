@@ -38,76 +38,9 @@
 
 // Standard colors
 static const GLfloat glBlack[] = { 0.0, 0.0, 0.0, 0.0 };
-static const GLfloat glGray25[] = { 0.25, 0.25, 0.25 };
-static const GLfloat glGray50[] = { 0.5, 0.5, 0.5 };
 static const GLfloat glWhite[] = { 1.0, 1.0, 1.0, 1.0 };
 
-static const GLfloat glRed[]  = { 1.0, 0.0, 0.0, 1.0 };
-static const GLfloat glYellow[]  = { 1.0, 1.0, 0.0 ,1.0};
-static const GLfloat glGreen[]   = { 0.0, 1.0, 0.0 ,1.0};
-static const GLfloat glCyan[] = { 0.0, 1.0, 1.0 ,1.0};
-static const GLfloat glBlue[] = { 0.0, 0.0, 1.0 ,1.0};
-static const GLfloat glMagenta[]= { 1.0, 0.0, 1.0 , 1.0};
-
-static const GLfloat glRed50[]      = { 0.5, 0.0, 0.0 };
-static const GLfloat glYellow50[]  = { 0.5, 0.5, 0.0 };
-static const GLfloat glGreen50[]   = { 0.0, 0.5, 0.0 };
-static const GLfloat glCyan50[]     = { 0.0, 0.5, 0.5 };
-static const GLfloat glBlue50[]     = { 0.0, 0.0, 0.5 };
-static const GLfloat glMagenta50[] = { 0.5, 0.0, 0.5 };
-
-// Standard light from the 1,1,1 angle
-static const GLfloat light0Pos[] = {1.0, 1.0, 1.0, 0.0};
-// Standard light from the 1,0,1 angle
-static const GLfloat light1Pos[] = {1.0, 0.0, 1.0, 0.0};
-// Standard OpenGL lightining
-static const GLfloat light0_diffuse[] = {1.0, 0.0, 0.0, 1.0};
-static const GLfloat light0_position[] = {-1.0, 0.0, 1.0, 0.0};
-static const GLfloat light1_diffuse[] = {0.0, 0.0, 1.0, 1.0};
-static const GLfloat light1_position[] = {1.0, 0.0, 1.0, 0.0};
-
-// Standard materials:
-static const GLfloat standardAmbient[] = {0.25f, 0.25f, 0.25f};
-static const GLfloat standardDiffuse[] = {1.0f, 1.0f, 1.0f};
-static const GLfloat standardSpecular[] = {1.0f, 1.0f, 1.0f};
-static const GLfloat standardShininess = 150.0f;
-
-
-void glPrintText( int x, int y , int w , int h , const std::string &text , const std::vector < double > &nums );
-void glPrintText(int _x, int _y, int _width, int _height, const std::string &text );
-
 // A useful define for turning two lights on
-#define BLUEREDLIGHTS \
-glEnable(GL_LIGHT0); \
-glEnable(GL_LIGHT1); \
-glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse); \
-glLightfv(GL_LIGHT0, GL_POSITION, light0_position); \
-glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse); \
-glLightfv(GL_LIGHT1, GL_POSITION, light1_position); \
-glLightfv(GL_LIGHT0, GL_SPECULAR, standardSpecular); \
-glLightfv(GL_LIGHT1, GL_SPECULAR, standardSpecular);
-
-#define WHITELIGHT \
-   glMaterialfv(GL_FRONT, GL_AMBIENT, no_mat); \
-   glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse); \
-   glMaterialfv(GL_FRONT, GL_SPECULAR, standardSpecular ); \
-   glMaterialfv(GL_FRONT, GL_SHININESS, low_shininess ); \
-   glColor4f(0.5, 0.5, 0.5, 0.95); \
-   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-#define TRANSLUCENT \
-   glMaterialfv(GL_FRONT, GL_AMBIENT, no_mat); \
-   glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse); \
-   glMaterialfv(GL_FRONT, GL_SPECULAR, standardSpecular ); \
-   glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess); \
-   glMaterialfv(GL_FRONT, GL_EMISSION, no_mat); \
-   glColor4f(0.8, 0.8, 0.8, 0.8); \
-   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-void beginOrtho();
-void endOrtho();
-void circleMask( double circleCenterX, double circleCenterY, double circleRadius );
-void circleMask2( double circleCenterX, double circleCenterY, double circleRadius );
 Eigen::Vector3d project(const Eigen::Vector3d &);
 void drawEllipse(double radiusX, double radiusY, double focalDistance, double minAngle=0.0, double maxAngle=6.28);
 void drawCylinder(double radius, double x0, double y0, double z0, double x1, double y1, double z1, int quality, int type);

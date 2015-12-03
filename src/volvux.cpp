@@ -26,56 +26,61 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include "VolvuxMainWindow.h"
+#include "StackedWidget.h"
 
 #ifdef WIN32
 #include <windows.h>
 void EnableCrashingOnCrashes()
 {
-        typedef BOOL (WINAPI *tGetPolicy)(LPDWORD lpFlags);
-        typedef BOOL (WINAPI *tSetPolicy)(DWORD dwFlags);
-        const DWORD EXCEPTION_SWALLOWING = 0x1;
-        HMODULE kernel32 = LoadLibraryA("kernel32.dll");
-        tGetPolicy pGetPolicy = (tGetPolicy)GetProcAddress(kernel32,
-                    "GetProcessUserModeExceptionPolicy");
-        tSetPolicy pSetPolicy = (tSetPolicy)GetProcAddress(kernel32,
-                    "SetProcessUserModeExceptionPolicy");
-        if (pGetPolicy && pSetPolicy)
+    typedef BOOL (WINAPI *tGetPolicy)(LPDWORD lpFlags);
+    typedef BOOL (WINAPI *tSetPolicy)(DWORD dwFlags);
+    const DWORD EXCEPTION_SWALLOWING = 0x1;
+    HMODULE kernel32 = LoadLibraryA("kernel32.dll");
+    tGetPolicy pGetPolicy = (tGetPolicy)GetProcAddress(kernel32,
+                                                       "GetProcessUserModeExceptionPolicy");
+    tSetPolicy pSetPolicy = (tSetPolicy)GetProcAddress(kernel32,
+                                                       "SetProcessUserModeExceptionPolicy");
+    if (pGetPolicy && pSetPolicy)
+    {
+        DWORD dwFlags;
+        if (pGetPolicy(&dwFlags))
         {
-            DWORD dwFlags;
-            if (pGetPolicy(&dwFlags))
-            {
-                // Turn off the filter
-                pSetPolicy(dwFlags & ~EXCEPTION_SWALLOWING);
-            }
+            // Turn off the filter
+            pSetPolicy(dwFlags & ~EXCEPTION_SWALLOWING);
         }
+    }
 }
 #endif
 
 
 int main(int argc, char *argv[])
 {
+    //#ifdef WIN32
+    //    AllocConsole();  // Create Console Window
+    //    freopen("CONIN$","rb",stdin);   // reopen stdin handle as console window input
+    //    freopen("CONOUT$","wb",stdout);  // reopen stout handle as console window output
+    //    freopen("CONOUT$","wb",stderr); // reopen stderr handle as console window output
+    //	EnableCrashingOnCrashes();
+    //#endif
+    //	QCoreApplication::addLibraryPath("./");
 
-//#ifdef WIN32
-//    AllocConsole();  // Create Console Window
-//    freopen("CONIN$","rb",stdin);   // reopen stdin handle as console window input
-//    freopen("CONOUT$","wb",stdout);  // reopen stout handle as console window output
-//    freopen("CONOUT$","wb",stderr); // reopen stderr handle as console window output
-//	EnableCrashingOnCrashes();
-//#endif
-//	QCoreApplication::addLibraryPath("./");
+
     QApplication app(argc, argv);
-//
-	VolvuxMainWindow window;
-	try
-	{
-		window.resize(window.sizeHint());
-		window.show();
-	}
-	catch (std::exception &e)
-	{
-		cerr << e.what() << endl;
-	}
-// 
+    ///*
+    StackedWidget stacked;
+    stacked.show();
+    //*/
+    /*
+    VolvuxMainWindow window;
+    try
+    {
+        window.resize(window.sizeHint());
+        window.show();
+    }
+    catch (std::exception &e)
+    {
+        cerr << e.what() << endl;
+    }
+    */
     return app.exec();
-	//return 0;
 }
