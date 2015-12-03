@@ -6,6 +6,10 @@
 using std::ifstream;
 using std::vector;
 
+/**
+ * @brief CalibrationHelper::CalibrationHelper
+ * @param parent
+ */
 CalibrationHelper::CalibrationHelper(QObject *parent) : QObject(parent)
 {
     this->CDLT = new CameraDirectLinearTransformation;
@@ -17,11 +21,18 @@ CalibrationHelper::CalibrationHelper(QObject *parent) : QObject(parent)
     }
 }
 
+/**
+ * @brief CalibrationHelper::~CalibrationHelper
+ */
 CalibrationHelper::~CalibrationHelper()
 {
     delete this->CDLT;
 }
 
+/**
+ * @brief CalibrationHelper::append2DPoint
+ * @param p
+ */
 void CalibrationHelper::append2DPoint(const QPoint &p)
 {
     points2D.push_back(Vector3d(p.x(),p.y(),1));
@@ -32,6 +43,10 @@ void CalibrationHelper::append2DPoint(const QPoint &p)
     }
 }
 
+/**
+ * @brief CalibrationHelper::remove2DPoint
+ * @param p
+ */
 void CalibrationHelper::remove2DPoint(const QPoint &p)
 {
     Vector3d x(p.x(),p.y(),1.0);
@@ -39,6 +54,10 @@ void CalibrationHelper::remove2DPoint(const QPoint &p)
     points2D.erase(it);
 }
 
+/**
+ * @brief CalibrationHelper::loadPoints2D
+ * @param filename
+ */
 void CalibrationHelper::loadPoints2D(const QString &filename)
 {
     ifstream is;
@@ -51,6 +70,10 @@ void CalibrationHelper::loadPoints2D(const QString &filename)
     }
 }
 
+/**
+ * @brief CalibrationHelper::loadPoints3D
+ * @param filename
+ */
 void CalibrationHelper::loadPoints3D(const QString &filename)
 {
     ifstream is;
@@ -63,17 +86,29 @@ void CalibrationHelper::loadPoints3D(const QString &filename)
     }
 }
 
+/**
+ * @brief CalibrationHelper::computeHomography
+ * @param points
+ */
 void CalibrationHelper::computeHomography(const vector<Vector3d> &points)
 {
     CDLT->init(points2D,points3D,true,true,0,0,PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT);
     CDLT->info();
 }
 
+/**
+ * @brief CalibrationHelper::getPoints3D
+ * @return
+ */
 const std::vector<Vector4d> &CalibrationHelper::getPoints3D() const
 {
     return points3D;
 }
 
+/**
+ * @brief CalibrationHelper::getPoints2D
+ * @return
+ */
 const std::vector<Vector3d> &CalibrationHelper::getPoints2D() const
 {
     return points2D;
