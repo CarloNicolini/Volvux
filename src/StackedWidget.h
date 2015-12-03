@@ -3,6 +3,8 @@
 
 #include <QStackedWidget>
 
+class CalibrationHelper;
+
 namespace Ui
 {
     class StackedWidget;
@@ -45,6 +47,7 @@ protected:
     void keyPressEvent(QKeyEvent *e);
     Ui::StackedWidget *ui;
     StackedWidgetHelper *helper;
+    CalibrationHelper *calibHelper;
 };
 
 #endif // STACKEDWIDGET_H

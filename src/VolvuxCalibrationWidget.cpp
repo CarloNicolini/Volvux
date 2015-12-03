@@ -45,7 +45,6 @@ QString CNCSVISION_BASE_DIRECTORY("/Users/rs/workspace/");
  */
 VolvuxCalibrationWidget::VolvuxCalibrationWidget(QWidget *parent)
 {
-
     // Get the 2D points and 3D points
     //this->setAutoBufferSwap(true);
     this->setMouseTracking(true);
@@ -104,22 +103,22 @@ void VolvuxCalibrationWidget::saveData()
     QString imageOutputFileName  = filename + ".bmp";
 
 
-//    QImage frame = this->grabFrameBuffer();
-//    if ( !frame.save(imageOutputFileName,NULL,-1) )
-//    {
-//        QMessageBox::warning(this,"Error saving image","Can't save image");
-//    }
+    //    QImage frame = this->grabFrameBuffer();
+    //    if ( !frame.save(imageOutputFileName,NULL,-1) )
+    //    {
+    //        QMessageBox::warning(this,"Error saving image","Can't save image");
+    //    }
 
-//    QFile outputFile(pointsOutputFileName);
-//    outputFile.open(QIODevice::WriteOnly | QIODevice::Text);
-//    QTextStream out(&outputFile);
+    //    QFile outputFile(pointsOutputFileName);
+    //    outputFile.open(QIODevice::WriteOnly | QIODevice::Text);
+    //    QTextStream out(&outputFile);
 
-//    //outputPoints.open(pointsOutputFileName.toStdString().c_str());
-//    out << "# Calibration points" << endl;
-//    for (int i=0; i<points2D.size();i++)
-//    {
-//        out << points2D.at(i).x() << "\t" << points2D.at(i).y() << endl;
-//    }
+    //    //outputPoints.open(pointsOutputFileName.toStdString().c_str());
+    //    out << "# Calibration points" << endl;
+    //    for (int i=0; i<points2D.size();i++)
+    //    {
+    //        out << points2D.at(i).x() << "\t" << points2D.at(i).y() << endl;
+    //    }
 }
 
 /**
@@ -171,6 +170,7 @@ void VolvuxCalibrationWidget::paintEvent(QPaintEvent *event)
     if ( drawingText )
     {
         painter.drawText(40,PROJECTOR_RESOLUTION_HEIGHT-20,QString("(x,y)=(")+ QString::number(lastPoint.x())+","+QString::number(lastPoint.y())+")");
+                painter.drawText(800,PROJECTOR_RESOLUTION_HEIGHT-20,QString("(x,y)=(")+ QString::number(lastPoint.x()-PROJECTOR_RESOLUTION_WIDTH/2)+","+QString::number(lastPoint.y()-PROJECTOR_RESOLUTION_HEIGHT/2)+")");
         //painter.drawText(80,PROJECTOR_RESOLUTION_HEIGHT-20,QString::number(lastPoint.y()));
         painter.drawText(120,PROJECTOR_RESOLUTION_HEIGHT-60,"Press S to select the output file name");
         painter.drawText(120,PROJECTOR_RESOLUTION_HEIGHT-80,"Press Q to quit and save");
@@ -222,12 +222,13 @@ void VolvuxCalibrationWidget::addPoint()
         if (lastPoint == points2D.at(i))
         {
             points2D.remove(i);
-            qDebug() << "Removed  " << lastPoint ;
+            emit pointRemoved(lastPoint);
+            //qDebug() << "Removed  " << lastPoint ;
             return;
         }
     }
-    qDebug() << "Added " << lastPoint;
-                ;
+    //qDebug() << "Added " << lastPoint;
+    ;
     emit lastPointPressed(lastPoint);
     this->points2D.push_back(lastPoint);
 }

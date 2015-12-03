@@ -466,7 +466,7 @@
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_7">
             <item>
-             <layout class="QVBoxLayout" name="verticalLayout_5"/>
+             <layout class="QVBoxLayout" name="verticalLayout3Dpoints"/>
             </item>
             <item>
              <spacer name="verticalSpacer_3">
@@ -498,7 +498,7 @@
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_6">
             <item>
-             <layout class="QVBoxLayout" name="verticalLayout_4"/>
+             <layout class="QVBoxLayout" name="verticalLayout2Dpoints"/>
             </item>
             <item>
              <spacer name="verticalSpacer_4">

@@ -26,17 +26,17 @@
 #ifndef CALIBRATIONWIDGET_H
 #define CALIBRATIONWIDGET_H
 
-#include <fstream>
-#include <Eigen/Core>
 #include <QtGui>
 #include <QGLWidget>
+
+#include <fstream>
+#include <Eigen/Core>
+
+#include "CalibrationHelper.h"
 
 #ifdef ALP_SUPPORT
 #include "ALPProjector.h"
 #endif
-
-#define PROJECTOR_RESOLUTION_WIDTH 1024
-#define PROJECTOR_RESOLUTION_HEIGHT 768
 
 //#define ALP_SUPPORT
 using Eigen::Vector3d;
@@ -57,6 +57,7 @@ public:
 
 signals:
     void lastPointPressed(const QPoint &p);
+    void pointRemoved(const QPoint &p);
 
 protected:
     void paintEvent(QPaintEvent *event);

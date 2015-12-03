@@ -16,15 +16,14 @@ void StackedWidgetHelper::updateMotorRate(int nSlices, double tFrameMicroSeconds
     }
 }
 
-void StackedWidgetHelper::fillWorldCoordinates()
+void StackedWidgetHelper::write3DPoints(CalibrationHelper *c)
 {
-    worldCalibrationCoordinates.push_back(Vector4d(0,0,0,1));
-    worldCalibrationCoordinates.push_back(Vector4d(1,0,0,1));
-    worldCalibrationCoordinates.push_back(Vector4d(0,1,0,1));
-    worldCalibrationCoordinates.push_back(Vector4d(0,0,1,1));
-    worldCalibrationCoordinates.push_back(Vector4d(1,1,0,1));
-    worldCalibrationCoordinates.push_back(Vector4d(0,1,1,1));
-    worldCalibrationCoordinates.push_back(Vector4d(1,0,1,1));
-    worldCalibrationCoordinates.push_back(Vector4d(1,0,1,1));
-    worldCalibrationCoordinates.push_back(Vector4d(1,0,1,1));
+    for (size_t i=0; i<9; i++)
+    {
+        QString valuePoint3D = QString::number(c->getPoints3D().at(i).x()) + QString(",") +
+                QString::number(c->getPoints3D().at(i).y()) + QString(",") +
+                QString::number(c->getPoints3D().at(i).z()) + QString(",");
+        QLabel *lab = new QLabel(valuePoint3D,_parent);
+        ui->verticalLayout3Dpoints->addWidget(lab);
+    }
 }

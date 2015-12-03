@@ -58,7 +58,7 @@ endif(SMI_SUPPORT)
 set(VOLVUX_HDRS VolvuxExpWidget.h  VolvuxMainWindow.h VolvuxWidget.h VolvuxCalibrationWidget.h StackedWidget.h)
 set(VOLVUX_SRCS VolvuxExpWidget.cpp  VolvuxMainWindow.cpp VolvuxWidget.cpp VolvuxCalibrationWidget.cpp StackedWidget.cpp)
 set(VOLVUX_FORMS VolvuxMainWindow.ui StackedWidget.ui)
-set(VOLVUX_HELPERS StackedWidgetHelper.cpp StackedWidgetHelper.h)
+set(VOLVUX_HELPERS StackedWidgetHelper.cpp StackedWidgetHelper.h CalibrationHelper.cpp CalibrationHelper.h)
 
 if(QT5_SUPPORT)
     # Tell CMake to run moc when necessary:

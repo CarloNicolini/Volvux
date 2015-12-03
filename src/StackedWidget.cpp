@@ -3,6 +3,7 @@
 #include "VolvuxCalibrationWidget.h"
 #include "ui_StackedWidget.h"
 #include "StackedWidgetHelper.h"
+#include "CalibrationHelper.h"
 
 StackedWidget::StackedWidget(QWidget *parent) :
     QStackedWidget(parent),
@@ -11,6 +12,7 @@ StackedWidget::StackedWidget(QWidget *parent) :
     ui->setupUi(this);
     this->setCurrentIndex(0);
     helper = new StackedWidgetHelper(this);
+    calibHelper = new CalibrationHelper(this);
     // Projector navigation buttons
     QObject::connect(ui->pushButtonNextProjector,SIGNAL(clicked(bool)),this,SLOT(onPushButtonNextStackedWidget(bool)));
     QObject::connect(ui->pushButtonCancelProjector,SIGNAL(clicked(bool)),this,SLOT(onCancelPressed(bool)));
@@ -19,6 +21,8 @@ StackedWidget::StackedWidget(QWidget *parent) :
     QObject::connect(ui->pushButtonNextCalibration,SIGNAL(clicked(bool)),this,SLOT(onPushButtonNextStackedWidget(bool)));
     QObject::connect(ui->pushButtonPreviousCalibration,SIGNAL(clicked(bool)),this,SLOT(onPushButtonPreviousStackedWidget(bool)));
     QObject::connect(ui->pushButtonCancelCalibration,SIGNAL(clicked(bool)),this,SLOT(onCancelPressed(bool)));
+    QObject::connect(ui->volvuxCalibrationWidget,SIGNAL(lastPointPressed(QPoint)),this->calibHelper,SLOT(append2DPoint(QPoint)));
+    QObject::connect(ui->volvuxCalibrationWidget,SIGNAL(pointRemoved(QPoint)),this->calibHelper,SLOT(remove2DPoint(QPoint)));
 
     //Projector control buttons
     QObject::connect(ui->pushButtonProjectorInitialize,SIGNAL(clicked(bool)),this,SLOT(onPushButtonProjectorInitializeClicked(bool)));
@@ -44,13 +48,7 @@ StackedWidget::StackedWidget(QWidget *parent) :
     onSpinboxFlickerRateChanged(ui->doubleSpinBoxMotorFlickerRate->value());
     onSpinboxProjectorNSlicesChanged(ui->spinBoxProjectorNSlices->value());
 
-    for (int i=0; i<8; i++)
-    {
-        QLabel *x = new QLabel(ui->pageCalibration);
-        //x->setText(QString::number(helper->) + QString::number() + QString::number());
-        x->setEnabled(true);
-        ui->verticalLayout_5->addWidget(x);
-    }
+    helper->write3DPoints(calibHelper);
 }
 
 //Methods

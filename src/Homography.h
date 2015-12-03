@@ -26,6 +26,7 @@
 #ifndef _HOMOGRAPHY_H_
 #define _HOMOGRAPHY_H_
 
+#include <iostream>
 #include <vector>
 #include <Eigen/Core>
 #include <Eigen/StdVector>
@@ -46,6 +47,8 @@ EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Vector4d)
 class CameraDirectLinearTransformation
 {
 public:
+    CameraDirectLinearTransformation(){};
+    // Utility constructors
     CameraDirectLinearTransformation(const Eigen::MatrixXd &images2D, const Eigen::MatrixXd &world3D, bool decomposeProjectionMatrix=false, bool computeOpenGLMatrices=false, double x0=0.0, double y0=0.0, int width=640, int height=480, double znear=0.1, double zfar=1000.0);
     CameraDirectLinearTransformation(const std::vector<Eigen::Vector3d> &x, const std::vector<Eigen::Vector4d> &X, bool decomposeProjectionMatrix=false, bool computeOpenGLMatrices=false, double x0=0.0, double y0=0.0, int width=640, int height=480, double znear=0.1, double zfar=1000.0);
 
@@ -140,6 +143,19 @@ public:
     // OLD DEPRECATED, I HAVE CHECKED THE RESULTS WITH THE Hartley Zisserman and with the Andrew Straw implementation too
     //void decomposePMatrix2(const Eigen::Matrix<double,3,4> &_P);
 
+    void info()
+    {
+        std::cout << "HZ 3x4 projection matrix=\n" << this->getProjectionMatrix() << endl;
+        std::cout << "Intrinsinc camera matrix=\n" <<this->getIntrinsicMatrix() << endl;
+        std::cout << "Extrinsic camera matrix=\n"<< this->getRotationMatrix() << endl << endl;
+        std::cout << "Camera Center C=" << this->getCameraPositionWorld().transpose() << endl;
+        std::cout << "Camera t= " << this->getT().transpose() << endl;
+        std::cout << "Camera Principal axis= " << this->getPrincipalAxis().transpose() << endl;
+        std::cout << "Camera Principal point=" << this->getPrincipalPoint().transpose() << endl ;
+        std::cout << "OpenGL ModelViewMatrix=\n" << this->getOpenGLModelViewMatrix().matrix() << endl;
+        std::cout << "OpenGL Projection=\n" << this->getOpenGLProjectionMatrix().matrix() << endl;
+        std::cout << "Reproduction error= " << this->getReprojectionError(this->getProjectionMatrix(),this->points2D,this->points3D) << endl;
+    }
 private:
 
     void rq3(const Matrix3d &A, Matrix3d &R, Matrix3d& Q);

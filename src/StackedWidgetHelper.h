@@ -14,16 +14,11 @@ public:
     {
         _parent = parent;
         ui = parent->getUi();
-        fillWorldCoordinates();
     }
     ~StackedWidgetHelper(){};
 
     void updateMotorRate(int nSlices, double tFrameMicroSeconds);
-    void computeHomography(const std::vector<QPoint> &images, const std::vector<Eigen::Vector3d> &world);
-    const std::vector<Eigen::Vector4d> getWorldCalibrationCoords() const
-    {
-        return worldCalibrationCoordinates;
-    }
+    void write3DPoints(CalibrationHelper *c);
 #ifdef ALP_SUPPORT
     ALPProjector alp;
 #endif
@@ -31,12 +26,9 @@ public:
 #if defined (SMI_SUPPORT) && (WIN32)
     INTEGMOTORINTERFACELib::ISMICommPtr CommInterface;
 #endif
-    void fillWorldCoordinates();
 protected:
     StackedWidget *_parent;
     Ui::StackedWidget *ui;
-
-    std::vector<Eigen::Vector4d> worldCalibrationCoordinates;
 };
 
 #endif // STACKEDWIDGETHELPER_H
