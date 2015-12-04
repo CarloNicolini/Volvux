@@ -57,9 +57,11 @@ VolvuxCalibrationWidget::VolvuxCalibrationWidget(QWidget *parent)
     QObject::connect(timer,SIGNAL(timeout()),this,SLOT(repaint()));
     this->setFocus();
     drawingText=true;
+}
 
-	this->alp = new ALPProjector();
-
+void VolvuxCalibrationWidget::setALP(ALPProjector *palp)
+{
+	this->alp = palp;
 }
 
 void VolvuxCalibrationWidget::moveCursor(int x, int y)
@@ -73,7 +75,6 @@ void VolvuxCalibrationWidget::moveCursor(int x, int y)
  */
 VolvuxCalibrationWidget::~VolvuxCalibrationWidget()
 {
-	delete alp;
 }
 
 /**
@@ -192,20 +193,9 @@ void VolvuxCalibrationWidget::paintEvent(QPaintEvent *event)
     painter.end();
 
     // Copy the current frame to the projector so that it can display it
-
-	QImage frame;// = this->grabFrameBuffer();
-    try
-    {
-        alp->stop();
-        alp->cleanAllSequences();
-        alp->loadSequence(1, frame.convertToFormat(QImage::Format_Mono).bits());
-        alp->start();
-    }
-    catch (std::exception &e)
-    {
-        QMessageBox::warning(this,"Error streaming data to projector", e.what());
-    }
-
+	//QImage frame;// = this->grabFrameBuffer();
+	//vector <unsigned char> frame;frame.resize(1024 * 768);
+	//frame.at(1024 * 768 / 2) = 255;
 }
 
 /**
@@ -235,4 +225,22 @@ void VolvuxCalibrationWidget::addPoint()
     ;
     emit lastPointPressed(lastPoint);
     this->points2D.push_back(lastPoint);
+}
+
+void VolvuxCalibrationWidget::transferFrame()
+{
+	QImage frame = this->grab().toImage();
+	frame = frame.convertToFormat(QImage::Format_Indexed8);
+	unsigned char *dataframe = static_cast<unsigned char*>(frame.bits());
+	try
+	{
+		alp->stop();
+		alp->cleanAllSequences();
+		alp->loadSequence(1, dataframe);// static_cast<unsigned char*>(frame.bits()));
+		alp->start();
+	}
+	catch (std::exception &e)
+	{
+		QMessageBox::warning(this, "Error streaming data to projector", e.what());
+	}
 }

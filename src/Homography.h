@@ -36,10 +36,13 @@
 using namespace std;
 using namespace Eigen;
 
-//#define EIGEN_DONT_VECTORIZE 1
-//#define EIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT 1 
-//#define EIGEN_DONT_ALIGN_STATICALLY 1
+#ifdef __WIN32
+#define EIGEN_DONT_Eigen::VectorIZE
+#define EIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT
+#define EIGEN_DONT_ALIGN_STATICALLY
+#endif
 
+EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Vector3d)
 EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Vector4d)
 /**
  * @brief The CameraDirectLinearTransformation class

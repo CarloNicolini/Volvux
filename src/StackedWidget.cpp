@@ -9,12 +9,16 @@ StackedWidget::StackedWidget(QWidget *parent) :
     QStackedWidget(parent),
     ui(new Ui::StackedWidget)
 {
-    ui->setupUi(this);
+	helper = new StackedWidgetHelper(this);
+	ui->setupUi(this);
+	timer = new QTimer(this);
+	timer->start(10);
     this->setCurrentIndex(0);
-    helper = new StackedWidgetHelper(this);
+    
     calibHelper = new CalibrationHelper(this);
     ui->pageMainWindow->setStackedWidgetHelper(helper);
     ui->pageMainWindow->setCalibrationHelper(this->calibHelper);
+	ui->volvuxCalibrationWidget->setALP(helper->getALP());
     // Projector navigation buttons
     QObject::connect(ui->pushButtonNextProjector,SIGNAL(clicked(bool)),this,SLOT(onPushButtonNextStackedWidget(bool)));
     QObject::connect(ui->pushButtonCancelProjector,SIGNAL(clicked(bool)),this,SLOT(onCancelPressed(bool)));
@@ -119,9 +123,12 @@ void StackedWidget::keyPressEvent(QKeyEvent *e)
 //Next
 void StackedWidget::onPushButtonNextStackedWidget(bool value)
 {
-    int curIndex = this->currentIndex();
-    if (curIndex==2)
-        ui->volvuxCalibrationWidget->resize(1024,768);
+	int curIndex = this->currentIndex();
+	if (curIndex == 2)
+	{
+		ui->volvuxCalibrationWidget->resize(1024, 768);
+		QObject::connect(this->timer, SIGNAL(timeout()), ui->volvuxCalibrationWidget, SLOT(transferFrame()));
+	}
     this->setCurrentIndex(curIndex+1);
 }
 
@@ -151,8 +158,9 @@ void StackedWidget::onPushButtonProjectorInitializeClicked(bool value){
 
     //Initialize ALP projector
 
-    if (helper->getALP()->m_bAlpInit)
-        return;
+    //if (helper->getALP()->m_bAlpInit)
+        //return;
+
     int nSlices = ui->spinBoxProjectorNSlices->value();
     //unsigned char *data = this->ui->volumetricGLWidget->allFrames.data();
     try

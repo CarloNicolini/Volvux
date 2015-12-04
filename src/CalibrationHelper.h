@@ -31,7 +31,7 @@ private:
     void computeHomography(const vector<Vector3d> &points);
     std::vector<Vector3d> points2D;
     std::vector<Vector4d> points3D;
-    CameraDirectLinearTransformation *CDLT;
+    CameraDirectLinearTransformation CDLT;
 };
 
 

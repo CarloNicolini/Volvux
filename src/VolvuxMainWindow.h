@@ -42,7 +42,7 @@
 
 #ifdef SMI_SUPPORT
 #import "IntegMotorInterface.tlb"
-#include <libs/drivers/SMI/SMIDefs.h>
+#include "SMIDefs.h"
 #include <comdef.h>
 #endif
 

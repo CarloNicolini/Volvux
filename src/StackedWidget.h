@@ -48,6 +48,7 @@ protected:
     Ui::StackedWidget *ui;
     StackedWidgetHelper *helper;
     CalibrationHelper *calibHelper;
+	QTimer *timer;
 };
 
 #endif // STACKEDWIDGET_H

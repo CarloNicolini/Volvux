@@ -130,6 +130,7 @@ if(WIN32)
 
     # Smart Motors Support
     if(SMI_SUPPORT)
+		add_definitions("-DSMI_SUPPORT")
         find_package(SmartMotor)
     endif(SMI_SUPPORT)
 endif(WIN32)

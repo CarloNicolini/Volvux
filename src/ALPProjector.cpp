@@ -43,6 +43,7 @@ ALPProjector::ALPProjector() :
 {  m_BitNum = 1;
    m_PicNum = 16;
    sequenceID=0;
+   cerr << "[ALP] CONSTRUCTOR..." << endl;
 }
 
 /**

@@ -12,7 +12,6 @@ using std::vector;
  */
 CalibrationHelper::CalibrationHelper(QObject *parent) : QObject(parent)
 {
-    this->CDLT = new CameraDirectLinearTransformation;
     for (int i=0; i<9; ++i)
     {
         Eigen::Vector4d p;
@@ -26,7 +25,6 @@ CalibrationHelper::CalibrationHelper(QObject *parent) : QObject(parent)
  */
 CalibrationHelper::~CalibrationHelper()
 {
-    delete this->CDLT;
 }
 
 /**
@@ -39,7 +37,7 @@ void CalibrationHelper::append2DPoint(const QPoint &p)
     if (points2D.size() == points3D.size())
     {
         this->computeHomography(points2D);
-        this->CDLT->info();
+        this->CDLT.info();
     }
 }
 
@@ -92,8 +90,8 @@ void CalibrationHelper::loadPoints3D(const QString &filename)
  */
 void CalibrationHelper::computeHomography(const vector<Vector3d> &points)
 {
-    CDLT->init(points2D,points3D,true,true,0,0,PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT);
-    CDLT->info();
+    CDLT.init(points2D,points3D,true,true,0,0,PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT);
+    CDLT.info();
 }
 
 /**

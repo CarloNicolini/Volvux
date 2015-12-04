@@ -109,7 +109,6 @@ VolvuxWidget::VolvuxWidget(QWidget *parent) :
     //this->setFocus();
 
     this->curvature=240.0;
-
 }
 
 /**
