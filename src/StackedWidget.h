@@ -19,7 +19,7 @@ public:
     StackedWidget(QWidget *parent = 0);
     ~StackedWidget();
     Ui::StackedWidget* getUi(){return this->ui;}
-
+    StackedWidgetHelper *getHelper(){ return this->helper;}
 private slots:
     void onPushButtonNextStackedWidget(bool value);
     void onPushButtonPreviousStackedWidget(bool value);

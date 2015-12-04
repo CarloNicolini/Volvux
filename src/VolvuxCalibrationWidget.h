@@ -32,6 +32,7 @@
 #include <fstream>
 #include <Eigen/Core>
 
+#include "ALPProjector.h"
 #include "CalibrationHelper.h"
 
 #ifdef ALP_SUPPORT
@@ -71,9 +72,8 @@ private:
     QPoint lastPoint;
     std::ofstream outputPoints;
 
-#ifdef ALP_SUPPORT
     ALPProjector *alp;
-#endif
+
 };
 
 #endif

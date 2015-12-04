@@ -1,6 +1,23 @@
 #include "StackedWidgetHelper.h"
 #include "ui_StackedWidget.h"
 
+StackedWidgetHelper::StackedWidgetHelper(StackedWidget *parent)
+{
+    _parent = parent;
+    ui = parent->getUi();
+    alp = new ALPProjector();
+}
+
+StackedWidgetHelper::~StackedWidgetHelper()
+{
+    this->alp->stop();
+    delete this->alp;
+}
+
+ALPProjector* StackedWidgetHelper::getALP()
+{
+    return this->alp;
+}
 
 void StackedWidgetHelper::updateMotorRate(int nSlices, double tFrameMicroSeconds)
 {
@@ -27,3 +44,5 @@ void StackedWidgetHelper::write3DPoints(CalibrationHelper *c)
         ui->verticalLayout3Dpoints->addWidget(lab);
     }
 }
+
+

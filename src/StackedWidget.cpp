@@ -13,6 +13,8 @@ StackedWidget::StackedWidget(QWidget *parent) :
     this->setCurrentIndex(0);
     helper = new StackedWidgetHelper(this);
     calibHelper = new CalibrationHelper(this);
+    ui->pageMainWindow->setStackedWidgetHelper(helper);
+    ui->pageMainWindow->setCalibrationHelper(this->calibHelper);
     // Projector navigation buttons
     QObject::connect(ui->pushButtonNextProjector,SIGNAL(clicked(bool)),this,SLOT(onPushButtonNextStackedWidget(bool)));
     QObject::connect(ui->pushButtonCancelProjector,SIGNAL(clicked(bool)),this,SLOT(onCancelPressed(bool)));
@@ -148,41 +150,39 @@ void StackedWidget::onPushButtonProjectorInitializeClicked(bool value){
     ui->pushButtonProjectorInitialize->setEnabled(false);
 
     //Initialize ALP projector
-#ifdef ALP_SUPPORT
-    if (alp.m_bAlpInit)
+
+    if (helper->getALP()->m_bAlpInit)
         return;
     int nSlices = ui->spinBoxProjectorNSlices->value();
     //unsigned char *data = this->ui->volumetricGLWidget->allFrames.data();
     try
     {
-        alp.init();
-        alp.initLED();
-        alp.setLED(ui->spinBoxProjectorLEDcurrent->value(),ui->doubleSpinBoxProjectorLEDpercentage->value());
-        alp.inquire();
+        helper->getALP()->init();
+        helper->getALP()->initLED();
+        helper->getALP()->setLED(ui->spinBoxProjectorLEDcurrent->value(),ui->doubleSpinBoxProjectorLEDpercentage->value());
+        helper->getALP()->inquire();
     }
     catch (std::exception &e)
     {
         QMessageBox::warning(this,"Error in ALP initialization",QString(e.what()));
     }
-#endif
-
     //Enables next button
     ui->pushButtonNextProjector->setEnabled(true);
 }
 
 //Release
 void StackedWidget::onPushButtonProjectorReleaseClicked(bool value){
-#ifdef ALP_SUPPORT
+
     try
     {
-        alp.cleanup();
-        alp.m_AlpSeqId.clear();
+        helper->getALP()->cleanup();
+        helper->getALP()->m_AlpSeqId.clear();
     }
     catch (std::exception &e)
     {
         QMessageBox::warning(this,"Error in ALP projector",QString(e.what()));
     }
-#endif
+
     //this->ui->listWidgetSequences->clear();
     ui->spinBoxProjectorNSlices->setEnabled(false);
     ui->spinBoxProjectorLEDcurrent->setEnabled(false);
@@ -218,35 +218,33 @@ void StackedWidget::onSpinboxProjectorNSlicesChanged(int nSlices)
 //LED current
 void StackedWidget::onSpinboxProjectorLEDCurrentChanged(int current)
 {
-#ifdef ALP_SUPPORT
-    if (alp.m_bAlpInit)
+
+    if (helper->getALP()->m_bAlpInit)
     {
-        if (!alp.m_bAlpLEDInit)
+        if (!helper->getALP()->m_bAlpLEDInit)
         {
-            alp.initLED();
-            alp.setLED(current,ui->doubleSpinBoxProjectorLEDpercentage->value());
+            helper->getALP()->initLED();
+            helper->getALP()->setLED(current,ui->doubleSpinBoxProjectorLEDpercentage->value());
         }
         else
-            alp.setLED(current,ui->doubleSpinBoxProjectorLEDpercentage->value());
+            helper->getALP()->setLED(current,ui->doubleSpinBoxProjectorLEDpercentage->value());
     }
-#endif
+
 }
 
 //LED percentage
 void StackedWidget::onSpinboxProjectorLEDPercentageChanged(double percentage)
 {
-#ifdef ALP_SUPPORT
-    if (alp.m_bAlpInit)
+    if (helper->getALP()->m_bAlpInit)
     {
-        if (!alp.m_bAlpLEDInit)
+        if (!helper->getALP()->m_bAlpLEDInit)
         {
-            alp.initLED();
-            alp.setLED(ui->spinBoxProjectorLEDcurrent->value(),static_cast<long int>(std::ceil(percentage)));
+            helper->getALP()->initLED();
+            helper->getALP()->setLED(ui->spinBoxProjectorLEDcurrent->value(),static_cast<long int>(std::ceil(percentage)));
         }
         else
-            alp.setLED(ui->spinBoxProjectorLEDcurrent->value(),static_cast<long int>(std::ceil(percentage)));
+            helper->getALP()->setLED(ui->spinBoxProjectorLEDcurrent->value(),static_cast<long int>(std::ceil(percentage)));
     }
-#endif
 }
 
 //Motor buttons

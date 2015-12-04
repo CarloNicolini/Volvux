@@ -49,10 +49,11 @@ ALPProjector::ALPProjector() :
  * @brief ALPProjector::inquire
  */
 void ALPProjector::inquire()
-{  if (!m_bAlpInit)	// check for initialization
+{
+   #ifdef ALP_SUPPORT
+   if (!m_bAlpInit)	// check for initialization
    {  throw std::runtime_error("[ALP ERROR] "+std::string(ALP_ERROR_ALP_NOT_INIT) );
    }
-
    // get device information and simply show it
    long int	Info;
    std::string	Text;
@@ -75,26 +76,33 @@ void ALPProjector::inquire()
       AlpSeqInquire( this->m_AlpId, this->m_AlpSeqId.at(this->m_AlpSeqDisp), ALP_MIN_PICTURE_TIME, &Info);
       cerr << "[ALP LOG] ALP Minimum picture time: " << Info << " [us]" << endl;
    }
+#endif
 }
 
 /**
  * getMinimumPictureTime
 **/
 long int ALPProjector::getMinimumPictureTime() const
-{  if (!m_bAlpInit)	// check for initialization
+{
+   #ifdef ALP_SUPPORT
+    if (!m_bAlpInit)	// check for initialization
    {  throw std::runtime_error("[ALP ERROR] "+std::string(ALP_ERROR_ALP_NOT_INIT) );
    }
    long int minimumPictureTime;
    AlpSeqInquire( this->m_AlpId, this->m_AlpSeqDisp, ALP_MIN_PICTURE_TIME, &minimumPictureTime);
-
    return minimumPictureTime;
+#else
+    return 0;
+#endif
 }
 
 /**
  * @brief ALPProjector::init
  */
 void ALPProjector::init()
-{  cerr << "[ALP LOG] Initializing ALP..." << endl;
+{
+    #ifdef ALP_SUPPORT
+    cerr << "[ALP LOG] Initializing ALP..." << endl;
    this->m_AlpSeqId.clear();
    if (m_bAlpInit)	// avoid re-initialization
    {  throw std::runtime_error("[ALP ERROR] ALP already initialized \""+std::string(ALP_ERROR_ALP_REINIT) );
@@ -176,14 +184,16 @@ void ALPProjector::init()
             break;
       }
    }
-
+    #endif
 }
 
 /**
  * @brief setSequenceQueueMode
 **/
 void ALPProjector::setSequenceQueueMode()
-{  long int projControlQueueModeReturn = AlpProjControl(m_AlpId, ALP_PROJ_QUEUE_MODE, ALP_PROJ_SEQUENCE_QUEUE);
+{
+#ifdef ALP_SUPPORT
+    long int projControlQueueModeReturn = AlpProjControl(m_AlpId, ALP_PROJ_QUEUE_MODE, ALP_PROJ_SEQUENCE_QUEUE);
    long int projInquireSequenceMode;
    long int projInquireSequenceModeReturnValue= AlpProjInquire(m_AlpId,ALP_PROJ_QUEUE_MODE,&projInquireSequenceMode);
 
@@ -212,6 +222,7 @@ void ALPProjector::setSequenceQueueMode()
          break;
       }
    }
+#endif
 }
 
 /**
@@ -219,9 +230,12 @@ void ALPProjector::setSequenceQueueMode()
  * @param pictureTime in microseconds
  */
 void ALPProjector::setPicturesTimeus(long int pictureTime)
-{  this->m_Timing_PictureTime = pictureTime;
+{
+#ifdef ALP_SUPPORT
+    this->m_Timing_PictureTime = pictureTime;
    cerr << "[ALP LOG] Timing to " << m_Timing_PictureTime << " [us]" << endl;
    cerr << "[ALP LOG] Pictures are all displayed in " << m_Timing_PictureTime*m_PicNum << " [us]" << endl;
+#endif
 }
 
 
@@ -230,7 +244,9 @@ void ALPProjector::setPicturesTimeus(long int pictureTime)
  * @param value
  */
 void ALPProjector::initLED()
-{  if (m_bAlpLEDInit)
+{
+#ifdef ALP_SUPPORT
+    if (m_bAlpLEDInit)
    {  AlpLedFree(m_AlpId, m_AlpLED_id);
       m_bAlpLEDInit=false;
    }
@@ -250,15 +266,17 @@ void ALPProjector::initLED()
          throw std::runtime_error("[ALP ERROR] AlpLedAlloc one of the requested I2C addresses has already been allocated");
          break;
    }
-
    m_bAlpLEDInit=true;
+#endif
 }
 
 /**
 * @brief setLED
 **/
 void ALPProjector::setLED(long int ledCurrentMilliAmperes, long int ledBrightnessPercent)
-{  // Change LED current using AlpLedControl
+{
+#ifdef ALP_SUPPORT
+    // Change LED current using AlpLedControl
    // here we don't want to exceed led brightness, so we put a maximum 10000 milliamperes
    long alpLEDcontrolResult = AlpLedControl( this->m_AlpId, this->m_AlpLED_id, ALP_LED_SET_CURRENT, ledCurrentMilliAmperes%18000);
    switch (alpLEDcontrolResult)
@@ -291,6 +309,7 @@ void ALPProjector::setLED(long int ledCurrentMilliAmperes, long int ledBrightnes
          throw std::runtime_error("[ALP ERROR] AlpLedControl USB communication error or I2C bus error");
          break;
    }
+#endif
 }
 
 /**
@@ -299,7 +318,9 @@ void ALPProjector::setLED(long int ledCurrentMilliAmperes, long int ledBrightnes
  * @param imageSequence
  */
 long int ALPProjector::loadSequence(unsigned int nPictures, unsigned char *imageSequence)
-{  this->m_AlpSeqId.push_back(sequenceID++);
+{
+#ifdef ALP_SUPPORT
+    this->m_AlpSeqId.push_back(sequenceID++);
    this->m_PicNum = nPictures;
    if (!m_bAlpInit)	// check for initialization
    {  throw std::runtime_error("[ALP ERROR] "+std::string(ALP_ERROR_ALP_NOT_INIT) );
@@ -336,6 +357,7 @@ long int ALPProjector::loadSequence(unsigned int nPictures, unsigned char *image
    }
    m_AlpSeqDisp = m_AlpSeqId.back();
    cerr << "[ALP LOG] Sequence " << m_AlpSeqDisp << " successfully loaded" << endl;
+#endif
    return m_AlpSeqDisp;
 }
 
@@ -344,7 +366,9 @@ long int ALPProjector::loadSequence(unsigned int nPictures, unsigned char *image
 * @param sequenceID
 **/
 void ALPProjector::removeSequence(long int sequenceID)
-{  if ( m_AlpSeqId.empty() )
+{
+#ifdef ALP_SUPPORT
+    if ( m_AlpSeqId.empty() )
       throw std::runtime_error("[ALP ERROR] No sequences allocated");
 
    std::vector<ALP_ID>::iterator iter = std::find(m_AlpSeqId.begin(),m_AlpSeqId.end(),sequenceID);
@@ -375,13 +399,16 @@ void ALPProjector::removeSequence(long int sequenceID)
       m_AlpSeqDisp=m_AlpSeqId.back();
    else
       m_AlpSeqDisp=-1;
+#endif
 }
 
 /**
 * @brief cleanAllSequences Free all the memory occupated from the sequences
 **/
 void ALPProjector::cleanAllSequences()
-{  for (unsigned int i=0; i<m_AlpSeqId.size(); i++)
+{
+#ifdef ALP_SUPPORT
+    for (unsigned int i=0; i<m_AlpSeqId.size(); i++)
    {  long int alpSeqFreeResult = AlpSeqFree(this->m_AlpId, m_AlpSeqId.at(i));
       switch (alpSeqFreeResult)
       {  case ALP_NOT_AVAILABLE:
@@ -403,26 +430,32 @@ void ALPProjector::cleanAllSequences()
    }
    m_AlpSeqDisp=-1;
    m_AlpSeqId.clear();
+#endif
 }
 
 /**
  * @brief ALPProjector::changeSequence
 **/
 void ALPProjector::changeSequence(long int sequenceID)
-{  if ( m_AlpSeqId.empty() )
+{
+#ifdef ALP_SUPPORT
+    if ( m_AlpSeqId.empty() )
       throw std::runtime_error("[ALP ERROR] No sequences allocated");
 
    if ( std::find(m_AlpSeqId.begin(),m_AlpSeqId.end(),sequenceID ) == m_AlpSeqId.end() )
    {  throw std::runtime_error("[ALP ERROR] No suitable sequence ID found in current sequence list");
    }
    this->m_AlpSeqDisp=sequenceID;//this->m_AlpSeqId.at(sequenceID);
+#endif
 }
 
 /**
  * @brief ALPProjector::start
  */
 void ALPProjector::start()
-{  if (!m_bAlpInit)	// check for initialization
+{
+#ifdef ALP_SUPPORT
+    if (!m_bAlpInit)	// check for initialization
    {  throw std::runtime_error("[ALP ERROR] "+ ALP_ERROR_ALP_NOT_INIT);
    }
 
@@ -432,36 +465,45 @@ void ALPProjector::start()
    cerr << "[ALP LOG] Starting projection on sequence " <<  m_AlpSeqDisp << endl;
    AlpProjStartCont(m_AlpId, m_AlpSeqDisp);
    m_bDisp = true;
+#endif
 }
 
 /**
  * @brief loopAllSequences
 **/
 void ALPProjector::loopAllSequences()
-{  unsigned int nSequences = m_AlpSeqId.size();
+{
+#ifdef ALP_SUPPORT
+    unsigned int nSequences = m_AlpSeqId.size();
    for (unsigned int i=0; i<nSequences; ++i)
    {  //AlpSeqControl(this->m_AlpId,m_AlpSeqId.at(i),ALP_SEQ_REPEAT,1);
       AlpProjStart(this->m_AlpId,this->m_AlpSeqId.at(i));
    }
+#endif
 }
 
 /**
  * @brief ALPProjector::stop
  */
 void ALPProjector::stop()
-{  if (!m_bAlpInit)	// check for initialization
+{
+#ifdef ALP_SUPPORT
+    if (!m_bAlpInit)	// check for initialization
    {  throw std::runtime_error("[ALP ERROR] "+std::string(ALP_ERROR_ALP_NOT_INIT));
    }
 
    AlpProjHalt(m_AlpId);
    m_bDisp = false;
+#endif
 }
 
 /**
  * @brief ALPProjector::dispose
  */
 void ALPProjector::cleanup()
-{  if (m_AlpLED_id!=0)
+{
+#ifdef ALP_SUPPORT
+    if (m_AlpLED_id!=0)
    {  AlpLedFree(m_AlpId, m_AlpLED_id);
       m_bAlpLEDInit=false;
    }
@@ -471,16 +513,20 @@ void ALPProjector::cleanup()
       m_AlpSeqDisp = -1;
       m_AlpSeqId.clear();
    }
+#endif
 }
 
 /**
  * @brief ALPProjector::~ALPProjector
  */
 ALPProjector::~ALPProjector()
-{  if (m_bDisp) // the projector is still active
+{
+#ifdef ALP_SUPPORT
+    if (m_bDisp) // the projector is still active
       this->stop();
    // Turns off ALP
    this->cleanup();
+#endif
 }
 
 /**
@@ -490,7 +536,9 @@ ALPProjector::~ALPProjector()
  */
 
 void ALPProjector::initWheel(unsigned char *buf, int num)
-{  long const n = 3;						// half number of spokes >= 2 !
+{
+#ifdef ALP_SUPPORT
+    long const n = 3;						// half number of spokes >= 2 !
    long const d = min(m_nSizeY, m_nSizeX);	// wheel diameter
    double const pi = 3.14159;
 
@@ -561,4 +609,5 @@ void ALPProjector::initWheel(unsigned char *buf, int num)
          }
       }
    }
+#endif
 }

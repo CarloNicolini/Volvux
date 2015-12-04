@@ -34,9 +34,8 @@ VolumetricMeshIntersection.cpp
 VolumetricSurfaceIntersection.cpp
 VRCamera.cpp)
 
-if(ALP_SUPPORT)
-    set(VOLVUXHELPER_SRCS ${VOLVUXHELPER_SRCS} ALPProjector.cpp)
-endif(ALP_SUPPORT)
+set(VOLVUXHELPER_SRCS ${VOLVUXHELPER_SRCS} ALPProjector.cpp)
+
 
 if(SMI_SUPPORT)
     set(VOLVUXHELPER_SRCS ${VOLVUXHELPER_SRCS} SmartMotor.cpp)

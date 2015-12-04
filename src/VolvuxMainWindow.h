@@ -35,21 +35,16 @@
 #include <stdexcept>
 
 #include "VolvuxExpWidget.h"
+#include "StackedWidgetHelper.h"
+#include "CalibrationHelper.h"
 
 #include "ui_VolvuxMainWindow.h"
-
-#ifdef ALP_SUPPORT
-    #include "ALPProjector.h"
-#endif
-
-//#define SMI_SUPPORT
 
 #ifdef SMI_SUPPORT
 #import "IntegMotorInterface.tlb"
 #include <libs/drivers/SMI/SMIDefs.h>
 #include <comdef.h>
 #endif
-
 
 namespace Ui
 {
@@ -63,6 +58,8 @@ class VolvuxMainWindow : public QMainWindow
 public:
     explicit VolvuxMainWindow(QWidget *parent = 0);
     ~VolvuxMainWindow();
+    void setStackedWidgetHelper(StackedWidgetHelper* swhelper);
+    void setCalibrationHelper(CalibrationHelper *calib);
 protected:
     void keyPressEvent(QKeyEvent *event) ;
     bool eventFilter(QObject *, QEvent *) ;
@@ -134,9 +131,9 @@ private:
 
     Ui::VolvuxMainWindow *ui;
     QPointer<VolvuxExpWidget> exp;
-#ifdef ALP_SUPPORT
-    ALPProjector alp;
-#endif
+
+    StackedWidgetHelper *helper;
+    CalibrationHelper *calib;
 
 #if defined (SMI_SUPPORT) && (WIN32)
     INTEGMOTORINTERFACELib::ISMICommPtr CommInterface;

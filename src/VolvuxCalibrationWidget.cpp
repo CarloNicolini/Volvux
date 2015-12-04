@@ -57,9 +57,9 @@ VolvuxCalibrationWidget::VolvuxCalibrationWidget(QWidget *parent)
     QObject::connect(timer,SIGNAL(timeout()),this,SLOT(repaint()));
     this->setFocus();
     drawingText=true;
-#ifdef ALP_SUPPORT
+
 	this->alp = new ALPProjector();
-#endif
+
 }
 
 void VolvuxCalibrationWidget::moveCursor(int x, int y)
@@ -192,7 +192,7 @@ void VolvuxCalibrationWidget::paintEvent(QPaintEvent *event)
     painter.end();
 
     // Copy the current frame to the projector so that it can display it
-#ifdef ALP_SUPPORT
+
 	QImage frame;// = this->grabFrameBuffer();
     try
     {
@@ -205,7 +205,7 @@ void VolvuxCalibrationWidget::paintEvent(QPaintEvent *event)
     {
         QMessageBox::warning(this,"Error streaming data to projector", e.what());
     }
-#endif
+
 }
 
 /**

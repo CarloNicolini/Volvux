@@ -83,6 +83,24 @@ VolvuxMainWindow::VolvuxMainWindow(QWidget *parent ):
 }
 
 /**
+ * @brief VolvuxMainWindow::setStackedWidgetHelper
+ * @param palp
+ */
+void VolvuxMainWindow::setStackedWidgetHelper(StackedWidgetHelper *swhelper)
+{
+    this->helper = swhelper;
+}
+
+/**
+ * @brief VolvuxMainWindow::setCalibrationHelper
+ * @param calibhelper
+ */
+void VolvuxMainWindow::setCalibrationHelper(CalibrationHelper *calibhelper)
+{
+    this->calib = calibhelper;
+}
+
+/**
  * @brief VolvuxMainWindow::saveSettings
  */
 void VolvuxMainWindow::saveSettings()
@@ -766,26 +784,26 @@ void VolvuxMainWindow::onCheckboxusecalibratedviewClicked(bool checked)
 void VolvuxMainWindow::onPushButtonUploadSequenceClicked()
 {
     this->ui->statusbar->showMessage("Uploading sequence...",500);
-#ifdef ALP_SUPPORT
+
     try
     {
         int nSlices = this->ui->spinBoxProjectorNSlices->value();
         unsigned char *data = this->ui->volumetricGLWidget->allFrames.data();
-        long int pictureTimeMs = alp.getMinimumPictureTime();
-        if (alp.m_bAlpInit)
+        long int pictureTimeMs = helper->getALP()->getMinimumPictureTime();
+        if (helper->getALP()->m_bAlpInit)
             this->ui->spinBoxProjectorMicrosecondsPerFrame->setMinimum(pictureTimeMs);
-        alp.setPicturesTimeus(this->ui->spinBoxProjectorMicrosecondsPerFrame->value());
-        alp.loadSequence(nSlices,data);
+        helper->getALP()->setPicturesTimeus(this->ui->spinBoxProjectorMicrosecondsPerFrame->value());
+        helper->getALP()->loadSequence(nSlices,data);
     }
     catch (std::exception &e)
     {
         QMessageBox::warning(this,"Error in ALP projector",QString(e.what()));
     }
-    this->ui->statusbar->showMessage("Sequence successfully uploaded, sequence ID="+QString::number(alp.m_AlpSeqDisp),5000);
+    this->ui->statusbar->showMessage("Sequence successfully uploaded, sequence ID="+QString::number(helper->getALP()->m_AlpSeqDisp),5000);
     this->ui->listWidgetSequences->clear();
-    for (unsigned int i=0; i<alp.m_AlpSeqId.size(); ++i)
-        this->ui->listWidgetSequences->addItem(QString::number(alp.m_AlpSeqId.at(i)));
-#endif
+    for (unsigned int i=0; i<helper->getALP()->m_AlpSeqId.size(); ++i)
+        this->ui->listWidgetSequences->addItem(QString::number(helper->getALP()->m_AlpSeqId.at(i)));
+
     this->ui->statusbar->showMessage("Sequence uploaded",5000);
 }
 
@@ -797,16 +815,16 @@ void VolvuxMainWindow::onPushButtonProjectorSequenceChanged()
     if( ui->listWidgetSequences->selectedItems().isEmpty() )
         return;
     int sequenceToDisplay = ui->listWidgetSequences->currentItem()->text().toLong();
-#ifdef ALP_SUPPORT
-    if (alp.m_bAlpInit)
+
+    if (helper->getALP()->m_bAlpInit)
     {
         try
         {
-            alp.changeSequence(sequenceToDisplay);
-            if (alp.m_bDisp)
+            helper->getALP()->changeSequence(sequenceToDisplay);
+            if (helper->getALP()->m_bDisp)
             {
-                alp.stop();
-                alp.start();
+                helper->getALP()->stop();
+                helper->getALP()->start();
             }
         }
         catch (const std::exception &e)
@@ -814,7 +832,7 @@ void VolvuxMainWindow::onPushButtonProjectorSequenceChanged()
             QMessageBox::warning(this,"Error in ALP projector, changing sequence",QString(e.what()));
         }
     }
-#endif
+
 }
 
 /**
@@ -825,24 +843,24 @@ void VolvuxMainWindow::onPushButtonProjectorRemoveSequencePressed()
     if( ui->listWidgetSequences->selectedItems().isEmpty() )
         return;
     int sequenceToRemove = ui->listWidgetSequences->currentItem()->text().toLong();
-#ifdef ALP_SUPPORT
-    if (alp.m_bAlpInit)
+
+    if (helper->getALP()->m_bAlpInit)
     {
         try
         {
-            if (alp.m_bDisp)
-                alp.stop();
-            alp.removeSequence(sequenceToRemove);
+            if (helper->getALP()->m_bDisp)
+                helper->getALP()->stop();
+            helper->getALP()->removeSequence(sequenceToRemove);
             this->ui->listWidgetSequences->clear();
-            for (unsigned int i=0; i<alp.m_AlpSeqId.size(); ++i)
-                this->ui->listWidgetSequences->addItem(QString::number(alp.m_AlpSeqId.at(i)));
+            for (unsigned int i=0; i<helper->getALP()->m_AlpSeqId.size(); ++i)
+                this->ui->listWidgetSequences->addItem(QString::number(helper->getALP()->m_AlpSeqId.at(i)));
         }
         catch (const std::exception &e)
         {
             QMessageBox::warning(this,"Error in ALP projector, removing sequence",QString(e.what()));
         }
     }
-#endif
+
 }
 
 /**
@@ -850,34 +868,34 @@ void VolvuxMainWindow::onPushButtonProjectorRemoveSequencePressed()
  */
 void VolvuxMainWindow::onPushButtonProjectorStartProjectionClicked()
 {
-#ifdef ALP_SUPPORT
+
     try
     {
         if ( this->ui->volumetricGLWidget->width() != PROJECTOR_RESOLUTION_WIDTH &&
              this->ui->volumetricGLWidget->height() != PROJECTOR_RESOLUTION_HEIGHT )
             throw std::runtime_error(std::string("OpenGL widget must have the same resolution of the projector, 1024x768"));
-        alp.start();
+        helper->getALP()->start();
     }
     catch (std::exception &e)
     {
         QMessageBox::warning(this,"Error in ALP projector, starting sequence",QString(e.what()));
     }
-#endif
+
 }
 
 void VolvuxMainWindow::onPushButtonProjectorReleaseClicked()
 {
-#ifdef ALP_SUPPORT
+
     try
     {
-        alp.cleanup();
-        alp.m_AlpSeqId.clear();
+        helper->getALP()->cleanup();
+        helper->getALP()->m_AlpSeqId.clear();
     }
     catch (std::exception &e)
     {
         QMessageBox::warning(this,"Error in ALP projector",QString(e.what()));
     }
-#endif
+
     this->ui->listWidgetSequences->clear();
     this->ui->spinBoxProjectorLEDcurrent->setEnabled(false);
     this->ui->doubleSpinBoxProjectorLEDpercentage->setEnabled(false);
@@ -888,18 +906,18 @@ void VolvuxMainWindow::onPushButtonProjectorReleaseClicked()
 **/
 void VolvuxMainWindow::onSpinBoxProjectorLEDpercentageChanged(double percentage)
 {
-#ifdef ALP_SUPPORT
-    if (alp.m_bAlpInit)
+
+    if (helper->getALP()->m_bAlpInit)
     {
-        if (!alp.m_bAlpLEDInit)
+        if (!helper->getALP()->m_bAlpLEDInit)
         {
-            alp.initLED();
-            alp.setLED(ui->spinBoxProjectorLEDcurrent->value(),static_cast<long int>(std::ceil(percentage)));
+            helper->getALP()->initLED();
+            helper->getALP()->setLED(ui->spinBoxProjectorLEDcurrent->value(),static_cast<long int>(std::ceil(percentage)));
         }
         else
-            alp.setLED(ui->spinBoxProjectorLEDcurrent->value(),static_cast<long int>(std::ceil(percentage)));
+            helper->getALP()->setLED(ui->spinBoxProjectorLEDcurrent->value(),static_cast<long int>(std::ceil(percentage)));
     }
-#endif
+
 }
 
 /**
@@ -907,18 +925,18 @@ void VolvuxMainWindow::onSpinBoxProjectorLEDpercentageChanged(double percentage)
 **/
 void VolvuxMainWindow::onspinBoxProjectorLEDcurrentChanged(int current)
 {
-#ifdef ALP_SUPPORT
-    if (alp.m_bAlpInit)
+
+    if (helper->getALP()->m_bAlpInit)
     {
-        if (!alp.m_bAlpLEDInit)
+        if (!helper->getALP()->m_bAlpLEDInit)
         {
-            alp.initLED();
-            alp.setLED(current,ui->doubleSpinBoxProjectorLEDpercentage->value());
+            helper->getALP()->initLED();
+            helper->getALP()->setLED(current,ui->doubleSpinBoxProjectorLEDpercentage->value());
         }
         else
-            alp.setLED(current,ui->doubleSpinBoxProjectorLEDpercentage->value());
+            helper->getALP()->setLED(current,ui->doubleSpinBoxProjectorLEDpercentage->value());
     }
-#endif
+
 }
 
 /**
@@ -929,23 +947,23 @@ void VolvuxMainWindow::onPushButtonProjectorInitializeClicked()
     this->ui->spinBoxProjectorLEDcurrent->setEnabled(true);
     this->ui->doubleSpinBoxProjectorLEDpercentage->setEnabled(true);
 
-#ifdef ALP_SUPPORT
-    if (alp.m_bAlpInit)
+
+    if (helper->getALP()->m_bAlpInit)
         return;
     int nSlices = this->ui->spinBoxProjectorNSlices->value();
     unsigned char *data = this->ui->volumetricGLWidget->allFrames.data();
     try
     {
-        alp.init();
-        alp.initLED();
-        alp.setLED(this->ui->spinBoxProjectorLEDcurrent->value(),ui->doubleSpinBoxProjectorLEDpercentage->value());
-        alp.inquire();
+        helper->getALP()->init();
+        helper->getALP()->initLED();
+        helper->getALP()->setLED(this->ui->spinBoxProjectorLEDcurrent->value(),ui->doubleSpinBoxProjectorLEDpercentage->value());
+        helper->getALP()->inquire();
     }
     catch (std::exception &e)
     {
         QMessageBox::warning(this,"Error in ALP initialization",QString(e.what()));
     }
-#endif
+
 }
 
 /**
@@ -955,9 +973,7 @@ void VolvuxMainWindow::onPushButtonProjectorStopProjectionClicked()
 {
     try
     {
-#ifdef ALP_SUPPORT
-        alp.stop();
-#endif
+        helper->getALP()->stop();
     }
     catch (std::exception &e)
     {

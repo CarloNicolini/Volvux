@@ -29,11 +29,14 @@
 
 //#define ALP_SUPPORT 1
 
-#include <windows.h>
 #include <iostream>
 #include <vector>
 #include <string>
+
+#ifdef ALP_SUPPORT
+#include <windows.h>
 #include "alp.h"
+#endif
 
 static const std::string MESSAGE_ALP_INIT("Initialize the ALP ...");
 static const std::string ALP_ERROR_ALP_INIT("Initialization of the ALP failed.");
@@ -54,6 +57,11 @@ static const std::string ALP_ERROR_SEQ_NOT_INIT("No sequence allocated.");
 #define    IDS_DEVICE_MEMORY       "Memory: %i of %i binary frames free"
 */
 #define SEQU_MAX 32
+
+#ifndef ALP_SUPPORT
+typedef unsigned long ALP_ID;
+#define ALP_DEFAULT 0L
+#endif
 
 class ALPProjector
 {

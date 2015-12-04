@@ -113,4 +113,3 @@ const std::vector<Vector3d> &CalibrationHelper::getPoints2D() const
 {
     return points2D;
 }
-

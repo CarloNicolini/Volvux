@@ -6,22 +6,16 @@
 #include <vector>
 #include <Eigen/Core>
 #include "StackedWidget.h"
+#include "ALPProjector.h"
 
 class StackedWidgetHelper
 {
 public:
-    StackedWidgetHelper(StackedWidget *parent)
-    {
-        _parent = parent;
-        ui = parent->getUi();
-    }
-    ~StackedWidgetHelper(){};
-
+    StackedWidgetHelper(StackedWidget *parent);
+    ~StackedWidgetHelper();
     void updateMotorRate(int nSlices, double tFrameMicroSeconds);
     void write3DPoints(CalibrationHelper *c);
-#ifdef ALP_SUPPORT
-    ALPProjector alp;
-#endif
+    ALPProjector* getALP();
 
 #if defined (SMI_SUPPORT) && (WIN32)
     INTEGMOTORINTERFACELib::ISMICommPtr CommInterface;
@@ -29,6 +23,7 @@ public:
 protected:
     StackedWidget *_parent;
     Ui::StackedWidget *ui;
+    ALPProjector *alp;
 };
 
 #endif // STACKEDWIDGETHELPER_H
