@@ -6,7 +6,6 @@ StackedWidgetHelper::StackedWidgetHelper(StackedWidget *parent)
     _parent = parent;
     ui = parent->getUi();
     alp = new ALPProjector();
-	alp->init();
 }
 
 StackedWidgetHelper::~StackedWidgetHelper()

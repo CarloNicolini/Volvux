@@ -14,7 +14,7 @@ StackedWidget::StackedWidget(QWidget *parent) :
 	timer = new QTimer(this);
 	timer->start(10);
     this->setCurrentIndex(0);
-    
+	
     calibHelper = new CalibrationHelper(this);
     ui->pageMainWindow->setStackedWidgetHelper(helper);
     ui->pageMainWindow->setCalibrationHelper(this->calibHelper);
@@ -124,9 +124,10 @@ void StackedWidget::keyPressEvent(QKeyEvent *e)
 void StackedWidget::onPushButtonNextStackedWidget(bool value)
 {
 	int curIndex = this->currentIndex();
-	if (curIndex == 2)
+	//if (curIndex == 1)
 	{
 		ui->volvuxCalibrationWidget->resize(1024, 768);
+		timer->start(10);
 		QObject::connect(this->timer, SIGNAL(timeout()), ui->volvuxCalibrationWidget, SLOT(transferFrame()));
 	}
     this->setCurrentIndex(curIndex+1);
