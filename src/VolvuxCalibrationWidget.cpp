@@ -57,6 +57,9 @@ VolvuxCalibrationWidget::VolvuxCalibrationWidget(QWidget *parent)
     QObject::connect(timer,SIGNAL(timeout()),this,SLOT(repaint()));
     this->setFocus();
     drawingText=true;
+#ifdef ALP_SUPPORT
+	this->alp = new ALPProjector();
+#endif
 }
 
 void VolvuxCalibrationWidget::moveCursor(int x, int y)
@@ -70,6 +73,7 @@ void VolvuxCalibrationWidget::moveCursor(int x, int y)
  */
 VolvuxCalibrationWidget::~VolvuxCalibrationWidget()
 {
+	delete alp;
 }
 
 /**
@@ -189,13 +193,13 @@ void VolvuxCalibrationWidget::paintEvent(QPaintEvent *event)
 
     // Copy the current frame to the projector so that it can display it
 #ifdef ALP_SUPPORT
-    QImage frame = this->grabFrameBuffer();
+	QImage frame;// = this->grabFrameBuffer();
     try
     {
-        alp.stop();
-        alp.cleanAllSequences();
-        alp.loadSequence(1, frame.convertToFormat(QImage::Format_Mono).bits());
-        alp.start();
+        alp->stop();
+        alp->cleanAllSequences();
+        alp->loadSequence(1, frame.convertToFormat(QImage::Format_Mono).bits());
+        alp->start();
     }
     catch (std::exception &e)
     {

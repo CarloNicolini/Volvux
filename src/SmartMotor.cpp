@@ -59,9 +59,10 @@ void SmartMotor::init()
    }
 
    cerr << "[Smart Motor] COM successfully initializated" << endl;
-
+   // Can return error on AfxMessabeBox see 
+   // http://stackoverflow.com/questions/6167609/some-problem-with-afxmessagebox-mfc-function
    if(!AfxOleInit())
-   {  AfxMessageBox("OLE initialization failed.  Make sure that the OLE libraries are the correct version.");
+   {  AfxMessageBox(L"OLE initialization failed.  Make sure that the OLE libraries are the correct version.");
       throw std::runtime_error("OLE initialization failed.  Make sure that the OLE libraries are the correct version.");
    }
    AfxEnableControlContainer();
@@ -70,7 +71,7 @@ void SmartMotor::init()
    {  // Create SMIHost object and interfaces
       HRESULT hr = CommInterface.CreateInstance(__uuidof(SMIHost));
       if(FAILED(hr))
-      {  AfxMessageBox("Cannot create an instance of \"SMIHost\" class!");
+      {  AfxMessageBox(L"Cannot create an instance of \"SMIHost\" class!");
          return;
       }
       /*
@@ -88,11 +89,11 @@ void SmartMotor::init()
         }
       */
       cerr << "[Smart Motor] Interface successfully created" << endl;
-      CString Str = "N/A";
+      CString Str =L"N/A";
       long Version = CommInterface->EngineVersion;
       if (Version)
       {  // Windows way to convert strings from long int...bleah!
-         Str.Format("IntegMotorInterface Version: %d.%d%d%d",
+         Str.Format(L"IntegMotorInterface Version: %d.%d%d%d",
                     HIBYTE(HIWORD(Version)),
                     LOBYTE(HIWORD(Version)),
                     HIBYTE(LOWORD(Version)),
