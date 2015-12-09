@@ -9,6 +9,7 @@ StackedWidget::StackedWidget(QWidget *parent) :
     QStackedWidget(parent),
     ui(new Ui::StackedWidget)
 {
+    //Setup ui and Helpers
 	helper = new StackedWidgetHelper(this);
 	ui->setupUi(this);
 	timer = new QTimer(this);
@@ -19,6 +20,7 @@ StackedWidget::StackedWidget(QWidget *parent) :
     ui->pageMainWindow->setStackedWidgetHelper(helper);
     ui->pageMainWindow->setCalibrationHelper(this->calibHelper);
 	ui->volvuxCalibrationWidget->setALP(helper->getALP());
+
     // Projector navigation buttons
     QObject::connect(ui->pushButtonNextProjector,SIGNAL(clicked(bool)),this,SLOT(onPushButtonNextStackedWidget(bool)));
     QObject::connect(ui->pushButtonCancelProjector,SIGNAL(clicked(bool)),this,SLOT(onCancelPressed(bool)));
@@ -124,13 +126,14 @@ void StackedWidget::keyPressEvent(QKeyEvent *e)
 void StackedWidget::onPushButtonNextStackedWidget(bool value)
 {
 	int curIndex = this->currentIndex();
-	//if (curIndex == 1)
-	{
-		ui->volvuxCalibrationWidget->resize(1024, 768);
-		timer->start(10);
-		QObject::connect(this->timer, SIGNAL(timeout()), ui->volvuxCalibrationWidget, SLOT(transferFrame()));
-	}
     this->setCurrentIndex(curIndex+1);
+    if (curIndex == CALIBRATION_INDEX_PAGE)
+    {
+        //ui->volvuxCalibrationWidget->resize(1024, 768);
+        timer->start(10);
+        //To send frame to the projector
+        QObject::connect(this->timer, SIGNAL(timeout()), ui->volvuxCalibrationWidget, SLOT(transferFrame()));
+    }
 }
 
 //Previous
@@ -150,6 +153,7 @@ void StackedWidget::onCancelPressed(bool value)
 //Projector buttons
 //Initilize
 void StackedWidget::onPushButtonProjectorInitializeClicked(bool value){
+
     //Enables other buttons
     ui->pushButtonProjectorRelease->setEnabled(true);
     ui->spinBoxProjectorNSlices->setEnabled(true);
@@ -175,13 +179,14 @@ void StackedWidget::onPushButtonProjectorInitializeClicked(bool value){
     {
         QMessageBox::warning(this,"Error in ALP initialization",QString(e.what()));
     }
+
     //Enables next button
     ui->pushButtonNextProjector->setEnabled(true);
 }
 
 //Release
 void StackedWidget::onPushButtonProjectorReleaseClicked(bool value){
-
+    //Release ALP projector
     try
     {
         helper->getALP()->cleanup();
@@ -193,6 +198,7 @@ void StackedWidget::onPushButtonProjectorReleaseClicked(bool value){
     }
 
     //this->ui->listWidgetSequences->clear();
+    //Enable and disable buttons and spinbox
     ui->spinBoxProjectorNSlices->setEnabled(false);
     ui->spinBoxProjectorLEDcurrent->setEnabled(false);
     ui->doubleSpinBoxProjectorLEDpercentage->setEnabled(false);
@@ -208,11 +214,13 @@ void StackedWidget::onPushButtonProjectorReleaseClicked(bool value){
  */
 void StackedWidget::onSpinboxProjectorNSlicesChanged(int nSlices)
 {
+    //Calculates the number of slices
     double flickerRateHz = ui->doubleSpinBoxMotorFlickerRate->value();
     double tFrameSec = 1.0/(nSlices*flickerRateHz);
     double tFrameMicroSeconds = 1E6*tFrameSec;
     ui->spinBoxProjectorMicrosecondsPerFrame->setValue( static_cast<int>(tFrameMicroSeconds) );
 
+    //The number must be an int
     if ( std::fabs(fmod(tFrameMicroSeconds,1.0)) <= std::numeric_limits<double>::epsilon() )
     {
         ui->spinBoxProjectorMicrosecondsPerFrame->setEnabled(true);
@@ -227,7 +235,7 @@ void StackedWidget::onSpinboxProjectorNSlicesChanged(int nSlices)
 //LED current
 void StackedWidget::onSpinboxProjectorLEDCurrentChanged(int current)
 {
-
+    //Initialize ALP LED
     if (helper->getALP()->m_bAlpInit)
     {
         if (!helper->getALP()->m_bAlpLEDInit)
@@ -298,7 +306,7 @@ void StackedWidget::onSpinboxFlickerRateChanged(double flickerRate)
     double tFrameMicroSeconds = tFrameSeconds*1E6;
 
     ui->spinBoxProjectorMicrosecondsPerFrame->setValue( static_cast<int>(tFrameMicroSeconds) );
-    // Check the remainder
+    // Checks the remainder
     if ( std::fabs(fmod(tFrameMicroSeconds,1.0)) <= std::numeric_limits<double>::epsilon() )
     {
         ui->spinBoxProjectorMicrosecondsPerFrame->setEnabled(true);

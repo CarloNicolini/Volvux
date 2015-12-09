@@ -1,6 +1,10 @@
 #ifndef STACKEDWIDGET_H
 #define STACKEDWIDGET_H
 
+#define PROJECTOR_INDEX_PAGE 0
+#define CALIBRATION_INDEX_PAGE 1
+#define VOLVUX_MAINWINDOW_INDEX 2
+
 #include <QStackedWidget>
 
 class CalibrationHelper;

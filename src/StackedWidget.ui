@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1236</width>
-    <height>851</height>
+    <width>1052</width>
+    <height>626</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Volvux Welcome Wizard</string>
   </property>
   <property name="currentIndex">
-   <number>2</number>
+   <number>0</number>
   </property>
   <widget class="QWidget" name="pageProjector">
    <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -98,7 +98,7 @@
       <item>
        <widget class="QGroupBox" name="projectorSettingsGroupbox">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string/>
         </property>
         <property name="title">
          <string>Projector Settings</string>

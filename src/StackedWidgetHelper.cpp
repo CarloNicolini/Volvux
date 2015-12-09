@@ -19,6 +19,7 @@ ALPProjector* StackedWidgetHelper::getALP()
     return this->alp;
 }
 
+//Update Motor rate
 void StackedWidgetHelper::updateMotorRate(int nSlices, double tFrameMicroSeconds)
 {
     double motorRate = (1E6/(nSlices*tFrameMicroSeconds)) * MOTOR_UNITS_TO_REV_MIN;
