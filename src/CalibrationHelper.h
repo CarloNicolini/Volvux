@@ -35,9 +35,9 @@ private:
 };
 
 
-#define CALIBRECT_EDGE_BOTTOM 10.0
-#define CALIBRECT_EDGE_TOP 8.0
-#define CALIBRECT_HEIGHT 4
+#define CALIBRECT_EDGE_BOTTOM 7.1
+#define CALIBRECT_EDGE_TOP 5
+#define CALIBRECT_HEIGHT 1.5
 
 static const double calibrationtoy[]  = {0,0,0,
                                -CALIBRECT_EDGE_BOTTOM/2,0, CALIBRECT_EDGE_BOTTOM/2,

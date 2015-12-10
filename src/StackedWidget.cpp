@@ -126,7 +126,8 @@ void StackedWidget::keyPressEvent(QKeyEvent *e)
 void StackedWidget::onPushButtonNextStackedWidget(bool value)
 {
 	int curIndex = this->currentIndex();
-    this->setCurrentIndex(curIndex+1);
+	curIndex = curIndex + 1;
+    this->setCurrentIndex(curIndex);
     if (curIndex == CALIBRATION_INDEX_PAGE)
     {
         //ui->volvuxCalibrationWidget->resize(1024, 768);
@@ -140,7 +141,8 @@ void StackedWidget::onPushButtonNextStackedWidget(bool value)
 void StackedWidget::onPushButtonPreviousStackedWidget(bool value)
 {
     int curIndex = this->currentIndex();
-    this->setCurrentIndex(curIndex-1);
+	curIndex = curIndex - 1;
+    this->setCurrentIndex(curIndex);
 }
 
 //Cancel
@@ -205,6 +207,7 @@ void StackedWidget::onPushButtonProjectorReleaseClicked(bool value){
     ui->spinBoxProjectorMicrosecondsPerFrame->setEnabled(false);
     ui->pushButtonProjectorRelease->setEnabled(false);
     ui->pushButtonProjectorInitialize->setEnabled(true);
+	ui->pushButtonNextProjector->setEnabled(false);
 }
 
 
@@ -269,6 +272,7 @@ void StackedWidget::onSpinboxProjectorLEDPercentageChanged(double percentage)
 void StackedWidget::onPushButtonMotorStartClicked(bool value)
 {
     ui->pushButtonMotorStart->setEnabled(false);
+	/*
 #if defined (SMI_SUPPORT) && (WIN32)
     cerr << "[MainWindow] Starting motor" << endl;
     long Version = 0;
@@ -283,6 +287,7 @@ void StackedWidget::onPushButtonMotorStartClicked(bool value)
         QMessageBox::warning(this,"!!! WARNING !!!","This speed is not safe for the system");
     }
 #endif
+	*/
     ui->pushButtonMotorStop->setEnabled(true);
 }
 
@@ -290,10 +295,12 @@ void StackedWidget::onPushButtonMotorStartClicked(bool value)
 void StackedWidget::onPushButtonMotorStopClicked(bool value)
 {
     ui->pushButtonMotorStart->setEnabled(true);
+	/*
 #if defined (SMI_SUPPORT) && (WIN32)
     cerr << "[MainWindow] Stopping motor" << endl;
     this->startRotation(0);
 #endif
+	*/
     ui->pushButtonMotorStop->setEnabled(false);
 }
 
@@ -327,15 +334,16 @@ void StackedWidget::onPushButtonMotorInitializeClicked()
 {
     if (ui->pushButtonMotorInitialize->isEnabled())
     {
-#if defined (SMI_SUPPORT) && (WIN32)
-        CoInitialize(NULL);
+
+//#if defined (SMI_SUPPORT) && (WIN32)
+        //CoInitialize(NULL);
         /*
     if(!AfxOleInit())
     {
         throw std::runtime_error("OLE initialization failed.  Make sure that the OLE libraries are the correct version.");
     }
-    AfxEnableControlContainer();
-    */
+    AfxEnableControlContainer();*/
+		/*
         HRESULT hr = CommInterface.CreateInstance(__uuidof(INTEGMOTORINTERFACELib::SMIHost));
         if(FAILED(hr))
         {
@@ -405,6 +413,7 @@ void StackedWidget::onPushButtonMotorInitializeClicked()
         }
         cerr << "DONE" << endl;
 #endif
+		*/
         emit motorInitialized(true);
         ui->pushButtonMotorInitialize->setEnabled(false);
     }

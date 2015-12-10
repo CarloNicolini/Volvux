@@ -16,10 +16,11 @@ public:
     void updateMotorRate(int nSlices, double tFrameMicroSeconds);
     void write3DPoints(CalibrationHelper *c);
     ALPProjector* getALP();
-
+	/*
 #if defined (SMI_SUPPORT) && (WIN32)
     INTEGMOTORINTERFACELib::ISMICommPtr CommInterface;
 #endif
+	*/
 protected:
     StackedWidget *_parent;
     Ui::StackedWidget *ui;

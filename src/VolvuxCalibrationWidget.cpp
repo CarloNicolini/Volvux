@@ -156,8 +156,9 @@ void VolvuxCalibrationWidget::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
     painter.fillRect(QRect(QPoint(0,0),QPoint(PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT)),Qt::black);
-    painter.setPen(Qt::white);
-
+    painter.setPen(Qt::red);
+	painter.drawRect(1, 1, 1023, 767);
+	painter.setPen(Qt::white);
     painter.drawPoint(lastPoint);
     painter.drawLine(lastPoint-QPoint(3,0),lastPoint+QPoint(3,0));
     painter.drawLine(lastPoint-QPoint(0,3),lastPoint+QPoint(0,3));

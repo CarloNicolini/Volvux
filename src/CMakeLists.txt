@@ -27,6 +27,7 @@ Mathcommon.cpp
 ObjLoader2.cpp
 ParametersLoader.cpp
 Screen.cpp
+StdAfx.cpp
 Timer.cpp
 TinyObjLoader.cpp
 Util.cpp
