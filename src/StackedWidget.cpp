@@ -112,7 +112,7 @@ void StackedWidget::keyPressEvent(QKeyEvent *e)
     }
     case Qt::Key_Escape :
     {
-        ui->volvuxCalibrationWidget->saveData();
+        //ui->volvuxCalibrationWidget->saveData();
         QApplication::quit();
         break;
     }

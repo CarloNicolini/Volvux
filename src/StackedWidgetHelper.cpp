@@ -10,7 +10,6 @@ StackedWidgetHelper::StackedWidgetHelper(StackedWidget *parent)
 
 StackedWidgetHelper::~StackedWidgetHelper()
 {
-    this->alp->stop();
     delete this->alp;
 }
 

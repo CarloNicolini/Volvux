@@ -84,24 +84,6 @@ VolvuxWidget::VolvuxWidget(QWidget *parent) :
     this->eyeZ=-7500.0;
     emit eyeZChanged(eyeZ);
 
-    // Setup the visualization volume
-    camCalibration=NULL;
-    volume = new VolumetricMeshIntersection(TEXTURE_RESOLUTION_X,TEXTURE_RESOLUTION_Y,TEXTURE_RESOLUTION_Z);
-    volume->setUniformColor(glWhite);
-
-    volume->meshStruct.radius=110.0;
-    volume->meshStruct.height=1.0;
-    volume->meshStruct.rotationAngle=0.0;
-    volume->meshStruct.offsetX=0.0;
-    volume->meshStruct.offsetY=0.0;
-    volume->meshStruct.offsetZ=0.0;
-
-    volume->meshStruct.x=0.0;
-    volume->meshStruct.y=0.0;
-    volume->meshStruct.z=0.0;
-
-    volume->meshStruct.thickness=0.5f;
-
     // Setup the calibration camera
     //loadCameraSettings();
     this->setCameraParameters(3.0f,200.0f,30000.0f);
@@ -109,6 +91,11 @@ VolvuxWidget::VolvuxWidget(QWidget *parent) :
     //this->setFocus();
 
     this->curvature=240.0;
+
+	this->volume = NULL;
+	this->fbo = NULL;
+	// Setup the visualization volume
+	this->camCalibration = NULL;
 }
 
 /**
@@ -117,7 +104,8 @@ VolvuxWidget::VolvuxWidget(QWidget *parent) :
 VolvuxWidget::~VolvuxWidget()
 {
     cerr << "[VolvuxWidget] Destructor" << endl;
-    delete fbo;
+	if (fbo)
+		delete fbo;
 
     if (volume)
         delete volume;
@@ -227,6 +215,19 @@ QSize VolvuxWidget::sizeHint() const
  */
 void VolvuxWidget::initializeGL()
 {
+	volume = new VolumetricMeshIntersection(TEXTURE_RESOLUTION_X, TEXTURE_RESOLUTION_Y, TEXTURE_RESOLUTION_Z);
+	volume->setUniformColor(glWhite);
+	volume->meshStruct.radius = 110.0;
+	volume->meshStruct.height = 1.0;
+	volume->meshStruct.rotationAngle = 0.0;
+	volume->meshStruct.offsetX = 0.0;
+	volume->meshStruct.offsetY = 0.0;
+	volume->meshStruct.offsetZ = 0.0;
+	volume->meshStruct.x = 0.0;
+	volume->meshStruct.y = 0.0;
+	volume->meshStruct.z = 0.0;
+	volume->meshStruct.thickness = 0.5f;
+
     this->makeCurrent();
     cerr << "[VolvuxWidget] initializing GL context" << endl;
     int argc = 1;
