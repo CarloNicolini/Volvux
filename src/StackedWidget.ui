@@ -426,7 +426,7 @@
       <item>
        <widget class="QPushButton" name="pushButtonCancelProjector">
         <property name="text">
-         <string>Cancel</string>
+         <string>Quit</string>
         </property>
        </widget>
       </item>

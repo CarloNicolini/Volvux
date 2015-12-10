@@ -109,6 +109,7 @@ if(WIN32)
     # This set the following defines when compiling on windows
         if(MSVC)
         add_definitions("-D_WIN32 -DNOMINMAX /EHsc /wd4127 /wd4129 /wd4505 /wd4714 /wd4800 /wd4181 /wd4244 /wd4996 /wd4250 -D_WIN32_WINNT=0x0501")
+		add_definitions(-DUNICODE -D_UNICODE)
         endif(MSVC)
     if( NOT SMI_SUPPORT)
         if(MSVC)
