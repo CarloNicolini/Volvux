@@ -24,6 +24,8 @@ public:
     ~StackedWidget();
     Ui::StackedWidget* getUi(){return this->ui;}
     StackedWidgetHelper *getHelper(){ return this->helper;}
+	bool eventFilter(QObject * target, QEvent * event);
+
 private slots:
     void onPushButtonNextStackedWidget(bool value);
     void onPushButtonPreviousStackedWidget(bool value);

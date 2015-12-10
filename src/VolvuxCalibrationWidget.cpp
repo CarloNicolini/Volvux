@@ -247,3 +247,4 @@ void VolvuxCalibrationWidget::transferFrame()
 		QMessageBox::warning(this, "Error streaming data to projector", e.what());
 	}
 }
+

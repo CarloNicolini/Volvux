@@ -12,6 +12,7 @@ StackedWidget::StackedWidget(QWidget *parent) :
     //Setup ui and Helpers
 	helper = new StackedWidgetHelper(this);
 	ui->setupUi(this);
+	this->installEventFilter(this);
 	timer = new QTimer(this);
 	timer->start(10);
     this->setCurrentIndex(0);
@@ -20,6 +21,7 @@ StackedWidget::StackedWidget(QWidget *parent) :
     ui->pageMainWindow->setStackedWidgetHelper(helper);
     ui->pageMainWindow->setCalibrationHelper(this->calibHelper);
 	ui->volvuxCalibrationWidget->setALP(helper->getALP());
+	
 
     // Projector navigation buttons
     QObject::connect(ui->pushButtonNextProjector,SIGNAL(clicked(bool)),this,SLOT(onPushButtonNextStackedWidget(bool)));
@@ -425,4 +427,21 @@ void StackedWidget::onPushButtonMotorInitializeClicked()
 
 void StackedWidget::onPoint2DEmitted(const QPoint &point)
 {
+}
+
+bool StackedWidget::eventFilter(QObject * target, QEvent * event)
+{
+	QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+	if (target == ui->volvuxCalibrationWidget && event->type() == QEvent::KeyPress)
+	{
+		//QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+		keyPressEvent(keyEvent);
+		qDebug() << "key " << keyEvent->key() << "from" << target;
+		return true;
+	}
+	else {
+		qDebug("Sono nell'else");
+		qDebug() << "from" << target;
+		return false;
+	}
 }

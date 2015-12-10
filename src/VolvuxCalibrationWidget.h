@@ -71,7 +71,6 @@ protected:
 
 private:
     QVector<QPoint> points2D;
-
     bool drawingText;
     QPoint lastPoint;
     std::ofstream outputPoints;
