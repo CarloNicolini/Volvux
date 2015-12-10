@@ -49,7 +49,7 @@ class VolvuxCalibrationWidget : public QWidget
 public:
     VolvuxCalibrationWidget(QWidget *parent = 0);
     ~VolvuxCalibrationWidget();
-	void setALP(ALPProjector *alp);
+    void setALP(ALPProjector *alp);
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
     void saveData();
@@ -60,11 +60,13 @@ public:
 signals:
     void lastPointPressed(const QPoint &p);
     void pointRemoved(const QPoint &p);
+    void points2Dupdated(const QVector<QPoint> &);
 
-	public slots:
-	void transferFrame();
+public slots:
+    void transferFrame();
 
 protected:
+    void keyPressEvent(QKeyEvent *event);
     void paintEvent(QPaintEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);

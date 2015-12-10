@@ -80,6 +80,7 @@ public:
     void setObjectScale(double objScale);
     void setHelicoidZeroColor(int value);
     void randomizeSpheres(bool useRandomDots, int nSpheres, int minRadius, int maxRadius);
+    void initVolume();
     void loadBinvox(const std::string &filename);
     // View methods
     void setCameraParameters(double _fieldOfView, double _zNear, double _zFar);

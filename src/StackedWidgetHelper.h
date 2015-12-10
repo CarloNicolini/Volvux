@@ -3,13 +3,15 @@
 
 #define MOTOR_UNITS_TO_REV_MIN 65536
 
+#include <QObject>
 #include <vector>
 #include <Eigen/Core>
 #include "StackedWidget.h"
 #include "ALPProjector.h"
 
-class StackedWidgetHelper
+class StackedWidgetHelper : public QObject
 {
+    Q_OBJECT
 public:
     StackedWidgetHelper(StackedWidget *parent);
     ~StackedWidgetHelper();
@@ -21,6 +23,9 @@ public:
     INTEGMOTORINTERFACELib::ISMICommPtr CommInterface;
 #endif
 	*/
+public slots:
+    void update2DPoints(const QVector<QPoint> &points2D);
+
 protected:
     StackedWidget *_parent;
     Ui::StackedWidget *ui;

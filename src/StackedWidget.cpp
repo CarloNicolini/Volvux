@@ -10,18 +10,17 @@ StackedWidget::StackedWidget(QWidget *parent) :
     ui(new Ui::StackedWidget)
 {
     //Setup ui and Helpers
-	helper = new StackedWidgetHelper(this);
-	ui->setupUi(this);
-	this->installEventFilter(this);
-	timer = new QTimer(this);
-	timer->start(10);
+    helper = new StackedWidgetHelper(this);
+    ui->setupUi(this);
+    //this->installEventFilter(this);
+    timer = new QTimer(this);
+    timer->start(10);
     this->setCurrentIndex(0);
-	
+
     calibHelper = new CalibrationHelper(this);
     ui->pageMainWindow->setStackedWidgetHelper(helper);
     ui->pageMainWindow->setCalibrationHelper(this->calibHelper);
-	ui->volvuxCalibrationWidget->setALP(helper->getALP());
-	
+    ui->volvuxCalibrationWidget->setALP(helper->getALP());
 
     // Projector navigation buttons
     QObject::connect(ui->pushButtonNextProjector,SIGNAL(clicked(bool)),this,SLOT(onPushButtonNextStackedWidget(bool)));
@@ -59,6 +58,11 @@ StackedWidget::StackedWidget(QWidget *parent) :
     onSpinboxProjectorNSlicesChanged(ui->spinBoxProjectorNSlices->value());
 
     helper->write3DPoints(calibHelper);
+
+    // Set strong focus on volvuxcalibrationwidget
+    this->ui->volvuxCalibrationWidget->setFocusPolicy(Qt::StrongFocus);
+
+    QObject::connect(ui->volvuxCalibrationWidget,SIGNAL(points2Dupdated(QVector<QPoint>)),this->helper,SLOT(update2DPoints(QVector<QPoint>)));
 }
 
 //Methods
@@ -69,57 +73,6 @@ StackedWidget::~StackedWidget()
     delete ui;
 }
 
-/**
- * @brief StackedWidget::keyPressEvent
- * @param e
- */
-void StackedWidget::keyPressEvent(QKeyEvent *e)
-{
-    switch (e->key())
-    {
-    case Qt::Key_T:
-    {
-        ui->volvuxCalibrationWidget->toggleText();
-        break;
-    }
-    case Qt::Key_Up:
-    {
-        ui->volvuxCalibrationWidget->moveCursor(0,-1);
-        break;
-    }
-    case Qt::Key_Down:
-    {
-        ui->volvuxCalibrationWidget->moveCursor(0,-1);
-        break;
-    }
-    case Qt::Key_Right:
-    {
-        ui->volvuxCalibrationWidget->moveCursor(-1,0);
-        break;
-    }
-    case Qt::Key_Left:
-    {
-        ui->volvuxCalibrationWidget->moveCursor(-1,0);
-        break;
-    }
-    case Qt::Key_R:
-    {
-        ui->volvuxCalibrationWidget->addPoint();
-        break;
-    }
-    case Qt::Key_S:
-    {
-        ui->volvuxCalibrationWidget->saveData();
-        break;
-    }
-    case Qt::Key_Escape :
-    {
-        //ui->volvuxCalibrationWidget->saveData();
-        QApplication::quit();
-        break;
-    }
-    }
-}
 
 //SLOTS
 
@@ -127,8 +80,8 @@ void StackedWidget::keyPressEvent(QKeyEvent *e)
 //Next
 void StackedWidget::onPushButtonNextStackedWidget(bool value)
 {
-	int curIndex = this->currentIndex();
-	curIndex = curIndex + 1;
+    int curIndex = this->currentIndex();
+    curIndex = curIndex + 1;
     this->setCurrentIndex(curIndex);
     if (curIndex == CALIBRATION_INDEX_PAGE)
     {
@@ -143,7 +96,7 @@ void StackedWidget::onPushButtonNextStackedWidget(bool value)
 void StackedWidget::onPushButtonPreviousStackedWidget(bool value)
 {
     int curIndex = this->currentIndex();
-	curIndex = curIndex - 1;
+    curIndex = curIndex - 1;
     this->setCurrentIndex(curIndex);
 }
 
@@ -168,7 +121,7 @@ void StackedWidget::onPushButtonProjectorInitializeClicked(bool value){
     //Initialize ALP projector
 
     //if (helper->getALP()->m_bAlpInit)
-        //return;
+    //return;
 
     int nSlices = ui->spinBoxProjectorNSlices->value();
     //unsigned char *data = this->ui->volumetricGLWidget->allFrames.data();
@@ -209,7 +162,7 @@ void StackedWidget::onPushButtonProjectorReleaseClicked(bool value){
     ui->spinBoxProjectorMicrosecondsPerFrame->setEnabled(false);
     ui->pushButtonProjectorRelease->setEnabled(false);
     ui->pushButtonProjectorInitialize->setEnabled(true);
-	ui->pushButtonNextProjector->setEnabled(false);
+    ui->pushButtonNextProjector->setEnabled(false);
 }
 
 
@@ -274,7 +227,7 @@ void StackedWidget::onSpinboxProjectorLEDPercentageChanged(double percentage)
 void StackedWidget::onPushButtonMotorStartClicked(bool value)
 {
     ui->pushButtonMotorStart->setEnabled(false);
-	/*
+    /*
 #if defined (SMI_SUPPORT) && (WIN32)
     cerr << "[MainWindow] Starting motor" << endl;
     long Version = 0;
@@ -289,7 +242,7 @@ void StackedWidget::onPushButtonMotorStartClicked(bool value)
         QMessageBox::warning(this,"!!! WARNING !!!","This speed is not safe for the system");
     }
 #endif
-	*/
+    */
     ui->pushButtonMotorStop->setEnabled(true);
 }
 
@@ -297,12 +250,12 @@ void StackedWidget::onPushButtonMotorStartClicked(bool value)
 void StackedWidget::onPushButtonMotorStopClicked(bool value)
 {
     ui->pushButtonMotorStart->setEnabled(true);
-	/*
+    /*
 #if defined (SMI_SUPPORT) && (WIN32)
     cerr << "[MainWindow] Stopping motor" << endl;
     this->startRotation(0);
 #endif
-	*/
+    */
     ui->pushButtonMotorStop->setEnabled(false);
 }
 
@@ -337,7 +290,7 @@ void StackedWidget::onPushButtonMotorInitializeClicked()
     if (ui->pushButtonMotorInitialize->isEnabled())
     {
 
-//#if defined (SMI_SUPPORT) && (WIN32)
+        //#if defined (SMI_SUPPORT) && (WIN32)
         //CoInitialize(NULL);
         /*
     if(!AfxOleInit())
@@ -345,7 +298,7 @@ void StackedWidget::onPushButtonMotorInitializeClicked()
         throw std::runtime_error("OLE initialization failed.  Make sure that the OLE libraries are the correct version.");
     }
     AfxEnableControlContainer();*/
-		/*
+        /*
         HRESULT hr = CommInterface.CreateInstance(__uuidof(INTEGMOTORINTERFACELib::SMIHost));
         if(FAILED(hr))
         {
@@ -415,7 +368,7 @@ void StackedWidget::onPushButtonMotorInitializeClicked()
         }
         cerr << "DONE" << endl;
 #endif
-		*/
+        */
         emit motorInitialized(true);
         ui->pushButtonMotorInitialize->setEnabled(false);
     }
@@ -429,19 +382,21 @@ void StackedWidget::onPoint2DEmitted(const QPoint &point)
 {
 }
 
+/*
 bool StackedWidget::eventFilter(QObject * target, QEvent * event)
 {
-	QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-	if (target == ui->volvuxCalibrationWidget && event->type() == QEvent::KeyPress)
-	{
-		//QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-		keyPressEvent(keyEvent);
-		qDebug() << "key " << keyEvent->key() << "from" << target;
-		return true;
-	}
-	else {
-		qDebug("Sono nell'else");
-		qDebug() << "from" << target;
-		return false;
-	}
+    QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+    if (target == ui->volvuxCalibrationWidget && event->type() == QEvent::KeyPress)
+    {
+        //QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        keyPressEvent(keyEvent);
+        qDebug() << "key " << keyEvent->key() << "from" << target;
+        return true;
+    }
+    else {
+        qDebug("Sono nell'else");
+        qDebug() << "from" << target;
+        return false;
+    }
 }
+*/

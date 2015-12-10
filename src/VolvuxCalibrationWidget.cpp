@@ -53,7 +53,7 @@ VolvuxCalibrationWidget::VolvuxCalibrationWidget(QWidget *parent)
     this->resize(PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT);
     glPointSize(0.1);
     QTimer *timer = new QTimer(this);
-    timer->start(10);
+    timer->start();
     QObject::connect(timer,SIGNAL(timeout()),this,SLOT(repaint()));
     this->setFocus();
     drawingText=true;
@@ -61,7 +61,7 @@ VolvuxCalibrationWidget::VolvuxCalibrationWidget(QWidget *parent)
 
 void VolvuxCalibrationWidget::setALP(ALPProjector *palp)
 {
-	this->alp = palp;
+    this->alp = palp;
 }
 
 void VolvuxCalibrationWidget::moveCursor(int x, int y)
@@ -157,14 +157,23 @@ void VolvuxCalibrationWidget::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.fillRect(QRect(QPoint(0,0),QPoint(PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT)),Qt::black);
     //Draws a red rectangle to unlight the widget borders
-	painter.setPen(Qt::red);
-	painter.drawRect(1, 1, 1022, 766);
-	//Draws the points
-	painter.setPen(Qt::white);
+    painter.setPen(Qt::red);
+    painter.drawRect(1, 1, PROJECTOR_RESOLUTION_WIDTH-2, PROJECTOR_RESOLUTION_HEIGHT-2);
+    //Draws the current mouse point
+    painter.setPen(Qt::white);
     painter.drawPoint(lastPoint);
     painter.drawLine(lastPoint-QPoint(3,0),lastPoint+QPoint(3,0));
     painter.drawLine(lastPoint-QPoint(0,3),lastPoint+QPoint(0,3));
 
+    // Draw the central point
+    QPoint centralPoint(PROJECTOR_RESOLUTION_WIDTH/2,PROJECTOR_RESOLUTION_HEIGHT/2);
+    painter.setPen(Qt::red);
+    painter.drawEllipse(centralPoint,6,6);
+    painter.drawLine(centralPoint-QPoint(3,0),centralPoint+QPoint(3,0));
+    painter.drawLine(centralPoint-QPoint(0,3),centralPoint+QPoint(0,3));
+    painter.setPen(Qt::white);
+
+    // Draw all the remaining points
     for (int i=0; i< this->points2D.size();i++)
     {
         painter.drawPoint(points2D.at(i));
@@ -173,12 +182,10 @@ void VolvuxCalibrationWidget::paintEvent(QPaintEvent *event)
         painter.drawLine(points2D.at(i)-QPoint(0,3),points2D.at(i)+QPoint(0,3));
     }
 
-    painter.drawPoint(PROJECTOR_RESOLUTION_WIDTH/2,PROJECTOR_RESOLUTION_HEIGHT/2);
-
     if ( drawingText )
     {
         painter.drawText(40,PROJECTOR_RESOLUTION_HEIGHT-20,QString("(x,y)=(")+ QString::number(lastPoint.x())+","+QString::number(lastPoint.y())+")");
-                painter.drawText(800,PROJECTOR_RESOLUTION_HEIGHT-20,QString("(x,y)=(")+ QString::number(lastPoint.x()-PROJECTOR_RESOLUTION_WIDTH/2)+","+QString::number(lastPoint.y()-PROJECTOR_RESOLUTION_HEIGHT/2)+")");
+        painter.drawText(800,PROJECTOR_RESOLUTION_HEIGHT-20,QString("(x,y)=(")+ QString::number(lastPoint.x()-PROJECTOR_RESOLUTION_WIDTH/2)+","+QString::number(lastPoint.y()-PROJECTOR_RESOLUTION_HEIGHT/2)+")");
         //painter.drawText(80,PROJECTOR_RESOLUTION_HEIGHT-20,QString::number(lastPoint.y()));
         painter.drawText(120,PROJECTOR_RESOLUTION_HEIGHT-60,"Press S to select the output file name");
         painter.drawText(120,PROJECTOR_RESOLUTION_HEIGHT-80,"Press Q to quit and save");
@@ -196,9 +203,9 @@ void VolvuxCalibrationWidget::paintEvent(QPaintEvent *event)
     painter.end();
 
     // Copy the current frame to the projector so that it can display it
-	//QImage frame;// = this->grabFrameBuffer();
-	//vector <unsigned char> frame;frame.resize(1024 * 768);
-	//frame.at(1024 * 768 / 2) = 255;
+    //QImage frame;// = this->grabFrameBuffer();
+    //vector <unsigned char> frame;frame.resize(1024 * 768);
+    //frame.at(1024 * 768 / 2) = 255;
 }
 
 /**
@@ -220,31 +227,87 @@ void VolvuxCalibrationWidget::addPoint()
         {
             points2D.remove(i);
             emit pointRemoved(lastPoint);
+            emit points2Dupdated(points2D);
             //qDebug() << "Removed  " << lastPoint ;
             return;
         }
     }
     //qDebug() << "Added " << lastPoint;
-    ;
     emit lastPointPressed(lastPoint);
     this->points2D.push_back(lastPoint);
+    emit points2Dupdated(points2D);
 }
 
 void VolvuxCalibrationWidget::transferFrame()
 {
-	QImage frame = this->grab().toImage();
-	frame = frame.convertToFormat(QImage::Format_Indexed8);
-	unsigned char *dataframe = static_cast<unsigned char*>(frame.bits());
-	try
-	{
-		alp->stop();
-		alp->cleanAllSequences();
-		alp->loadSequence(1, dataframe);// static_cast<unsigned char*>(frame.bits()));
-		alp->start();
-	}
-	catch (std::exception &e)
-	{
-		QMessageBox::warning(this, "Error streaming data to projector", e.what());
-	}
+    QImage frame = this->grab().toImage();
+    frame = frame.convertToFormat(QImage::Format_Indexed8);
+    unsigned char *dataframe = static_cast<unsigned char*>(frame.bits());
+    try
+    {
+        alp->stop();
+        alp->cleanAllSequences();
+        alp->loadSequence(1, dataframe);// static_cast<unsigned char*>(frame.bits()));
+        alp->start();
+    }
+    catch (std::exception &e)
+    {
+        QMessageBox::warning(this, "Error streaming data to projector", e.what());
+    }
 }
 
+
+void VolvuxCalibrationWidget::keyPressEvent(QKeyEvent *event)
+{
+    int keypressed = event->key();
+
+    int deltaCursorMove=1;
+    if (event->modifiers() == Qt::ShiftModifier)
+        deltaCursorMove=10;
+    //qDebug() << event->key() << " " << deltaCursorMove;
+    switch (keypressed)
+    {
+    case Qt::Key_T:
+    {
+        this->toggleText();
+        break;
+    }
+    case Qt::Key_Up:
+    {
+        this->moveCursor(0,-deltaCursorMove);
+        break;
+    }
+    case Qt::Key_Down:
+    {
+        this->moveCursor(0,deltaCursorMove);
+        break;
+    }
+    case Qt::Key_Right:
+    {
+        this->moveCursor(deltaCursorMove,0);
+        break;
+    }
+    case Qt::Key_Left:
+    {
+        this->moveCursor(-deltaCursorMove,0);
+        break;
+    }
+    case Qt::Key_Enter:
+    case Qt::Key_Return:
+    {
+        this->addPoint();
+        break;
+    }
+    case Qt::Key_S:
+    {
+        this->saveData();
+        break;
+    }
+    case Qt::Key_Escape :
+    {
+        //this->saveData();
+        QApplication::quit();
+        break;
+    }
+    }
+}

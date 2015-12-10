@@ -11,7 +11,7 @@ class CalibrationHelper;
 
 namespace Ui
 {
-    class StackedWidget;
+class StackedWidget;
 }
 
 class StackedWidgetHelper; // forward declaration
@@ -24,7 +24,7 @@ public:
     ~StackedWidget();
     Ui::StackedWidget* getUi(){return this->ui;}
     StackedWidgetHelper *getHelper(){ return this->helper;}
-	bool eventFilter(QObject * target, QEvent * event);
+    //bool eventFilter(QObject * target, QEvent * event);
 
 private slots:
     void onPushButtonNextStackedWidget(bool value);
@@ -50,11 +50,11 @@ signals:
     void motorInitialized(bool);
 
 protected:
-    void keyPressEvent(QKeyEvent *e);
+    //void keyPressEvent(QKeyEvent *e);
     Ui::StackedWidget *ui;
     StackedWidgetHelper *helper;
     CalibrationHelper *calibHelper;
-	QTimer *timer;
+    QTimer *timer;
 };
 
 #endif // STACKEDWIDGET_H

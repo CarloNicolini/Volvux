@@ -91,11 +91,11 @@ VolvuxWidget::VolvuxWidget(QWidget *parent) :
     //this->setFocus();
 
     this->curvature=240.0;
-
-	this->volume = NULL;
-	this->fbo = NULL;
-	// Setup the visualization volume
-	this->camCalibration = NULL;
+    this->initVolume();
+    //this->volume = NULL;
+    this->fbo = NULL;
+    // Setup the visualization volume
+    this->camCalibration = NULL;
 }
 
 /**
@@ -104,11 +104,12 @@ VolvuxWidget::VolvuxWidget(QWidget *parent) :
 VolvuxWidget::~VolvuxWidget()
 {
     cerr << "[VolvuxWidget] Destructor" << endl;
-	if (fbo)
-		delete fbo;
+    if (fbo)
+        delete fbo;
 
     if (volume)
         delete volume;
+
     if (camCalibration)
         delete camCalibration;
 }
@@ -215,18 +216,6 @@ QSize VolvuxWidget::sizeHint() const
  */
 void VolvuxWidget::initializeGL()
 {
-	volume = new VolumetricMeshIntersection(TEXTURE_RESOLUTION_X, TEXTURE_RESOLUTION_Y, TEXTURE_RESOLUTION_Z);
-	volume->setUniformColor(glWhite);
-	volume->meshStruct.radius = 110.0;
-	volume->meshStruct.height = 1.0;
-	volume->meshStruct.rotationAngle = 0.0;
-	volume->meshStruct.offsetX = 0.0;
-	volume->meshStruct.offsetY = 0.0;
-	volume->meshStruct.offsetZ = 0.0;
-	volume->meshStruct.x = 0.0;
-	volume->meshStruct.y = 0.0;
-	volume->meshStruct.z = 0.0;
-	volume->meshStruct.thickness = 0.5f;
 
     this->makeCurrent();
     cerr << "[VolvuxWidget] initializing GL context" << endl;
@@ -259,8 +248,8 @@ void VolvuxWidget::initializeGL()
     glewInit();
     initializeGLFunctions();
     volume->resize(TEXTURE_RESOLUTION_X,TEXTURE_RESOLUTION_Y,TEXTURE_RESOLUTION_Z);
-	//volume->loadObj("C:\workspace\Volvux\data\objmodels\helicoid.obj");
-	volume->loadObj(objPath);
+    //volume->loadObj("C:\workspace\Volvux\data\objmodels\helicoid.obj");
+    volume->loadObj(objPath);
     volume->setTexture3DfillValue(0);
     volume->fillVolumeWithSpheres(VOLUME_N_SPHERES,SPHERES_MIN_RADIUS,SPHERES_MAX_RADIUS);
     volume->meshStruct.showMesh=false;
@@ -466,8 +455,8 @@ void VolvuxWidget::generateFrames()
     catch (const std::exception &e)
     {
         QString maximumVectorSize = QString::number(allFrames.max_size()/1E6);
-		cerr << e.what() << endl;
-		//QMessageBox::warning(this,QString("Error: ")+QString::fromStdString(e.what()),"Too much memory allocated, asked "+QString::number(length/1E6) + " [MB] but " + maximumVectorSize + " [MB] addressable" + "\n"+"User memory= "+QString::number((unsigned int)getTotalSystemMemory()/1E6)+" [MB]");
+        cerr << e.what() << endl;
+        //QMessageBox::warning(this,QString("Error: ")+QString::fromStdString(e.what()),"Too much memory allocated, asked "+QString::number(length/1E6) + " [MB] but " + maximumVectorSize + " [MB] addressable" + "\n"+"User memory= "+QString::number((unsigned int)getTotalSystemMemory()/1E6)+" [MB]");
         return;
     }
 
@@ -724,16 +713,6 @@ void VolvuxWidget::onSurfaceCurvatureChanged(double val)
 void VolvuxWidget::computeCameraCalibrationMatrices(const QString &points2Dfilename,const QString &points3Dfilename)
 {
     // First load the 2D and 3D points
-    /*
-#ifdef __linux__
-    QString points2Dfilename = "/home/carlo/Desktop/3D-Display/Calibrations/2D_points.txt";
-    QString points3Dfilename = "/home/carlo/Desktop/3D-Display/Calibrations/3D_points.txt";
-#endif
-#ifdef _WIN32
-    QString points2Dfilename = "I:/Images/22July2013/2D_points.txt";
-    QString points3Dfilename = "I:/Images/22July2013/3D_points.txt";
-#endif
-*/
     int width = PROJECTOR_RESOLUTION_WIDTH;
     int height = PROJECTOR_RESOLUTION_HEIGHT;
     bool decomposePMatrix = true;
@@ -753,4 +732,20 @@ void VolvuxWidget::computeCameraCalibrationMatrices(const QString &points2Dfilen
     cout << "OpenGL ModelViewMatrix=\n" << camCalibration->getOpenGLModelViewMatrix().matrix() << endl;
     cout << "OpenGL Projection=\n" << camCalibration->getOpenGLProjectionMatrix().matrix() << endl;
     cout << "Reproduction error= " << camCalibration->getReprojectionError(camCalibration->getProjectionMatrix(),camCalibration->points2D,camCalibration->points3D) << endl;
+}
+
+void VolvuxWidget::initVolume()
+{
+    this->volume = new VolumetricMeshIntersection(TEXTURE_RESOLUTION_X, TEXTURE_RESOLUTION_Y, TEXTURE_RESOLUTION_Z);
+    this->volume->setUniformColor(glWhite);
+    this->volume->meshStruct.radius = 110.0;
+    this->volume->meshStruct.height = 1.0;
+    this->volume->meshStruct.rotationAngle = 0.0;
+    this->volume->meshStruct.offsetX = 0.0;
+    this->volume->meshStruct.offsetY = 0.0;
+    this->volume->meshStruct.offsetZ = 0.0;
+    this->volume->meshStruct.x = 0.0;
+    this->volume->meshStruct.y = 0.0;
+    this->volume->meshStruct.z = 0.0;
+    this->volume->meshStruct.thickness = 0.5f;
 }
