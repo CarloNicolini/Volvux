@@ -49,9 +49,9 @@ if(ALP_SUPPORT)
 target_link_libraries(VOLVUXHELPER ${ALP_LIBRARY})
 endif(ALP_SUPPORT)
 
-if(SMI_SUPPORT)
-    target_link_libraries(VOLVUXHELPER ${SMI_LIBRARY})
-endif(SMI_SUPPORT)
+#if(SMI_SUPPORT)
+#   target_link_libraries(VOLVUXHELPER ${SMI_LIBRARY})
+#endif(SMI_SUPPORT)
 
 # Volvux Main files
 set(VOLVUX_HDRS VolvuxExpWidget.h  VolvuxMainWindow.h VolvuxWidget.h VolvuxCalibrationWidget.h StackedWidget.h)

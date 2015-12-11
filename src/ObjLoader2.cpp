@@ -39,8 +39,8 @@ ObjLoader2::ObjLoader2()
 {
     fillColor = new GLfloat[4];
     lineColor = new GLfloat[4];
-    for (int i=0; i<4;i++) fillColor[i] = 1;
-    for (int i=0; i<4;i++) lineColor[i] = 0.3;
+    for (int i=0; i<4;i++) fillColor[i] = 1.0f;
+    for (int i=0; i<4;i++) lineColor[i] = 0.3f;
     this->areGLBuffersInitialized=false;
 }
 
