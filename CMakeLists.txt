@@ -109,8 +109,16 @@ if(WIN32)
     # This set the following defines when compiling on windows
         if(MSVC)
         add_definitions("-D_WIN32 -DNOMINMAX /EHsc /wd4127 /wd4129 /wd4505 /wd4714 /wd4800 /wd4181 /wd4244 /wd4996 /wd4250 -D_WIN32_WINNT=0x0501")
-		add_definitions(-DUNICODE -D_UNICODE)
+		add_definitions("-DUNICODE")
+		add_definitions("-D_UNICODE")
         endif(MSVC)
+
+
+	IF(CMAKE_BUILD_TYPE MATCHES DEBUG)
+		message(STATUS "Compiling in Debug mode")
+		add_definitions("/Wall")
+	ENDIF(CMAKE_BUILD_TYPE MATCHES DEBUG)
+
     if( NOT SMI_SUPPORT)
         if(MSVC)
         add_definitions("/MP") #disable multiprocessor compilation when including Smart Motor

@@ -64,7 +64,7 @@ void StackedWidgetHelper::update2DPoints(const QVector<QPoint> &points2D)
 {
     clearLayout(ui->verticalLayout2Dpoints,true);
 
-    for (size_t i=0; i<points2D.size(); i++)
+    for (int i=0; i<points2D.size(); i++)
     {
         QString valuePoint2D = QString::number(QPoint(points2D.at(i)).x()) + "," + QString::number(QPoint(points2D.at(i)).y());
         QLabel *lab = new QLabel(valuePoint2D,_parent);

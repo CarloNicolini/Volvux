@@ -26,8 +26,9 @@ static const double calibrationtoy[]  = {0,0,0,
 int main()
 {
 
-	vector<Vector4d > points3D;
-    for (int i=0; i<9; ++i)
+	stlalignedvector4d points3D;
+	//vector<Vector4d> points3D;
+	for (int i=0; i<9; ++i)
     {
         Eigen::Vector4d p;
         p << calibrationtoy[i*3],calibrationtoy[i*3+1],calibrationtoy[i*3+2],1;

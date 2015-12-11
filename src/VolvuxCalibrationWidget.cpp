@@ -51,7 +51,7 @@ VolvuxCalibrationWidget::VolvuxCalibrationWidget(QWidget *parent)
     this->setAutoFillBackground(false);
     this->setCursor(Qt::BlankCursor);
     this->resize(PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT);
-    glPointSize(0.1);
+    glPointSize(0.1f);
     QTimer *timer = new QTimer(this);
     timer->start();
     QObject::connect(timer,SIGNAL(timeout()),this,SLOT(repaint()));

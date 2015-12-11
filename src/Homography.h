@@ -55,14 +55,15 @@ typedef std::vector<Eigen::Vector4d, Eigen::aligned_allocator<Eigen::Vector4d> >
 class CameraDirectLinearTransformation
 {
 public:
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     CameraDirectLinearTransformation(){};
     // Utility constructors
     CameraDirectLinearTransformation(const Eigen::MatrixXd &images2D, const Eigen::MatrixXd &world3D, bool decomposeProjectionMatrix=false, bool computeOpenGLMatrices=false, double x0=0.0, double y0=0.0, int width=640, int height=480, double znear=0.1, double zfar=1000.0);
     CameraDirectLinearTransformation(const std::vector<Eigen::Vector3d> &x, const stlalignedvector4d &X, bool decomposeProjectionMatrix=false, bool computeOpenGLMatrices=false, double x0=0.0, double y0=0.0, int width=640, int height=480, double znear=0.1, double zfar=1000.0);
 
-        CameraDirectLinearTransformation(const std::string &imagesFileName, const std::string &worldCoordsFileName, bool decomposeProjectionMatrix=false, bool computeOpenGLMatrices=false, double x0=0.0, double y0=0.0, int width=640, int height=480, double znear=0.1, double zfar=1000.0);
+    CameraDirectLinearTransformation(const std::string &imagesFileName, const std::string &worldCoordsFileName, bool decomposeProjectionMatrix=false, bool computeOpenGLMatrices=false, double x0=0.0, double y0=0.0, int width=640, int height=480, double znear=0.1, double zfar=1000.0);
 
-		void init(const std::vector<Eigen::Vector3d> &x, const stlalignedvector4d &X, bool decomposeProjectionMatrix = false, bool computeOpenGLMatrices = false, double x0 = 0.0, double y0 = 0.0, int width = 640, int height = 480, double znear = 0.1, double zfar = 1000.0);
+	void init(const std::vector<Eigen::Vector3d> &x, const stlalignedvector4d &X, bool decomposeProjectionMatrix = false, bool computeOpenGLMatrices = false, double x0 = 0.0, double y0 = 0.0, int width = 640, int height = 480, double znear = 0.1, double zfar = 1000.0);
 
     std::vector<Vector3d> loadImages(const string &filename);
 	stlalignedvector4d loadWorldCoords(const string &filename);
