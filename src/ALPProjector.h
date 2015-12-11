@@ -58,8 +58,7 @@ static const std::string ALP_ERROR_SEQ_NOT_INIT("No sequence allocated.");
 */
 #define SEQU_MAX 32
 
-#ifndef ALP_SUPPORT
-typedef unsigned long ALP_ID;
+#ifndef ALP_DEFAULT
 #define ALP_DEFAULT 0L
 #endif
 
@@ -99,9 +98,9 @@ public:
     bool        m_bAlpLEDInit;            // ALP LED initialization status
     bool        m_bDisp;                // display active
     
-    ALP_ID        m_AlpId;                // ALP device ID
-    ALP_ID      m_AlpLED_id;
-    std::vector<ALP_ID> m_AlpSeqId;
+    unsigned long        m_AlpId;                // ALP device ID
+    unsigned long      m_AlpLED_id;
+    std::vector<unsigned long> m_AlpSeqId;
 
     long int    m_nDmdType;                // DMD type (ALP_DMDTYPE_...)
     long int    m_nSizeX, m_nSizeY;        // DMD size (pixels X*Y)
@@ -124,6 +123,57 @@ public:
 
     // Helper and secondary methods
     void initWheel(unsigned char *buf, int num);
-
 };
+
+
+#ifndef ALP_SUPPORT
+#define ALP_OK				0x00000000L		/*	successfull execution */
+#define ALP_NOT_ONLINE			1001L		/*	The specified ALP has not been found or is not ready. */
+#define ALP_NOT_IDLE			1002L		/*	The ALP is not in idle state. */
+#define ALP_NOT_AVAILABLE		1003L		/*	The specified ALP identifier is not valid. */
+#define ALP_NOT_READY			1004L		/*	The specified ALP is already allocated. */
+#define ALP_PARM_INVALID		1005L		/*	One of the parameters is invalid. */
+#define ALP_ADDR_INVALID		1006L		/*	Error accessing user data. */
+#define ALP_MEMORY_FULL			1007L		/*	The requested memory is not available. */
+#define ALP_SEQ_IN_USE			1008L		/*	The sequence specified is currently in use. */
+#define ALP_HALTED				1009L		/*	The ALP has been stopped while image data transfer was active. */
+#define ALP_ERROR_INIT			1010L		/*	Initialization error. */
+#define ALP_ERROR_COMM			1011L		/*	Communication error. */
+#define ALP_DEVICE_REMOVED		1012L		/*	The specified ALP has been removed. */
+#endif
+
+#define ALP_TRY(ALPcall){ \
+int _alpResult = ALPcall; \
+switch (_alpResult)\
+{\
+    case ALP_OK:\
+    break;\
+    case ALP_PARM_INVALID:\
+        throw std::runtime_error("Invalid ALP parameter");\
+    break;\
+    case ALP_ADDR_INVALID:\
+        throw std::runtime_error("Invalid ALP address");\
+    break;\
+    case ALP_NOT_READY:\
+        throw std::runtime_error("ALP not ready");\
+    break;\
+    case ALP_NOT_IDLE:\
+        throw std::runtime_error("ALP not idle");\
+    break;\
+    case ALP_SEQ_IN_USE:\
+        throw std::runtime_error("ALP sequence is in use");\
+    break;\
+    case ALP_NOT_AVAILABLE:\
+        throw std::runtime_error("ALP is not available");\
+    break;\
+    case ALP_ERROR_COMM:\
+        throw std::runtime_error("ALP communication error");\
+    break;\
+    case ALP_DEVICE_REMOVED:\
+        throw std::runtime_error("ALP device is removed");\
+    break;\
+}\
+}
+
+
 #endif

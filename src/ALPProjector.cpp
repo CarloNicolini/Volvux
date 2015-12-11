@@ -372,7 +372,7 @@ void ALPProjector::removeSequence(long int sequenceID)
     if ( m_AlpSeqId.empty() )
       throw std::runtime_error("[ALP ERROR] No sequences allocated");
 
-   std::vector<ALP_ID>::iterator iter = std::find(m_AlpSeqId.begin(),m_AlpSeqId.end(),sequenceID);
+   std::vector<unsigned long>::iterator iter = std::find(m_AlpSeqId.begin(),m_AlpSeqId.end(),sequenceID);
    if ( iter == m_AlpSeqId.end() )
    {  throw std::runtime_error("[ALP ERROR] Removing sequence, no suitable sequence ID found in current sequence list");
    }
