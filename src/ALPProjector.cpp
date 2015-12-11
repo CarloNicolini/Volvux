@@ -357,7 +357,7 @@ long int ALPProjector::loadSequence(unsigned int nPictures, unsigned char *image
    {  throw std::runtime_error("[ALP ERROR] " + std::string("Data transfer of sequence ") +std::to_string( (_ULonglong)(m_AlpSeqId.size())) + std::string(" failed"));
    }
    m_AlpSeqDisp = m_AlpSeqId.back();
-   cerr << "[ALP LOG] Sequence " << m_AlpSeqDisp << " successfully loaded" << endl;
+   //cerr << "[ALP LOG] Sequence " << m_AlpSeqDisp << " successfully loaded" << endl;
 #endif
    return m_AlpSeqDisp;
 }
@@ -463,7 +463,7 @@ void ALPProjector::start()
    if (m_AlpSeqDisp==-1)
    {  throw std::runtime_error("[ALP ERROR] Invalid sequence to display, call ALPProjector::changeSequence first");
    }
-   cerr << "[ALP LOG] Starting projection on sequence " <<  m_AlpSeqDisp << endl;
+   //cerr << "[ALP LOG] Starting projection on sequence " <<  m_AlpSeqDisp << endl;
    AlpProjStartCont(m_AlpId, m_AlpSeqDisp);
    m_bDisp = true;
 #endif
