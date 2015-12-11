@@ -26,14 +26,14 @@ static const double calibrationtoy[]  = {0,0,0,
 int main()
 {
 
-    vector<Vector4d> points3D;
+	vector<Vector4d > points3D;
     for (int i=0; i<9; ++i)
     {
         Eigen::Vector4d p;
         p << calibrationtoy[i*3],calibrationtoy[i*3+1],calibrationtoy[i*3+2],1;
         points3D.push_back(p);
     }
-
+	/*
     vector<Vector3d> points2d;
     points2d.push_back(Vector3d(512,384,1));
     points2d.push_back(Vector3d(602,472,1));
@@ -46,7 +46,8 @@ int main()
     points2d.push_back(Vector3d(448,458,1));
 
     CameraDirectLinearTransformation cam;
-    cam.init(points2d,points3D,true,true,0,0,1024,768,0.1,1000);
+    //cam.init(points2d,points3D,true,true,0,0,1024,768,0.1,1000);
     cam.info();
+	*/
     return 0;
 }

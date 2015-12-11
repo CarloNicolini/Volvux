@@ -32,7 +32,7 @@
 CameraDirectLinearTransformation::CameraDirectLinearTransformation(const MatrixXd &images2D, const MatrixXd &world3D, bool decomposeProjectionMatrix, bool computeOpenGLMatrices, double x0, double y0, int width, int height, double znear, double zfar)
 {
     std::vector<Vector3d> imagesVector;
-    std::vector<Vector4d> worldVector;
+    stlalignedvector4d worldVector;
 
     for (int i=0; i<images2D.rows();i++)
         imagesVector.push_back(Vector3d(images2D(i,0),images2D(i,1),1));
@@ -42,7 +42,7 @@ CameraDirectLinearTransformation::CameraDirectLinearTransformation(const MatrixX
     this->init(imagesVector,worldVector,decomposeProjectionMatrix,computeOpenGLMatrices,x0,y0,width,height,znear,zfar);
 }
 
-CameraDirectLinearTransformation::CameraDirectLinearTransformation(const std::vector<Eigen::Vector3d> &x, const std::vector<Eigen::Vector4d> &X, bool decomposeProjectionMatrix, bool computeOpenGLMatrices, double x0, double y0, int width, int height, double znear, double zfar)
+CameraDirectLinearTransformation::CameraDirectLinearTransformation(const std::vector<Eigen::Vector3d> &x, const stlalignedvector4d &X, bool decomposeProjectionMatrix, bool computeOpenGLMatrices, double x0, double y0, int width, int height, double znear, double zfar)
     : ModelViewProjectionInitialized(false),DecompositionComputed(false)
 {
     this->init(x,X,decomposeProjectionMatrix,computeOpenGLMatrices,x0,y0,width,height,znear,zfar);
@@ -51,11 +51,11 @@ CameraDirectLinearTransformation::CameraDirectLinearTransformation(const std::ve
 CameraDirectLinearTransformation::CameraDirectLinearTransformation(const string &imagesFileName, const string &worldCoordsFileName, bool decomposeProjectionMatrix, bool computeOpenGLMatrices, double x0, double y0, int width, int height, double znear, double zfar)
 {
     std::vector<Eigen::Vector3d> x = this->loadImages(imagesFileName);
-    std::vector<Eigen::Vector4d> X = this->loadWorldCoords(worldCoordsFileName);
+    stlalignedvector4d X = this->loadWorldCoords(worldCoordsFileName);
     this->init(x,X,decomposeProjectionMatrix,computeOpenGLMatrices,x0,y0,width,height,znear,zfar);
 }
 
-void CameraDirectLinearTransformation::init(const std::vector<Vector3d> &x, const std::vector<Vector4d> &X, bool decomposeProjectionMatrix, bool computeOpenGLMatrices, double x0, double y0, int width, int height, double znear, double zfar)
+void CameraDirectLinearTransformation::init(const std::vector<Vector3d> &x, const stlalignedvector4d &X, bool decomposeProjectionMatrix, bool computeOpenGLMatrices, double x0, double y0, int width, int height, double znear, double zfar)
 {
     if (x.size() != X.size() )
         throw std::logic_error("There must be the same number of correspondencies");
@@ -326,11 +326,11 @@ std::vector<Vector3d> CameraDirectLinearTransformation::loadImages(const string 
  * @param filename
  * @return The world coordinates in homogenized format (x,y,z,1)
  */
-std::vector<Vector4d> CameraDirectLinearTransformation::loadWorldCoords(const string &filename)
+stlalignedvector4d CameraDirectLinearTransformation::loadWorldCoords(const string &filename)
 {
     std::ifstream is;
     is.open(filename.c_str());
-    std::vector<Vector4d> vals;
+    stlalignedvector4d vals;
     double x,y,z;
     while( (is >> x ) &&  (is >> y) && (is >> z ) )
     {
