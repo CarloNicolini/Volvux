@@ -29,7 +29,7 @@ ParametersLoader.cpp
 Screen.cpp
 Timer.cpp
 TinyObjLoader.cpp
-Util.cpp
+#Util.cpp
 VolumetricMeshIntersection.cpp
 VolumetricSurfaceIntersection.cpp
 VRCamera.cpp)
