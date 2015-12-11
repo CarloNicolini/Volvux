@@ -37,13 +37,17 @@ using namespace std;
  */
 ObjLoader2::ObjLoader2()
 {
-    fillColor << 1.0,1.0,1.0,1.0;
-    lineColor << 0.3,0.3,0.3,0.0;
+    fillColor = new GLfloat[4];
+    lineColor = new GLfloat[4];
+    for (int i=0; i<4;i++) fillColor[i] = 1;
+    for (int i=0; i<4;i++) lineColor[i] = 0.3;
     this->areGLBuffersInitialized=false;
 }
 
 ObjLoader2::~ObjLoader2()
 {
+    delete[] fillColor;
+    delete[] lineColor;
     for (unsigned int i=0; i<this->shapes.size();i++)
     {
         glDeleteBuffers(1,&vertexBufferObjectIDs[i]);
@@ -306,7 +310,7 @@ void ObjLoader2::draw(GLenum drawMode)
     if (drawMode!=GL_FILL && drawMode!=GL_LINE && drawMode!=GL_POINT && drawMode!= (GL_LINE | GL_FILL) )
         throw std::runtime_error("Error in draw mode: Can only be GL_POINT or GL_LINE or GL_FILL or GL_LINE | GL_FILL");
 
-    glColor4fv(fillColor.data());
+    glColor4fv(fillColor);
     glPolygonMode(GL_FRONT_AND_BACK,drawMode);
     drawShapes();
     getGLerrors();
@@ -356,7 +360,10 @@ void ObjLoader2::getInfo()
  */
 void ObjLoader2::setLineColor(GLfloat lineRed, GLfloat lineGreen, GLfloat lineBlue, GLfloat lineAlpha)
 {
-    lineColor <<  lineRed,  lineGreen,  lineBlue,  lineAlpha;
+    lineColor[0] =  lineRed;
+    lineColor[1] =  lineGreen;
+    lineColor[2] = lineBlue;
+    lineColor[3] =  lineAlpha;
 }
 
 /**
@@ -368,7 +375,10 @@ void ObjLoader2::setLineColor(GLfloat lineRed, GLfloat lineGreen, GLfloat lineBl
  */
 void ObjLoader2::setFillColor(GLfloat fillRed, GLfloat fillGreen, GLfloat fillBlue, GLfloat fillAlpha)
 {
-    fillColor <<  fillRed,  fillGreen,  fillBlue,  fillAlpha;
+    fillColor[0] =  fillRed;
+    fillColor[1] =  fillGreen;
+    fillColor[2] = fillBlue;
+    fillColor[3] =  fillAlpha;
 }
 
 /**

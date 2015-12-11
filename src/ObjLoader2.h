@@ -69,8 +69,10 @@ private:
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::shape_t> selectedShapes;
     bool areGLBuffersInitialized;
-    Eigen::Matrix<GLfloat,4,1> fillColor;
-    Eigen::Matrix<GLfloat,4,1> lineColor;
+    GLfloat *fillColor;
+    GLfloat *lineColor;
+    //Eigen::Matrix<GLfloat,4,1> fillColor;
+    //Eigen::Matrix<GLfloat,4,1> lineColor;
 
 };
 
