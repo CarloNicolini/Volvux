@@ -108,3 +108,6 @@ endif(QT5_SUPPORT)
 #    set_target_properties(volvux PROPERTIES LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE")
 #endif(WIN32)
 #endif(QT4_SUPPORT)
+
+add_executable(testhomography testhomography.cpp)
+target_link_libraries(testhomography VOLVUXHELPER)
