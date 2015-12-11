@@ -112,6 +112,8 @@ private slots:
     void triggerFramesGeneration(double curvature);
     void onRandomizationMethodChanged(int randomVal);
 
+    // Calibration slots
+    void onCalibrationEmitted(CameraDirectLinearTransformation &cam);
 private:
     void initializeTabProjectorQConnections();
     void initializeTabSceneQConnections();

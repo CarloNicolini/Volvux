@@ -22,6 +22,7 @@ public:
     const stlalignedvector4d &getPoints3D() const;
 
 signals:
+    void calibrationEmitted(CameraDirectLinearTransformation &cam);
 
 public slots:
     void append2DPoint(const QPoint &p);

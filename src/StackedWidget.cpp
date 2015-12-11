@@ -14,7 +14,7 @@ StackedWidget::StackedWidget(QWidget *parent) :
     ui->setupUi(this);
     //this->installEventFilter(this);
     timer = new QTimer(this);
-    timer->start(10);
+    timer->start();
     this->setCurrentIndex(0);
 
     calibHelper = new CalibrationHelper(this);
@@ -57,10 +57,14 @@ StackedWidget::StackedWidget(QWidget *parent) :
     onSpinboxFlickerRateChanged(ui->doubleSpinBoxMotorFlickerRate->value());
     onSpinboxProjectorNSlicesChanged(ui->spinBoxProjectorNSlices->value());
 
+    // Calibration helper slots
+    QObject::connect(this->calibHelper,SIGNAL(calibrationEmitted(CameraDirectLinearTransformation &)),ui->pageMainWindow,SLOT(onCalibrationEmitted(CameraDirectLinearTransformation &)));
+
     helper->write3DPoints(calibHelper);
 
     // Set strong focus on volvuxcalibrationwidget
     this->ui->volvuxCalibrationWidget->setFocusPolicy(Qt::StrongFocus);
+
 
     QObject::connect(ui->volvuxCalibrationWidget,SIGNAL(points2Dupdated(QVector<QPoint>)),this->helper,SLOT(update2DPoints(QVector<QPoint>)));
 }
@@ -86,8 +90,7 @@ void StackedWidget::onPushButtonNextStackedWidget(bool value)
     if (curIndex == CALIBRATION_INDEX_PAGE)
     {
         //ui->volvuxCalibrationWidget->resize(1024, 768);
-        timer->start(10);
-        //To send frame to the projector
+        //To send frame to the projector only after widget has been correctly initialized via initializeGL
         QObject::connect(this->timer, SIGNAL(timeout()), ui->volvuxCalibrationWidget, SLOT(transferFrame()));
     }
 }

@@ -91,7 +91,7 @@ void CalibrationHelper::loadPoints3D(const QString &filename)
 void CalibrationHelper::computeHomography(const vector<Vector3d> &points)
 {
     CDLT.init(points2D,points3D,true,true,0,0,PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT);
-    CDLT.info();
+    emit calibrationEmitted(CDLT);
 }
 
 /**

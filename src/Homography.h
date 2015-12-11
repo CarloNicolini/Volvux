@@ -55,21 +55,20 @@ typedef std::vector<Eigen::Vector4d, Eigen::aligned_allocator<Eigen::Vector4d> >
 class CameraDirectLinearTransformation
 {
 public:
-	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     CameraDirectLinearTransformation(){};
     // Utility constructors
-    CameraDirectLinearTransformation(const Eigen::MatrixXd &images2D, const Eigen::MatrixXd &world3D, bool decomposeProjectionMatrix=false, bool computeOpenGLMatrices=false, double x0=0.0, double y0=0.0, int width=640, int height=480, double znear=0.1, double zfar=1000.0);
     CameraDirectLinearTransformation(const std::vector<Eigen::Vector3d> &x, const stlalignedvector4d &X, bool decomposeProjectionMatrix=false, bool computeOpenGLMatrices=false, double x0=0.0, double y0=0.0, int width=640, int height=480, double znear=0.1, double zfar=1000.0);
 
     CameraDirectLinearTransformation(const std::string &imagesFileName, const std::string &worldCoordsFileName, bool decomposeProjectionMatrix=false, bool computeOpenGLMatrices=false, double x0=0.0, double y0=0.0, int width=640, int height=480, double znear=0.1, double zfar=1000.0);
 
-	void init(const std::vector<Eigen::Vector3d> &x, const stlalignedvector4d &X, bool decomposeProjectionMatrix = false, bool computeOpenGLMatrices = false, double x0 = 0.0, double y0 = 0.0, int width = 640, int height = 480, double znear = 0.1, double zfar = 1000.0);
+    void init(const std::vector<Eigen::Vector3d> &x, const stlalignedvector4d &X, bool decomposeProjectionMatrix = false, bool computeOpenGLMatrices = false, double x0 = 0.0, double y0 = 0.0, int width = 640, int height = 480, double znear = 0.1, double zfar = 1000.0);
 
     std::vector<Vector3d> loadImages(const string &filename);
-	stlalignedvector4d loadWorldCoords(const string &filename);
+    stlalignedvector4d loadWorldCoords(const string &filename);
 
-	double getReprojectionError(const Eigen::Matrix<double, 3, 4> &P, const vector<Vector3d> &x, const stlalignedvector4d &X);
-	double getReproductionErrorOpenGL(const Eigen::Projective3d &P, const Eigen::Affine3d &MV, const Vector4i &viewport, const vector<Vector3d> &x, const stlalignedvector4d &X);
+    double getReprojectionError(const Eigen::Matrix<double, 3, 4> &P, const vector<Vector3d> &x, const stlalignedvector4d &X);
+    double getReproductionErrorOpenGL(const Eigen::Projective3d &P, const Eigen::Affine3d &MV, const Vector4i &viewport, const vector<Vector3d> &x, const stlalignedvector4d &X);
 
     const Eigen::Vector3d &getCameraCenter() const;
     // For backward compatibility
@@ -147,7 +146,7 @@ public:
     }
 
     std::vector<Eigen::Vector3d> points2D;
-	stlalignedvector4d points3D;
+    stlalignedvector4d points3D;
 
     // OLD DEPRECATED, I HAVE CHECKED THE RESULTS WITH THE Hartley Zisserman and with the Andrew Straw implementation too
     //void decomposePMatrix2(const Eigen::Matrix<double,3,4> &_P);
@@ -163,7 +162,7 @@ public:
         std::cout << "Camera Principal point=" << this->getPrincipalPoint().transpose() << endl ;
         std::cout << "OpenGL ModelViewMatrix=\n" << this->getOpenGLModelViewMatrix().matrix() << endl;
         std::cout << "OpenGL Projection=\n" << this->getOpenGLProjectionMatrix().matrix() << endl;
-        std::cout << "Reproduction error= " << this->getReprojectionError(this->getProjectionMatrix(),this->points2D,this->points3D) << endl;
+        //std::cout << "Reproduction error= " << this->getReprojectionError(this->getProjectionMatrix(),this->points2D,this->points3D) << endl;
     }
 private:
 

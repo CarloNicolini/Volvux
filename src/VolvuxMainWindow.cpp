@@ -1016,3 +1016,12 @@ void VolvuxMainWindow::closeEvent(QCloseEvent *event)
         exp->close();
     this->onPushButtonProjectorReleaseClicked();
 }
+
+/**
+ * @brief VolvuxMainWindow::onCalibrationEmitted
+ * @param cam
+ */
+void VolvuxMainWindow::onCalibrationEmitted(CameraDirectLinearTransformation &cam)
+{
+    cam.info();
+}
