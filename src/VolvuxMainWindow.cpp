@@ -252,6 +252,9 @@ void VolvuxMainWindow::onRandomizationMethodChanged(int randomVal)
  */
 void VolvuxMainWindow::onPushButtonLoadBinVoxPressed()
 {
+    QMessageBox::warning(this,"Error", "Not yet implemented");
+    return;
+    /*
     QString binvoxfile = QFileDialog::getOpenFileName(this,"Select 2D points file",QDir::currentPath(),"*.binvox");
     if (binvoxfile.isEmpty())
         return;
@@ -263,6 +266,7 @@ void VolvuxMainWindow::onPushButtonLoadBinVoxPressed()
     {
         QMessageBox::warning(this,"Error in loading binvox file",QString(e.what()));
     }
+    */
 }
 
 /**
@@ -579,6 +583,7 @@ void VolvuxMainWindow::triggerFramesGeneration(double curvature)
  */
 void VolvuxMainWindow::onPushButtonExperimentStartClicked()
 {
+#ifdef EXPERIMENTWIDGET_IMPLEMENTED
     this->ui->plainTextExperimentInfo->clear();
     QDate date = QDate::currentDate();
     QTime time = QTime::currentTime();
@@ -646,6 +651,7 @@ void VolvuxMainWindow::onPushButtonExperimentStartClicked()
     // Run the experiment
     exp->initializeExperiment();
     exp->show();
+#endif
 }
 
 void VolvuxMainWindow::closeEvent(QCloseEvent *event)
@@ -656,11 +662,9 @@ void VolvuxMainWindow::closeEvent(QCloseEvent *event)
     //this->onPushButtonProjectorReleaseClicked();
 }
 
-/**
- * @brief VolvuxMainWindow::onCalibrationEmitted
- * @param cam
- */
+
 void VolvuxMainWindow::onCalibrationEmitted(CameraDirectLinearTransformation &cam)
 {
     cam.info();
+    this->ui->volumetricGLWidget->setCamera(cam);
 }

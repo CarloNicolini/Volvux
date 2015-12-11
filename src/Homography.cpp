@@ -35,13 +35,6 @@ CameraDirectLinearTransformation::CameraDirectLinearTransformation(const std::ve
     this->init(x,X,decomposeProjectionMatrix,computeOpenGLMatrices,x0,y0,width,height,znear,zfar);
 }
 
-CameraDirectLinearTransformation::CameraDirectLinearTransformation(const string &imagesFileName, const string &worldCoordsFileName, bool decomposeProjectionMatrix, bool computeOpenGLMatrices, double x0, double y0, int width, int height, double znear, double zfar)
-{
-    std::vector<Eigen::Vector3d> x = this->loadImages(imagesFileName);
-    stlalignedvector4d X = this->loadWorldCoords(worldCoordsFileName);
-    this->init(x,X,decomposeProjectionMatrix,computeOpenGLMatrices,x0,y0,width,height,znear,zfar);
-}
-
 void CameraDirectLinearTransformation::init(const std::vector<Vector3d> &x, const stlalignedvector4d &X, bool decomposeProjectionMatrix, bool computeOpenGLMatrices, double x0, double y0, int width, int height, double znear, double zfar)
 {
     if (x.size() != X.size() )
