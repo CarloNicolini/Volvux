@@ -98,7 +98,7 @@ void CalibrationHelper::computeHomography(const vector<Vector3d> &points)
  * @brief CalibrationHelper::getPoints3D
  * @return
  */
-const std::vector<Vector4d> &CalibrationHelper::getPoints3D() const
+const stlalignedvector4d &CalibrationHelper::getPoints3D() const
 {
     return points3D;
 }

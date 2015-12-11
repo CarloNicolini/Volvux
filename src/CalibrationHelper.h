@@ -19,7 +19,7 @@ public:
     void loadPoints2D(const QString &filename);
 
     const std::vector<Vector3d> &getPoints2D() const;
-    const std::vector<Vector4d> &getPoints3D() const;
+    const stlalignedvector4d &getPoints3D() const;
 
 signals:
 
@@ -30,7 +30,7 @@ public slots:
 private:
     void computeHomography(const vector<Vector3d> &points);
     std::vector<Vector3d> points2D;
-    std::vector<Vector4d> points3D;
+    stlalignedvector4d points3D;
     CameraDirectLinearTransformation CDLT;
 };
 

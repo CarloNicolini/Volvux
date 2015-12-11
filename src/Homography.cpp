@@ -346,7 +346,7 @@ stlalignedvector4d CameraDirectLinearTransformation::loadWorldCoords(const strin
  * @param X
  * @return
  */
-double CameraDirectLinearTransformation::getReprojectionError(const Eigen::Matrix<double,3,4> &P, const vector<Vector3d> &x, const vector<Vector4d> &X)
+double CameraDirectLinearTransformation::getReprojectionError(const Eigen::Matrix<double,3,4> &P, const vector<Vector3d> &x, const stlalignedvector4d &X)
 {
     int n=x.size();
     double error=0.0;
@@ -369,7 +369,7 @@ double CameraDirectLinearTransformation::getReprojectionError(const Eigen::Matri
  * @param x
  * @return
  */
-double CameraDirectLinearTransformation::getReproductionErrorOpenGL(const Eigen::Projective3d &P, const Eigen::Affine3d &MV, const Vector4i &viewport, const vector<Vector3d> &x, const vector<Vector4d> &X)
+double CameraDirectLinearTransformation::getReproductionErrorOpenGL(const Eigen::Projective3d &P, const Eigen::Affine3d &MV, const Vector4i &viewport, const vector<Vector3d> &x, const stlalignedvector4d &X)
 {
     int n=x.size();
     double error=0.0;
