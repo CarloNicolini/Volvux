@@ -89,23 +89,7 @@ private slots:
     // Projector initialization/release/start/stop slots
     void onPushButtonProjectorStartProjectionClicked();
     void onPushButtonProjectorStopProjectionClicked();
-    void onPushButtonProjectorInitializeClicked();
-    void onPushButtonProjectorReleaseClicked();
     void onPushButtonUploadSequenceClicked();
-
-    // Projector parameters slots
-    void onSpinboxProjectorNSlicesChanged(int value);
-    void onspinBoxProjectorLEDcurrentChanged(int current);
-    void onSpinBoxProjectorLEDpercentageChanged(double percentage);
-    void onSpinBoxProjectorMicrosecondsPerFrameChanged(int value);
-    void onSpinboxProjectorMicrosecondsPerRoundChanged(int value);
-
-    // Motor control slots
-    void onPushButtonMotorInitializeClicked();
-    void onPushButtonMotorStartClicked();
-    void onPushButtonMotorStopClicked();
-    void onSpinBoxFlickerFrequencyChanged(double flickerFrequency);
-    void startRotation(int speed);
 
     // Experiment slots
     void onPushButtonExperimentStartClicked();
@@ -115,11 +99,9 @@ private slots:
     // Calibration slots
     void onCalibrationEmitted(CameraDirectLinearTransformation &cam);
 private:
-    void initializeTabProjectorQConnections();
     void initializeTabSceneQConnections();
-    void initializeTabCameraCalibrationQConnections();
+    void initializeTabProjectorQConnections();
     void initializeTabExperimentQConnections();
-    void initializeTabMotorQConnections();
     void loadSettings();
     void saveSettings();
 
