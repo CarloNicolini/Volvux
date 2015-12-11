@@ -44,7 +44,7 @@ typedef  Eigen::Matrix< GLfloat, 3,Eigen::Dynamic,Eigen::ColMajor> GLVertices;
 class ObjLoader2
 {
 public:
-    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+    //EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     ObjLoader2();
     ObjLoader2(const std::string &filename);
     ~ObjLoader2();
