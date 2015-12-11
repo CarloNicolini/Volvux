@@ -100,14 +100,6 @@ private slots:
     void onSpinBoxProjectorMicrosecondsPerFrameChanged(int value);
     void onSpinboxProjectorMicrosecondsPerRoundChanged(int value);
 
-    // Camera calibration slots
-    void onCameraFOVChanged(double fov);
-    void onCameraZNearChanged(double znear);
-    void onCameraZFarChanged(double zfar);
-    void onCheckboxcameraviewmodeClicked(bool checked);
-    void onCheckboxusecalibratedviewClicked(bool checked);
-    void onPushButtonCalibrateClicked();
-
     // Motor control slots
     void onPushButtonMotorInitializeClicked();
     void onPushButtonMotorStartClicked();

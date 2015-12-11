@@ -50,7 +50,6 @@ VolvuxMainWindow::VolvuxMainWindow(QWidget *parent ):
 {
     ui->setupUi(this);
     this->initializeTabSceneQConnections();
-    this->initializeTabCameraCalibrationQConnections();
     this->initializeTabProjectorQConnections();
     this->initializeTabExperimentQConnections();
     this->initializeTabMotorQConnections();
@@ -64,7 +63,7 @@ VolvuxMainWindow::VolvuxMainWindow(QWidget *parent ):
     this->ui->spinBoxProjectorNSlices->setValue(PROJECTOR_SLICES_NUMBER);
 
     // Initialization of OpenGL Widget scene
-    this->ui->volumetricGLWidget->setCameraParameters(ui->doubleSpinBoxCameraFOV->value(),ui->doubleSpinboxCameraZNear->value(),ui->doubleSpinboxCameraZFar->value());
+    //this->ui->volumetricGLWidget->setCameraParameters(ui->doubleSpinBoxCameraFOV->value(),ui->doubleSpinboxCameraZNear->value(),ui->doubleSpinboxCameraZFar->value());
     this->update();
 
     this->loadSettings();
@@ -128,13 +127,6 @@ void VolvuxMainWindow::saveSettings()
     settings.setValue("Max_Radius",this->ui->spinBoxStimulusSpheresRadiusMax->value());
     settings.endGroup();
 
-    // Camera settings
-    settings.beginGroup("Camera");
-    settings.setValue("Eye_Z",this->ui->doubleSpinBoxCameraEyeZ->value());
-    settings.setValue("FOV",this->ui->doubleSpinBoxCameraFOV->value());
-    settings.setValue("Z_near",this->ui->doubleSpinboxCameraZNear->value());
-    settings.setValue("Z_far",this->ui->doubleSpinboxCameraZFar->value());
-    settings.endGroup();
     // Projector
     settings.beginGroup("Projector");
     settings.setValue("N_slices",this->ui->spinBoxProjectorNSlices->value());
@@ -181,12 +173,6 @@ void VolvuxMainWindow::loadSettings()
     this->ui->spinBoxStimulusSpheresRadiusMin->setValue(settings.value("Stimulus/Min_Radius").toInt());
     this->ui->spinBoxStimulusSpheresRadiusMax->setValue(settings.value("Stimulus/Max_Radius").toInt());
 
-    // Camera
-    this->ui->doubleSpinBoxCameraEyeZ->setValue(settings.value("Camera/Eye_Z").toDouble());
-    this->ui->doubleSpinBoxCameraFOV->setValue(settings.value("Camera/FOV").toDouble());
-    this->ui->doubleSpinboxCameraZNear->setValue(settings.value("Camera/Z_near").toDouble());
-    this->ui->doubleSpinboxCameraZFar->setValue(settings.value("Camera/Z_far").toDouble());
-
     // Projector
     this->ui->spinBoxProjectorNSlices->setValue(settings.value("Projector/N_Slices").toInt());
     this->ui->spinBoxProjectorBitDepth->setValue(settings.value("Projector/Bit_Depth").toInt());
@@ -204,20 +190,6 @@ void VolvuxMainWindow::loadSettings()
     this->ui->monitorHeightMMDoubleSpinBox->setValue(this->monitorHeightMM);
 #endif
 }
-
-/**
- * @brief VolvuxMainWindow::initializeTabCameraCalibrationQConnections
- */
-void VolvuxMainWindow::initializeTabCameraCalibrationQConnections()
-{
-    QObject::connect(this->ui->doubleSpinBoxCameraFOV,SIGNAL(valueChanged(double)),this,SLOT(onCameraFOVChanged(double)));
-    QObject::connect(this->ui->doubleSpinboxCameraZNear,SIGNAL(valueChanged(double)),this,SLOT(onCameraZNearChanged(double)));
-    QObject::connect(this->ui->doubleSpinboxCameraZFar,SIGNAL(valueChanged(double)),this,SLOT(onCameraZFarChanged(double)));
-    QObject::connect(this->ui->pushButtonCalibrate,SIGNAL(clicked()),this,SLOT(onPushButtonCalibrateClicked()));
-}
-
-
-
 
 /**
  * @brief VolvuxMainWindow::initializeTabProjectorQConnections
@@ -263,18 +235,6 @@ void VolvuxMainWindow::initializeTabSceneQConnections()
     QObject::connect(this->ui->doubleSpinboxHelicoidCzMm,SIGNAL(valueChanged(double)),this,SLOT(onDoubleSpinboxHelicoidZChanged(double)));
 
     QObject::connect(this->ui->doubleSpinBoxObjectSize,SIGNAL(valueChanged(double)),this,SLOT(onDoubleSpinboxObjectSizeChanged(double)));
-
-    // Camera eyeZ changed
-    QObject::connect(this->ui->volumetricGLWidget,SIGNAL(eyeZChanged(double)),this->ui->doubleSpinBoxCameraEyeZ,SLOT(setValue(double)));
-    QObject::connect(this->ui->doubleSpinBoxCameraEyeZ,SIGNAL(valueChanged(double)),this->ui->volumetricGLWidget,SLOT(onEyeZChanged(double)));
-
-    // Camera zNear changed
-    QObject::connect(this->ui->volumetricGLWidget,SIGNAL(zNearChanged(double)),this->ui->doubleSpinboxCameraZNear,SLOT(setValue(double)));
-    QObject::connect(this->ui->doubleSpinboxCameraZNear,SIGNAL(valueChanged(double)),this->ui->volumetricGLWidget,SLOT(onZNearChanged(double)));
-
-    // Camera zFar changed
-    QObject::connect(this->ui->volumetricGLWidget,SIGNAL(zFarChanged(double)),this->ui->doubleSpinboxCameraZFar,SLOT(setValue(double)));
-    QObject::connect(this->ui->doubleSpinboxCameraZFar,SIGNAL(valueChanged(double)),this->ui->volumetricGLWidget,SLOT(onZFarChanged(double)));
 
     // Stimulus tab connections
     QObject::connect(this->ui->pushButtonStimulusRandomizeSpheres,SIGNAL(clicked()),this,SLOT(onPushButtonRandomizeSpheresPressed()));
@@ -551,33 +511,6 @@ void VolvuxMainWindow::onPushButtonLoadBinVoxPressed()
 }
 
 /**
- * @brief VolvuxMainWindow::onCameraFOVChanged
- * @param val
- */
-void VolvuxMainWindow::onCameraFOVChanged(double val)
-{
-    this->ui->volumetricGLWidget->setCameraParameters(val,ui->doubleSpinboxCameraZNear->value(),ui->doubleSpinboxCameraZFar->value());
-}
-
-/**
- * @brief VolvuxMainWindow::onCameraZNearChanged
- * @param val
- */
-void VolvuxMainWindow::onCameraZNearChanged(double val)
-{
-    this->ui->volumetricGLWidget->setCameraParameters(ui->doubleSpinBoxCameraFOV->value(),val,ui->doubleSpinboxCameraZFar->value());
-}
-
-/**
- * @brief VolvuxMainWindow::onCameraZFarChanged
- * @param val
- */
-void VolvuxMainWindow::onCameraZFarChanged(double val)
-{
-    this->ui->volumetricGLWidget->setCameraParameters(ui->doubleSpinBoxCameraFOV->value(),ui->doubleSpinboxCameraZNear->value(),val);
-}
-
-/**
 * @brief onSpinBoxProjectorMicrosecondsPerFrameChanged
 **/
 
@@ -760,25 +693,6 @@ void VolvuxMainWindow::onSpinboxspheresradiusmaxValuechanged(int arg1)
     {
         this->ui->spinBoxStimulusSpheresRadiusMin->setValue(arg1-1);
     }
-}
-
-/**
- * @brief VolvuxMainWindow::on_checkBoxCameraViewMode_clicked
- * @param checked
- */
-void VolvuxMainWindow::onCheckboxcameraviewmodeClicked(bool checked)
-{
-    this->ui->volumetricGLWidget->toggleStandardGL(checked);
-}
-
-
-/**
- * @brief VolvuxMainWindow::on_checkBoxUseCalibratedView_clicked
- * @param checked
- */
-void VolvuxMainWindow::onCheckboxusecalibratedviewClicked(bool checked)
-{
-    this->ui->volumetricGLWidget->toggleUseCalibratedGLView();
 }
 
 void VolvuxMainWindow::onPushButtonUploadSequenceClicked()
@@ -979,18 +893,6 @@ void VolvuxMainWindow::onPushButtonProjectorStopProjectionClicked()
     {
         QMessageBox::warning(this,"Error in ALP projector",QString(e.what()));
     }
-}
-
-/**
- * @brief VolvuxMainWindow::onPushButtonCalibrateClicked
- */
-void VolvuxMainWindow::onPushButtonCalibrateClicked()
-{
-    QString points2Dfilename = QFileDialog::getOpenFileName(this,"Select 2D points file",QDir::currentPath(),"*.txt");
-    QString points3Dfilename = QFileDialog::getOpenFileName(this,"Select 3D points file",QDir::currentPath(),"*.txt");
-
-    this->ui->volumetricGLWidget->computeCameraCalibrationMatrices(points2Dfilename,points3Dfilename);
-    //this->ui->volumetricGLWidget->computeCameraCalibrationMatrices("/home/carlo/Desktop/3D-Display/Calibrations/2D_points.txt" , "/home/carlo/Desktop/3D-Display/Calibrations/3D_points.txt");
 }
 
 /**
