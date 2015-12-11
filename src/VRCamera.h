@@ -33,11 +33,13 @@
 #include "Screen.h"
 #include "IncludeGL.h"
 
+/*
 #ifdef __WIN32
 #define EIGEN_DONT_Eigen::VectorIZE
 #define EIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT
 #define EIGEN_DONT_ALIGN_STATICALLY
 #endif
+*/
 
 //using namespace Eigen;
 /**
