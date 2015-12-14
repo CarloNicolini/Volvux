@@ -46,9 +46,9 @@ void CameraDirectLinearTransformation::init(const std::vector<Vector3d> &x, cons
     this->R.setZero();
     this->t.setZero();
     this->C.setZero();
-    this->OpenGLModelViewMatrix.setIdentity();
-    this->OpenGLProjectionMatrix.matrix().setZero();
-    this->OpenGLModelViewProjectionMatrix.matrix().setZero();
+    this->gl_ModelView_Matrix.setIdentity();
+    this->gl_Projection_Matrix.matrix().setZero();
+    this->gl_ModelViewProjection_Matrix.matrix().setZero();
 
     unsigned int n=x.size();
     Eigen::MatrixXd A;
@@ -135,7 +135,7 @@ OpenGL ModelViewProjection=
             this->computeOpenGLProjectionMatrix(x0,y0,width,height,znear,zfar);
             this->computeOpenGLModelViewMatrix(this->R, this->t);
 
-            this->OpenGLModelViewProjectionMatrix = OpenGLProjectionMatrix* OpenGLModelViewMatrix;
+            this->gl_ModelViewProjection_Matrix = gl_Projection_Matrix* gl_ModelView_Matrix;
             this->ModelViewProjectionInitialized=true;
         }
     }
@@ -196,18 +196,23 @@ void CameraDirectLinearTransformation::computeOpenGLProjectionMatrix(double x0,d
     // This follows the OpenGL convention where positive Y coordinates goes down
     if (windowCoordsYUp)
     {
-        this->OpenGLProjectionMatrix.matrix() <<  2.0*K(0,0)/width, -2.0*K(0,1)/width, (-2.0*K(0,2)+width+2.0*x0)/width, 0 ,
+        this->gl_Projection_Matrix.matrix() <<  2.0*K(0,0)/width, -2.0*K(0,1)/width, (-2.0*K(0,2)+width+2.0*x0)/width, 0 ,
                 0,             -2.0*K(1,1)/height,(-2.0*K(1,2)+height+2.0*y0)/height, 0,
                 0,0,q,qn,
                 0,0,-1,0;
     }
     else // y_down convention
     {
-        this->OpenGLProjectionMatrix.matrix() << 2.0*K(0,0)/width, -2.0*K(0,1)/width, (-2.0*K(0,2)+width+2.0*x0)/width, 0 ,
+        this->gl_Projection_Matrix.matrix() << 2.0*K(0,0)/width, -2.0*K(0,1)/width, (-2.0*K(0,2)+width+2.0*x0)/width, 0 ,
                 0,              2.0*K(1,1)/height,( 2.0*K(1,2)-height+2.0*y0)/height, 0,
                 0,0,q,qn,
                 0,0,-1,0;
     }
+
+    // Compute the inverses
+    this->gl_ModelViewInverse_Matrix = this->gl_ModelView_Matrix.inverse();
+    this->gl_ModelViewProjectionInverse_Matrix = this->gl_ModelViewProjection_Matrix.inverse();
+    this->gl_ProjectionInverse_Matrix = this->gl_Projection_Matrix.inverse();
 }
 
 /**
@@ -260,9 +265,9 @@ void CameraDirectLinearTransformation::rq3(const Matrix3d &A, Matrix3d &R, Matri
  */
 void CameraDirectLinearTransformation::computeOpenGLModelViewMatrix(const Eigen::Matrix3d &Rot, const Vector3d &trans)
 {
-    this->OpenGLModelViewMatrix.setIdentity();
-    this->OpenGLModelViewMatrix.linear().matrix() << Rot;
-    this->OpenGLModelViewMatrix.translation() << trans;
+    this->gl_ModelView_Matrix.setIdentity();
+    this->gl_ModelView_Matrix.linear().matrix() << Rot;
+    this->gl_ModelView_Matrix.translation() << trans;
   /*
     Eigen::Affine3d CoordXForm = Eigen::Affine3d::Identity();
     CoordXForm.matrix().coeffRef(1,1)=-1; // flip Y coordinate in eye space (OpenGL has +Y as up, Hartley Zisserman has -Y)
@@ -430,3 +435,17 @@ void CameraDirectLinearTransformation::decomposePMatrix2(const Eigen::Matrix<dou
     R.col(1)=-R.col(1);
 }
 */
+
+void CameraDirectLinearTransformation::info()
+{
+    std::cout << "HZ 3x4 projection matrix=\n" << this->getProjectionMatrix() << endl;
+    std::cout << "Intrinsinc camera matrix=\n" <<this->getIntrinsicMatrix() << endl;
+    std::cout << "Extrinsic camera matrix=\n"<< this->getRotationMatrix() << endl << endl;
+    std::cout << "Camera Center C=" << this->getCameraPositionWorld().transpose() << endl;
+    std::cout << "Camera t= " << this->getT().transpose() << endl;
+    std::cout << "Camera Principal axis= " << this->getPrincipalAxis().transpose() << endl;
+    std::cout << "Camera Principal point=" << this->getPrincipalPoint().transpose() << endl ;
+    std::cout << "OpenGL ModelViewMatrix=\n" << this->getOpenGLModelViewMatrix().matrix() << endl;
+    std::cout << "OpenGL Projection=\n" << this->getOpenGLProjectionMatrix().matrix() << endl;
+    //std::cout << "Reproduction error= " << this->getReprojectionError(this->getProjectionMatrix(),this->points2D,this->points3D) << endl;
+}

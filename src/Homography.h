@@ -102,14 +102,14 @@ public:
     {
         eigen_assert(DecompositionComputed && "You did not asked for the P = K[R t] matrix decomposition, explicitly ask in constructor");
         eigen_assert(ModelViewProjectionInitialized && "You did not asked for the OpenGL ModelViewProjection matrix to be computed, explicitly ask in constructor and provide appropriate parameters");
-        return this->OpenGLModelViewMatrix;
+        return this->gl_ModelView_Matrix;
     }
 
     const Eigen::Projective3d &getOpenGLProjectionMatrix()
     {
         eigen_assert(DecompositionComputed && "You did not asked for the P = K[R t] matrix decomposition, explicitly ask in constructor");
         eigen_assert(ModelViewProjectionInitialized && "You did not asked for the OpenGL ModelViewProjection matrix to be computed, explicitly ask in constructor and provide appropriate parameters");
-        return this->OpenGLProjectionMatrix;
+        return this->gl_Projection_Matrix;
     }
 
     /**
@@ -128,7 +128,7 @@ public:
     {
         eigen_assert(DecompositionComputed && "You did not asked for the P = K[R t] matrix decomposition, explicitly ask in constructor");
         eigen_assert(ModelViewProjectionInitialized && "You did not asked for the OpenGL ModelViewProjection matrix to be computed, explicitly ask in constructor and provide appropriate parameters");
-        return this->OpenGLModelViewProjectionMatrix;
+        return this->gl_ModelViewProjection_Matrix;
     }
 
     const Vector2d &getPrincipalPoint()
@@ -149,30 +149,36 @@ public:
     // OLD DEPRECATED, I HAVE CHECKED THE RESULTS WITH THE Hartley Zisserman and with the Andrew Straw implementation too
     //void decomposePMatrix2(const Eigen::Matrix<double,3,4> &_P);
 
-    void info()
-    {
-        std::cout << "HZ 3x4 projection matrix=\n" << this->getProjectionMatrix() << endl;
-        std::cout << "Intrinsinc camera matrix=\n" <<this->getIntrinsicMatrix() << endl;
-        std::cout << "Extrinsic camera matrix=\n"<< this->getRotationMatrix() << endl << endl;
-        std::cout << "Camera Center C=" << this->getCameraPositionWorld().transpose() << endl;
-        std::cout << "Camera t= " << this->getT().transpose() << endl;
-        std::cout << "Camera Principal axis= " << this->getPrincipalAxis().transpose() << endl;
-        std::cout << "Camera Principal point=" << this->getPrincipalPoint().transpose() << endl ;
-        std::cout << "OpenGL ModelViewMatrix=\n" << this->getOpenGLModelViewMatrix().matrix() << endl;
-        std::cout << "OpenGL Projection=\n" << this->getOpenGLProjectionMatrix().matrix() << endl;
-        //std::cout << "Reproduction error= " << this->getReprojectionError(this->getProjectionMatrix(),this->points2D,this->points3D) << endl;
-    }
-private:
+    void info();
 
+
+    const Eigen::Projective3d &getOpenGLModelViewProjectionInverseMatrix() const
+    {
+        eigen_assert(DecompositionComputed && "You did not asked for the P = K[R t] matrix decomposition, explicitly ask in constructor");
+        eigen_assert(ModelViewProjectionInitialized && "You did not asked for the OpenGL ModelViewProjection matrix to be computed, explicitly ask in constructor and provide appropriate parameters");
+        return gl_ModelViewProjectionInverse_Matrix;
+    }
+
+    const Eigen::Projective3d &getOpenGLProjectionInverseMatrix() const
+    {
+        eigen_assert(DecompositionComputed && "You did not asked for the P = K[R t] matrix decomposition, explicitly ask in constructor");
+        eigen_assert(ModelViewProjectionInitialized && "You did not asked for the OpenGL ModelViewProjection matrix to be computed, explicitly ask in constructor and provide appropriate parameters");
+        return gl_ProjectionInverse_Matrix;
+    }
+
+    const Eigen::Affine3d &getOpenGLModelViewInverseMatrix() const
+    {
+        eigen_assert(DecompositionComputed && "You did not asked for the P = K[R t] matrix decomposition, explicitly ask in constructor");
+        eigen_assert(ModelViewProjectionInitialized && "You did not asked for the OpenGL ModelViewProjection matrix to be computed, explicitly ask in constructor and provide appropriate parameters");
+        return gl_ModelViewInverse_Matrix;
+    }
+
+private:
     void rq3(const Matrix3d &A, Matrix3d &R, Matrix3d& Q);
     /**
      * @brief P The matrix x = P X that projects 3D world homogenous points to their images
      */
     Eigen::Matrix<double,3,4> P;
-    /**
-     * @brief ModelViewProjectionMatrix The OpenGL matrix computed starting from P
-     */
-    Eigen::Projective3d OpenGLModelViewProjectionMatrix;
     /**
      * @brief R The orthogonal rotation matrix obtained decomposing P, it's part of the extrinsic pose P= K [R t]
      */
@@ -200,8 +206,34 @@ private:
      */
     Vector3d principalVector;
 
-    Affine3d OpenGLModelViewMatrix;
-    Projective3d OpenGLProjectionMatrix;
+    // OpenGL computed matrices
+    /**
+     * @brief gl_ModelView_Matrix
+     */
+    Affine3d gl_ModelView_Matrix;
+    /**
+     * @brief gl_Projection_Matrix
+     */
+    Projective3d gl_Projection_Matrix;
+    /**
+     * @brief ModelViewProjectionMatrix The OpenGL matrix computed starting from P
+     */
+    Eigen::Projective3d gl_ModelViewProjection_Matrix;
+
+    // and their inverses
+    /**
+     * @brief gl_ModelViewInverse_Matrix
+     */
+    Eigen::Affine3d gl_ModelViewInverse_Matrix;
+    /**
+     * @brief gl_ProjectionInverse_Matrix
+     */
+    Eigen::Projective3d gl_ProjectionInverse_Matrix;
+    /**
+     * @brief gl_ModelViewProjectionInverse_Matrix
+     */
+    Eigen::Projective3d gl_ModelViewProjectionInverse_Matrix;
+
     bool ModelViewProjectionInitialized;
     bool DecompositionComputed;
 };
