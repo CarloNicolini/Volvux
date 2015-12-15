@@ -1,8 +1,7 @@
-function P=projectionmatrix(r,l,t,b,n,f)
+function P=glfrustum(l,r,b,t,n,f)
 
 w = r-l;
 h = t-b;
-
 
 P = [ 2*n/w 0       (r+l)/(r-l)  0;
       0     2*n/h   (t+b)/(t-b)  0;

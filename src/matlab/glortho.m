@@ -1,4 +1,4 @@
-function P = orthographicprojectionmatrix(r,l,t,b,n,f)
+function P = glortho(l,r,b,t,n,f)
 
 w = r-l;
 h = t-b;
