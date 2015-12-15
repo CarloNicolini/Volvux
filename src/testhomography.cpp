@@ -14,13 +14,14 @@
 #include "Timer.h"
 #include "Homography.h"
 #include "VRCamera.h"
+#include "VolumetricMeshIntersection.h"
 
 using namespace Eigen;
 using namespace std;
 
-#define CALIBRECT_EDGE_BOTTOM 7.1
-#define CALIBRECT_EDGE_TOP 5
-#define CALIBRECT_HEIGHT 1.5
+#define CALIBRECT_EDGE_BOTTOM 70.0
+#define CALIBRECT_EDGE_TOP 50.0
+#define CALIBRECT_HEIGHT 10.0
 
 stlalignedvector4d points3D;
 
@@ -34,6 +35,12 @@ static const double calibrationtoy[]  = {0,0,0,
                                          CALIBRECT_EDGE_TOP/2,  CALIBRECT_HEIGHT, -CALIBRECT_EDGE_TOP/2,
                                          -CALIBRECT_EDGE_TOP/2, CALIBRECT_HEIGHT, -CALIBRECT_EDGE_TOP/2
                                         };
+
+int iWidth=768;
+int iHeight=768;
+int iDepth=768;
+
+VolumetricMeshIntersection surface;
 
 static void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
 {
@@ -51,6 +58,14 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     {
         glfwSetWindowShouldClose(window, GL_TRUE);
     }
+    if ( (key == GLFW_KEY_A ) && action == GLFW_REPEAT || action == GLFW_PRESS)
+    {
+        surface.meshStruct.rotationAngle += 0.05;
+    }
+    if ( (key == GLFW_KEY_Z ) && action == GLFW_REPEAT || action == GLFW_PRESS)
+    {
+        surface.meshStruct.rotationAngle -= 0.05;
+    }
 }
 
 static void mouse_entered_callback(GLFWwindow *window, int entered)
@@ -58,7 +73,7 @@ static void mouse_entered_callback(GLFWwindow *window, int entered)
     printf("%d\n",entered);
 }
 
-GLFWwindow *initOpenGLContext(const int width=1024, const int height=768, const int refreshRate=60, const bool gamemode=false, const bool stereo=false, const int fsaaSamples=1)
+GLFWwindow *initOpenGLContext(const int width=1024, const int height=768, const int refreshRate=60, const bool gamemode=false, const bool stereo=false, const int fsaaSamples=0)
 {
     GLFWwindow* window;
     int widthMM=0;
@@ -129,30 +144,16 @@ GLFWwindow *initOpenGLContext(const int width=1024, const int height=768, const 
 
 void drawObject()
 {
-    double e=10;
-
-    glLineWidth(1.0f);
+    glPushMatrix();
     glPointSize(5);
-
-    glBegin(GL_LINE_LOOP);
-    glColor3d(0,0,1);
-    glVertex3d(-e,0,e);
-    glVertex3d(e,0,e);
-    glVertex3d(e,0,-e);
-    glVertex3d(-e,0,-e);
-    glEnd();
-
+    glPushAttrib(GL_COLOR_BUFFER_BIT | GL_POINT_BIT);
     glBegin(GL_POINTS);
+    glColor3d(0,1,1);
     for (int i=0; i<9; i++)
         glVertex3dv(points3D.at(i).data());
     glEnd();
-
-    glutWireCube(10);
-}
-
-void draw2Dpoints()
-{
-
+    glPopAttrib();
+    glPopMatrix();
 }
 
 void drawFrame(GLFWwindow *window, CameraDirectLinearTransformation &cdlt)
@@ -163,22 +164,49 @@ void drawFrame(GLFWwindow *window, CameraDirectLinearTransformation &cdlt)
     glfwGetFramebufferSize(window, &width, &height);
     ratio = width / (float) height*100;
 
+    Projective3d Pp = cdlt.getOpenGLProjectionMatrix();
+    Projective3d PpInv = cdlt.getOpenGLProjectionInverseMatrix();
+    //Projective3d Po = cdlt.getOpenGLOrthographicProjectionMatrix();
+    //Projective3d PoInv = cdlt.getOpenGLOrthographicProjectionMatrix().inverse();
+    Affine3d MV = cdlt.getOpenGLModelViewMatrix();
+
+    Projective3d P = Pp;
+
     glViewport(0, 0, width, height);
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(1,1,1,1);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glLoadMatrixd(cdlt.getOpenGLProjectionMatrix().data());
-    //glOrtho(-ratio, ratio, -100.f, 100.f, 100.f, -100.f);
+    // Apply GL_PROJECTION matrix
+    //glLoadMatrixd(P.data());
+    //glOrtho(-ratio, ratio, -50.f, 50.f, 50.f, -50.f);
+    VRCamera cam; cam.init(Screen(500,500,0,0,-500),false);
+    cam.setEye(Vector3d(0,0,0));
+    // Apply modelview matrix
     glMatrixMode(GL_MODELVIEW);
-
-    //glLoadIdentity();
-    Affine3d MV = cdlt.getOpenGLModelViewMatrix();
-
-    glLoadMatrixd(MV.data());
-
-    //glRotatef((float) glfwGetTime() * 50.f, 1.0f, 0.f, 1.f);
+    //surface.draw();
     drawObject();
+}
+
+void init()
+{
+    surface.resize(iWidth,iHeight,iDepth);
+    surface.loadObj("../data/objmodels/helicoid.obj");
+    const GLfloat white[]={1.0f,0.0f,0.0f,1.0f};
+    surface.setUniformColor(white);
+    int nspheres=1000;
+    int minRadius=10;
+    int maxRadius=50;
+    surface.fillVolumeWithSpheres(nspheres,minRadius,maxRadius);
+    surface.initializeTexture();
+    surface.initializeSurfaceShaders();
+
+    surface.meshStruct.radius=120.0;
+    surface.meshStruct.height=1.0;
+    surface.meshStruct.rotationAngle=0.0;
+    surface.meshStruct.offsetX=0.0;
+    surface.meshStruct.offsetY=0.0;
+    surface.meshStruct.offsetZ=0.0;
 }
 
 int main(int argc, char *argv[])
@@ -202,17 +230,16 @@ int main(int argc, char *argv[])
     points2d.push_back(Vector3d(448,458,1));
 
     CameraDirectLinearTransformation cdlt;
-    cdlt.init(points2d,points3D,true,true,0,0,1024,768,0.1,1000);
+    cdlt.init(points2d,points3D,true,true,0,0,1024,768,0.01,1500);
     cdlt.info();
 
-    GLFWwindow *window = initOpenGLContext(1024,768,60,false,false,1);
+    GLFWwindow *window = initOpenGLContext(1024,768,60,false,false,0);
 
     glewInit();
-    glutInit(&argc, argv);
-
+    //glutInit(&argc, argv);
+    //init();
     glfwSetKeyCallback(window, key_callback);
     glfwSetCursorPosCallback(window, cursor_pos_callback);
-
 
     while ( !glfwWindowShouldClose(window) )
     {

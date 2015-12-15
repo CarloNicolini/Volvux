@@ -56,7 +56,7 @@ class CameraDirectLinearTransformation
 {
 public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-    CameraDirectLinearTransformation(){};
+    CameraDirectLinearTransformation();
     // Utility constructors
     CameraDirectLinearTransformation(const std::vector<Eigen::Vector3d> &x, const stlalignedvector4d &X, bool decomposeProjectionMatrix=false, bool computeOpenGLMatrices=false, double x0=0.0, double y0=0.0, int width=640, int height=480, double znear=0.1, double zfar=1000.0);
 
