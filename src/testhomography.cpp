@@ -229,6 +229,20 @@ int main(int argc, char *argv[])
     points2d.push_back(Vector3d(443,329,1));
     points2d.push_back(Vector3d(448,458,1));
 
+    cout << "[ " ;
+    for (int i=0; i<9; ++i)
+    {
+        cout << points2d.at(i).transpose() << " ;" << endl;
+    }
+    cout << "]" << endl;
+
+    cout << "[ " ;
+    for (int i=0; i<9; ++i)
+    {
+        cout << points3D.at(i).transpose() << " ;" << endl;
+    }
+    cout << "]" << endl;
+exit(0);
     CameraDirectLinearTransformation cdlt;
     cdlt.init(points2d,points3D,true,true,0,0,1024,768,0.01,1500);
     cdlt.info();
