@@ -72,21 +72,16 @@ VolvuxWidget::VolvuxWidget(QWidget *parent) :
 
     drawTextureCube=true;
 
-    isDrawingFrustum=false;
-    useCalibratedGLView=false;
+    isDrawingFrustum=true;
+    useCalibratedGLView=true;
     useOffscreenRendering=false;
 
-    this->projectorPixelWidth =PROJECTOR_RESOLUTION_WIDTH;
-    this->projectorPixelHeight= PROJECTOR_RESOLUTION_HEIGHT;
     this->slicesNumber=PROJECTOR_SLICES_NUMBER;
-    this->resize(projectorPixelWidth,projectorPixelHeight);
-
-    this->eyeZ=-7500.0;
-    emit eyeZChanged(eyeZ);
+    this->resize(PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT);
 
     // Setup the calibration camera
     //loadCameraSettings();
-    this->setCameraParameters(3.0f,200.0f,30000.0f);
+    //this->setCameraParameters(3.0f,200.0f,30000.0f);
     // Set the current focus in this OpenGL window
     //this->setFocus();
 
@@ -114,12 +109,7 @@ VolvuxWidget::~VolvuxWidget()
         delete camCalibration;
 }
 
-/**
- * @brief setCameraParameters
- * @param fieldOfView
- * @param zNear
- * @param zFar
-**/
+/*
 void VolvuxWidget::setCameraParameters(double _fieldOfView, double _zNear, double _zFar)
 {
     this->FOV=_fieldOfView;
@@ -129,33 +119,19 @@ void VolvuxWidget::setCameraParameters(double _fieldOfView, double _zNear, doubl
     emit zFarChanged(zFar);
     emit fovChanged(FOV);
 }
+*/
 
-/**
- * @brief VolvuxWidget::onZFarChanged
- * @param val
- */
-void VolvuxWidget::onZFarChanged(double val)
+void VolvuxWidget::setCamera(CameraDirectLinearTransformation &cam)
 {
-    this->zFar = val;
+    this->camCalibration = &cam;
+    /*
+    glMatrixMode(GL_PROJECTION);
+    glLoadMatrixd(cam.getOpenGLProjectionMatrix().data());
+    glMatrixMode(GL_MODELVIEW);
+    glLoadMatrixd(cam.getOpenGLModelViewMatrix().data());
+    */
 }
 
-/**
- * @brief VolvuxWidget::onZNearChanged
- * @param val
- */
-void VolvuxWidget::onZNearChanged(double val)
-{
-    this->zNear = val;
-}
-
-/**
- * @brief VolvuxWidget::setEyeZ
- * @param val
- */
-void VolvuxWidget::onEyeZChanged(double val)
-{
-    this->eyeZ=val;
-}
 
 /**
  * @brief applyOpenGLCameraFOV
@@ -165,30 +141,7 @@ void VolvuxWidget::onEyeZChanged(double val)
  */
 void VolvuxWidget::applyOpenGLCameraFOV()
 {
-#ifdef MONA
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    /*
-    cam.setNearFarPlanes(this->zNear,this->zFar);
-    cam.setOrthoGraphicProjection(true);
-    cam.init(Screen(431.0,272.0,0.0,0.0,eyeZ));
-    cam.setEye(Vector3d(0,0,0));
-    */
-    gluPerspective(this->FOV, (float)this->width() / (float)this->height(), this->zNear,this->zFar);
-    //glOrtho(eyeZ,-eyeZ,eyeZ,-eyeZ,0.1,10000);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-#endif
-    double ratio = (float)this->projectorPixelHeight/(float)this->projectorPixelWidth;
-    cam.setOrthoGraphicProjection(true);
-    this->cam.init(Screen(500.0,500.0*ratio,0,0,this->eyeZ));
-    this->cam.setNearFarPlanes(this->zNear,this->zFar);
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    cam.setEye(Vector3d(0,0,0));
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+    // TO IMPLEMENT
 }
 
 
@@ -307,7 +260,6 @@ void VolvuxWidget::initializeGL()
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glPointSize(0.1f);
     glLineWidth(0.1f);
-    arcball.setWidthHeight(this->width(),this->height());
     // Initializing frame buffer object
     // Here we create a framebuffer object with the smallest necessary precision, i.e. GL_RED in order to make
     // the subsequent calls to glReadPixels MUCH faster!
@@ -339,6 +291,8 @@ void VolvuxWidget::draw()
         applyOpenGLCameraFOV();
     }
 
+    //glutWireTeapot(10);
+    /*
     glEnable(GL_TEXTURE_3D);
     volume->meshStruct.shader->begin();
     volume->meshStruct.shader->setUniform4f(static_cast<GLcharARB*>((char*)"uniformColor"),1.0f,1.0f,1.0f,1.0f);
@@ -358,7 +312,7 @@ void VolvuxWidget::draw()
     glPopMatrix();
     volume->meshStruct.shader->end();
     glDisable(GL_TEXTURE_3D);
-
+    */
     /*
     glPushMatrix();
     glLoadIdentity();
@@ -367,18 +321,7 @@ void VolvuxWidget::draw()
     glRotated(90,1,0,0);
     volume->draw();
     glPopMatrix();
-*/
-    if ( drawTextureCube )
-    {
-        glPushMatrix();
-        glLoadIdentity();
-        glTranslated(0,0,this->eyeZ);
-        arcball.applyRotationMatrix();
-        glRotated(90,1,0,0);
-        glTranslated(volume->meshStruct.offsetX, volume->meshStruct.offsetY, volume->meshStruct.offsetZ);
-        //glutWireCube(volume->meshStruct.radius*2);
-        glPopMatrix();
-    }
+    */
 }
 
 /**
@@ -508,83 +451,6 @@ void VolvuxWidget::resizeGL(int width, int height)
 {
     glViewport(0, 0, (GLsizei) width, (GLsizei) height); // Set our viewport to the size of our window
     applyOpenGLCameraFOV();
-    arcball.setWidthHeight(this->width(),this->height());
-}
-
-/**
- * @brief VolvuxWidget::wheelEvent
- * @param e
- */
-void VolvuxWidget::wheelEvent(QWheelEvent *e)
-{
-    eyeZ+=e->delta()*0.1*eyeZ/100.0;
-    emit eyeZChanged(eyeZ);
-}
-
-/**
- * @brief VolvuxWidget::keyPressEvent
- * @param e
- */
-void VolvuxWidget::keyPressEvent(QKeyEvent *e)
-{
-    switch ( e->key() )
-    {
-    case Qt::Key_Q:
-    {
-        QApplication::exit(0);
-        break;
-    }
-    case Qt::Key_Plus:
-    {
-        volume->meshStruct.rotationAngle+=(2.0*M_PI)/this->slicesNumber;
-        break;
-    }
-    case Qt::Key_Minus:
-    {
-        volume->meshStruct.rotationAngle-=(2.0*M_PI)/this->slicesNumber;
-        break;
-    }
-    }
-}
-
-/**
- * @brief VolvuxWidget::mousePressEvent
- * @param event
- */
-void VolvuxWidget::mousePressEvent(QMouseEvent *event)
-{
-    this->setFocus();
-    if (event->button() == Qt::LeftButton)
-    {
-        arcball.startRotation(event->x(),event->y());
-    }
-}
-
-/**
- * @brief VolvuxWidget::mouseDoubleClickEvent
- */
-
-void VolvuxWidget::mouseDoubleClickEvent(QMouseEvent *)
-{
-    arcball.reset();
-}
-
-/**
- * @brief VolvuxWidget::mouseReleaseEvent
- * @param event
- */
-void VolvuxWidget::mouseReleaseEvent(QMouseEvent *event)
-{
-    arcball.stopRotation();
-}
-
-/**
- * @brief VolvuxWidget::mouseMoveEvent
- * @param event
- */
-void VolvuxWidget::mouseMoveEvent(QMouseEvent *event)
-{
-    arcball.updateRotation(event->x(),event->y());
 }
 
 /**
@@ -640,7 +506,6 @@ void VolvuxWidget::setSlicesNumber(int nSlices)
  */
 void VolvuxWidget::randomizeSpheres(bool useRandomDots, int nSpheres, int minRadius, int maxRadius)
 {
-
     volume->setTexture3DfillValue(0);
     if (useRandomDots)
         volume->fillVolumeWithRandomDots(nSpheres,minRadius);
@@ -649,39 +514,6 @@ void VolvuxWidget::randomizeSpheres(bool useRandomDots, int nSpheres, int minRad
 
     volume->meshStruct.showMesh=false;
     volume->initializeTexture();
-}
-
-/**
- * @brief VolvuxWidget::loadBinvox
- * @param filename
- */
-void VolvuxWidget::loadBinvox(const string &filename)
-{
-    volume->setTexture3DfillValue(0);
-    volume->loadTexture3DFile(filename);
-    QString informations("Texture size ");
-    informations += "[ "+QString::number(this->volume->getTextureSizeX())+","+QString::number(this->volume->getTextureSizeY())+","+QString::number(this->volume->getTextureSizeZ())+ "]";
-    emit binVoxLoaded(informations);
-    volume->initializeTexture();
-}
-
-/**
- * @brief VolvuxWidget::toggleStandardGL
- * @param val
- */
-void VolvuxWidget::toggleStandardGL(bool val)
-{
-    isDrawingFrustum=!isDrawingFrustum;
-    this->arcball.reset();
-}
-
-/**
- * @brief VolvuxWidget::toggleUseCalibratedGLView
- */
-void VolvuxWidget::toggleUseCalibratedGLView()
-{
-    useCalibratedGLView=!useCalibratedGLView;
-    this->arcball.reset();
 }
 
 /**
@@ -705,35 +537,6 @@ void VolvuxWidget::onSurfaceCurvatureChanged(double val)
     this->curvature=val;
 }
 
-/**
- * @brief VolvuxWidget::computeCameraCalibrationMatrices
- * @param points2d
- * @param points3d
- */
-void VolvuxWidget::computeCameraCalibrationMatrices(const QString &points2Dfilename,const QString &points3Dfilename)
-{
-    // First load the 2D and 3D points
-    int width = PROJECTOR_RESOLUTION_WIDTH;
-    int height = PROJECTOR_RESOLUTION_HEIGHT;
-    bool decomposePMatrix = true;
-    bool computeOpenGLMatrices = true;
-    camCalibration = new CameraDirectLinearTransformation(points2Dfilename.toStdString(),points3Dfilename.toStdString(),decomposePMatrix,computeOpenGLMatrices,0,0,width,height,this->zNear,this->zFar);
-
-    this->Projection = camCalibration->getOpenGLProjectionMatrix().matrix();
-    this->ModelView = camCalibration->getOpenGLModelViewMatrix().matrix();
-
-    cout << "HZ 3x4 projection matrix=\n" << camCalibration->getProjectionMatrix() << endl;
-    cout << "Intrinsinc camera matrix=\n" <<camCalibration->getIntrinsicMatrix() << endl;
-    cout << "Extrinsic camera matrix=\n"<< camCalibration->getRotationMatrix() << endl << endl;
-    cout << "Camera Center C=" << camCalibration->getCameraPositionWorld().transpose() << endl;
-    cout << "Camera t= " << camCalibration->getT().transpose() << endl;
-    cout << "Camera Principal axis= " << camCalibration->getPrincipalAxis().transpose() << endl;
-    cout << "Camera Principal point=" << camCalibration->getPrincipalPoint().transpose() << endl ;
-    cout << "OpenGL ModelViewMatrix=\n" << camCalibration->getOpenGLModelViewMatrix().matrix() << endl;
-    cout << "OpenGL Projection=\n" << camCalibration->getOpenGLProjectionMatrix().matrix() << endl;
-    cout << "Reproduction error= " << camCalibration->getReprojectionError(camCalibration->getProjectionMatrix(),camCalibration->points2D,camCalibration->points3D) << endl;
-}
-
 void VolvuxWidget::initVolume()
 {
     this->volume = new VolumetricMeshIntersection(TEXTURE_RESOLUTION_X, TEXTURE_RESOLUTION_Y, TEXTURE_RESOLUTION_Z);
@@ -749,3 +552,15 @@ void VolvuxWidget::initVolume()
     this->volume->meshStruct.z = 0.0;
     this->volume->meshStruct.thickness = 0.5f;
 }
+
+/*
+void VolvuxWidget::loadBinvox(const string &filename)
+{
+    volume->setTexture3DfillValue(0);
+    volume->loadTexture3DFile(filename);
+    QString informations("Texture size ");
+    informations += "[ "+QString::number(this->volume->getTextureSizeX())+","+QString::number(this->volume->getTextureSizeY())+","+QString::number(this->volume->getTextureSizeZ())+ "]";
+    emit binVoxLoaded(informations);
+    volume->initializeTexture();
+}
+*/

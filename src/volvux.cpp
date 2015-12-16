@@ -25,7 +25,7 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
-#include "VolvuxMainWindow.h"
+//#include "VolvuxMainWindow.h"
 #include "StackedWidget.h"
 
 #ifdef WIN32

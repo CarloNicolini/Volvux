@@ -35,8 +35,8 @@
 #include <stdexcept>
 
 #include "VolvuxExpWidget.h"
-#include "StackedWidgetHelper.h"
-#include "CalibrationHelper.h"
+//#include "StackedWidgetHelper.h"
+//#include "CalibrationHelper.h"
 
 #include "ui_VolvuxMainWindow.h"
 
@@ -58,8 +58,8 @@ class VolvuxMainWindow : public QMainWindow
 public:
     explicit VolvuxMainWindow(QWidget *parent = 0);
     ~VolvuxMainWindow();
-    void setStackedWidgetHelper(StackedWidgetHelper* swhelper);
-    void setCalibrationHelper(CalibrationHelper *calib);
+    //void setStackedWidgetHelper(StackedWidgetHelper* swhelper);
+    //void setCalibrationHelper(CalibrationHelper *calib);
 protected:
     void keyPressEvent(QKeyEvent *event) ;
     bool eventFilter(QObject *, QEvent *) ;
@@ -89,51 +89,27 @@ private slots:
     // Projector initialization/release/start/stop slots
     void onPushButtonProjectorStartProjectionClicked();
     void onPushButtonProjectorStopProjectionClicked();
-    void onPushButtonProjectorInitializeClicked();
-    void onPushButtonProjectorReleaseClicked();
     void onPushButtonUploadSequenceClicked();
-
-    // Projector parameters slots
-    void onSpinboxProjectorNSlicesChanged(int value);
-    void onspinBoxProjectorLEDcurrentChanged(int current);
-    void onSpinBoxProjectorLEDpercentageChanged(double percentage);
-    void onSpinBoxProjectorMicrosecondsPerFrameChanged(int value);
-    void onSpinboxProjectorMicrosecondsPerRoundChanged(int value);
-
-    // Camera calibration slots
-    void onCameraFOVChanged(double fov);
-    void onCameraZNearChanged(double znear);
-    void onCameraZFarChanged(double zfar);
-    void onCheckboxcameraviewmodeClicked(bool checked);
-    void onCheckboxusecalibratedviewClicked(bool checked);
-    void onPushButtonCalibrateClicked();
-
-    // Motor control slots
-    void onPushButtonMotorInitializeClicked();
-    void onPushButtonMotorStartClicked();
-    void onPushButtonMotorStopClicked();
-    void onSpinBoxFlickerFrequencyChanged(double flickerFrequency);
-    void startRotation(int speed);
 
     // Experiment slots
     void onPushButtonExperimentStartClicked();
     void triggerFramesGeneration(double curvature);
     void onRandomizationMethodChanged(int randomVal);
 
+    // Calibration slots
+    void onCalibrationEmitted(CameraDirectLinearTransformation &cam);
 private:
-    void initializeTabProjectorQConnections();
     void initializeTabSceneQConnections();
-    void initializeTabCameraCalibrationQConnections();
+    void initializeTabProjectorQConnections();
     void initializeTabExperimentQConnections();
-    void initializeTabMotorQConnections();
     void loadSettings();
     void saveSettings();
 
     Ui::VolvuxMainWindow *ui;
     QPointer<VolvuxExpWidget> exp;
 
-    StackedWidgetHelper *helper;
-    CalibrationHelper *calib;
+    //StackedWidgetHelper *helper;
+    //CalibrationHelper *calib;
 
 #if defined (SMI_SUPPORT) && (WIN32)
     INTEGMOTORINTERFACELib::ISMICommPtr CommInterface;

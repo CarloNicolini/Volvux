@@ -29,7 +29,6 @@ ParametersLoader.cpp
 Screen.cpp
 Timer.cpp
 TinyObjLoader.cpp
-#Util.cpp
 VolumetricMeshIntersection.cpp
 VolumetricSurfaceIntersection.cpp
 VRCamera.cpp)
@@ -54,10 +53,10 @@ endif(ALP_SUPPORT)
 #endif(SMI_SUPPORT)
 
 # Volvux Main files
-set(VOLVUX_HDRS VolvuxExpWidget.h  VolvuxMainWindow.h VolvuxWidget.h VolvuxCalibrationWidget.h StackedWidget.h)
-set(VOLVUX_SRCS VolvuxExpWidget.cpp  VolvuxMainWindow.cpp VolvuxWidget.cpp VolvuxCalibrationWidget.cpp StackedWidget.cpp)
-set(VOLVUX_FORMS VolvuxMainWindow.ui StackedWidget.ui)
-set(VOLVUX_HELPERS StackedWidgetHelper.cpp StackedWidgetHelper.h CalibrationHelper.cpp CalibrationHelper.h)
+set(VOLVUX_HDRS VolvuxCalibrationWidget.h StackedWidget.h ProjectorWidgetPage.h CalibrationWidgetPage.h VolvuxWidgetPage.h VolvuxExpWidget.h VolvuxWidget.h) #VolvuxExpWidget.h  VolvuxMainWindow.h VolvuxWidget.h 
+set(VOLVUX_SRCS VolvuxCalibrationWidget.cpp StackedWidget.cpp ProjectorWidgetPage.cpp CalibrationWidgetPage.cpp VolvuxWidgetPage.cpp VolvuxExpWidget.cpp VolvuxWidget.cpp ) #VolvuxExpWidget.cpp  VolvuxMainWindow.cpp VolvuxWidget.cpp 
+set(VOLVUX_FORMS StackedWidget.ui ProjectorWidgetPage.ui CalibrationWidgetPage.ui VolvuxWidgetPage.ui) #VolvuxMainWindow.ui
+#set(VOLVUX_HELPERS StackedWidgetHelper.cpp StackedWidgetHelper.h CalibrationHelper.cpp CalibrationHelper.h)
 
 if(QT5_SUPPORT)
     # Tell CMake to run moc when necessary:

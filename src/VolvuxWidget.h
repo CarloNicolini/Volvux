@@ -39,9 +39,9 @@
 #include "VRCamera.h"
 #include "Screen.h"
 #include "ParametersLoader.h"
+#include "CalibrationWidgetPage.h"
+//#include "CalibrationHelper.h"
 
-#define PROJECTOR_RESOLUTION_WIDTH 1024
-#define PROJECTOR_RESOLUTION_HEIGHT 768
 #define PROJECTOR_SLICES_NUMBER 16
 
 #define TEXTURE_RESOLUTION_X 512
@@ -75,46 +75,33 @@ public:
     QSize sizeHint() const;
 
     // Object methods
+    void initVolume();
+    //void loadBinvox(const std::string &filename);
+
     void setHelicoidOffset(double x, double y, double z);
     void setObjectOffset(double x, double y, double z);
     void setObjectScale(double objScale);
     void setHelicoidZeroColor(int value);
     void randomizeSpheres(bool useRandomDots, int nSpheres, int minRadius, int maxRadius);
-    void initVolume();
-    void loadBinvox(const std::string &filename);
+
     // View methods
+    void setCamera(CameraDirectLinearTransformation &cam);
     void setCameraParameters(double _fieldOfView, double _zNear, double _zFar);
     void setSlicesNumber(int nSlices);
     void setCurrentGLColor(Qt::GlobalColor val);
-    void toggleStandardGL(bool val);
-    void toggleUseCalibratedGLView();
-    void initProjectionArea(int projAreaHorizontalSize, int projAreaVerticalSize)
-    {
-        // Camera calibrations done on the flight
-        this->cam.init(Screen(projAreaHorizontalSize,projAreaVerticalSize,0,0,eyeZ));
-        this->cam.setNearFarPlanes(0.01f,1E5f);
-    }
-    // Non inherited methods for various other computations
-    void computeCameraCalibrationMatrices(const QString &points2Dfilename,const QString &points3Dfilename);
+
 
 public slots:
-    // Projector methods
 
+    // Projector methods
     void generateFrames();
     void setOffscreenRendering(bool val);
-    void onEyeZChanged(double);
-    void onZNearChanged(double);
-    void onZFarChanged(double);
     void onSurfaceThicknessChanged(double);
     void onSurfaceCurvatureChanged(double);
 
 signals:
     void framePercentageGenerated(double);
     void memoryAllocatedMegaBytes(int);
-    void eyeZChanged(double);
-    void fovChanged(double);
-    void zNearChanged(double);
-    void zFarChanged(double);
     void binVoxLoaded(QString);
 
     // Inherited QGLWidget methods for GUI control
@@ -122,12 +109,8 @@ protected:
     void initializeGL();
     void paintGL();
     void resizeGL(int width, int height);
-    void mouseDoubleClickEvent(QMouseEvent *e);
-    void mouseMoveEvent(QMouseEvent *e);
-    void mousePressEvent(QMouseEvent *e);
-    void mouseReleaseEvent(QMouseEvent *e);
-    void keyPressEvent(QKeyEvent *e);
-    void wheelEvent(QWheelEvent *e);
+
+
     void applyOpenGLCameraFOV();
     void draw();
 
@@ -138,29 +121,16 @@ public:
     bool isDrawingFrustum;
     bool useCalibratedGLView;
 
-    unsigned int projectorPixelWidth;
-    unsigned int projectorPixelHeight;
-    unsigned int slicesNumber;
-
-    GLfloat FOV;
-    GLfloat zNear;
-    GLfloat zFar;
-    GLfloat eyeZ;
-    Eigen::MatrixXd Projection;
-    Eigen::MatrixXd ModelView;
 
     // Volumetric mesh intersection instance
     VolumetricMeshIntersection *volume;
     CameraDirectLinearTransformation *camCalibration;
-    VRCamera cam;
-    // Arcball control
-    Arcball arcball;
+    //VRCamera cam;
 
-    QString points2Dfilename;
-    QString points3Dfilename;
     // Background color
     Qt::GlobalColor currentGLColor;
 
+    unsigned int slicesNumber;
     std::vector<unsigned char> allFrames;
 
     QGLFramebufferObject *fbo;

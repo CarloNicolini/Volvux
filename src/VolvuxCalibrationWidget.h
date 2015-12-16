@@ -33,7 +33,7 @@
 #include <Eigen/Core>
 
 #include "ALPProjector.h"
-#include "CalibrationHelper.h"
+#include "CalibrationWidgetPage.h"
 
 #ifdef ALP_SUPPORT
 #include "ALPProjector.h"

@@ -29,6 +29,7 @@
 #include <QSlider>
 #include "VolvuxMainWindow.h"
 #include "ui_VolvuxMainWindow.h"
+#include "CalibrationWidgetPage.h"
 
 #ifdef COMPILE_GLFW
 #include <GLFW/glfw3.h>
@@ -50,21 +51,15 @@ VolvuxMainWindow::VolvuxMainWindow(QWidget *parent ):
 {
     ui->setupUi(this);
     this->initializeTabSceneQConnections();
-    this->initializeTabCameraCalibrationQConnections();
     this->initializeTabProjectorQConnections();
     this->initializeTabExperimentQConnections();
-    this->initializeTabMotorQConnections();
 
     this->resize(minimumSizeHint());
     cerr << "[MAINWINDOW] QtConnections done" << endl;
     cerr << "[MAINWINDOW] User interface successfully setup" << endl;
 
-    // Initialization of spinboxes eccetera
-    this->ui->spinBoxProjectorMicrosecondsPerFrame->setValue(100);
-    this->ui->spinBoxProjectorNSlices->setValue(PROJECTOR_SLICES_NUMBER);
-
     // Initialization of OpenGL Widget scene
-    this->ui->volumetricGLWidget->setCameraParameters(ui->doubleSpinBoxCameraFOV->value(),ui->doubleSpinboxCameraZNear->value(),ui->doubleSpinboxCameraZFar->value());
+    //this->ui->volumetricGLWidget->setCameraParameters(ui->doubleSpinBoxCameraFOV->value(),ui->doubleSpinboxCameraZNear->value(),ui->doubleSpinboxCameraZFar->value());
     this->update();
 
     this->loadSettings();
@@ -86,26 +81,26 @@ VolvuxMainWindow::VolvuxMainWindow(QWidget *parent ):
  * @brief VolvuxMainWindow::setStackedWidgetHelper
  * @param palp
  */
-void VolvuxMainWindow::setStackedWidgetHelper(StackedWidgetHelper *swhelper)
+/*void VolvuxMainWindow::setStackedWidgetHelper(StackedWidgetHelper *swhelper)
 {
     this->helper = swhelper;
-}
+}*/
 
 /**
  * @brief VolvuxMainWindow::setCalibrationHelper
  * @param calibhelper
  */
-void VolvuxMainWindow::setCalibrationHelper(CalibrationHelper *calibhelper)
+/*void VolvuxMainWindow::setCalibrationHelper(CalibrationHelper *calibhelper)
 {
     this->calib = calibhelper;
-}
+}*/
 
 /**
  * @brief VolvuxMainWindow::saveSettings
  */
 void VolvuxMainWindow::saveSettings()
 {
-    QSettings settings("CNCSVision","QtVolumetrixALPExperiment");
+    QSettings settings("Volvux","QtVolumetrixALPExperiment");
 
     // Scene tab
     settings.beginGroup("Scene");
@@ -128,20 +123,6 @@ void VolvuxMainWindow::saveSettings()
     settings.setValue("Max_Radius",this->ui->spinBoxStimulusSpheresRadiusMax->value());
     settings.endGroup();
 
-    // Camera settings
-    settings.beginGroup("Camera");
-    settings.setValue("Eye_Z",this->ui->doubleSpinBoxCameraEyeZ->value());
-    settings.setValue("FOV",this->ui->doubleSpinBoxCameraFOV->value());
-    settings.setValue("Z_near",this->ui->doubleSpinboxCameraZNear->value());
-    settings.setValue("Z_far",this->ui->doubleSpinboxCameraZFar->value());
-    settings.endGroup();
-    // Projector
-    settings.beginGroup("Projector");
-    settings.setValue("N_slices",this->ui->spinBoxProjectorNSlices->value());
-    settings.setValue("Bit_Depth",this->ui->spinBoxProjectorBitDepth->value());
-    settings.setValue("us_per_frame",this->ui->spinBoxProjectorMicrosecondsPerFrame->value());
-    settings.endGroup();
-
     // Experiment settigns
     settings.beginGroup("Monitor");
     settings.setValue("Resolution_X",this->ui->monitorResolutionXSpinBox->value());
@@ -158,7 +139,7 @@ void VolvuxMainWindow::saveSettings()
 void VolvuxMainWindow::loadSettings()
 {
 
-    QSettings settings("CNCSVision","QtVolumetrixALPExperiment");
+    QSettings settings("Volvux","QtVolumetrixALPExperiment");
     QFile settingsFile(settings.fileName());
     if (!settingsFile.exists())
         return;
@@ -181,17 +162,6 @@ void VolvuxMainWindow::loadSettings()
     this->ui->spinBoxStimulusSpheresRadiusMin->setValue(settings.value("Stimulus/Min_Radius").toInt());
     this->ui->spinBoxStimulusSpheresRadiusMax->setValue(settings.value("Stimulus/Max_Radius").toInt());
 
-    // Camera
-    this->ui->doubleSpinBoxCameraEyeZ->setValue(settings.value("Camera/Eye_Z").toDouble());
-    this->ui->doubleSpinBoxCameraFOV->setValue(settings.value("Camera/FOV").toDouble());
-    this->ui->doubleSpinboxCameraZNear->setValue(settings.value("Camera/Z_near").toDouble());
-    this->ui->doubleSpinboxCameraZFar->setValue(settings.value("Camera/Z_far").toDouble());
-
-    // Projector
-    this->ui->spinBoxProjectorNSlices->setValue(settings.value("Projector/N_Slices").toInt());
-    this->ui->spinBoxProjectorBitDepth->setValue(settings.value("Projector/Bit_Depth").toInt());
-    this->ui->spinBoxProjectorMicrosecondsPerFrame->setValue(settings.value("Projector/us_per_frame").toInt());
-
     // Monitor
     this->ui->monitorResolutionXSpinBox->setValue(settings.value("Monitor/Resolution_X").toInt());
     this->ui->monitorResolutionYSpinBox->setValue(settings.value("Monitor/Resolution_Y").toInt());
@@ -206,20 +176,6 @@ void VolvuxMainWindow::loadSettings()
 }
 
 /**
- * @brief VolvuxMainWindow::initializeTabCameraCalibrationQConnections
- */
-void VolvuxMainWindow::initializeTabCameraCalibrationQConnections()
-{
-    QObject::connect(this->ui->doubleSpinBoxCameraFOV,SIGNAL(valueChanged(double)),this,SLOT(onCameraFOVChanged(double)));
-    QObject::connect(this->ui->doubleSpinboxCameraZNear,SIGNAL(valueChanged(double)),this,SLOT(onCameraZNearChanged(double)));
-    QObject::connect(this->ui->doubleSpinboxCameraZFar,SIGNAL(valueChanged(double)),this,SLOT(onCameraZFarChanged(double)));
-    QObject::connect(this->ui->pushButtonCalibrate,SIGNAL(clicked()),this,SLOT(onPushButtonCalibrateClicked()));
-}
-
-
-
-
-/**
  * @brief VolvuxMainWindow::initializeTabProjectorQConnections
  */
 void VolvuxMainWindow::initializeTabProjectorQConnections()
@@ -227,25 +183,11 @@ void VolvuxMainWindow::initializeTabProjectorQConnections()
     // Projector tab connections
     QObject::connect(this->ui->pushButtonProjectorStartProjection,SIGNAL(clicked()),this,SLOT(onPushButtonProjectorStartProjectionClicked()));
     QObject::connect(this->ui->pushButtonProjectorStopProjection,SIGNAL(clicked()),this,SLOT(onPushButtonProjectorStopProjectionClicked()));
-    QObject::connect(this->ui->pushButtonProjectorInitialize,SIGNAL(clicked()),this,SLOT(onPushButtonProjectorInitializeClicked()));
-    QObject::connect(this->ui->pushButtonProjectorRelease,SIGNAL(clicked()),this,SLOT(onPushButtonProjectorReleaseClicked()));
-    QObject::connect(this->ui->spinBoxProjectorNSlices,SIGNAL(valueChanged(int)),this,SLOT(onSpinboxProjectorNSlicesChanged(int)));
     QObject::connect(this->ui->pushButtonUploadCurrentSequence,SIGNAL(clicked()),this,SLOT(onPushButtonUploadSequenceClicked()));
     QObject::connect(this->ui->pushButtonProjectorChangeSequence,SIGNAL(clicked()),this,SLOT(onPushButtonProjectorSequenceChanged()));
     QObject::connect(this->ui->pushButtonRemoveSequence,SIGNAL(clicked()),this,SLOT(onPushButtonProjectorRemoveSequencePressed()));
 
-    // Connect microsecPerFrame spinbox to slot that changes the microseconds per round given the number of slices
-    QObject::connect(this->ui->spinBoxProjectorMicrosecondsPerFrame,SIGNAL(valueChanged(int)),this,SLOT(onSpinBoxProjectorMicrosecondsPerFrameChanged(int)));
-    // Connect microsecPerFrame spinbox to slot that changes the microseconds per round given the number of slices
-    QObject::connect(this->ui->spinBoxProjectorMicrosecondsPerRound,SIGNAL(valueChanged(int)),this,SLOT(onSpinboxProjectorMicrosecondsPerRoundChanged(int)));
-
-    // Connections for LED current contorol
-    QObject::connect(this->ui->spinBoxProjectorLEDcurrent,SIGNAL(valueChanged(int)),this,SLOT(onspinBoxProjectorLEDcurrentChanged(int)));
-    QObject::connect(this->ui->doubleSpinBoxProjectorLEDpercentage,SIGNAL(valueChanged(double)),this,SLOT(onSpinBoxProjectorLEDpercentageChanged(double)));
-
-    // When microseconds per frame are changed, then microseconds per round is changed
-    QObject::connect(this->ui->spinBoxProjectorMicrosecondsPerRound,SIGNAL(valueChanged(int)),this,SLOT(onSpinboxProjectorMicrosecondsPerRoundChanged(int)));
-    this->repaint();
+    //this->repaint();
 }
 
 /**
@@ -264,18 +206,6 @@ void VolvuxMainWindow::initializeTabSceneQConnections()
 
     QObject::connect(this->ui->doubleSpinBoxObjectSize,SIGNAL(valueChanged(double)),this,SLOT(onDoubleSpinboxObjectSizeChanged(double)));
 
-    // Camera eyeZ changed
-    QObject::connect(this->ui->volumetricGLWidget,SIGNAL(eyeZChanged(double)),this->ui->doubleSpinBoxCameraEyeZ,SLOT(setValue(double)));
-    QObject::connect(this->ui->doubleSpinBoxCameraEyeZ,SIGNAL(valueChanged(double)),this->ui->volumetricGLWidget,SLOT(onEyeZChanged(double)));
-
-    // Camera zNear changed
-    QObject::connect(this->ui->volumetricGLWidget,SIGNAL(zNearChanged(double)),this->ui->doubleSpinboxCameraZNear,SLOT(setValue(double)));
-    QObject::connect(this->ui->doubleSpinboxCameraZNear,SIGNAL(valueChanged(double)),this->ui->volumetricGLWidget,SLOT(onZNearChanged(double)));
-
-    // Camera zFar changed
-    QObject::connect(this->ui->volumetricGLWidget,SIGNAL(zFarChanged(double)),this->ui->doubleSpinboxCameraZFar,SLOT(setValue(double)));
-    QObject::connect(this->ui->doubleSpinboxCameraZFar,SIGNAL(valueChanged(double)),this->ui->volumetricGLWidget,SLOT(onZFarChanged(double)));
-
     // Stimulus tab connections
     QObject::connect(this->ui->pushButtonStimulusRandomizeSpheres,SIGNAL(clicked()),this,SLOT(onPushButtonRandomizeSpheresPressed()));
     QObject::connect(this->ui->pushButtonGenerateFrames,SIGNAL(clicked()),this,SLOT(onPushButtonGenerateFramesPressed()));
@@ -287,17 +217,6 @@ void VolvuxMainWindow::initializeTabSceneQConnections()
     QObject::connect(this->ui->volumetricGLWidget,SIGNAL(binVoxLoaded(QString)),this->ui->labelTextureInfo,SLOT(setText(QString)));
     // Connection for filtered parametric surface thickness
     QObject::connect(this->ui->doubleSpinBoxSurfaceThickness,SIGNAL(valueChanged(double)),this->ui->volumetricGLWidget,SLOT(onSurfaceThicknessChanged(double)));
-}
-
-/**
- * @brief VolvuxMainWindow::initializeTabMotorQConnections
- */
-void VolvuxMainWindow::initializeTabMotorQConnections()
-{
-    QObject::connect(this->ui->pushButtonMotorStart,SIGNAL(clicked(bool)),this,SLOT(onPushButtonMotorStartClicked()));
-    QObject::connect(this->ui->pushButtonMotorStop,SIGNAL(clicked(bool)),this,SLOT(onPushButtonMotorStopClicked()));
-    QObject::connect(this->ui->pushButtonMotorInitialize,SIGNAL(clicked(bool)),this,SLOT(onPushButtonMotorInitializeClicked()));
-    QObject::connect(this->ui->doubleSpinBoxFlickerRateHz,SIGNAL(valueChanged(double)),this,SLOT(onSpinBoxFlickerFrequencyChanged(double)));
 }
 
 /**
@@ -313,209 +232,6 @@ void VolvuxMainWindow::initializeTabExperimentQConnections()
     QObject::connect(this->ui->buttonGroupRandomizationMethod,SIGNAL(buttonClicked(int)),this,SLOT(onRandomizationMethodChanged(int)));
 }
 
-/**
- * @brief VolvuxMainWindow::onPushButtonMotorInitializeClicked
- */
-void VolvuxMainWindow::onPushButtonMotorInitializeClicked()
-{
-#if defined (SMI_SUPPORT) && (WIN32)
-    CoInitialize(NULL);
-    /*
-    if(!AfxOleInit())
-    {
-        throw std::runtime_error("OLE initialization failed.  Make sure that the OLE libraries are the correct version.");
-    }
-    AfxEnableControlContainer();
-    */
-    HRESULT hr = CommInterface.CreateInstance(__uuidof(INTEGMOTORINTERFACELib::SMIHost));
-    if(FAILED(hr))
-    {
-        QMessageBox::warning(this,"Error","Cannot create an instance of \"SMIHost\" class!");
-        return;
-    }
-
-    cerr << "[MainWindow] Starting motor" << endl;
-    long portResult=-1;
-    try
-    {
-        CommInterface->BaudRate = 9600;
-        portResult = CommInterface->OpenPort("Com4");
-    }
-    catch (_com_error e)
-    {
-        throw std::exception("Error opening COM4 port");
-    }
-    // Detect RS232
-    cerr << "[Smart Motor] Detecting RS232...";
-    UINT x= 10;//GetDlgItemInt(IDC_MAXADDRESS);
-    long MaxAddress=10;
-    long flags=0;
-    long result = CommInterface->DetectRS232(MaxAddress,flags);
-    switch(result)
-    {
-    case CER_SOMEADDRESSED:
-        cerr << "Some Motors are not addressed!"<<" IntegMotorInterface Error!"<< endl;
-        break;
-
-    case CER_BIGADDRESS:
-        cerr << "Some Motors have big addresses!" <<" IntegMotorInterface Error!" << endl;
-        break;
-
-    case CER_DUPLICATEADDR:
-        cerr << "Some Motors have duplicate addresses!"<<" IntegMotorInterface Error!"<< endl;
-        break;
-
-    case CER_NOTADDRESSED:
-        cerr << "Motors are not addressed!"<<" IntegMotorInterface Error!"<< endl;
-        break;
-
-    case CER_COMMERROR:
-        cerr << "Communication Error!"<<" IntegMotorInterface Error!"<< endl;
-        break;
-
-    case CER_NOMOTOR:
-        cerr << "No Motor Found!"<<" IntegMotorInterface Error!" << endl;
-        break;
-    default:
-        cerr << CommInterface->NoOfMotors << endl;
-        //cerr << CommInterface->DefaultMotor = long(1);//GetDlgItemInt(IDC_CURRENTMOTOR);
-    }
-
-    // Establish chain
-    cerr << "[Smart Motor] Addressing motor chain...";
-    try
-    {
-        // Establish chain
-        CommInterface->AddressMotorChain();
-        CommInterface->DefaultMotor = 1;
-    }
-    catch (_com_error e )
-    {
-        //AfxMessageBox(e.Description());
-        throw std::runtime_error(BSTR2STR(e.Description()));
-    }
-    cerr << "DONE" << endl;
-#endif
-}
-
-/**
- * @brief VolvuxMainWindow::onPushButtonMotorStartClicked
- */
-void VolvuxMainWindow::onPushButtonMotorStartClicked()
-{
-#if defined (SMI_SUPPORT) && (WIN32)
-    cerr << "[MainWindow] Starting motor" << endl;
-    long Version = 0;
-    Version = CommInterface->EngineVersion;
-    if ( this->ui->spinBoxMotorSpeed->isEnabled() )
-    {
-        int speed = this->ui->spinBoxMotorSpeed->value();
-        this->startRotation(speed);
-    }
-    else
-    {
-        QMessageBox::warning(this,"!!! WARNING !!!","This speed is not safe for the system");
-    }
-#endif
-}
-
-/**
- * @brief VolvuxMainWindow::onPushButtonMotorStopClicked
- */
-void VolvuxMainWindow::onPushButtonMotorStopClicked()
-{
-#if defined (SMI_SUPPORT) && (WIN32)
-    cerr << "[MainWindow] Stopping motor" << endl;
-    this->startRotation(0);
-#endif
-}
-
-/**
-* @brief VolvuxMainWindow::onSpinBoxFlickerFrequencyChanged
-**/
-void VolvuxMainWindow::onSpinBoxFlickerFrequencyChanged(double flickerFrequency)
-{
-    QComboBox *c = this->ui->comboBoxMotorUnitsToRevMin;
-    // The persistence of the stimulus on the eye in microseconds
-    double flickerPersistence_microSec = 1E6/flickerFrequency;
-    double nSlices = this->ui->spinBoxProjectorNSlices->value();
-    double motorUnitsToRevMin = 65536;//c->itemData(c->currentIndex()).toInt(); //XXX useless combobox units to rev min check page 22 SMI manual
-    cerr << c->itemData(c->currentIndex()).toDouble() << endl;
-    double microSecPerFrame = flickerPersistence_microSec/nSlices;
-    if ( std::fmod(microSecPerFrame,1.0) == 0.0)
-    {
-        //cerr << "consistent frame per microsecond" << endl;
-        this->ui->spinBoxProjectorMicrosecondsPerFrame->setValue((int)microSecPerFrame);
-        //this->onPushButtonProjectorRemoveSequencePressed();
-        //this->onPushButtonUploadSequenceClicked();
-    }
-    else
-    {
-        //cerr << "inconsistent frame per microsecond" << endl;
-    }
-
-    double motorRate = (1E6/(nSlices*std::floor(microSecPerFrame))) * motorUnitsToRevMin;
-    if ( motorRate > this->ui->spinBoxMotorSpeed->maximum() )
-    {
-        this->ui->spinBoxMotorSpeed->setValue((int)motorRate);
-        this->ui->spinBoxMotorSpeed->setEnabled(false);
-    }
-    else
-    {
-        //if ( std::fmod(motorRate,1.0) == 0)
-        if (true)
-        {
-            this->ui->spinBoxMotorSpeed->setEnabled(true);
-            this->ui->spinBoxMotorSpeed->setValue((int)motorRate);
-            //this->onPushButtonMotorStartClicked();
-        }
-        else
-        {
-            this->ui->spinBoxMotorSpeed->setEnabled(false);
-        }
-        this->ui->spinBoxMotorRevMin->setValue(motorRate/8000);
-    }
-}
-
-void VolvuxMainWindow::startRotation(int speed)
-{
-#if defined (SMI_SUPPORT) && (WIN32)
-    try
-    {
-        CommInterface->ClearBuffer();
-        CommInterface->WriteCommand("EIGN(W,0)");
-        CommInterface->WriteCommand("O=0");
-        CommInterface->WriteCommand("ZS");
-        // Remove limits
-        CommInterface->WriteCommand("EL=-1");
-        // Set the PID settings
-        CommInterface->WriteCommand("KP=560");
-        CommInterface->WriteCommand("KI=5");
-        CommInterface->WriteCommand("KD=4500");
-
-        CommInterface->WriteCommand("KL=32767");
-        CommInterface->WriteCommand("KS=3");
-        CommInterface->WriteCommand("KV=1000");
-        CommInterface->WriteCommand("KA=0");
-        CommInterface->WriteCommand("KG=0");
-
-        // Activate the buffered PID settings
-        CommInterface->WriteCommand("F");
-        CommInterface->WriteCommand("MV");
-        CommInterface->WriteCommand("ADT=1");
-        // Convert the speed to the "VT=speed" command
-        string speedstring("VT=");
-        speedstring+=util::stringify<int>(speed);
-        CommInterface->WriteCommand(STR2BSTR(speedstring));
-        // Terminate communication
-        CommInterface->WriteCommand("G");
-    }
-    catch (_com_error e )
-    {
-        throw std::runtime_error(BSTR2STR(e.Description()));
-    }
-#endif
-}
 /**
  * @brief VolvuxMainWindow::onRandomizationMethodChanged
  * @param randomVal
@@ -537,6 +253,9 @@ void VolvuxMainWindow::onRandomizationMethodChanged(int randomVal)
  */
 void VolvuxMainWindow::onPushButtonLoadBinVoxPressed()
 {
+    QMessageBox::warning(this,"Error", "Not yet implemented");
+    return;
+    /*
     QString binvoxfile = QFileDialog::getOpenFileName(this,"Select 2D points file",QDir::currentPath(),"*.binvox");
     if (binvoxfile.isEmpty())
         return;
@@ -548,52 +267,7 @@ void VolvuxMainWindow::onPushButtonLoadBinVoxPressed()
     {
         QMessageBox::warning(this,"Error in loading binvox file",QString(e.what()));
     }
-}
-
-/**
- * @brief VolvuxMainWindow::onCameraFOVChanged
- * @param val
- */
-void VolvuxMainWindow::onCameraFOVChanged(double val)
-{
-    this->ui->volumetricGLWidget->setCameraParameters(val,ui->doubleSpinboxCameraZNear->value(),ui->doubleSpinboxCameraZFar->value());
-}
-
-/**
- * @brief VolvuxMainWindow::onCameraZNearChanged
- * @param val
- */
-void VolvuxMainWindow::onCameraZNearChanged(double val)
-{
-    this->ui->volumetricGLWidget->setCameraParameters(ui->doubleSpinBoxCameraFOV->value(),val,ui->doubleSpinboxCameraZFar->value());
-}
-
-/**
- * @brief VolvuxMainWindow::onCameraZFarChanged
- * @param val
- */
-void VolvuxMainWindow::onCameraZFarChanged(double val)
-{
-    this->ui->volumetricGLWidget->setCameraParameters(ui->doubleSpinBoxCameraFOV->value(),ui->doubleSpinboxCameraZNear->value(),val);
-}
-
-/**
-* @brief onSpinBoxProjectorMicrosecondsPerFrameChanged
-**/
-
-void VolvuxMainWindow::onSpinBoxProjectorMicrosecondsPerFrameChanged(int value)
-{
-    this->ui->spinBoxProjectorMicrosecondsPerRound->setValue( std::ceil( (double)value*this->ui->spinBoxProjectorNSlices->value()) );
-    double flickerRate = 1E6/((double)(value*this->ui->spinBoxProjectorNSlices->value()));
-    this->ui->doubleSpinBoxFlickerRateHz->setValue(flickerRate);
-}
-
-/**
-* @brief onSpinboxMicrosecondsPerRoundChanged
-**/
-void VolvuxMainWindow::onSpinboxProjectorMicrosecondsPerRoundChanged(int value)
-{
-    this->ui->spinBoxProjectorMicrosecondsPerFrame->setValue( std::ceil( (double)value/this->ui->spinBoxProjectorNSlices->value()) );
+    */
 }
 
 /**
@@ -713,22 +387,6 @@ void VolvuxMainWindow::onDoubleSpinboxObjectSizeChanged(double value)
 }
 
 /**
- * @brief VolvuxMainWindow::onSpinboxNSlicesChanged
- */
-void VolvuxMainWindow::onSpinboxProjectorNSlicesChanged(int value)
-{
-    this->ui->volumetricGLWidget->setSlicesNumber(value);
-    double flickerPersistenceMicroSec = this->ui->doubleSpinBoxFlickerRateHz->value()*1E-6;
-    double motorUnitsToRevMin = this->ui->comboBoxMotorUnitsToRevMin->itemData(
-                this->ui->comboBoxMotorUnitsToRevMin->currentIndex()).toInt();
-    int usPerFrame = flickerPersistenceMicroSec/value;
-    this->ui->spinBoxProjectorMicrosecondsPerFrame->setValue(usPerFrame);
-    double motorRate = (1E6/((double)value*usPerFrame))*motorUnitsToRevMin;
-    this->ui->spinBoxMotorSpeed->setValue(motorRate);
-    this->ui->spinBoxProjectorMicrosecondsPerRound->setValue(value*ui->spinBoxProjectorMicrosecondsPerFrame->value());
-}
-
-/**
  * @brief VolvuxMainWindow::onPushButtonRandomizeSpheresPressed
  */
 void VolvuxMainWindow::onPushButtonRandomizeSpheresPressed()
@@ -762,29 +420,10 @@ void VolvuxMainWindow::onSpinboxspheresradiusmaxValuechanged(int arg1)
     }
 }
 
-/**
- * @brief VolvuxMainWindow::on_checkBoxCameraViewMode_clicked
- * @param checked
- */
-void VolvuxMainWindow::onCheckboxcameraviewmodeClicked(bool checked)
-{
-    this->ui->volumetricGLWidget->toggleStandardGL(checked);
-}
-
-
-/**
- * @brief VolvuxMainWindow::on_checkBoxUseCalibratedView_clicked
- * @param checked
- */
-void VolvuxMainWindow::onCheckboxusecalibratedviewClicked(bool checked)
-{
-    this->ui->volumetricGLWidget->toggleUseCalibratedGLView();
-}
-
 void VolvuxMainWindow::onPushButtonUploadSequenceClicked()
 {
     this->ui->statusbar->showMessage("Uploading sequence...",500);
-
+    /*
     try
     {
         int nSlices = this->ui->spinBoxProjectorNSlices->value();
@@ -803,7 +442,7 @@ void VolvuxMainWindow::onPushButtonUploadSequenceClicked()
     this->ui->listWidgetSequences->clear();
     for (unsigned int i=0; i<helper->getALP()->m_AlpSeqId.size(); ++i)
         this->ui->listWidgetSequences->addItem(QString::number(helper->getALP()->m_AlpSeqId.at(i)));
-
+    */
     this->ui->statusbar->showMessage("Sequence uploaded",5000);
 }
 
@@ -815,7 +454,7 @@ void VolvuxMainWindow::onPushButtonProjectorSequenceChanged()
     if( ui->listWidgetSequences->selectedItems().isEmpty() )
         return;
     int sequenceToDisplay = ui->listWidgetSequences->currentItem()->text().toLong();
-
+    /*
     if (helper->getALP()->m_bAlpInit)
     {
         try
@@ -831,7 +470,7 @@ void VolvuxMainWindow::onPushButtonProjectorSequenceChanged()
         {
             QMessageBox::warning(this,"Error in ALP projector, changing sequence",QString(e.what()));
         }
-    }
+    }*/
 
 }
 
@@ -843,7 +482,7 @@ void VolvuxMainWindow::onPushButtonProjectorRemoveSequencePressed()
     if( ui->listWidgetSequences->selectedItems().isEmpty() )
         return;
     int sequenceToRemove = ui->listWidgetSequences->currentItem()->text().toLong();
-
+    /*
     if (helper->getALP()->m_bAlpInit)
     {
         try
@@ -859,7 +498,7 @@ void VolvuxMainWindow::onPushButtonProjectorRemoveSequencePressed()
         {
             QMessageBox::warning(this,"Error in ALP projector, removing sequence",QString(e.what()));
         }
-    }
+    }*/
 
 }
 
@@ -874,94 +513,11 @@ void VolvuxMainWindow::onPushButtonProjectorStartProjectionClicked()
         if ( this->ui->volumetricGLWidget->width() != PROJECTOR_RESOLUTION_WIDTH &&
              this->ui->volumetricGLWidget->height() != PROJECTOR_RESOLUTION_HEIGHT )
             throw std::runtime_error(std::string("OpenGL widget must have the same resolution of the projector, 1024x768"));
-        helper->getALP()->start();
+        //helper->getALP()->start();
     }
     catch (std::exception &e)
     {
         QMessageBox::warning(this,"Error in ALP projector, starting sequence",QString(e.what()));
-    }
-
-}
-
-void VolvuxMainWindow::onPushButtonProjectorReleaseClicked()
-{
-
-    try
-    {
-        helper->getALP()->cleanup();
-        helper->getALP()->m_AlpSeqId.clear();
-    }
-    catch (std::exception &e)
-    {
-        QMessageBox::warning(this,"Error in ALP projector",QString(e.what()));
-    }
-
-    this->ui->listWidgetSequences->clear();
-    this->ui->spinBoxProjectorLEDcurrent->setEnabled(false);
-    this->ui->doubleSpinBoxProjectorLEDpercentage->setEnabled(false);
-}
-
-/**
-* @brief onSpinBoxLEDpercentageChanged
-**/
-void VolvuxMainWindow::onSpinBoxProjectorLEDpercentageChanged(double percentage)
-{
-
-    if (helper->getALP()->m_bAlpInit)
-    {
-        if (!helper->getALP()->m_bAlpLEDInit)
-        {
-            helper->getALP()->initLED();
-            helper->getALP()->setLED(ui->spinBoxProjectorLEDcurrent->value(),static_cast<long int>(std::ceil(percentage)));
-        }
-        else
-            helper->getALP()->setLED(ui->spinBoxProjectorLEDcurrent->value(),static_cast<long int>(std::ceil(percentage)));
-    }
-
-}
-
-/**
-* @brief onspinBoxProjectorLEDcurrentChanged
-**/
-void VolvuxMainWindow::onspinBoxProjectorLEDcurrentChanged(int current)
-{
-
-    if (helper->getALP()->m_bAlpInit)
-    {
-        if (!helper->getALP()->m_bAlpLEDInit)
-        {
-            helper->getALP()->initLED();
-            helper->getALP()->setLED(current,ui->doubleSpinBoxProjectorLEDpercentage->value());
-        }
-        else
-            helper->getALP()->setLED(current,ui->doubleSpinBoxProjectorLEDpercentage->value());
-    }
-
-}
-
-/**
- * @brief VolvuxMainWindow::onPushButtonProjectorInitializeClicked
- */
-void VolvuxMainWindow::onPushButtonProjectorInitializeClicked()
-{
-    this->ui->spinBoxProjectorLEDcurrent->setEnabled(true);
-    this->ui->doubleSpinBoxProjectorLEDpercentage->setEnabled(true);
-
-
-    if (helper->getALP()->m_bAlpInit)
-        return;
-    int nSlices = this->ui->spinBoxProjectorNSlices->value();
-    unsigned char *data = this->ui->volumetricGLWidget->allFrames.data();
-    try
-    {
-        helper->getALP()->init();
-        helper->getALP()->initLED();
-        helper->getALP()->setLED(this->ui->spinBoxProjectorLEDcurrent->value(),ui->doubleSpinBoxProjectorLEDpercentage->value());
-        helper->getALP()->inquire();
-    }
-    catch (std::exception &e)
-    {
-        QMessageBox::warning(this,"Error in ALP initialization",QString(e.what()));
     }
 
 }
@@ -973,24 +529,12 @@ void VolvuxMainWindow::onPushButtonProjectorStopProjectionClicked()
 {
     try
     {
-        helper->getALP()->stop();
+        //helper->getALP()->stop();
     }
     catch (std::exception &e)
     {
         QMessageBox::warning(this,"Error in ALP projector",QString(e.what()));
     }
-}
-
-/**
- * @brief VolvuxMainWindow::onPushButtonCalibrateClicked
- */
-void VolvuxMainWindow::onPushButtonCalibrateClicked()
-{
-    QString points2Dfilename = QFileDialog::getOpenFileName(this,"Select 2D points file",QDir::currentPath(),"*.txt");
-    QString points3Dfilename = QFileDialog::getOpenFileName(this,"Select 3D points file",QDir::currentPath(),"*.txt");
-
-    this->ui->volumetricGLWidget->computeCameraCalibrationMatrices(points2Dfilename,points3Dfilename);
-    //this->ui->volumetricGLWidget->computeCameraCalibrationMatrices("/home/carlo/Desktop/3D-Display/Calibrations/2D_points.txt" , "/home/carlo/Desktop/3D-Display/Calibrations/3D_points.txt");
 }
 
 /**
@@ -1040,6 +584,7 @@ void VolvuxMainWindow::triggerFramesGeneration(double curvature)
  */
 void VolvuxMainWindow::onPushButtonExperimentStartClicked()
 {
+#ifdef EXPERIMENTWIDGET_IMPLEMENTED
     this->ui->plainTextExperimentInfo->clear();
     QDate date = QDate::currentDate();
     QTime time = QTime::currentTime();
@@ -1053,6 +598,7 @@ void VolvuxMainWindow::onPushButtonExperimentStartClicked()
     }
 
     // Then must initialize the ALP
+    /*
     try
     {
         this->ui->checkBoxUseOffscreenRendering->setChecked(true);
@@ -1067,6 +613,7 @@ void VolvuxMainWindow::onPushButtonExperimentStartClicked()
         this->onPushButtonProjectorReleaseClicked();
         return;
     }
+    */
 
     exp = new VolvuxExpWidget(NULL);
     exp->setCameraParameters(this->ui->volumetricGLWidget->eyeZ,this->ui->volumetricGLWidget->FOV,this->ui->volumetricGLWidget->zNear,this->ui->volumetricGLWidget->zFar);
@@ -1105,6 +652,7 @@ void VolvuxMainWindow::onPushButtonExperimentStartClicked()
     // Run the experiment
     exp->initializeExperiment();
     exp->show();
+#endif
 }
 
 void VolvuxMainWindow::closeEvent(QCloseEvent *event)
@@ -1112,5 +660,12 @@ void VolvuxMainWindow::closeEvent(QCloseEvent *event)
     // Ensure clean close of Experiment Widget
     if (exp)
         exp->close();
-    this->onPushButtonProjectorReleaseClicked();
+    //this->onPushButtonProjectorReleaseClicked();
+}
+
+
+void VolvuxMainWindow::onCalibrationEmitted(CameraDirectLinearTransformation &cam)
+{
+    cam.info();
+    this->ui->volumetricGLWidget->setCamera(cam);
 }

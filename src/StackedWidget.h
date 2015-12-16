@@ -1,60 +1,53 @@
 #ifndef STACKEDWIDGET_H
 #define STACKEDWIDGET_H
 
-#define PROJECTOR_INDEX_PAGE 0
-#define CALIBRATION_INDEX_PAGE 1
-#define VOLVUX_MAINWINDOW_INDEX 2
+#define PROJECTORMOTOR_PAGE_INDEX 0
+#define CALIBRATION_PAGE_INDEX 1
+#define MAINWINDOW_PAGE_INDEX 2
 
-#include <QStackedWidget>
+#include <QMainWindow>
+#include <QMessageBox>
+#include "ProjectorWidgetPage.h"
+#include "CalibrationWidgetPage.h"
+#include "VolvuxWidgetPage.h"
 
-class CalibrationHelper;
-
-namespace Ui
-{
+namespace Ui {
 class StackedWidget;
 }
 
-class StackedWidgetHelper; // forward declaration
+class ProjectorWidgetPage;
 
-class StackedWidget : public QStackedWidget
+class StackedWidget : public QMainWindow
 {
     Q_OBJECT
+
 public:
-    StackedWidget(QWidget *parent = 0);
+    explicit StackedWidget(QWidget *parent = 0);
     ~StackedWidget();
-    Ui::StackedWidget* getUi(){return this->ui;}
-    StackedWidgetHelper *getHelper(){ return this->helper;}
-    //bool eventFilter(QObject * target, QEvent * event);
+    ProjectorWidgetPage *projectorWidgetpage;
+    CalibrationWidgetPage *calibrationWidgetpage;
+    VolvuxWidgetPage *volvuxWidgetpage;
+    QTimer *timer;
 
-private slots:
-    void onPushButtonNextStackedWidget(bool value);
-    void onPushButtonPreviousStackedWidget(bool value);
-    void onCancelPressed(bool value);
-    //Projector Slots
-    void onPushButtonProjectorInitializeClicked(bool value);
-    void onPushButtonProjectorReleaseClicked(bool value);
-
-    void onSpinboxProjectorNSlicesChanged(int nSlices);
-    void onSpinboxProjectorLEDCurrentChanged(int current);
-    void onSpinboxProjectorLEDPercentageChanged(double percentage);
-    //Motor Slots
-    void onPushButtonMotorStartClicked(bool value);
-    void onPushButtonMotorStopClicked(bool value);
-    void onSpinboxFlickerRateChanged(double flickerRate);
-    void onPushButtonMotorInitializeClicked();
-
-    // Calibration slots
-    void onPoint2DEmitted(const QPoint &point);
-
-signals:
-    void motorInitialized(bool);
+private:
+    Ui::StackedWidget *ui;
+    QList<QWidget *> widgets;
+    void showCurrentWidget(int curr_index);
 
 protected:
-    //void keyPressEvent(QKeyEvent *e);
-    Ui::StackedWidget *ui;
-    StackedWidgetHelper *helper;
-    CalibrationHelper *calibHelper;
-    QTimer *timer;
+    void keyPressEvent(QKeyEvent *event);
+
+public slots:
+    //Navigation buttons
+    void onQuitButtonPressed();
+    void onNextButtonPressed();
+    void onBackButtonPressed();
+
+private slots:
+    //Menu bar actions
+    void onActionExitTriggered();
+    void onActionProjectorMotorTriggered();
+    void onActionCalibrationTriggered();
 };
 
 #endif // STACKEDWIDGET_H
