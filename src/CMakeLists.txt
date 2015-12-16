@@ -81,7 +81,6 @@ if(QT5_SUPPORT)
     endif(WIN32)
     qt5_use_modules(volvux Gui Widgets OpenGL)
 
-
     #add_executable(welcomevolvux welcomevolvux.cpp ${VOLVUX_SRCS} ${VOLVUX_HDRS} ${VOLVUX_FORMS_HDRS})
     #Link the helloworld executable to the Qt 5 widgets library.
     #target_link_libraries(welcomevolvux Qt5::Gui Qt5::Widgets Qt5::OpenGL VOLVUXHELPER)
@@ -109,4 +108,7 @@ endif(QT5_SUPPORT)
 #endif(QT4_SUPPORT)
 
 add_executable(testhomography testhomography.cpp)
+target_link_libraries(testhomography VOLVUXHELPER dl)
+
+add_executable(testhomonogl testhomonogl.cpp)
 target_link_libraries(testhomography VOLVUXHELPER)

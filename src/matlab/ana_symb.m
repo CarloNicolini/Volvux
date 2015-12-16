@@ -27,9 +27,6 @@ P = [ 2*n/(r-l) 0       (r+l)/(r-l)  0;
   
 IP = inv(P);
 
-c = [ x y z 1];
+p = [ x y z 1];
 
-for i=1:size(Cube,1)
-    point = (IP*IP)*Cube(i,:)';
-    point = simplify(point/point(4));
-end
+AC = anamorphicdeform(P,p');

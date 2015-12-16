@@ -19,22 +19,26 @@
 using namespace Eigen;
 using namespace std;
 
-#define CALIBRECT_EDGE_BOTTOM 70.0
+#define CALIBRECT_EDGE_BOTTOM 71.0
 #define CALIBRECT_EDGE_TOP 50.0
 #define CALIBRECT_HEIGHT 10.0
 
 stlalignedvector4d points3D;
 
+#define CALIBRECT_EDGE_BOTTOM 7.1
+#define CALIBRECT_EDGE_TOP 5
+#define CALIBRECT_HEIGHT 1.5
+
 static const double calibrationtoy[]  = {0,0,0,
-                                         -CALIBRECT_EDGE_BOTTOM/2,0, CALIBRECT_EDGE_BOTTOM/2,
-                                         CALIBRECT_EDGE_BOTTOM/2,  0, CALIBRECT_EDGE_BOTTOM/2,
-                                         CALIBRECT_EDGE_BOTTOM/2,  0, -CALIBRECT_EDGE_BOTTOM/2,
-                                         -CALIBRECT_EDGE_BOTTOM/2, 0, -CALIBRECT_EDGE_BOTTOM/2,
-                                         -CALIBRECT_EDGE_TOP/2,CALIBRECT_HEIGHT, CALIBRECT_EDGE_TOP/2,
-                                         CALIBRECT_EDGE_TOP/2,  CALIBRECT_HEIGHT, CALIBRECT_EDGE_TOP/2,
-                                         CALIBRECT_EDGE_TOP/2,  CALIBRECT_HEIGHT, -CALIBRECT_EDGE_TOP/2,
-                                         -CALIBRECT_EDGE_TOP/2, CALIBRECT_HEIGHT, -CALIBRECT_EDGE_TOP/2
-                                        };
+                               -CALIBRECT_EDGE_BOTTOM/2, CALIBRECT_EDGE_BOTTOM/2,0,
+                               CALIBRECT_EDGE_BOTTOM/2, CALIBRECT_EDGE_BOTTOM/2,0,
+                               CALIBRECT_EDGE_BOTTOM/2, -CALIBRECT_EDGE_BOTTOM/2,0,
+                               -CALIBRECT_EDGE_BOTTOM/2, -CALIBRECT_EDGE_BOTTOM/2,0,
+                               -CALIBRECT_EDGE_TOP/2, CALIBRECT_EDGE_TOP/2, CALIBRECT_HEIGHT,
+                               CALIBRECT_EDGE_TOP/2, CALIBRECT_EDGE_TOP/2, CALIBRECT_HEIGHT,
+                               CALIBRECT_EDGE_TOP/2, -CALIBRECT_EDGE_TOP/2, CALIBRECT_HEIGHT,
+                               -CALIBRECT_EDGE_TOP/2, -CALIBRECT_EDGE_TOP/2, CALIBRECT_HEIGHT,
+                              };
 
 int iWidth=768;
 int iHeight=768;
@@ -220,14 +224,14 @@ int main(int argc, char *argv[])
 
     vector<Vector3d> points2d;
     points2d.push_back(Vector3d(512,384,1));
-    points2d.push_back(Vector3d(602,472,1));
-    points2d.push_back(Vector3d(591,286,1));
-    points2d.push_back(Vector3d(403,293,1));
-    points2d.push_back(Vector3d(423,479,1));
-    points2d.push_back(Vector3d(573,440,1));
-    points2d.push_back(Vector3d(573,310,1));
-    points2d.push_back(Vector3d(443,329,1));
-    points2d.push_back(Vector3d(448,458,1));
+    points2d.push_back(Vector3d(419,474,1));
+    points2d.push_back(Vector3d(409,294,1));
+    points2d.push_back(Vector3d(589,294,1));
+    points2d.push_back(Vector3d(589,474,1));
+    points2d.push_back(Vector3d(449,441,1));
+    points2d.push_back(Vector3d(449,321,1));
+    points2d.push_back(Vector3d(569,321,1));
+    points2d.push_back(Vector3d(569,441,1));
 
     cout << "[ " ;
     for (int i=0; i<9; ++i)

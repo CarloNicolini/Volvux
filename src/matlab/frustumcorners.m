@@ -1,5 +1,4 @@
 function C=frustumcorners(l,r,b,t,n,f)
-syms l r t b n f
 C = [l,b,-n,1;
 l,t,-n,1;
 r,b,-n,1;
