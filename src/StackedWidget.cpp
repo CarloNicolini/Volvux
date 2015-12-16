@@ -8,6 +8,16 @@ StackedWidget::StackedWidget(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::StackedWidget)
 {
+<<<<<<< HEAD
+=======
+    //Setup ui and Helpers
+    helper = new StackedWidgetHelper(this);
+    ui->setupUi(this);
+    //this->installEventFilter(this);
+    timer = new QTimer(this);
+    timer->start();
+    this->setCurrentIndex(0);
+>>>>>>> 190fae4722b1db81ebb3993c4cfa3ab9cd951ae7
 
     //Setup Ui
     ui->setupUi(this);
@@ -80,7 +90,20 @@ StackedWidget::StackedWidget(QWidget *parent) :
     //QObject::connect(calibrationWidgetpage,SIGNAL(calibrationEmitted(CameraDirectLinearTransformation &)),this,SLOT(onCalibrationEmitted(CameraDirectLinearTransformation &)));
 
 
+<<<<<<< HEAD
 
+=======
+    // Calibration helper slots
+    QObject::connect(this->calibHelper,SIGNAL(calibrationEmitted(CameraDirectLinearTransformation &)),ui->pageMainWindow,SLOT(onCalibrationEmitted(CameraDirectLinearTransformation &)));
+
+    helper->write3DPoints(calibHelper);
+
+    // Set strong focus on volvuxcalibrationwidget
+    this->ui->volvuxCalibrationWidget->setFocusPolicy(Qt::StrongFocus);
+
+
+    QObject::connect(ui->volvuxCalibrationWidget,SIGNAL(points2Dupdated(QVector<QPoint>)),this->helper,SLOT(update2DPoints(QVector<QPoint>)));
+>>>>>>> 190fae4722b1db81ebb3993c4cfa3ab9cd951ae7
 }
 
 StackedWidget::~StackedWidget()
@@ -88,6 +111,7 @@ StackedWidget::~StackedWidget()
     delete ui;
 }
 
+<<<<<<< HEAD
 //Show current widget
 void StackedWidget::showCurrentWidget(int curr_index){
     if (widgets.count() > 0){
@@ -95,6 +119,69 @@ void StackedWidget::showCurrentWidget(int curr_index){
             widget->hide();
         widgets.at(curr_index)->show();
         updateGeometry();
+=======
+
+//SLOTS
+
+//Navigation buttons
+//Next
+void StackedWidget::onPushButtonNextStackedWidget(bool value)
+{
+    int curIndex = this->currentIndex();
+    curIndex = curIndex + 1;
+    this->setCurrentIndex(curIndex);
+    if (curIndex == CALIBRATION_INDEX_PAGE)
+    {
+        //ui->volvuxCalibrationWidget->resize(1024, 768);
+        //To send frame to the projector only after widget has been correctly initialized via initializeGL
+        QObject::connect(this->timer, SIGNAL(timeout()), ui->volvuxCalibrationWidget, SLOT(transferFrame()));
+    }
+}
+
+//Previous
+void StackedWidget::onPushButtonPreviousStackedWidget(bool value)
+{
+    int curIndex = this->currentIndex();
+    curIndex = curIndex - 1;
+    this->setCurrentIndex(curIndex);
+}
+
+//Cancel
+void StackedWidget::onCancelPressed(bool value)
+{
+    QMessageBox::warning(this,"Leaving Volvux","You are now exiting...");
+    QApplication::exit(0);
+}
+
+//Projector buttons
+//Initilize
+void StackedWidget::onPushButtonProjectorInitializeClicked(bool value){
+
+    //Enables other buttons
+    ui->pushButtonProjectorRelease->setEnabled(true);
+    ui->spinBoxProjectorNSlices->setEnabled(true);
+    ui->spinBoxProjectorLEDcurrent->setEnabled(true);
+    ui->doubleSpinBoxProjectorLEDpercentage->setEnabled(true);
+    ui->pushButtonProjectorInitialize->setEnabled(false);
+
+    //Initialize ALP projector
+
+    //if (helper->getALP()->m_bAlpInit)
+    //return;
+
+    int nSlices = ui->spinBoxProjectorNSlices->value();
+    //unsigned char *data = this->ui->volumetricGLWidget->allFrames.data();
+    try
+    {
+        helper->getALP()->init();
+        helper->getALP()->initLED();
+        helper->getALP()->setLED(ui->spinBoxProjectorLEDcurrent->value(),ui->doubleSpinBoxProjectorLEDpercentage->value());
+        helper->getALP()->inquire();
+    }
+    catch (std::exception &e)
+    {
+        QMessageBox::warning(this,"Error in ALP initialization",QString(e.what()));
+>>>>>>> 190fae4722b1db81ebb3993c4cfa3ab9cd951ae7
     }
 }
 

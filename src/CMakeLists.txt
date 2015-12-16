@@ -109,4 +109,6 @@ endif(QT5_SUPPORT)
 #endif(QT4_SUPPORT)
 
 add_executable(testhomography testhomography.cpp)
-target_link_libraries(testhomography VOLVUXHELPER)
+target_link_libraries(testhomography VOLVUXHELPER ${GLUT_LIBRARIES} ${GLEW_LIBRARY} glut glfw3 dl)
+
+message(STATUS ">>>>>> GLFW= ${THREAD_LIBRARIES}")

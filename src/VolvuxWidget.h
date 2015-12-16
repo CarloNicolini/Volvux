@@ -39,8 +39,12 @@
 #include "VRCamera.h"
 #include "Screen.h"
 #include "ParametersLoader.h"
+<<<<<<< HEAD
 #include "CalibrationWidgetPage.h"
 //#include "CalibrationHelper.h"
+=======
+#include "CalibrationHelper.h"
+>>>>>>> 190fae4722b1db81ebb3993c4cfa3ab9cd951ae7
 
 #define PROJECTOR_SLICES_NUMBER 16
 
