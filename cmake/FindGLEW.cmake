@@ -6,6 +6,7 @@
 #  GLEW_LIBRARY_DIR  - where the libraries are
 #  GLEW_LIBRARY      - Link these to use GLEW
 #
+message (STATUS "-------- ${GLEW_INCLUDE_DIR}")
 if( WIN32 )
    set( GLEW_INCLUDE_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/libs/glew-1.13-win32" )
    

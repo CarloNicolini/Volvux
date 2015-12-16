@@ -1,5 +1,6 @@
 project(Volvux)
 cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
+
 ################################ CMAKE OPTIONS ###############################
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 set(PROJECT_BINARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build/")
@@ -26,7 +27,7 @@ if (NOT OPENGL_FOUND)
 endif()
 
 # 2. Try to find FreeGLUT or GLUT
-if (NOT COMPILE_FREEGLUT MATCHES True)
+if (NOT COMPILE_FREEGLUT)
     # On Apple use the system provided GLUT
     if(APPLE)
         include_directories( /System/Library/Frameworks )
@@ -37,58 +38,51 @@ if (NOT COMPILE_FREEGLUT MATCHES True)
     if (UNIX)
         find_package(FreeGLUT REQUIRED)
     endif(UNIX)
-else(NOT COMPILE_FREEGLUT MATCHES True)
+else()
     # Include the FreeGLUT project for the necessary FreeGLUT implementation
     set(FREEGLUT_SRC_DIR "${PROJECT_SOURCE_DIR}/libs/FreeGLUT/freeglut/freeglut")
     # Override demos building http://stackoverflow.com/questions/3766740/overriding-a-default-option-value-in-cmake-from-a-parent-cmakelists-txt
     set(FREEGLUT_BUILD_DEMOS OFF CACHE BOOL "Disable freeglut demos building")
     add_subdirectory(${FREEGLUT_SRC_DIR})
-    set(FREEGLUT_INCLUDE_DIR "${FREEGLUT_SRC_DIR}/include/GL")
-    include_directories(FREEGLUT_INCLUDE_DIR)
+    include_directories(${FREEGLUT_SRC_DIR}/include/GL)
     set(GLUT_LIBRARIES "freeglut;${GLUT_LIBRARIES}")
-endif(NOT COMPILE_FREEGLUT MATCHES True)
-message (STATUS "[INFO] FreeGLUT INCLUDE DIR=${FREEGLUT_INCLUDE_DIR}")
-message (STATUS "[INFO] GLUT LIBRARIES=${GLUT_LIBRARIES}")
+endif()
 
 # 3. Try to find GLFW
-if(NOT COMPILE_GLFW MATCHES True)
+if(NOT COMPILE_GLFW)
     find_package(GLFW) #Looks for system-wise installed GLFW
     include_directories(${GLFW_INCLUDE_DIR})
     if (NOT GLFW_FOUND)
         message(FATAL_ERROR "GLFW not found in system. Please select compile GLFW from scratch.Set COMPILE_GLFW=True option.")
-    endif(NOT GLFW_FOUND)
-else(NOT COMPILE_GLFW MATCHES True)
+    endif()
+else()
     # Override demos building http://stackoverflow.com/questions/3766740/overriding-a-default-option-value-in-cmake-from-a-parent-cmakelists-txt
     set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Disable glfw examples building")
     set(GLFW_BUILD_TESTS OFF CACHE BOOL "Disable glfw tests building")
     set(GLFW_BUILD_DOCS OFF CACHE BOOL "Disable glfw documentation building")
-    set(GLFW_INSTALL ON CACHE BOOL "Disable glfw installation")
+    set(GLFW_INSTALL OFF CACHE BOOL "Disable glfw installation")
     set(GLFW_DOCUMENT_INTERNALS OFF CACHE BOOL "Disable glfw internal documentation")
     # Now add glfw
     add_subdirectory("${PROJECT_SOURCE_DIR}/libs/glfw")
     set(GLFW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/glfw/include")
     include_directories(${GLFW_INCLUDE_DIR})
-endif(NOT COMPILE_GLFW MATCHES True)
-message (STATUS "[INFO] GLFW INCLUDE DIR=${GLFW_INCLUDE_DIR}")
-message (STATUS "[INFO] GLFW LIBRARY=${GLFW_LIBRARIES} ${GLFW_glfw_LIBRARY}")
+endif(NOT COMPILE_GLFW)
 
 # 4. Try to find GLEW
-if(NOT COMPILE_GLEW MATCHES True)
+if(NOT COMPILE_GLEW)
     find_package(GLEW) #Looks for system-wise installed GLFW
     include_directories(${GLEW_INCLUDE_DIR})
     if (NOT GLEW_FOUND)
         message(FATAL_ERROR "GLEW not found in system. Please select compile GLEW from scratch.Set COMPILE_GLEW=True option.")
     endif()
-else(NOT COMPILE_GLEW MATCHES True) # compile glew 1.10 from cmake project source
+else() # compile glew 1.10 from cmake project source
      add_subdirectory("${PROJECT_SOURCE_DIR}/libs/glew-1.10.0-src/")
      set(GLEW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/glew-1.10.0-src/include")
      include_directories(${GLEW_INCLUDE_DIR})
     if (WIN32)
         set(GLEW_LIBRARY glew32)
     endif(WIN32)
-endif(NOT COMPILE_GLEW MATCHES True)
-message (STATUS "[INFO] GLEW INCLUDE DIR=${GLEW_INCLUDE_DIR}")
-message (STATUS "[INFO] GLEW LIBRARY=${GLEW_LIBRARY}")
+endif(NOT COMPILE_GLEW)
 
 # 5. Try to find Qt4 
 #if(QT4_SUPPORT)
