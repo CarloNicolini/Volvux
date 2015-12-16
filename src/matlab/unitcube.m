@@ -1,6 +1,6 @@
 function [C,col]=unitcube()
 
-l=0.5;
+l=1;
 % use homogeneous coordinates
 
 % C=[+l +l +l 1;
