@@ -29,7 +29,6 @@ AC = project(IP*IP,C);
 AF = project(IP*IP,F);
 % project anamorphically transformed vertices
 
-
 ACP = project(P,AC);
 
 PIX = ndctopix(ACP,viewport,f,n);

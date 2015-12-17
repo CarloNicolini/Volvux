@@ -91,6 +91,9 @@ void CameraDirectLinearTransformation::init(const std::vector<Vector3d> &x, cons
             this->gl_ModelViewProjection_Matrix = gl_Projection_Matrix* gl_ModelView_Matrix;
             this->ModelViewProjectionInitialized=true;
         }
+
+        Vector4i viewport(0,0,1024,768);
+        this->getReprojectionErrorOpenGL(gl_Projection_Matrix,gl_ModelView_Matrix,viewport,points2D,points3D);
     }
 }
 
@@ -124,7 +127,7 @@ void CameraDirectLinearTransformation::decomposePMatrix(const Eigen::Matrix<doub
     // http://ksimek.github.io/2012/08/14/decompose/
     // Negate the second column of K and R because the y window coordinates and camera y direction are opposite is positive
     // This is the solution I've found personally to correct the behaviour using OpenGL gluPerspective convention
-    this->R.row(2)=-R.row(2);
+    //this->R.row(2)=-R.row(2);
 
     // t is the location of the world origin in camera coordinates.
     t = -R*C;
@@ -309,20 +312,22 @@ double CameraDirectLinearTransformation::getReprojectionError(const Eigen::Matri
  * @param x
  * @return
  */
-double CameraDirectLinearTransformation::getReproductionErrorOpenGL(const Eigen::Projective3d &P, const Eigen::Affine3d &MV, const Vector4i &viewport, const vector<Vector3d> &x, const stlalignedvector4d &X)
+double CameraDirectLinearTransformation::getReprojectionErrorOpenGL(const Eigen::Projective3d &P, const Eigen::Affine3d &MV, const Vector4i &viewport, const vector<Vector3d> &x, const stlalignedvector4d &X)
 {
+    cout << "== OPENGL REPRODUCTION ERROR ==" << endl;
     int n=x.size();
     double error=0.0;
-    for (int i=0; i<n;i++)
+    for (int i=0; i<n; i++)
     {
         Vector3d point = X.at(i).head<3>();
         Vector3d v = ( P*(MV*point).homogeneous() ).eval().hnormalized();
         Vector2d vPixel(viewport(0) + viewport(2)*(v.x()+1)/2,viewport(1) + viewport(3)*(v.y()+1)/2);
 
-        cout << i << "-->" << vPixel.transpose() << " " << x.at(i).head<2>().transpose() << endl;
+        cout << "[" << vPixel.transpose() << "] [" << x.at(i).head<2>().transpose() << "]" << endl;
         error += ( vPixel- x.at(i).head<2>() ).norm();
     }
     error/=n;
+    cout << "OpenGL reproduction error=" << error << endl;
     return error;
 }
 

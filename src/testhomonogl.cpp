@@ -13,15 +13,17 @@
 using namespace Eigen;
 using namespace std;
 
+#ifndef CALIBRECT_EDGE_BOTTOM
 #define CALIBRECT_EDGE_BOTTOM 71.0
+#endif
+
+#ifndef CALIBRECT_EDGE_TOP
 #define CALIBRECT_EDGE_TOP 50.0
-#define CALIBRECT_HEIGHT 10.0
-
+#endif
+#ifndef CALIBRECT_HEIGHT
+#define CALIBRECT_HEIGHT 15.0
+#endif
 stlalignedvector4d points3D;
-
-#define CALIBRECT_EDGE_BOTTOM 7.1
-#define CALIBRECT_EDGE_TOP 5
-#define CALIBRECT_HEIGHT 1.5
 
 static const double calibrationtoy[]  = {0,0,0,
                                          -CALIBRECT_EDGE_BOTTOM/2, CALIBRECT_EDGE_BOTTOM/2,0,

@@ -66,7 +66,7 @@ public:
     stlalignedvector4d loadWorldCoords(const string &filename);
 
     double getReprojectionError(const Eigen::Matrix<double, 3, 4> &P, const vector<Vector3d> &x, const stlalignedvector4d &X);
-    double getReproductionErrorOpenGL(const Eigen::Projective3d &P, const Eigen::Affine3d &MV, const Vector4i &viewport, const vector<Vector3d> &x, const stlalignedvector4d &X);
+    double getReprojectionErrorOpenGL(const Eigen::Projective3d &P, const Eigen::Affine3d &MV, const Vector4i &viewport, const vector<Vector3d> &x, const stlalignedvector4d &X);
 
     const Eigen::Vector3d &getCameraCenter() const;
     // For backward compatibility
