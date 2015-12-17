@@ -55,8 +55,11 @@ int main()
     points2d.push_back(Vector3d(569,441,1));
 
     CameraDirectLinearTransformation cdlt;
-    cdlt.init(points2d,points3D,true,true,0,0,1024,768,0.01,1500);
-    //cdlt.info();
+    double znear=10.0;
+    double zfar = 800;
+    cdlt.init(points2d,points3D,true,true,0,0,1024,768,znear,zfar);
+    
+    cdlt.info();
 
     return 0;
 }

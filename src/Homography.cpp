@@ -293,9 +293,11 @@ double CameraDirectLinearTransformation::getReprojectionError(const Eigen::Matri
         Vector3d mr = P*X.at(i);
         mr/=mr(2);  // switch back to cartesian coordinates
         double d = ( Vector2d(mr.x(),mr.y()) - Vector2d(x.at(i).x(),x.at(i).y())).norm();
+        cerr << "[" << Vector2d(mr.x(),mr.y()).transpose()  << "],[" << Vector2d(x.at(i).x(),x.at(i).y()).transpose() << "]" << endl;
         error+=d;
     }
     error/=n;
+    cerr << "TOTAL MEAN ERROR [px]=" << error << endl;
     return error;
 }
 
