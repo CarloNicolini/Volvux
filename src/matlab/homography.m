@@ -2,13 +2,13 @@ function P = homography(x,X)
 
 n = size(x,2);
 
-K=zeros(3,3); % intrinsic matrix
-P=zeros(3,4);
-R=zeros(3,3); % rotation matrix
+% K=zeros(3,3); % intrinsic matrix
+% P=zeros(3,4);
+% R=zeros(3,3); % rotation matrix
 
-glModelView = zeros(4,4);
-glProjection = zeros(4,4);
-glModelViewProjection = zeros(4,4);
+% glModelView = zeros(4,4);
+% glProjection = zeros(4,4);
+% glModelViewProjection = zeros(4,4);
 
 A=zeros(2*n,12);
 for i=1:n
@@ -19,6 +19,7 @@ for i=1:n
 end
 
 [U,S,V] = svd(A);
+
 k=1;
 for i=1:3
     for j=1:4
