@@ -17,7 +17,7 @@ StackedWidget::StackedWidget(QWidget *parent) :
     this->ui->statusBar->hide();
 
     //Fullscreen
-    this->showFullScreen();
+    //this->showFullScreen();
 
     //Start timer
     timer = new QTimer(this);
