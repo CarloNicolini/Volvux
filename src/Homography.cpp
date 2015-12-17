@@ -60,7 +60,8 @@ void CameraDirectLinearTransformation::init(const std::vector<Vector3d> &x, cons
         A.row(2*i) << 0,0,0,0, -m[2]*M, m[1]*M;
         A.row(2*i+1) << m[2]*M,0,0,0,0, -m[0]*M;
     }
-
+    ofstream afile;afile.open("a.txt");
+    afile << A << endl; afile.close();
     // http://my.safaribooksonline.com/book/-/9781449341916/4dot4-augmented-reality/id2706803
 
     JacobiSVD<MatrixXd> svd(A, ComputeFullV );
@@ -76,7 +77,9 @@ void CameraDirectLinearTransformation::init(const std::vector<Vector3d> &x, cons
             ++k;
         }
     }
-
+    cout << "--- MATRIX V=" << endl;
+    cout << svd.matrixV() << endl;
+    cout << "----" << endl;
     this->getReprojectionError(this->getProjectionMatrix(),this->points2D,this->points3D);
 
     // WARNING MUST FIX THE DECOMPOSITION OF OPENGL CAMERA
