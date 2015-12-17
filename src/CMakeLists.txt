@@ -107,7 +107,7 @@ endif(QT5_SUPPORT)
 #endif(WIN32)
 #endif(QT4_SUPPORT)
 
-add_executable(testhomography testhomography.cpp)
-target_link_libraries(testhomography VOLVUXHELPER dl)
+#add_executable(testhomography testhomography.cpp)
+#target_link_libraries(testhomography VOLVUXHELPER dl)
 
-add_executable(testhomonogl testhomonogl.cpp Homography.cpp)
+#add_executable(testhomonogl testhomonogl.cpp Homography.cpp)
