@@ -126,18 +126,6 @@ void CameraDirectLinearTransformation::decomposePMatrix(const Eigen::Matrix<doub
     this->rq3(M,this->K,this->R);
     K/=K(2,2); // EXTREMELY IMPORTANT TO MAKE THE K(2,2)==1 !!!
 
-    K = -K;
-    if (R.determinant() < 0)
-        R = -R;
-
-    /*
-    K.col(0) = -K.col(0);
-    R.row(0) = -R.row(0);
-    K.col(2) = -K.col(2);
-
-    if (R.determinant() < 0)
-        R = -R;
-    */
     // http://ksimek.github.io/2012/08/14/decompose/
     // Negate the second column of K and R because the y window coordinates and camera y direction are opposite is positive
     // This is the solution I've found personally to correct the behaviour using OpenGL gluPerspective convention
