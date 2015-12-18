@@ -1,6 +1,8 @@
-function [C,col]=unitcube()
+function [C,col]=unitcube(l)
 
-l=1;
+if nargin < 1
+    l=1;
+end
 % use homogeneous coordinates
 
 % C=[+l +l +l 1;
@@ -11,7 +13,7 @@ l=1;
 %     +l -l -l 1;
 %     -l +l -l 1;
 %     -l -l -l 1];
-n=10;
+n=4;
 C=[];
 col=[];
 for x=linspace(-l,l,n)

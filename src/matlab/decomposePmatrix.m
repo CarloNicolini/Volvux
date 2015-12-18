@@ -80,8 +80,8 @@ function [K, Rc_w, Pc, pp, pv] = decomposePmatrix(P)
     
     % Perform RQ decomposition of M matrix. Note that rq3 returns K with +ve
     % diagonal elements, as required for the calibration marix.
-    [K Rc_w] = rq3(M);
-    
+    [K, Rc_w] = rq3(M);
+    % normalize K
     K = K/K(3,3);
     % Check that R is right handed, if not give warning
     if dot(cross(Rc_w(:,1), Rc_w(:,2)), Rc_w(:,3)) < 0

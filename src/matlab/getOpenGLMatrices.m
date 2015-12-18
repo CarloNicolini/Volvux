@@ -10,13 +10,14 @@ disp(['Principal vector= ' num2str(pv')]);
 if K(3,3)>0
 	K(:,3) = -K(:,3);
 end
-
+% This we need because of OpenGL convention
+K(:,2)=-K(:,2);
+R(1,:)=-R(1,:);
 
 % K is now in the form
 % K = [a    s   -x0 ;
 %      0    b   -y0 ;
 %      0    0   -1 ];
-
 
 % Make a Persp matrix like this
 
@@ -38,10 +39,10 @@ Persp = [K(1,1)    K(1,2)    K(1,3)   0;
 % The result is that points between the clipping planes 
 % remain between clipping planes after multiplication by Persp.
 
-l=-width/2;
-r=width/2;
-b=-height/2;
-t=height/2;
+l=0;
+r=width;
+b=height;
+t=0;
 
 NDC = glortho(l,r,b,t,near,far);
 

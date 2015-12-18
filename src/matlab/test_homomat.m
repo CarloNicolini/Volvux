@@ -1,5 +1,5 @@
 clear all;
-close all;
+%close all;
 
 X=[ 0        0     0   1 ;
     -35.5   35.5   0   1 ;
@@ -23,7 +23,6 @@ x=[ 512 384   1 ;
 
 [P,A,U,S,V] = homography(x',X');
 
-
 Pcpp=[-0.000526867  -0.00425901   0.00270392     0.794751;
  -0.00431719 -0.000275423   0.00125992     0.606896;
 -9.00724e-07  -7.1911e-07  4.30476e-06   0.00157439];
@@ -31,7 +30,6 @@ Pcpp=[-0.000526867  -0.00425901   0.00270392     0.794751;
 % Evaluate camera error
 for i=1:9
 p(:,i) = P*(X(i,:)');
-
 p(:,i) = p(:,i)/p(3,i);
 end
 
@@ -39,6 +37,7 @@ err=0;
 for i=1:9
     err = err + norm(p(:,i)-x(i,:)');
 end
+fprintf('Camera matrix error = %f\n',err);
 
 % figure;
 % hold on;
@@ -47,11 +46,15 @@ end
 % legend({'original','recosntructed'});
 % hold off;
 
-[gl_Proj,gl_ModelView] = getOpenGLMatrices(P,1024,768,50,150);
-gl_MVProj = gl_Proj*gl_ModelView;
+gl_Viewport=[0 0 1024 768];
+[gl_Projection_matrix,gl_Modelview_matrix] = getOpenGLMatrices(P,1024,768,0.5,1500);
+gl_MVProj = gl_Projection_matrix*gl_Modelview_matrix;
 % Evaluate OpenGL camera error
-pgl=project(gl_MVProj,X);
-pgl=pgl(:,1:3)'; %discard w information
+for i=1:size(x,1)
+    pgl(i,:)=glProject(gl_MVProj,gl_Viewport,X(i,:)');
+end
+%pgl=project(gl_MVProj,X);
+%pgl=pgl(:,1:3)'; %discard w information
 
 %errGL=0;
 %for i=1:9
@@ -59,9 +62,15 @@ pgl=pgl(:,1:3)'; %discard w information
 %end
 
 % viewport transformation
-figure;
+%figure;
+close all;
 hold on;
-scatter(x(:,1),x(:,2),'r');
-scatter(pgl(1,:)',pgl(2,:));
+scatter(x(:,1),x(:,2),'fr');
+scatter(pgl(:,1),pgl(:,2),'or');
+ylim([-2000 2000]);
+xlim([-2000 2000]);
 legend({'original','reconstructed GL'});
 hold off;
+
+U=umeyama(x',[pgl ones(9,1)]');
+U
