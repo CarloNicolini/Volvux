@@ -11,8 +11,8 @@ if K(3,3)>0
 	K(:,3) = -K(:,3);
 end
 % This we need because of OpenGL convention
-K(:,2)=-K(:,2);
-R(1,:)=-R(1,:);
+K(:,2)=-K(:,2); %working
+R(1,:)=-R(1,:); %working
 
 % K is now in the form
 % K = [a    s   -x0 ;
@@ -41,8 +41,8 @@ Persp = [K(1,1)    K(1,2)    K(1,3)   0;
 
 l=0;
 r=width;
-b=height;
-t=0;
+b=0;
+t=height;
 
 NDC = glortho(l,r,b,t,near,far);
 
@@ -51,3 +51,4 @@ gl_Projection = NDC*Persp;
 gl_ModelView = eye(4,4);
 gl_ModelView(1:3,1:3) = R;
 gl_ModelView(1:3,4)= -R*Pc;
+
