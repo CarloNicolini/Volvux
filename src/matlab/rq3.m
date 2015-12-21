@@ -69,4 +69,3 @@ function [R,Q] = rq3(A)
             Q(n,:) = -Q(n,:);
         end
     end
-    

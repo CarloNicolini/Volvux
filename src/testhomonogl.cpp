@@ -56,7 +56,7 @@ int main()
     points2d.push_back(Vector3d(569,321,1));
     points2d.push_back(Vector3d(569,441,1));
 
-    
+/*
     for (int i=0; i<9; i++)
     {
         cout << points2d.at(i).transpose() << " ;" <<endl;
@@ -67,12 +67,11 @@ int main()
         cout << points3D.at(i).transpose() << " ;" << endl;
     }
     cout << "---------------" << endl;
-
+*/
     CameraDirectLinearTransformation cdlt;
-    double znear=10.0;
-    double zfar = 800;
-    cdlt.init(points2d,points3D,true,true,0,0,1024,768,znear,zfar);
-    
+    double znear=0.5;
+    double zfar = 1500;
+    cdlt.init(points2d,points3D,Vector4i(0,0,1024,768),znear,zfar);
     cdlt.info();
 
     return 0;

@@ -1,7 +1,8 @@
 function [gl_Projection, gl_ModelView] = getOpenGLMatrices(cameraMatrix,width,height,near,far)
 
 [K,R,Pc,pp,pv]=decomposePmatrix(cameraMatrix);
-
+K
+R
 disp(['Camera point world= ' num2str(Pc')]);
 disp(['Principal point= ' num2str(pp')]);
 disp(['Principal vector= ' num2str(pv')]);
@@ -46,9 +47,14 @@ t=height;
 
 NDC = glortho(l,r,b,t,near,far);
 
+
 gl_Projection = NDC*Persp;
 
 gl_ModelView = eye(4,4);
 gl_ModelView(1:3,1:3) = R;
 gl_ModelView(1:3,4)= -R*Pc;
 
+NDC
+Persp
+gl_Projection
+gl_ModelView

@@ -32,7 +32,7 @@ CameraDirectLinearTransformation::CameraDirectLinearTransformation()
 {}
 
 
-void CameraDirectLinearTransformation::init(const std::vector<Vector3d> &x, const stlalignedvector4d &X, bool decomposeProjectionMatrix, bool computeOpenGLMatrices, double x0, double y0, int width, int height, double znear, double zfar)
+void CameraDirectLinearTransformation::init(const std::vector<Vector3d> &x, const stlalignedvector4d &X, const Vector4i &gl_Viewport, double znear, double zfar)
 {
     points2D = x;
     points3D = X;
@@ -60,49 +60,56 @@ void CameraDirectLinearTransformation::init(const std::vector<Vector3d> &x, cons
         A.row(2*i) << 0,0,0,0, -m[2]*M, m[1]*M;
         A.row(2*i+1) << m[2]*M,0,0,0,0, -m[0]*M;
     }
-    ofstream afile;afile.open("a.txt");
-    afile << A << endl; afile.close();
+
     // http://my.safaribooksonline.com/book/-/9781449341916/4dot4-augmented-reality/id2706803
 
-    JacobiSVD<MatrixXd> svd(A, ComputeFullV );
+    JacobiSVD<MatrixXd> svd(A, ComputeFullV | ComputeFullU );
     // Copy the data in the last column of matrix V (the eigenvector with the smallest eigenvalue of A^T*A)
     // maintaining the correct order
+    Eigen::MatrixXd V = svd.matrixV();
     int k=0;
     for (int i=0; i<3;i++)
     {
         for (int j=0; j<4; j++)
         {
-            double t = svd.matrixV().col(11).coeffRef(k);
+            double t = svd.matrixV()(k,11);
             P(i,j)= t;
             ++k;
         }
     }
-    cout << "--- MATRIX V=" << endl;
-    cout << svd.matrixV() << endl;
-    cout << "----" << endl;
-    this->getReprojectionError(this->getProjectionMatrix(),this->points2D,this->points3D);
 
-    // WARNING MUST FIX THE DECOMPOSITION OF OPENGL CAMERA
-    if (decomposeProjectionMatrix)
-    {
-        this->decomposePMatrix(this->P);
-        this->DecompositionComputed=true;
-        if (computeOpenGLMatrices)
-        {
-            this->computeOpenGLProjectionMatrix(x0,y0,width,height,znear,zfar);
-            this->computeOpenGLModelViewMatrix(this->R, this->t);
+    ofstream svdv("V.txt");
+    svdv << V << endl;
+    ofstream data("P.txt");
+    data << P << endl;
 
-            this->gl_ModelViewProjection_Matrix = gl_Projection_Matrix* gl_ModelView_Matrix;
-            this->ModelViewProjectionInitialized=true;
-        }
+    // Compute the error using the camera matrix P
+    this->getReprojectionError(P,this->points2D,this->points3D);
 
-        Vector4i viewport(0,0,1024,768);
-        this->getReprojectionErrorOpenGL(gl_Projection_Matrix,gl_ModelView_Matrix,viewport,points2D,points3D);
-    }
+    this->decomposePMatrix(this->P);
+    this->computeOpenGLMatrices(gl_Viewport,znear,zfar);
+    // Compute the error using OpenGL pipeline matrices
+    this->getReprojectionErrorOpenGL(gl_Projection_Matrix,gl_ModelView_Matrix,gl_Viewport,points2D,points3D);
 }
 
+/**
+ * @brief CameraDirectLinearTransformation::decomposePMatrix
+ * @param P
+ */
 void CameraDirectLinearTransformation::decomposePMatrix(const Eigen::Matrix<double,3,4> &P)
 {
+    /*
+    Vector3d p1 = P.col(0);
+    Vector3d p2 = P.col(1);
+    Vector3d p3 = P.col(2);
+    Vector3d p4 = P.col(3);
+
+    Matrix3d M;
+    M.col(0) = p1;
+    M.col(1) = p2;
+    M.col(2) = p3;
+    */
+
     Matrix3d M = P.topLeftCorner<3,3>();
     Vector3d m3 = M.row(2).transpose();
     // Follow the HartleyZisserman - "Multiple view geometry in computer vision" implementation chapter 3
@@ -128,52 +135,63 @@ void CameraDirectLinearTransformation::decomposePMatrix(const Eigen::Matrix<doub
     this->R = this->K = Matrix3d::Identity();
     this->rq3(M,this->K,this->R);
     K/=K(2,2); // EXTREMELY IMPORTANT TO MAKE THE K(2,2)==1 !!!
-
-    // http://ksimek.github.io/2012/08/14/decompose/
-    // Negate the second column of K and R because the y window coordinates and camera y direction are opposite is positive
-    // This is the solution I've found personally to correct the behaviour using OpenGL gluPerspective convention
-    //this->R.row(2)=-R.row(2);
-
-    // t is the location of the world origin in camera coordinates.
-    t = -R*C;
 }
 
 /**
- * @brief CameraDirectLinearTransformation::computeOpenGLProjectionMatrix
- * @param x0
- * @param y0
- * @param width
- * @param height
+ * @brief CameraDirectLinearTransformation::computeOpenGLMatrices
+ * @param gl_viewport
  * @param znear
  * @param zfar
- * @param windowCoordsYUp
  */
-void CameraDirectLinearTransformation::computeOpenGLProjectionMatrix(double x0,double y0,double width,double height,double znear,double zfar,bool windowCoordsYUp)
+void CameraDirectLinearTransformation::computeOpenGLMatrices(const Vector4i &gl_Viewport, double znear, double zfar)
 {
-    eigen_assert(DecompositionComputed && "You did not asked for the P = K[R t] matrix decomposition, explicitly ask in constructor");
-    double depth = zfar - znear;
-    double q =  -(zfar + znear) / depth;
-    double qn = -2.0 * (zfar * znear) / depth;
-    // This follows the OpenGL convention where positive Y coordinates goes down
-    if (windowCoordsYUp)
-    {
-        this->gl_Projection_Matrix.matrix() <<  2.0*K(0,0)/width, -2.0*K(0,1)/width, (-2.0*K(0,2)+width+2.0*x0)/width, 0 ,
-                0,             -2.0*K(1,1)/height,(-2.0*K(1,2)+height+2.0*y0)/height, 0,
-                0,0,q,qn,
-                0,0,-1,0;
-    }
-    else // y_down convention
-    {
-        this->gl_Projection_Matrix.matrix() << 2.0*K(0,0)/width, -2.0*K(0,1)/width, (-2.0*K(0,2)+width+2.0*x0)/width, 0 ,
-                0,              2.0*K(1,1)/height,( 2.0*K(1,2)-height+2.0*y0)/height, 0,
-                0,0,q,qn,
-                0,0,-1,0;
-    }
 
+    // Invert the signs to fit opengl conventions
+    // If K(3,3) isn't -1 negate the 3rd column because OpenGL camera looks down z axis
+    if (K(2,2)>0)
+        K.col(2) = -K.col(2);
+
+    // This we need because of OpenGL convention
+    K.col(1) = -K.col(1);
+    R.row(0) = -R.row(0);
+
+    t = -R*C;
+
+    double A = znear+zfar;
+    double B = znear*zfar;
+
+    Eigen::Projective3d Persp;
+    Persp.matrix() << K(0,0), K(0,1), K(0,2), 0,
+            0,      K(1,1), K(1,2), 0,
+            0,      0,      A,      B,
+            0,      0,     -1,      0;
+
+    double l=gl_Viewport(0);
+    double r=gl_Viewport(2);
+    double b=gl_Viewport(1);
+    double t=gl_Viewport(3);
+    double f=zfar;
+    double n=znear;
+
+    Eigen::Affine3d NDC;
+    NDC.matrix() << 2.0/(r-l),     0,           0,          -(r+l)/(r-l),
+            0,             2.0/(t-b),   0,          -(t+b)/(t-b),
+            0,             0,           -2/(f-n),    -(f+n)/(f-n),
+            0,             0,           0,          1;
+
+    cout << "PERSP="  << Persp.matrix() << endl;
+    cout << "NDC=" << NDC.matrix() << endl;
+
+    // WARNING C'E UN ERRORE
+    this->gl_Projection_Matrix.matrix() = Persp.matrix()*NDC.matrix();
+    this->gl_ModelView_Matrix.matrix().topLeftCorner<3,3>().matrix() = R;
+    this->gl_ModelView_Matrix.translation().matrix() << -R*this->C;
+    cout << "gl_Projection\n" << gl_Projection_Matrix.matrix() << endl;
+    cout << "gl_ModelView_Matrix\n" << gl_ModelView_Matrix.matrix() << endl;
     // Compute the inverses
     this->gl_ModelViewInverse_Matrix = this->gl_ModelView_Matrix.inverse();
     this->gl_ModelViewProjectionInverse_Matrix = this->gl_ModelViewProjection_Matrix.inverse();
-    this->gl_ProjectionInverse_Matrix = this->gl_Projection_Matrix.inverse();
+    this->gl_Projection_Inverse_Matrix = this->gl_Projection_Matrix.inverse();
 }
 
 /**
@@ -184,27 +202,35 @@ void CameraDirectLinearTransformation::computeOpenGLProjectionMatrix(double x0,d
  * @param R
  * @param Q
  */
-void CameraDirectLinearTransformation::rq3(const Matrix3d &A, Matrix3d &R, Matrix3d& Q)
+void CameraDirectLinearTransformation::rq3(const Matrix3d &_A, Matrix3d &R, Matrix3d& Q)
 {
-    // Find rotation Qx to set A(2,1) to 0
-    double c = -A(2,2)/sqrt(A(2,2)*A(2,2)+A(2,1)*A(2,1));
-    double s = A(2,1)/sqrt(A(2,2)*A(2,2)+A(2,1)*A(2,1));
+    Matrix3d A=_A; // to allow modification
+    double eps=1E-10;
+    double c = -A(2,2)/sqrt(pow(A(2,2),2)+pow(A(2,1),2));
+    double s = A(2,1)/sqrt(pow(A(2,2),2)+pow(A(2,1),2));
     Matrix3d Qx,Qy,Qz;
-    Qx << 1 ,0,0, 0,c,-s, 0,s,c;
-    R = A*Qx;
-    // Find rotation Qy to set A(2,0) to 0
-    c = R(2,2)/sqrt(R(2,2)*R(2,2)+R(2,0)*R(2,0) );
-    s = R(2,0)/sqrt(R(2,2)*R(2,2)+R(2,0)*R(2,0) );
-    Qy << c, 0, s, 0, 1, 0,-s, 0, c;
-    R*=Qy;
 
-    // Find rotation Qz to set A(1,0) to 0
-    c = -R(1,1)/sqrt(R(1,1)*R(1,1)+R(1,0)*R(1,0));
-    s =  R(1,0)/sqrt(R(1,1)*R(1,1)+R(1,0)*R(1,0));
-    Qz << c ,-s, 0, s ,c ,0, 0, 0 ,1;
-    R*=Qz;
+    // Find rotation Qx to set A(3,2) to 0
+    A(2,2) = A(2,2) + eps;
+    Qx <<  1, 0, 0, 0, c, -s, 0, s, c;
+    R = A*Qx;
+
+    // Find rotation Qy to set A(3,1) to 0
+    R(2,2) = R(2,2) + eps;
+    c = R(2,2)/sqrt(pow(R(2,2),2)+pow(R(2,0),2));
+    s = R(2,0)/sqrt(pow(R(2,2),2)+pow(R(2,0),2));
+    Qy << c, 0, s, 0, 1, 0,-s, 0, c;
+    R = R*Qy;
+
+    // Find rotation Qz to set A(2,1) to 0
+    R(1,1) = R(1,1) + eps;
+    c = -R(1,1)/sqrt(pow(R(1,1),2)+pow(R(1,0),2));
+    s =  R(1,0)/sqrt(pow(R(1,1),2)+pow(R(1,0),2));
+    Qz << c, -s, 0, s, c, 0, 0, 0, 1;
+    R = R*Qz;
 
     Q = Qz.transpose()*Qy.transpose()*Qx.transpose();
+
     // Adjust R and Q so that the diagonal elements of R are +ve
     for (int n=0; n<3; n++)
     {
@@ -217,34 +243,11 @@ void CameraDirectLinearTransformation::rq3(const Matrix3d &A, Matrix3d &R, Matri
 }
 
 /**
- * @brief CameraDirectLinearTransformation::computeOpenGLModelViewMatrix
- * This matrix describes how to transform points in world coordinates to camera coordinates.
- * The vector t can be interpreted as the position of the world origin in camera coordinates,
- * and the columns of R represent the directions of the world-axes in camera coordinates.
- * @param Rot
- * @param trans
- */
-void CameraDirectLinearTransformation::computeOpenGLModelViewMatrix(const Eigen::Matrix3d &Rot, const Vector3d &trans)
-{
-    this->gl_ModelView_Matrix.setIdentity();
-    this->gl_ModelView_Matrix.linear().matrix() << Rot;
-    this->gl_ModelView_Matrix.translation() << trans;
-  /*
-    Eigen::Affine3d CoordXForm = Eigen::Affine3d::Identity();
-    CoordXForm.matrix().coeffRef(1,1)=-1; // flip Y coordinate in eye space (OpenGL has +Y as up, Hartley Zisserman has -Y)
-    CoordXForm.matrix().coeffRef(2,2)=-1; // flip Z coordinate in eye space (OpenGL has -Z in front of camera, Hartley Zisserman has +Z)
-    */
-    //CoordXForm.linear() = Eigen::AngleAxis<double>(M_PI,Vector3d::UnitX()).toRotationMatrix();
-    //this->OpenGLModelViewMatrix.matrix()*=CoordXForm.matrix();
-}
-
-/**
  * @brief CameraDirectLinearTransformation::getCameraCenter
  * @return
  */
 const Eigen::Vector3d &CameraDirectLinearTransformation::getCameraCenter() const
 {
-    eigen_assert(DecompositionComputed && "You did not asked for the P matrix decomposition, explicitly ask in constructor");
     return this->C;
 }
 
@@ -301,11 +304,11 @@ double CameraDirectLinearTransformation::getReprojectionError(const Eigen::Matri
         Vector3d mr = P*X.at(i);
         mr/=mr(2);  // switch back to cartesian coordinates
         double d = ( Vector2d(mr.x(),mr.y()) - Vector2d(x.at(i).x(),x.at(i).y())).norm();
-        cerr << "[" << Vector2d(mr.x(),mr.y()).transpose()  << "],[" << Vector2d(x.at(i).x(),x.at(i).y()).transpose() << "]" << endl;
+        //cerr << "[" << Vector2d(mr.x(),mr.y()).transpose()  << "],[" << Vector2d(x.at(i).x(),x.at(i).y()).transpose() << "]" << endl;
         error+=d;
     }
     error/=n;
-    cerr << "TOTAL MEAN ERROR [px]=" << error << endl;
+    cerr << "Camera matrix error [px]=" << error << endl;
     return error;
 }
 
@@ -319,7 +322,7 @@ double CameraDirectLinearTransformation::getReprojectionError(const Eigen::Matri
  */
 double CameraDirectLinearTransformation::getReprojectionErrorOpenGL(const Eigen::Projective3d &P, const Eigen::Affine3d &MV, const Vector4i &viewport, const vector<Vector3d> &x, const stlalignedvector4d &X)
 {
-    cout << "== OPENGL REPRODUCTION ERROR ==" << endl;
+    //cout << "== OPENGL REPRODUCTION ERROR ==" << endl;
     int n=x.size();
     double error=0.0;
     for (int i=0; i<n; i++)
@@ -327,92 +330,64 @@ double CameraDirectLinearTransformation::getReprojectionErrorOpenGL(const Eigen:
         Vector3d point = X.at(i).head<3>();
         Vector3d v = ( P*(MV*point).homogeneous() ).eval().hnormalized();
         Vector2d vPixel(viewport(0) + viewport(2)*(v.x()+1)/2,viewport(1) + viewport(3)*(v.y()+1)/2);
-
-        cout << "[" << vPixel.transpose() << "] [" << x.at(i).head<2>().transpose() << "]" << endl;
+        //cerr << "[" << vPixel.transpose() << "] [" << x.at(i).head<2>().transpose() << "]" << endl;
         error += ( vPixel- x.at(i).head<2>() ).norm();
     }
     error/=n;
-    cout << "OpenGL reproduction error=" << error << endl;
+    cerr << "OpenGL error [px] =" << error << endl;
     return error;
 }
 
-/*
-void CameraDirectLinearTransformation::decomposePMatrix2(const Eigen::Matrix<double,3,4> &_P)
+const Eigen::Vector3d & CameraDirectLinearTransformation::getCameraPositionWorld() const
 {
-    // Normalized Projection Matrix
-    Matrix<double,3,4> P=_P;
-    P/= _P.row(2).head<3>().norm();
-
-    this->R = this->K = Matrix3d::Zero();
-    // Principal Point
-    K(0,2) = P.row(0).head<3>().dot(P.row(2).head<3>()); //P(0,0:2)*P(2,0:2)';
-    K(1,2) = P.row(1).head<3>().dot(P.row(2).head<3>()); // P(1,0:2)*P(2,0:2)';
-    this->principalPoint << K(0,2),K(1,2) ;
-    // Focal Length
-    K(0,0)   = sqrt(pow(P.row(0).head<3>().norm(),2) - K(0,2)*K(0,2));
-    K(1,1)   = sqrt(pow(P.row(1).head<3>().norm(),2) - K(1,2)*K(1,2));
-    K.row(2) << 0, 0, 1;
-
-    // Rotation Matrix
-    R(2,0)   = P(2,0);
-    R(2,1)   = P(2,1);
-    R(2,2)   = P(2,2);
-    R.row(0) << (P.row(0).head<3>()-K(0,2)*P.row(2).head<3>())/K(0,0);
-    R.row(1) << (P.row(1).head<3>()-K(1,2)*P.row(2).head<3>())/K(1,1);
-
-    if (K(0,0)<0)
-    {
-        Matrix3d J=Matrix3d::Identity();
-        J(0,0)=-1;
-        K*=J;
-        R*=J;
-    }
-    if (K(1,1)>0)
-    {
-        Matrix3d H=Matrix3d::Identity();
-        H(1,1)=-1;
-        K*=H;
-        R*=H;
-    }
-
-    // Translation Vector
-    this->t(2)   = P(2,3);
-    this->t(0)   = (P(0,3)-K(0,2)*t(2))/K(0,0);
-    this->t(1)   = (P(1,3)-K(1,2)*t(2))/K(1,1);
-    // t can also be computed by mean of this formula
-    Vector3d t = K.inverse()*P.col(3).head<3>();
-
-    // Orthogonality Enforcement
-    JacobiSVD<Matrix3d> svd(R,ComputeFullU | ComputeFullV);
-    R=svd.matrixU()*Matrix3d::Identity()*svd.matrixV().transpose();
-
-    // XXX carlo
-    this->principalVector << R.col(2);
-    // Camera position in world coordinates
-    this->C = -R.transpose()*t;
-    //cout << "CameraPosWorld=\n" << C.transpose() << endl;
-
-    // Transform some signs to fit OpenGL conventions
-    this->t.tail<2>() =-this->t.tail<2>();
-    //cout << "t=\n" << t.transpose() << endl;
-
-    R.row(2)=-R.row(2);
-    R.col(1)=-R.col(1);
+    return getCameraCenter();
 }
-*/
+
+const Eigen::Affine3d &CameraDirectLinearTransformation::getOpenGLModelViewMatrix()
+{
+    return this->gl_ModelView_Matrix;
+}
+
+const Eigen::Projective3d &CameraDirectLinearTransformation::getOpenGLProjectionMatrix()
+{
+    return this->gl_Projection_Matrix;
+}
+
+const Eigen::Projective3d &CameraDirectLinearTransformation::getOpenGLModelViewProjectionInverseMatrix() const
+{
+
+    return gl_ModelViewProjectionInverse_Matrix;
+}
+
+const Eigen::Projective3d &CameraDirectLinearTransformation::getOpenGLProjectionInverseMatrix() const
+{
+
+    return gl_Projection_Inverse_Matrix;
+}
+
+const Eigen::Affine3d &CameraDirectLinearTransformation::getOpenGLModelViewInverseMatrix() const
+{
+    return gl_ModelViewInverse_Matrix;
+}
+
+const Eigen::Matrix<double,3,4> &CameraDirectLinearTransformation::getCameraMatrix()
+{
+    return this->P;
+}
 
 void CameraDirectLinearTransformation::info()
 {
-    std::cout << "HZ 3x4 projection matrix=\n" << this->getProjectionMatrix() << endl;
-    std::cout << "Intrinsinc camera matrix=\n" <<this->getIntrinsicMatrix() << endl;
-    std::cout << "Extrinsic camera matrix=\n"<< this->getRotationMatrix() << endl << endl;
-    std::cout << "Camera Center C=" << this->getCameraPositionWorld().transpose() << endl;
-    std::cout << "Camera t= " << this->getT().transpose() << endl;
+    std::cout << "HZ 3x4 projection matrix=\n" << this->P << endl;
+    std::cout << "Intrinsinc camera matrix=\n" <<this->K << endl;
+    std::cout << "Extrinsic camera matrix=\n"<< this->R << endl << endl;
+    std::cout << "Camera Center C=" << this->C.transpose() << endl;
+    /*
+    std::cout << "Camera t= " << this->T.transpose() << endl;
     std::cout << "Camera Principal axis= " << this->getPrincipalAxis().transpose() << endl;
     std::cout << "Camera Principal point=" << this->getPrincipalPoint().transpose() << endl ;
     std::cout << "OpenGL ModelViewMatrix=\n" << this->getOpenGLModelViewMatrix().matrix() << endl;
     std::cout << "OpenGL Projection=\n" << this->getOpenGLProjectionMatrix().matrix() << endl;
-    //std::cout << "Reproduction error= " << this->getReprojectionError(this->getProjectionMatrix(),this->points2D,this->points3D) << endl;
+    */
 }
 
 

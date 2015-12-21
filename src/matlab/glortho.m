@@ -1,4 +1,4 @@
-function P = glortho(l,r,b,t,n,f)
+ function P = glortho(l,r,b,t,n,f)
 
 
 P = [ 2/(r-l)   0       0         -(r+l)/(r-l);

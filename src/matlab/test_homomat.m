@@ -26,13 +26,14 @@ x=[ 512 384   1 ;
 Pcpp=[-0.000526867  -0.00425901   0.00270392     0.794751;
  -0.00431719 -0.000275423   0.00125992     0.606896;
 -9.00724e-07  -7.1911e-07  4.30476e-06   0.00157439];
+P=Pcpp;
 
 % Evaluate camera error
 for i=1:9
 p(:,i) = P*(X(i,:)');
 p(:,i) = p(:,i)/p(3,i);
 end
-
+P
 err=0;
 for i=1:9
     err = err + norm(p(:,i)-x(i,:)');
@@ -62,15 +63,15 @@ end
 
 % viewport transformation
 %figure;
-close all;
-hold on;
-scatter(x(:,1),x(:,2),'fr');
-scatter(pgl(:,1),pgl(:,2),'or');
-delta = pgl(:,1:2) - x(:,1:2);
-quiver(x(:,1),x(:,2),delta(:,1),delta(:,2),0);
-xlim([0 gl_Viewport(3)]);
-ylim([0 gl_Viewport(4)]);
-legend({'original','reconstructed GL'});
+% close all;
+% hold on;
+% scatter(x(:,1),x(:,2),'fr');
+% scatter(pgl(:,1),pgl(:,2),'or');
+% delta = pgl(:,1:2) - x(:,1:2);
+% quiver(x(:,1),x(:,2),delta(:,1),delta(:,2),0);
+% xlim([0 gl_Viewport(3)]);
+% ylim([0 gl_Viewport(4)]);
+% legend({'original','reconstructed GL'});
 %hold off;
 
 U=umeyama(x',[pgl ones(9,1)]');
