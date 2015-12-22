@@ -43,7 +43,7 @@ void CameraDirectLinearTransformation::init(const std::vector<Vector3d> &x, cons
     this->K.setZero();
     this->P.setZero();
     this->R.setZero();
-    this->t.setZero();
+    this->T.setZero();
     this->C.setZero();
     this->gl_ModelView_Matrix.setIdentity();
     this->gl_Projection_Matrix.matrix().setZero();
@@ -146,7 +146,10 @@ void CameraDirectLinearTransformation::decomposePMatrix(const Eigen::Matrix<doub
 void CameraDirectLinearTransformation::computeOpenGLMatrices(const Vector4i &gl_Viewport, double znear, double zfar)
 {
 
-    // Invert the signs to fit opengl conventions
+    // Implementation of http://ksimek.github.io/2013/06/03/calibrated_cameras_in_opengl/
+    // with inversion of second column on K and first row of R to match the inverted OpenGL axes when reprojected via the
+    // light projector with a mirror
+
     // If K(3,3) isn't -1 negate the 3rd column because OpenGL camera looks down z axis
     if (K(2,2)>0)
         K.col(2) = -K.col(2);
@@ -155,7 +158,7 @@ void CameraDirectLinearTransformation::computeOpenGLMatrices(const Vector4i &gl_
     K.col(1) = -K.col(1);
     R.row(0) = -R.row(0);
 
-    t = -R*C;
+    this->T = -R*C;
 
     double A = znear+zfar;
     double B = znear*zfar;
@@ -179,15 +182,17 @@ void CameraDirectLinearTransformation::computeOpenGLMatrices(const Vector4i &gl_
             0,             0,           -2/(f-n),    -(f+n)/(f-n),
             0,             0,           0,          1;
 
-    cout << "PERSP="  << Persp.matrix() << endl;
-    cout << "NDC=" << NDC.matrix() << endl;
 
-    // WARNING C'E UN ERRORE
-    this->gl_Projection_Matrix.matrix() = Persp.matrix()*NDC.matrix();
+    this->gl_Projection_Matrix = NDC*Persp;
     this->gl_ModelView_Matrix.matrix().topLeftCorner<3,3>().matrix() = R;
-    this->gl_ModelView_Matrix.translation().matrix() << -R*this->C;
-    cout << "gl_Projection\n" << gl_Projection_Matrix.matrix() << endl;
-    cout << "gl_ModelView_Matrix\n" << gl_ModelView_Matrix.matrix() << endl;
+    this->gl_ModelView_Matrix.translation().matrix() << this->T;
+    this->gl_ModelViewProjection_Matrix = gl_Projection_Matrix*gl_ModelView_Matrix;
+
+    //cout << "gl_Projection\n" << gl_Projection_Matrix.matrix() << endl;
+    //cout << "gl_ModelView_Matrix\n" << gl_ModelView_Matrix.matrix() << endl;
+    //cout << "PERSP="  << Persp.matrix() << endl;
+    //cout << "NDC=" << NDC.matrix() << endl;
+
     // Compute the inverses
     this->gl_ModelViewInverse_Matrix = this->gl_ModelView_Matrix.inverse();
     this->gl_ModelViewProjectionInverse_Matrix = this->gl_ModelViewProjection_Matrix.inverse();
@@ -205,7 +210,7 @@ void CameraDirectLinearTransformation::computeOpenGLMatrices(const Vector4i &gl_
 void CameraDirectLinearTransformation::rq3(const Matrix3d &_A, Matrix3d &R, Matrix3d& Q)
 {
     Matrix3d A=_A; // to allow modification
-    double eps=1E-10;
+    double eps=std::numeric_limits<double>::epsilon();
     double c = -A(2,2)/sqrt(pow(A(2,2),2)+pow(A(2,1),2));
     double s = A(2,1)/sqrt(pow(A(2,2),2)+pow(A(2,1),2));
     Matrix3d Qx,Qy,Qz;
@@ -240,15 +245,6 @@ void CameraDirectLinearTransformation::rq3(const Matrix3d &_A, Matrix3d &R, Matr
             Q.row(n) = - Q.row(n);
         }
     }
-}
-
-/**
- * @brief CameraDirectLinearTransformation::getCameraCenter
- * @return
- */
-const Eigen::Vector3d &CameraDirectLinearTransformation::getCameraCenter() const
-{
-    return this->C;
 }
 
 /**
@@ -330,7 +326,7 @@ double CameraDirectLinearTransformation::getReprojectionErrorOpenGL(const Eigen:
         Vector3d point = X.at(i).head<3>();
         Vector3d v = ( P*(MV*point).homogeneous() ).eval().hnormalized();
         Vector2d vPixel(viewport(0) + viewport(2)*(v.x()+1)/2,viewport(1) + viewport(3)*(v.y()+1)/2);
-        //cerr << "[" << vPixel.transpose() << "] [" << x.at(i).head<2>().transpose() << "]" << endl;
+        cerr << "[" << vPixel.transpose() << "] [" << x.at(i).head<2>().transpose() << "]" << endl;
         error += ( vPixel- x.at(i).head<2>() ).norm();
     }
     error/=n;
@@ -338,10 +334,15 @@ double CameraDirectLinearTransformation::getReprojectionErrorOpenGL(const Eigen:
     return error;
 }
 
-const Eigen::Vector3d & CameraDirectLinearTransformation::getCameraPositionWorld() const
+/**
+ * @brief CameraDirectLinearTransformation::getCameraCenter
+ * @return
+ */
+const Eigen::Vector3d &CameraDirectLinearTransformation::getCameraCenter() const
 {
-    return getCameraCenter();
+    return this->C;
 }
+
 
 const Eigen::Affine3d &CameraDirectLinearTransformation::getOpenGLModelViewMatrix()
 {

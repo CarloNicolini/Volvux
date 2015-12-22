@@ -47,7 +47,6 @@ t=height;
 
 NDC = glortho(l,r,b,t,near,far);
 
-
 gl_Projection = NDC*Persp;
 
 gl_ModelView = eye(4,4);

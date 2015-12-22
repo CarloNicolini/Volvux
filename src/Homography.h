@@ -74,7 +74,6 @@ public:
 
     const Eigen::Matrix<double,3,4> &getCameraMatrix();
     const Eigen::Vector3d &getCameraCenter() const;
-    const Eigen::Vector3d &getCameraPositionWorld() const;
     const Eigen::Affine3d &getOpenGLModelViewMatrix();
     const Eigen::Projective3d &getOpenGLProjectionMatrix();
     const Eigen::Projective3d &getOpenGLModelViewProjectionInverseMatrix() const;
@@ -89,11 +88,11 @@ private:
      */
     Eigen::Matrix<double,3,4> P;
     /**
-     * @brief R The orthogonal rotation matrix obtained decomposing P, it's part of the extrinsic pose P= K [R t]
+     * @brief R The orthogonal rotation matrix obtained decomposing P, it's part of the extrinsic pose P= K [R T]
      */
     Eigen::Matrix3d R;
     /**
-     * @brief K The intrinsic matrix P = K [R t]
+     * @brief K The intrinsic matrix P = K [R T]
      */
     Eigen::Matrix3d K;
     /**
@@ -104,14 +103,14 @@ private:
     /**
      * @brief t
      */
-    Eigen::Vector3d t;
+    Eigen::Vector3d T;
 
     /**
      * @brief principalPoint The principal point
      */
     Vector2d principalPoint;
     /**
-     * @brief principalVector
+     * @brief principalVector The principal vector
      */
     Vector3d principalVector;
     /**
