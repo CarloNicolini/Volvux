@@ -14,6 +14,7 @@
 #include "Timer.h"
 #include "Homography.h"
 #include "VRCamera.h"
+#include "ObjLoader2.h"
 #include "VolumetricMeshIntersection.h"
 
 using namespace Eigen;
@@ -23,26 +24,29 @@ using namespace std;
 #define CALIBRECT_EDGE_TOP 50.0
 #define CALIBRECT_HEIGHT 10.0
 
-stlalignedvector4d points3D;
-/*
-#define CALIBRECT_EDGE_BOTTOM 7.1
-#define CALIBRECT_EDGE_TOP 5
-#define CALIBRECT_HEIGHT 1.5
-*/
-static const double calibrationtoy[]  = {0,0,0,
-                               -CALIBRECT_EDGE_BOTTOM/2, CALIBRECT_EDGE_BOTTOM/2,0,
-                               CALIBRECT_EDGE_BOTTOM/2, CALIBRECT_EDGE_BOTTOM/2,0,
-                               CALIBRECT_EDGE_BOTTOM/2, -CALIBRECT_EDGE_BOTTOM/2,0,
-                               -CALIBRECT_EDGE_BOTTOM/2, -CALIBRECT_EDGE_BOTTOM/2,0,
-                               -CALIBRECT_EDGE_TOP/2, CALIBRECT_EDGE_TOP/2, CALIBRECT_HEIGHT,
-                               CALIBRECT_EDGE_TOP/2, CALIBRECT_EDGE_TOP/2, CALIBRECT_HEIGHT,
-                               CALIBRECT_EDGE_TOP/2, -CALIBRECT_EDGE_TOP/2, CALIBRECT_HEIGHT,
-                               -CALIBRECT_EDGE_TOP/2, -CALIBRECT_EDGE_TOP/2, CALIBRECT_HEIGHT,
-                              };
+#define ZNEAR 0.1
+#define ZFAR 1E6
 
-int iWidth=768;
-int iHeight=768;
-int iDepth=768;
+ObjLoader2 *obj;
+
+stlalignedvector4d points3D;
+
+static const double calibrationtoy[]  = {0,0,0,
+                                         -CALIBRECT_EDGE_BOTTOM/2, CALIBRECT_EDGE_BOTTOM/2,0,
+                                         CALIBRECT_EDGE_BOTTOM/2, CALIBRECT_EDGE_BOTTOM/2,0,
+                                         CALIBRECT_EDGE_BOTTOM/2, -CALIBRECT_EDGE_BOTTOM/2,0,
+                                         -CALIBRECT_EDGE_BOTTOM/2, -CALIBRECT_EDGE_BOTTOM/2,0,
+                                         -CALIBRECT_EDGE_TOP/2, CALIBRECT_EDGE_TOP/2, CALIBRECT_HEIGHT,
+                                         CALIBRECT_EDGE_TOP/2, CALIBRECT_EDGE_TOP/2, CALIBRECT_HEIGHT,
+                                         CALIBRECT_EDGE_TOP/2, -CALIBRECT_EDGE_TOP/2, CALIBRECT_HEIGHT,
+                                         -CALIBRECT_EDGE_TOP/2, -CALIBRECT_EDGE_TOP/2, CALIBRECT_HEIGHT,
+                                        };
+
+int iWidth=256;
+int iHeight=256;
+int iDepth=256;
+
+double spheresize=120;
 
 VolumetricMeshIntersection surface;
 
@@ -70,6 +74,15 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     {
         surface.meshStruct.rotationAngle -= 0.05;
     }
+    if ( (key == GLFW_KEY_S ) && action == GLFW_REPEAT || action == GLFW_PRESS)
+    {
+        spheresize += 10;
+    }
+    if ( (key == GLFW_KEY_X ) && action == GLFW_REPEAT || action == GLFW_PRESS)
+    {
+        spheresize -= 10;
+    }
+    cout << "spheresize=" << spheresize << endl;
 }
 
 static void mouse_entered_callback(GLFWwindow *window, int entered)
@@ -146,71 +159,128 @@ GLFWwindow *initOpenGLContext(const int width=1024, const int height=768, const 
     return window;
 }
 
-void drawObject()
+void drawCalibrations3D()
 {
     glPushMatrix();
     glPointSize(5);
-    glPushAttrib(GL_COLOR_BUFFER_BIT | GL_POINT_BIT);
     glBegin(GL_POINTS);
-    glColor3d(0,1,1);
+    glColor3d(0,0,1);
     for (int i=0; i<9; i++)
         glVertex3dv(points3D.at(i).data());
     glEnd();
-    glPopAttrib();
     glPopMatrix();
 }
 
 void drawFrame(GLFWwindow *window, CameraDirectLinearTransformation &cdlt)
 {
-    float ratio;
-    int width, height;
+    double ratio;
+    double width=1024;
+    double height=768;
 
-    glfwGetFramebufferSize(window, &width, &height);
+    //glfwGetFramebufferSize(window, &width, &height);
     ratio = width / (float) height*100;
 
-    Projective3d Pp = cdlt.getOpenGLProjectionMatrix();
-    Projective3d PpInv = cdlt.getOpenGLProjectionInverseMatrix();
-    //Projective3d Po = cdlt.getOpenGLOrthographicProjectionMatrix();
-    //Projective3d PoInv = cdlt.getOpenGLOrthographicProjectionMatrix().inverse();
+    Projective3d P = cdlt.getOpenGLProjectionMatrix();
     Affine3d MV = cdlt.getOpenGLModelViewMatrix();
 
-    Projective3d P = Pp;
-
-    glViewport(0, 0, width, height);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(1,1,1,1);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
+    glDisable(GL_DEPTH_TEST);
+    glViewport(0, 0, 1024, 768);
+    glDepthRange(ZNEAR,ZFAR);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glClearColor(0,0,0,0);
     // Apply GL_PROJECTION matrix
-    //glLoadMatrixd(P.data());
-    //glOrtho(-ratio, ratio, -50.f, 50.f, 50.f, -50.f);
-    VRCamera cam; cam.init(Screen(500,500,0,0,-500),false);
-    cam.setEye(Vector3d(0,0,0));
+    glMatrixMode(GL_PROJECTION);
+    glLoadMatrixd(P.data());
+
     // Apply modelview matrix
     glMatrixMode(GL_MODELVIEW);
-    //surface.draw();
-    drawObject();
+    glLoadMatrixd(MV.data());
+    obj->draw();
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
+    // DRAW THE AXES
+    // Draw arrows
+    glLineWidth(5);
+    glBegin(GL_LINES);
+    // red X axis
+    glColor3d(1,0,0);
+    glVertex3d(0,0,0);
+    glVertex3d(50,0,0);
+    // blue Y axis
+    glColor3d(0,1,0);
+    glVertex3d(0,0,0);
+    glVertex3d(0,50,0);
+    // green Z axis
+    glColor3d(0,0,1);
+    glVertex3d(0,0,0);
+    glVertex3d(0,0,50);
+    glEnd();
+    glPopAttrib();
+
+    drawCalibrations3D();
+    /*
+    glPushMatrix();
+    glColor3d(1,0,0);
+    glutWireSphere(spheresize,50,50);
+    Eigen::Projective3d X;
+    glGetDoublev(GL_MODELVIEW_PROJECTION_NV,X.data());
+    //cout << X.matrix() << endl;
+    glTranslated(-X.translation().x(),-X.translation().y(),-X.translation().z());
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
+    // Draw arrows
+    glLineWidth(5);
+    glBegin(GL_LINES);
+    // red axis
+    glColor3d(1,0,0);
+    glVertex3d(0,0,0);
+    glVertex3d(50,0,0);
+    // blue axis
+    glColor3d(0,1,0);
+    glVertex3d(0,0,0);
+    glVertex3d(0,50,0);
+    // green axis
+    glColor3d(0,0,1);
+    glVertex3d(0,0,0);
+    glVertex3d(0,0,50);
+    glEnd();
+    glPopAttrib();
+
+    /*
+    glEnable(GL_TEXTURE_3D);
+    surface.draw();
+    glDisable(GL_TEXTURE_3D);
+    drawCalibrations3D();
+    glPopAttrib();
+    glPopMatrix();
+    */
 }
 
 void init()
 {
+    obj = new ObjLoader2();
+    obj->load("../data/objmodels/helicoid.obj");
+    obj->initializeBuffers();
+    //obj->getInfo();
+
+    /*
     surface.resize(iWidth,iHeight,iDepth);
     surface.loadObj("../data/objmodels/helicoid.obj");
     const GLfloat white[]={1.0f,0.0f,0.0f,1.0f};
     surface.setUniformColor(white);
     int nspheres=1000;
-    int minRadius=10;
-    int maxRadius=50;
+    int minRadius=1;
+    int maxRadius=5;
     surface.fillVolumeWithSpheres(nspheres,minRadius,maxRadius);
     surface.initializeTexture();
     surface.initializeSurfaceShaders();
-
+    surface.meshStruct.showMesh=true;
     surface.meshStruct.radius=120.0;
     surface.meshStruct.height=1.0;
     surface.meshStruct.rotationAngle=0.0;
     surface.meshStruct.offsetX=0.0;
     surface.meshStruct.offsetY=0.0;
     surface.meshStruct.offsetZ=0.0;
+    surface.meshStruct.thickness=10000;
+    */
 }
 
 int main(int argc, char *argv[])
@@ -232,7 +302,7 @@ int main(int argc, char *argv[])
     points2d.push_back(Vector3d(449,321,1));
     points2d.push_back(Vector3d(569,321,1));
     points2d.push_back(Vector3d(569,441,1));
-
+    /*
     cout << "[ " ;
     for (int i=0; i<9; ++i)
     {
@@ -246,18 +316,29 @@ int main(int argc, char *argv[])
         cout << points3D.at(i).transpose() << " ;" << endl;
     }
     cout << "]" << endl;
-exit(0);
+    */
     CameraDirectLinearTransformation cdlt;
-    cdlt.init(points2d,points3D,true,true,0,0,1024,768,0.01,1500);
+    cdlt.init(points2d,points3D,Vector4i(0,0,1024,768),ZNEAR,ZFAR);
     cdlt.info();
 
     GLFWwindow *window = initOpenGLContext(1024,768,60,false,false,0);
 
     glewInit();
-    //glutInit(&argc, argv);
-    //init();
+    glutInit(&argc, argv);
+    init();
     glfwSetKeyCallback(window, key_callback);
-    glfwSetCursorPosCallback(window, cursor_pos_callback);
+    //glfwSetCursorPosCallback(window, cursor_pos_callback);
+
+
+    {
+        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //glShadeModel(GL_SMOOTH);
+        //glEnable(GL_DEPTH_TEST);
+        glEnable (GL_BLEND);
+        glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        // Set depth buffer clear value
+        //glClearDepth(0.0);
+    }
 
     while ( !glfwWindowShouldClose(window) )
     {

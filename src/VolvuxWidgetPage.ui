@@ -25,913 +25,893 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="Line" name="line">
-   <property name="geometry">
-    <rect>
-     <x>410</x>
-     <y>11</y>
-     <width>16</width>
-     <height>769</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Vertical</enum>
-   </property>
-  </widget>
-  <widget class="QFrame" name="frame">
-   <property name="geometry">
-    <rect>
-     <x>430</x>
-     <y>11</y>
-     <width>834</width>
-     <height>768</height>
-    </rect>
-   </property>
-   <property name="maximumSize">
-    <size>
-     <width>834</width>
-     <height>768</height>
-    </size>
-   </property>
-   <property name="baseSize">
-    <size>
-     <width>1024</width>
-     <height>768</height>
-    </size>
-   </property>
-   <property name="autoFillBackground">
-    <bool>true</bool>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
-   </property>
-  </widget>
-  <widget class="QTabWidget" name="tabWidget">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>11</y>
-     <width>410</width>
-     <height>800</height>
-    </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="maximumSize">
-    <size>
-     <width>410</width>
-     <height>800</height>
-    </size>
-   </property>
-   <property name="currentIndex">
-    <number>0</number>
-   </property>
-   <widget class="QWidget" name="tabScene">
-    <attribute name="title">
-     <string>Scene</string>
-    </attribute>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>354</width>
-       <height>741</height>
-      </rect>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <property name="spacing">
-       <number>154</number>
-      </property>
-      <item>
-       <widget class="QGroupBox" name="groupBox_3">
-        <property name="title">
-         <string>Texture Object Parameters</string>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_6">
-         <item>
-          <layout class="QFormLayout" name="formLayoutHelicoidParameters">
-           <property name="fieldGrowthPolicy">
-            <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-           </property>
-           <item row="0" column="0">
-            <widget class="QLabel" name="labelOffsetX">
-             <property name="text">
-              <string>OffsetX [mm]</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QDoubleSpinBox" name="doubleSpinBoxOffsetX">
-             <property name="mouseTracking">
-              <bool>true</bool>
-             </property>
-             <property name="wrapping">
-              <bool>true</bool>
-             </property>
-             <property name="minimum">
-              <double>-500.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>500.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="labelOffsetY">
-             <property name="text">
-              <string>OffsetY [mm]</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="doubleSpinBoxOffsetY">
-             <property name="mouseTracking">
-              <bool>true</bool>
-             </property>
-             <property name="wrapping">
-              <bool>true</bool>
-             </property>
-             <property name="minimum">
-              <double>-500.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>500.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="labelOffsetZ">
-             <property name="text">
-              <string>OffsetZ [mm]</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QDoubleSpinBox" name="doubleSpinBoxOffsetZ">
-             <property name="mouseTracking">
-              <bool>true</bool>
-             </property>
-             <property name="wrapping">
-              <bool>true</bool>
-             </property>
-             <property name="minimum">
-              <double>-500.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>500.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="labelObjectSize">
-             <property name="text">
-              <string>ObjectSize [mm]</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QDoubleSpinBox" name="doubleSpinBoxObjectSize">
-             <property name="maximum">
-              <double>600.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>110.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="groupBox_9">
-        <property name="title">
-         <string>Surface filter</string>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_12">
-         <item>
-          <layout class="QFormLayout" name="formLayout_4">
-           <item row="0" column="0">
-            <widget class="QLabel" name="thicknessLabel">
-             <property name="text">
-              <string>Thickness</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QDoubleSpinBox" name="doubleSpinBoxSurfaceThickness">
-             <property name="maximum">
-              <double>999990000.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>0.500000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="secondOrderCoeffLabel">
-             <property name="text">
-              <string>2nd order coeff</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="doubleSpinBox2ndOrderCoeff"/>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="firstOrderCoeffLabel">
-             <property name="text">
-              <string>1st order coeff</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QDoubleSpinBox" name="doubleSpinBox1stOrderCoeff"/>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="zerothOrderCoeffLabel">
-             <property name="text">
-              <string>0th order coeff</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QDoubleSpinBox" name="doubleSpinBox0thOrderCoeff"/>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="groupBox_7">
-        <property name="title">
-         <string>Helicoid Position Parameters</string>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_10">
-         <item>
-          <layout class="QFormLayout" name="formLayout_3">
-           <item row="0" column="0">
-            <widget class="QLabel" name="labelHelicoidCxMm">
-             <property name="text">
-              <string>Helicoid Cx [mm]</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QDoubleSpinBox" name="doubleSpinboxHelicoidCxMm">
-             <property name="minimum">
-              <double>-1000000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000000.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="labelHelicoidCyMm">
-             <property name="text">
-              <string>Helicoid Cy [mm]</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="doubleSpinboxHelicoidCyMm">
-             <property name="minimum">
-              <double>-1000000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000000.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="labelHelicoidCzMm">
-             <property name="text">
-              <string>Helicoid Cz [mm]</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QDoubleSpinBox" name="doubleSpinboxHelicoidCzMm">
-             <property name="minimum">
-              <double>-1000000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000000.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="tabStimulus">
-    <attribute name="title">
-     <string>Stimulus</string>
-    </attribute>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>10</y>
-       <width>313</width>
-       <height>461</height>
-      </rect>
+     <property name="maximumSize">
+      <size>
+       <width>410</width>
+       <height>800</height>
+      </size>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <widget class="QGroupBox" name="groupBox_2">
-        <property name="title">
-         <string>Stimulus</string>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
-         <item>
-          <layout class="QFormLayout" name="formLayoutStimulusSettings">
-           <property name="fieldGrowthPolicy">
-            <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-           </property>
-           <item row="0" column="0">
-            <widget class="QLabel" name="labelStimulusSpheresNumber">
-             <property name="text">
-              <string>#Spheres</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QSpinBox" name="spinBoxStimulusNSpheres">
-             <property name="maximum">
-              <number>100000</number>
-             </property>
-             <property name="value">
-              <number>1000</number>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="labelStimulusRadiusMin">
-             <property name="text">
-              <string>RadiusMin</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QSpinBox" name="spinBoxStimulusSpheresRadiusMin">
-             <property name="maximum">
-              <number>256</number>
-             </property>
-             <property name="value">
-              <number>5</number>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="labelStimulusRadiusMax">
-             <property name="text">
-              <string>RadiusMax</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QSpinBox" name="spinBoxStimulusSpheresRadiusMax">
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>512</number>
-             </property>
-             <property name="value">
-              <number>50</number>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="randomDotsLabel">
-             <property name="text">
-              <string>Random Dots</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QCheckBox" name="randomDotsCheckBox"/>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="groupBox">
-        <property name="title">
-         <string>Job info</string>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
-         <item>
-          <layout class="QFormLayout" name="formLayout">
-           <property name="fieldGrowthPolicy">
-            <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-           </property>
-           <item row="0" column="0">
-            <widget class="QLabel" name="labelMemoryAllocatedMB">
-             <property name="text">
-              <string>Memory allocated [MB]</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QSpinBox" name="spinBoxMemoryAllocated">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="statusTip">
-              <string>Size of current frames on client</string>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-             <property name="maximum">
-              <number>999999999</number>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QCheckBox" name="checkBoxUseOffscreenRendering">
-             <property name="text">
-              <string>Offscreen rendering</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButtonStimulusRandomizeSpheres">
-        <property name="text">
-         <string>Randomize spheres</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButtonGenerateFrames">
-        <property name="text">
-         <string>Generate frames</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="groupBox_8">
-        <property name="title">
-         <string>Volume data</string>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_11">
-         <item>
-          <widget class="QPushButton" name="pushButtonLoadBinVox">
-           <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Load a volumetric dataset in .binvox format ( http://www.cs.princeton.edu/~min/binvox/ )&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="text">
-            <string>Load .binvox model...</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="labelTextureInformations">
-           <property name="text">
-            <string>Texture informations:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="labelTextureInfo">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-        <zorder>pushButtonLoadBinVox</zorder>
-        <zorder>labelTextureInfo</zorder>
-        <zorder>labelTextureInformations</zorder>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="tabProjector">
-    <attribute name="title">
-     <string>Projector Sequence</string>
-    </attribute>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>351</width>
-       <height>741</height>
-      </rect>
+     <property name="currentIndex">
+      <number>0</number>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_20">
-      <item>
-       <widget class="QGroupBox" name="groupBox_6">
-        <property name="title">
-         <string>Projector current sequences</string>
+     <widget class="QWidget" name="tabScene">
+      <attribute name="title">
+       <string>Scene</string>
+      </attribute>
+      <widget class="QWidget" name="layoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>354</width>
+         <height>741</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>154</number>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="QListWidget" name="listWidgetSequences">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_9">
+        <item>
+         <widget class="QGroupBox" name="groupBox_3">
+          <property name="title">
+           <string>Texture Object Parameters</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
            <item>
-            <widget class="QPushButton" name="pushButtonProjectorStartProjection">
-             <property name="text">
-              <string>Start projection</string>
+            <layout class="QFormLayout" name="formLayoutHelicoidParameters">
+             <property name="fieldGrowthPolicy">
+              <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
              </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButtonProjectorStopProjection">
-             <property name="text">
-              <string>Stop projection</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButtonUploadCurrentSequence">
-             <property name="text">
-              <string>Upload Sequence</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButtonProjectorChangeSequence">
-             <property name="text">
-              <string>Change to sequence</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButtonRemoveSequence">
-             <property name="text">
-              <string>Remove sequence</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_4">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="tabExperiment">
-    <attribute name="title">
-     <string>Experiment</string>
-    </attribute>
-    <widget class="QWidget" name="">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>10</y>
-       <width>297</width>
-       <height>751</height>
-      </rect>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_5">
-      <item>
-       <widget class="QPushButton" name="pushButtonStartExperiment">
-        <property name="text">
-         <string>Start Experiment</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="groupBoxDeBrujinRandomization">
-        <property name="title">
-         <string>DeBrujin Randomization Parameters</string>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_15">
-         <item>
-          <layout class="QFormLayout" name="formLayout_7">
-           <item row="0" column="0">
-            <widget class="QLabel" name="subsequenceLenghtLabel">
-             <property name="text">
-              <string>Subsequence lenght</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QSpinBox" name="subsequenceLenghtSpinBox">
-             <property name="toolTip">
-              <string>The lenght of a subsequence of trials.</string>
-             </property>
-             <property name="value">
-              <number>1</number>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="subsequenceRepetitionsLabel">
-             <property name="text">
-              <string>Subsequence repetitions</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QSpinBox" name="subsequenceRepetitionsSpinBox">
-             <property name="toolTip">
-              <string>The repetition of a given subsequence.</string>
-             </property>
-             <property name="value">
-              <number>1</number>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="preRandomizeLabel">
-             <property name="text">
-              <string>Pre Randomize</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QCheckBox" name="preRandomizeCheckBox">
-             <property name="toolTip">
-              <string>Prerandomize the subsequence. It allows to have different debrujin sequences for every experiment otherwise the same standard sequence is created.</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="groupBoxExperimentParameters">
-        <property name="title">
-         <string>Experiment parameters</string>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_13">
-         <item>
-          <layout class="QFormLayout" name="formLayout_5">
-           <item row="0" column="0">
-            <widget class="QLabel" name="factorCurvatureLabel">
-             <property name="text">
-              <string>Factor Curvature</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLineEdit" name="factorCurvatureLineEdit">
-             <property name="toolTip">
-              <string>Insert the curvatures separated by spaces, the factors are then generated.</string>
-             </property>
-             <property name="text">
-              <string>60 120 240</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="repetitionsLabel">
-             <property name="text">
-              <string>Repetitions</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QSpinBox" name="repetitionsSpinBox">
-             <property name="minimum">
-              <number>1</number>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="randomizeLabel">
-             <property name="text">
-              <string>Randomize</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <layout class="QVBoxLayout" name="verticalLayout_17">
-             <item>
-              <widget class="QRadioButton" name="radioButtonRandomizeNone">
-               <property name="toolTip">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Present trials in the same order as specified in the factor levels.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
+             <item row="0" column="0">
+              <widget class="QLabel" name="labelOffsetX">
                <property name="text">
-                <string>No randomization</string>
+                <string>OffsetX [mm]</string>
                </property>
-               <property name="checked">
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QDoubleSpinBox" name="doubleSpinBoxOffsetX">
+               <property name="mouseTracking">
                 <bool>true</bool>
                </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="radioButtonRandomizeExtrablock">
-               <property name="toolTip">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Randomize over the blocks (over the whole experiment). It is possible that two consecutive trials have the same factors.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <property name="wrapping">
+                <bool>true</bool>
                </property>
-               <property name="text">
-                <string>Extra-block</string>
+               <property name="minimum">
+                <double>-500.000000000000000</double>
                </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="radioButtonRandomizeIntraBlock">
-               <property name="toolTip">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Randomize within the block. Factor levels are shuffled within the repetition block.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="text">
-                <string>Intra-block</string>
+               <property name="maximum">
+                <double>500.000000000000000</double>
                </property>
               </widget>
              </item>
-             <item>
-              <widget class="QRadioButton" name="radioButtonRandomizeNoConsecutiv">
-               <property name="toolTip">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;Randomize the trials in such a way that no two consecutive trials have the same factor levels.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
+             <item row="1" column="0">
+              <widget class="QLabel" name="labelOffsetY">
                <property name="text">
-                <string>No consecutive</string>
+                <string>OffsetY [mm]</string>
                </property>
               </widget>
              </item>
-             <item>
-              <widget class="QRadioButton" name="radioButtonDeBrujin">
-               <property name="toolTip">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;The trials are presented in such a order that every possible combination of&lt;br/&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;subsequence length&lt;/span&gt; factors is presented &lt;span style=&quot; font-style:italic;&quot;&gt;subsequence repetitions &lt;/span&gt;times. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <item row="1" column="1">
+              <widget class="QDoubleSpinBox" name="doubleSpinBoxOffsetY">
+               <property name="mouseTracking">
+                <bool>true</bool>
                </property>
+               <property name="wrapping">
+                <bool>true</bool>
+               </property>
+               <property name="minimum">
+                <double>-500.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>500.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="labelOffsetZ">
                <property name="text">
-                <string>De Brujin</string>
+                <string>OffsetZ [mm]</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QDoubleSpinBox" name="doubleSpinBoxOffsetZ">
+               <property name="mouseTracking">
+                <bool>true</bool>
+               </property>
+               <property name="wrapping">
+                <bool>true</bool>
+               </property>
+               <property name="minimum">
+                <double>-500.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>500.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="labelObjectSize">
+               <property name="text">
+                <string>ObjectSize [mm]</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QDoubleSpinBox" name="doubleSpinBoxObjectSize">
+               <property name="maximum">
+                <double>600.000000000000000</double>
+               </property>
+               <property name="value">
+                <double>110.000000000000000</double>
                </property>
               </widget>
              </item>
             </layout>
            </item>
           </layout>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="groupBox_10">
-        <property name="title">
-         <string>External Monitor Settings</string>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_24">
-         <item>
-          <layout class="QFormLayout" name="formLayout_8">
-           <property name="fieldGrowthPolicy">
-            <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-           </property>
-           <item row="0" column="0">
-            <widget class="QLabel" name="monitorWidthMMLabel">
-             <property name="text">
-              <string>Monitor Width MM</string>
-             </property>
-            </widget>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_9">
+          <property name="title">
+           <string>Surface filter</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_12">
+           <item>
+            <layout class="QFormLayout" name="formLayout_4">
+             <item row="0" column="0">
+              <widget class="QLabel" name="thicknessLabel">
+               <property name="text">
+                <string>Thickness</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QDoubleSpinBox" name="doubleSpinBoxSurfaceThickness">
+               <property name="maximum">
+                <double>999990000.000000000000000</double>
+               </property>
+               <property name="value">
+                <double>0.500000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="secondOrderCoeffLabel">
+               <property name="text">
+                <string>2nd order coeff</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QDoubleSpinBox" name="doubleSpinBox2ndOrderCoeff"/>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="firstOrderCoeffLabel">
+               <property name="text">
+                <string>1st order coeff</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QDoubleSpinBox" name="doubleSpinBox1stOrderCoeff"/>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="zerothOrderCoeffLabel">
+               <property name="text">
+                <string>0th order coeff</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QDoubleSpinBox" name="doubleSpinBox0thOrderCoeff"/>
+             </item>
+            </layout>
            </item>
-           <item row="0" column="1">
-            <widget class="QDoubleSpinBox" name="monitorWidthMMDoubleSpinBox">
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_7">
+          <property name="title">
+           <string>Helicoid Position Parameters</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_10">
+           <item>
+            <layout class="QFormLayout" name="formLayout_3">
+             <item row="0" column="0">
+              <widget class="QLabel" name="labelHelicoidCxMm">
+               <property name="text">
+                <string>Helicoid Cx [mm]</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QDoubleSpinBox" name="doubleSpinboxHelicoidCxMm">
+               <property name="minimum">
+                <double>-1000000.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>1000000.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="labelHelicoidCyMm">
+               <property name="text">
+                <string>Helicoid Cy [mm]</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QDoubleSpinBox" name="doubleSpinboxHelicoidCyMm">
+               <property name="minimum">
+                <double>-1000000.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>1000000.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="labelHelicoidCzMm">
+               <property name="text">
+                <string>Helicoid Cz [mm]</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QDoubleSpinBox" name="doubleSpinboxHelicoidCzMm">
+               <property name="minimum">
+                <double>-1000000.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>1000000.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="tabStimulus">
+      <attribute name="title">
+       <string>Stimulus</string>
+      </attribute>
+      <widget class="QWidget" name="layoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>50</x>
+         <y>10</y>
+         <width>313</width>
+         <height>461</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QGroupBox" name="groupBox_2">
+          <property name="title">
+           <string>Stimulus</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <layout class="QFormLayout" name="formLayoutStimulusSettings">
+             <property name="fieldGrowthPolicy">
+              <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+             </property>
+             <item row="0" column="0">
+              <widget class="QLabel" name="labelStimulusSpheresNumber">
+               <property name="text">
+                <string>#Spheres</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QSpinBox" name="spinBoxStimulusNSpheres">
+               <property name="maximum">
+                <number>100000</number>
+               </property>
+               <property name="value">
+                <number>1000</number>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="labelStimulusRadiusMin">
+               <property name="text">
+                <string>RadiusMin</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QSpinBox" name="spinBoxStimulusSpheresRadiusMin">
+               <property name="maximum">
+                <number>256</number>
+               </property>
+               <property name="value">
+                <number>5</number>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="labelStimulusRadiusMax">
+               <property name="text">
+                <string>RadiusMax</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QSpinBox" name="spinBoxStimulusSpheresRadiusMax">
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <number>512</number>
+               </property>
+               <property name="value">
+                <number>50</number>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="randomDotsLabel">
+               <property name="text">
+                <string>Random Dots</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QCheckBox" name="randomDotsCheckBox"/>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox">
+          <property name="title">
+           <string>Job info</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <layout class="QFormLayout" name="formLayout">
+             <property name="fieldGrowthPolicy">
+              <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+             </property>
+             <item row="0" column="0">
+              <widget class="QLabel" name="labelMemoryAllocatedMB">
+               <property name="text">
+                <string>Memory allocated [MB]</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QSpinBox" name="spinBoxMemoryAllocated">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="statusTip">
+                <string>Size of current frames on client</string>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+               <property name="maximum">
+                <number>999999999</number>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QCheckBox" name="checkBoxUseOffscreenRendering">
+               <property name="text">
+                <string>Offscreen rendering</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButtonStimulusRandomizeSpheres">
+          <property name="text">
+           <string>Randomize spheres</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButtonGenerateFrames">
+          <property name="text">
+           <string>Generate frames</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_8">
+          <property name="title">
+           <string>Volume data</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_11">
+           <item>
+            <widget class="QPushButton" name="pushButtonLoadBinVox">
              <property name="toolTip">
-              <string>The width of stimuli presentation monitor in millimeters.</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Load a volumetric dataset in .binvox format ( http://www.cs.princeton.edu/~min/binvox/ )&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
-             <property name="maximum">
-              <double>10000.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>300.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="monitorHeightMMLabel">
              <property name="text">
-              <string>Monitor Height MM</string>
+              <string>Load .binvox model...</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="monitorHeightMMDoubleSpinBox">
-             <property name="toolTip">
-              <string>The height of stimuli presentation monitor in millimeters.</string>
-             </property>
-             <property name="maximum">
-              <double>10000.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>200.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="monitorResolutionXLabel">
+           <item>
+            <widget class="QLabel" name="labelTextureInformations">
              <property name="text">
-              <string>Monitor Resolution X</string>
+              <string>Texture informations:</string>
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
-            <widget class="QSpinBox" name="monitorResolutionXSpinBox">
-             <property name="toolTip">
-              <string>The horizontal resolution of stimuli presentation monitor in pixels.</string>
-             </property>
-             <property name="maximum">
-              <number>10000</number>
-             </property>
-             <property name="value">
-              <number>1280</number>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="monitorResolutionYLabel">
+           <item>
+            <widget class="QLabel" name="labelTextureInfo">
              <property name="text">
-              <string>Monitor Resolution Y</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QSpinBox" name="monitorResolutionYSpinBox">
-             <property name="toolTip">
-              <string>The vertical resolution of stimuli presentation monitor in pixels.</string>
-             </property>
-             <property name="maximum">
-              <number>10000</number>
-             </property>
-             <property name="value">
-              <number>1024</number>
+              <string/>
              </property>
             </widget>
            </item>
           </layout>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="groupBoxExperimentInfo">
-        <property name="title">
-         <string>Running experiment information</string>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_16">
-         <item>
-          <widget class="QPlainTextEdit" name="plainTextExperimentInfo"/>
-         </item>
-        </layout>
-       </widget>
-      </item>
-     </layout>
+          <zorder>pushButtonLoadBinVox</zorder>
+          <zorder>labelTextureInfo</zorder>
+          <zorder>labelTextureInformations</zorder>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="tabProjector">
+      <attribute name="title">
+       <string>Projector Sequence</string>
+      </attribute>
+      <widget class="QWidget" name="layoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>351</width>
+         <height>741</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_20">
+        <item>
+         <widget class="QGroupBox" name="groupBox_6">
+          <property name="title">
+           <string>Projector current sequences</string>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="QListWidget" name="listWidgetSequences">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_9">
+             <item>
+              <widget class="QPushButton" name="pushButtonProjectorStartProjection">
+               <property name="text">
+                <string>Start projection</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButtonProjectorStopProjection">
+               <property name="text">
+                <string>Stop projection</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButtonUploadCurrentSequence">
+               <property name="text">
+                <string>Upload Sequence</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButtonProjectorChangeSequence">
+               <property name="text">
+                <string>Change to sequence</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButtonRemoveSequence">
+               <property name="text">
+                <string>Remove sequence</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_4">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="tabExperiment">
+      <attribute name="title">
+       <string>Experiment</string>
+      </attribute>
+      <widget class="QWidget" name="layoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>50</x>
+         <y>10</y>
+         <width>297</width>
+         <height>751</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <item>
+         <widget class="QPushButton" name="pushButtonStartExperiment">
+          <property name="text">
+           <string>Start Experiment</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBoxDeBrujinRandomization">
+          <property name="title">
+           <string>DeBrujin Randomization Parameters</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_15">
+           <item>
+            <layout class="QFormLayout" name="formLayout_7">
+             <item row="0" column="0">
+              <widget class="QLabel" name="subsequenceLenghtLabel">
+               <property name="text">
+                <string>Subsequence lenght</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QSpinBox" name="subsequenceLenghtSpinBox">
+               <property name="toolTip">
+                <string>The lenght of a subsequence of trials.</string>
+               </property>
+               <property name="value">
+                <number>1</number>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="subsequenceRepetitionsLabel">
+               <property name="text">
+                <string>Subsequence repetitions</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QSpinBox" name="subsequenceRepetitionsSpinBox">
+               <property name="toolTip">
+                <string>The repetition of a given subsequence.</string>
+               </property>
+               <property name="value">
+                <number>1</number>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="preRandomizeLabel">
+               <property name="text">
+                <string>Pre Randomize</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QCheckBox" name="preRandomizeCheckBox">
+               <property name="toolTip">
+                <string>Prerandomize the subsequence. It allows to have different debrujin sequences for every experiment otherwise the same standard sequence is created.</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBoxExperimentParameters">
+          <property name="title">
+           <string>Experiment parameters</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_13">
+           <item>
+            <layout class="QFormLayout" name="formLayout_5">
+             <item row="0" column="0">
+              <widget class="QLabel" name="factorCurvatureLabel">
+               <property name="text">
+                <string>Factor Curvature</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="factorCurvatureLineEdit">
+               <property name="toolTip">
+                <string>Insert the curvatures separated by spaces, the factors are then generated.</string>
+               </property>
+               <property name="text">
+                <string>60 120 240</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="repetitionsLabel">
+               <property name="text">
+                <string>Repetitions</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QSpinBox" name="repetitionsSpinBox">
+               <property name="minimum">
+                <number>1</number>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="randomizeLabel">
+               <property name="text">
+                <string>Randomize</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <layout class="QVBoxLayout" name="verticalLayout_17">
+               <item>
+                <widget class="QRadioButton" name="radioButtonRandomizeNone">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Present trials in the same order as specified in the factor levels.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                 <property name="text">
+                  <string>No randomization</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioButtonRandomizeExtrablock">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Randomize over the blocks (over the whole experiment). It is possible that two consecutive trials have the same factors.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                 <property name="text">
+                  <string>Extra-block</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioButtonRandomizeIntraBlock">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Randomize within the block. Factor levels are shuffled within the repetition block.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                 <property name="text">
+                  <string>Intra-block</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioButtonRandomizeNoConsecutiv">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;Randomize the trials in such a way that no two consecutive trials have the same factor levels.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                 <property name="text">
+                  <string>No consecutive</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioButtonDeBrujin">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;The trials are presented in such a order that every possible combination of&lt;br/&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;subsequence length&lt;/span&gt; factors is presented &lt;span style=&quot; font-style:italic;&quot;&gt;subsequence repetitions &lt;/span&gt;times. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                 <property name="text">
+                  <string>De Brujin</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_10">
+          <property name="title">
+           <string>External Monitor Settings</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_24">
+           <item>
+            <layout class="QFormLayout" name="formLayout_8">
+             <property name="fieldGrowthPolicy">
+              <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+             </property>
+             <item row="0" column="0">
+              <widget class="QLabel" name="monitorWidthMMLabel">
+               <property name="text">
+                <string>Monitor Width MM</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QDoubleSpinBox" name="monitorWidthMMDoubleSpinBox">
+               <property name="toolTip">
+                <string>The width of stimuli presentation monitor in millimeters.</string>
+               </property>
+               <property name="maximum">
+                <double>10000.000000000000000</double>
+               </property>
+               <property name="value">
+                <double>300.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="monitorHeightMMLabel">
+               <property name="text">
+                <string>Monitor Height MM</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QDoubleSpinBox" name="monitorHeightMMDoubleSpinBox">
+               <property name="toolTip">
+                <string>The height of stimuli presentation monitor in millimeters.</string>
+               </property>
+               <property name="maximum">
+                <double>10000.000000000000000</double>
+               </property>
+               <property name="value">
+                <double>200.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="monitorResolutionXLabel">
+               <property name="text">
+                <string>Monitor Resolution X</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QSpinBox" name="monitorResolutionXSpinBox">
+               <property name="toolTip">
+                <string>The horizontal resolution of stimuli presentation monitor in pixels.</string>
+               </property>
+               <property name="maximum">
+                <number>10000</number>
+               </property>
+               <property name="value">
+                <number>1280</number>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="monitorResolutionYLabel">
+               <property name="text">
+                <string>Monitor Resolution Y</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QSpinBox" name="monitorResolutionYSpinBox">
+               <property name="toolTip">
+                <string>The vertical resolution of stimuli presentation monitor in pixels.</string>
+               </property>
+               <property name="maximum">
+                <number>10000</number>
+               </property>
+               <property name="value">
+                <number>1024</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBoxExperimentInfo">
+          <property name="title">
+           <string>Running experiment information</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_16">
+           <item>
+            <widget class="QPlainTextEdit" name="plainTextExperimentInfo"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
     </widget>
-   </widget>
-  </widget>
+   </item>
+   <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="VolvuxWidget" name="widget" native="true">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>1024</width>
+       <height>768</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>VolvuxWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">VolvuxWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

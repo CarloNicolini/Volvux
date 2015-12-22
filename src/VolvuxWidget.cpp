@@ -84,7 +84,6 @@ VolvuxWidget::VolvuxWidget(QWidget *parent) :
     //this->setCameraParameters(3.0f,200.0f,30000.0f);
     // Set the current focus in this OpenGL window
     //this->setFocus();
-
     this->curvature=240.0;
     this->initVolume();
     //this->volume = NULL;
@@ -104,32 +103,11 @@ VolvuxWidget::~VolvuxWidget()
 
     if (volume)
         delete volume;
-
-    if (camCalibration)
-        delete camCalibration;
 }
-
-/*
-void VolvuxWidget::setCameraParameters(double _fieldOfView, double _zNear, double _zFar)
-{
-    this->FOV=_fieldOfView;
-    this->zNear = _zNear;
-    this->zFar = _zFar;
-    emit zNearChanged(zNear);
-    emit zFarChanged(zFar);
-    emit fovChanged(FOV);
-}
-*/
 
 void VolvuxWidget::setCamera(CameraDirectLinearTransformation &cam)
 {
     this->camCalibration = &cam;
-    /*
-    glMatrixMode(GL_PROJECTION);
-    glLoadMatrixd(cam.getOpenGLProjectionMatrix().data());
-    glMatrixMode(GL_MODELVIEW);
-    glLoadMatrixd(cam.getOpenGLModelViewMatrix().data());
-    */
 }
 
 
@@ -205,7 +183,7 @@ void VolvuxWidget::initializeGL()
     volume->loadObj(objPath);
     volume->setTexture3DfillValue(0);
     volume->fillVolumeWithSpheres(VOLUME_N_SPHERES,SPHERES_MIN_RADIUS,SPHERES_MAX_RADIUS);
-    volume->meshStruct.showMesh=false;
+    volume->meshStruct.showMesh=true;
     volume->initializeTexture();
 
     ////////////////////////////
@@ -291,8 +269,8 @@ void VolvuxWidget::draw()
         applyOpenGLCameraFOV();
     }
 
-    //glutWireTeapot(10);
-    /*
+    glutWireSphere(500,50,50);
+
     glEnable(GL_TEXTURE_3D);
     volume->meshStruct.shader->begin();
     volume->meshStruct.shader->setUniform4f(static_cast<GLcharARB*>((char*)"uniformColor"),1.0f,1.0f,1.0f,1.0f);
@@ -303,16 +281,13 @@ void VolvuxWidget::draw()
     volume->meshStruct.shader->setUniform1f(static_cast<GLcharARB*>((char*)"curvature"),this->curvature);
 
     glPushMatrix();
-    glLoadIdentity();
-    glTranslated(0,0,this->eyeZ);
-    arcball.applyRotationMatrix();
     glRotated(90,1,0,0);
     glTranslated(volume->meshStruct.x,volume->meshStruct.y,volume->meshStruct.z);
     volume->obj->draw();
     glPopMatrix();
     volume->meshStruct.shader->end();
     glDisable(GL_TEXTURE_3D);
-    */
+
     /*
     glPushMatrix();
     glLoadIdentity();
@@ -450,7 +425,6 @@ void VolvuxWidget::generateFrames()
 void VolvuxWidget::resizeGL(int width, int height)
 {
     glViewport(0, 0, (GLsizei) width, (GLsizei) height); // Set our viewport to the size of our window
-    applyOpenGLCameraFOV();
 }
 
 /**

@@ -57,8 +57,6 @@ function [K, Rc_w, Pc, pp, pv] = decomposePmatrix(P)
     M = [p1 p2 p3];
     m3 = M(3,:)';
 
-    M
-    m3
     % Camera centre, analytic solution
     X =  det([p2 p3 p4]);
     Y = -det([p1 p3 p4]);
@@ -85,7 +83,3 @@ function [K, Rc_w, Pc, pp, pv] = decomposePmatrix(P)
     [K, Rc_w] = rq3(M);
     % normalize K
     K = K/K(3,3);
-    % Check that R is right handed, if not give warning
-    if dot(cross(Rc_w(:,1), Rc_w(:,2)), Rc_w(:,3)) < 0
-        warning('Note that rotation matrix is left handed');
-    end

@@ -78,11 +78,6 @@ void CameraDirectLinearTransformation::init(const std::vector<Vector3d> &x, cons
         }
     }
 
-    ofstream svdv("V.txt");
-    svdv << V << endl;
-    ofstream data("P.txt");
-    data << P << endl;
-
     // Compute the error using the camera matrix P
     this->getReprojectionError(P,this->points2D,this->points3D);
 
@@ -124,7 +119,7 @@ void CameraDirectLinearTransformation::decomposePMatrix(const Eigen::Matrix<doub
     double Y = -P023.determinant();
     double Z = P013.determinant();
     double T = -P012.determinant();
-    C << X/T,Y/T,Z/T;
+    this->C << X/T,Y/T,Z/T;
 
     // Image Principal points computed with homogeneous normalization
     this->principalPoint = (M*m3).eval().hnormalized().head<2>();
@@ -185,13 +180,13 @@ void CameraDirectLinearTransformation::computeOpenGLMatrices(const Vector4i &gl_
 
     this->gl_Projection_Matrix = NDC*Persp;
     this->gl_ModelView_Matrix.matrix().topLeftCorner<3,3>().matrix() = R;
-    this->gl_ModelView_Matrix.translation().matrix() << this->T;
+    this->gl_ModelView_Matrix.translation().matrix() << R*C; // XXX WARNING SEMBREREBBE SBAGLIATO!!!
     this->gl_ModelViewProjection_Matrix = gl_Projection_Matrix*gl_ModelView_Matrix;
 
     //cout << "gl_Projection\n" << gl_Projection_Matrix.matrix() << endl;
     //cout << "gl_ModelView_Matrix\n" << gl_ModelView_Matrix.matrix() << endl;
-    //cout << "PERSP="  << Persp.matrix() << endl;
-    //cout << "NDC=" << NDC.matrix() << endl;
+    cout << "PERSP="  << Persp.matrix() << endl;
+    cout << "NDC=" << NDC.matrix() << endl;
 
     // Compute the inverses
     this->gl_ModelViewInverse_Matrix = this->gl_ModelView_Matrix.inverse();
@@ -325,8 +320,9 @@ double CameraDirectLinearTransformation::getReprojectionErrorOpenGL(const Eigen:
     {
         Vector3d point = X.at(i).head<3>();
         Vector3d v = ( P*(MV*point).homogeneous() ).eval().hnormalized();
+
         Vector2d vPixel(viewport(0) + viewport(2)*(v.x()+1)/2,viewport(1) + viewport(3)*(v.y()+1)/2);
-        cerr << "[" << vPixel.transpose() << "] [" << x.at(i).head<2>().transpose() << "]" << endl;
+        //cerr << "[" << vPixel.transpose() << "] [" << x.at(i).head<2>().transpose() << "]" << endl;
         error += ( vPixel- x.at(i).head<2>() ).norm();
     }
     error/=n;
@@ -343,34 +339,28 @@ const Eigen::Vector3d &CameraDirectLinearTransformation::getCameraCenter() const
     return this->C;
 }
 
-
+/**
+ * @brief CameraDirectLinearTransformation::getOpenGLModelViewMatrix
+ * @return
+ */
 const Eigen::Affine3d &CameraDirectLinearTransformation::getOpenGLModelViewMatrix()
 {
     return this->gl_ModelView_Matrix;
 }
 
+/**
+ * @brief CameraDirectLinearTransformation::getOpenGLProjectionMatrix
+ * @return
+ */
 const Eigen::Projective3d &CameraDirectLinearTransformation::getOpenGLProjectionMatrix()
 {
     return this->gl_Projection_Matrix;
 }
 
-const Eigen::Projective3d &CameraDirectLinearTransformation::getOpenGLModelViewProjectionInverseMatrix() const
-{
-
-    return gl_ModelViewProjectionInverse_Matrix;
-}
-
-const Eigen::Projective3d &CameraDirectLinearTransformation::getOpenGLProjectionInverseMatrix() const
-{
-
-    return gl_Projection_Inverse_Matrix;
-}
-
-const Eigen::Affine3d &CameraDirectLinearTransformation::getOpenGLModelViewInverseMatrix() const
-{
-    return gl_ModelViewInverse_Matrix;
-}
-
+/**
+ * @brief CameraDirectLinearTransformation::getCameraMatrix
+ * @return
+ */
 const Eigen::Matrix<double,3,4> &CameraDirectLinearTransformation::getCameraMatrix()
 {
     return this->P;
@@ -378,17 +368,15 @@ const Eigen::Matrix<double,3,4> &CameraDirectLinearTransformation::getCameraMatr
 
 void CameraDirectLinearTransformation::info()
 {
-    std::cout << "HZ 3x4 projection matrix=\n" << this->P << endl;
-    std::cout << "Intrinsinc camera matrix=\n" <<this->K << endl;
-    std::cout << "Extrinsic camera matrix=\n"<< this->R << endl << endl;
-    std::cout << "Camera Center C=" << this->C.transpose() << endl;
-    /*
-    std::cout << "Camera t= " << this->T.transpose() << endl;
-    std::cout << "Camera Principal axis= " << this->getPrincipalAxis().transpose() << endl;
-    std::cout << "Camera Principal point=" << this->getPrincipalPoint().transpose() << endl ;
-    std::cout << "OpenGL ModelViewMatrix=\n" << this->getOpenGLModelViewMatrix().matrix() << endl;
-    std::cout << "OpenGL Projection=\n" << this->getOpenGLProjectionMatrix().matrix() << endl;
-    */
+    std::cout << "P=[\n" << this->P << " ]" << endl;
+    std::cout << "K=[\n" <<this->K << " ]" << endl;
+    std::cout << "R=[\n"<< this->R << " ]" << endl ;
+    std::cout << "C=[ " << this->C.transpose() << " ]" <<endl;
+    std::cout << "T=[ " << this->T.transpose() << " ]" <<endl;
+    std::cout << "Principal point=[ " << this->principalPoint.transpose() << " ]" << endl;
+    std::cout << "Principal axis=[ " << this->principalVector.transpose() << " ]" << endl;
+    std::cout << "OpenGL Projection=[\n" << this->gl_Projection_Matrix.matrix() << "]" << endl;
+    std::cout << "OpenGL ModelViewMatrix=[\n" << this->gl_ModelView_Matrix.matrix() << "]" << endl;
 }
 
 

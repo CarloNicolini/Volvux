@@ -57,10 +57,7 @@ class CameraDirectLinearTransformation
 public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     CameraDirectLinearTransformation();
-    // Utility constructors
-    CameraDirectLinearTransformation(const std::vector<Eigen::Vector3d> &x, const stlalignedvector4d &X, const Vector4i &gl_Viewport, double x0=0.0, double y0=0.0, int width=640, int height=480, double znear=0.1, double zfar=1000.0);
-
-    void init(const std::vector<Eigen::Vector3d> &x, const stlalignedvector4d &X, const Vector4i &gl_Viewport, double znear = 0.1, double zfar = 1000.0);
+    void init(const std::vector<Eigen::Vector3d> &x, const stlalignedvector4d &X, const Vector4i &gl_Viewport, double znear, double zfar);
 
     std::vector<Vector3d> loadImages(const string &filename);
     stlalignedvector4d loadWorldCoords(const string &filename);
@@ -76,9 +73,6 @@ public:
     const Eigen::Vector3d &getCameraCenter() const;
     const Eigen::Affine3d &getOpenGLModelViewMatrix();
     const Eigen::Projective3d &getOpenGLProjectionMatrix();
-    const Eigen::Projective3d &getOpenGLModelViewProjectionInverseMatrix() const;
-    const Eigen::Projective3d &getOpenGLProjectionInverseMatrix() const;
-    const Eigen::Affine3d &getOpenGLModelViewInverseMatrix() const;
     void info();
 
 private:

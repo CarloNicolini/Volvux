@@ -79,11 +79,8 @@ StackedWidget::StackedWidget(QWidget *parent) :
     QObject::connect(calibrationWidgetpage->ui->volvuxCalibrationWidget,SIGNAL(lastPointPressed(QPoint)),calibrationWidgetpage,SLOT(append2DPoint(QPoint)));
     QObject::connect(calibrationWidgetpage->ui->volvuxCalibrationWidget,SIGNAL(pointRemoved(QPoint)),calibrationWidgetpage,SLOT(remove2DPoint(QPoint)));
     QObject::connect(calibrationWidgetpage->ui->volvuxCalibrationWidget,SIGNAL(points2Dupdated(QVector<QPoint>)),calibrationWidgetpage,SLOT(update2DPoints(QVector<QPoint>)));
-    //To check XXX
-    //QObject::connect(calibrationWidgetpage,SIGNAL(calibrationEmitted(CameraDirectLinearTransformation &)),this,SLOT(onCalibrationEmitted(CameraDirectLinearTransformation &)));
 
-
-
+    QObject::connect(calibrationWidgetpage,SIGNAL(calibrationEmitted(CameraDirectLinearTransformation&)),volvuxWidgetpage->ui->widget,SLOT(setCamera(CameraDirectLinearTransformation&)));
 }
 
 StackedWidget::~StackedWidget()

@@ -23,8 +23,8 @@
 // License and a copy of the GNU General Public License along with
 // CNCSVision. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef VOLUMETRIC_HELICOID_WIDGET_ALP_EXPERIMENT_H
-#define VOLUMETRIC_HELICOID_WIDGET_ALP_EXPERIMENT_H
+#ifndef VOLVUX_WIDGET_H_
+#define VOLVUX_WIDGET_H_
 
 #include <QApplication>
 #include <QtGui>
@@ -85,7 +85,6 @@ public:
     void randomizeSpheres(bool useRandomDots, int nSpheres, int minRadius, int maxRadius);
 
     // View methods
-    void setCamera(CameraDirectLinearTransformation &cam);
     void setCameraParameters(double _fieldOfView, double _zNear, double _zFar);
     void setSlicesNumber(int nSlices);
     void setCurrentGLColor(Qt::GlobalColor val);
@@ -99,6 +98,8 @@ public slots:
     void onSurfaceThicknessChanged(double);
     void onSurfaceCurvatureChanged(double);
 
+    // Calibration methods
+    void setCamera(CameraDirectLinearTransformation &cam);
 signals:
     void framePercentageGenerated(double);
     void memoryAllocatedMegaBytes(int);

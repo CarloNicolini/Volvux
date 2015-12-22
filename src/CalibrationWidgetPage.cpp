@@ -58,7 +58,19 @@ const std::vector<Vector3d> &CalibrationWidgetPage::getPoints2D() const
 //Compute Homography
 void CalibrationWidgetPage::computeHomography(const vector<Vector3d> &points)
 {
-    CDLT.init(points2D,points3D,true,true,0,0,PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT);
+    points2D.clear();
+
+    points2D.push_back(Vector3d(512,384,1));
+    points2D.push_back(Vector3d(419,474,1));
+    points2D.push_back(Vector3d(409,294,1));
+    points2D.push_back(Vector3d(589,294,1));
+    points2D.push_back(Vector3d(589,474,1));
+    points2D.push_back(Vector3d(449,441,1));
+    points2D.push_back(Vector3d(449,321,1));
+    points2D.push_back(Vector3d(569,321,1));
+    points2D.push_back(Vector3d(569,441,1));
+
+    CDLT.init(points2D,points3D,Vector4i(0,0,PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT),1,1E4);
     emit calibrationEmitted(CDLT);
 }
 
