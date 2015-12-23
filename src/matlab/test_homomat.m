@@ -75,7 +75,7 @@ HELICOID=load('~/workspace/Volvux/data/objmodels/helicoid.vert');
 %axis square;
 
 for i=1:size(HELICOID,1)
-    x = HELICOID(i,:);
+    hh = HELICOID(i,:);
     pHELICOID(i,:)=glProject(gl_MVProj,gl_Viewport,[x 1]',znear,zfar);
 end
 figure;
@@ -84,29 +84,29 @@ title('Projected helicoid');
 xlim([0 1024]);
 ylim([0 768]);
 colorbar;
+ 
+ for i=1:size(x,1)
+     pgl(i,:)=glProject(gl_MVProj,gl_Viewport,X(i,:)',znear,zfar);
+ end
 % 
-% for i=1:size(x,1)
-%     pgl(i,:)=glProject(gl_MVProj,gl_Viewport,X(i,:)',znear,zfar);
-% end
-% 
-% errGL=0;
-% for i=1:9
-%     errGL = errGL + norm(pgl(i,1:2)-x(i,1:2));
-% end
+ errGL=0;
+ for i=1:9
+     errGL = errGL + norm(pgl(i,1:2)-x(i,1:2));
+ end
 
 % viewport transformation
 % close all;
-% figure;
-% hold on;
-% scatter(x(:,1),x(:,2),'fr');
-% scatter(pgl(:,1),pgl(:,2),'or');
-% delta = pgl(:,1:2) - x(:,1:2);
-% text(x(:,1)+2,x(:,2)+2,cellstr(num2str([(1:9)'])),'Color',[0 0 1] );
-% text(pgl(:,1)-10,pgl(:,2)-10,cellstr(num2str([(1:9)'])),'Color',[1 0 0] );
-% quiver(x(:,1),x(:,2),delta(:,1),delta(:,2),0);
-% xlim([0 gl_Viewport(3)]);
-% ylim([0 gl_Viewport(4)]);
-% legend({'original','reconstructed GL'});
-% hold off;
+figure;
+hold on;
+scatter(x(:,1),x(:,2),'fr');
+scatter(pgl(:,1),pgl(:,2),'or');
+delta = pgl(:,1:2) - x(:,1:2);
+text(x(:,1)+2,x(:,2)+2,cellstr(num2str([(1:9)'])),'Color',[0 0 1] );
+text(pgl(:,1)-10,pgl(:,2)-10,cellstr(num2str([(1:9)'])),'Color',[1 0 0] );
+quiver(x(:,1),x(:,2),delta(:,1),delta(:,2),0);
+xlim([0 gl_Viewport(3)]);
+ylim([0 gl_Viewport(4)]);
+legend({'original','reconstructed GL'});
+hold off;
 
 %U=umeyama(x',[pgl ones(9,1)]');

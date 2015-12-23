@@ -34,8 +34,12 @@ glColor3d(1,1,1);
 glViewport(0, 0, RectWidth(winRect), RectHeight(winRect));
 
 % Animation loop: Run until key press...
-while true
-   
+cols = (data + repmat(max(data),size(data,1),1));
+cols = cols./ repmat(max(cols),size(cols,1),1);
+%size(cols)
+%cols = ind2rgb(cols(:,3),parula);
+%size(cols)
+while true   
     % Setup cubes rotation around axis:
     glPushMatrix;
     % Clear out the backbuffer: This also cleans the depth-buffer for
@@ -43,7 +47,7 @@ while true
     glClear;
     glRotated(90,1,0,0);
     % Draw dots quickly:
-    moglDrawDots3D(win, data', 0.1, [255 255 255 255], [0, 0, 0], 1, []);
+    moglDrawDots3D(win, data', 0.1, cols' , [0, 0, 0], 1, []);
     glPopMatrix;
     
     % Finish OpenGL rendering into PTB window and check for OpenGL errors.
@@ -51,7 +55,9 @@ while true
 
     % Show rendered image at next vertical retrace:
     Screen('Flip', win);
-
+    im = Screen('GetImage',win);
+    imwrite(im,'helicoid.bmp');
+    %break;
     % Switch to OpenGL rendering again for drawing of next frame:
     Screen('BeginOpenGL', win);
     

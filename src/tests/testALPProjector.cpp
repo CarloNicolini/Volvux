@@ -32,6 +32,32 @@
 #define N_TOTAL_SEQUENCES 10
 using namespace std;
 
+unsigned char* readBMP(char* filename, int *width, int *height, int *size)
+{
+    int i;
+    FILE* f = fopen(filename, "rb");
+    unsigned char info[54];
+    fread(info, sizeof(unsigned char), 54, f); // read the 54-byte header
+
+    // extract image height and width from header
+    *width = *(int*)&info[18];
+    *height = *(int*)&info[22];
+
+    *size = 3 * (*width) * (*height);
+    unsigned char* data = new unsigned char[size]; // allocate 3 bytes per pixel
+    fread(data, sizeof(unsigned char), size, f); // read the rest of the data at once
+    fclose(f);
+
+    for(i = 0; i < size; i += 3)
+    {
+            unsigned char tmp = data[i];
+            data[i] = data[i+2];
+            data[i+2] = tmp;
+    }
+
+    return data;
+}
+
 void fillSquare(vector<unsigned char> &buf, int width, int height, int centerX, int centerY, int nPixelsX, int nPixelsY)
 {  for (int i=0; i<width; i++)
    {  for (int j=0; j<height; j++)
@@ -50,55 +76,21 @@ void fillPixel(vector<unsigned char> &buf,  int width, int height, int x, int y)
 }
 
 int main( int argc, char *argv[] )
-{  unsigned long int nPictures=1;
-   unsigned long int width = 1024;
-   unsigned long int height = 768;
+{  
+   unsigned long int nPictures=1;
+   //unsigned long int width = 1024;
+   //unsigned long int height = 768;
    unsigned long int length = width*height*nPictures;
 
-   /*
-   cerr << "Creating sequences" << endl;
-   std::vector< std::vector<unsigned char> > allSequences(N_TOTAL_SEQUENCES);
+   int width,height,size;
+   unsigned char *bmp = readBMP("helicoid.bmp",width,height,size);
 
-   for ( int i=0; i<N_TOTAL_SEQUENCES; i++ )
-   {
-   	allSequences.at(i) = std::vector<unsigned char>(length,0);
-   	// It fills a moving square
-   	//fillPixel(allSequences.at(i),width,height,i*50,height/2);
-   	fillSquare(allSequences.at(i),width,height,(i*50)%width,height/2,50,100);
-   }
-
-   ALPProjector alp;
-   try
-   {
-   	alp.init();
-   	alp.initLED();
-   	alp.setLED(5000,100);
-   	alp.inquire();
-   	alp.setPicturesTimeus(1E6); //timing in hertz
-   	for (int i=0; i<N_TOTAL_SEQUENCES;i++)
-   		alp.loadSequence(nPictures,allSequences.back().data());
-   	alp.inquire();
-   	cerr << "Press enter to continue" << endl;
-
-   	alp.setSequenceQueueMode();
-   	Timer timer; timer.start();
-   	for ( int i=0; i<10; i++ )
-   		alp.loopAllSequences();
-   	cerr << timer.getElapsedTimeInSec() << endl;
-   	cerr << "Press enter to continue" << endl;
-   	cin.ignore(1E6,'\n');
-   }
-   catch (const std::exception &e)
-   {
-   	cerr << e.what() << endl << "Press Enter to exit..." ;
-   	cin.ignore(1E6,'\n');
-   	alp.cleanup();
-   }
-   */
    std::vector<unsigned char> data;
-   data.resize(length);
-   fillSquare(data, width, height, width/2, height/2, 10,10);
-   fillPixel(data,  width, height, width/2, height/2);
+   data.resize(size);
+   &data.at(0) = bmp;
+
+   //fillSquare(data, width, height, width/2, height/2, 10,10);
+   //fillPixel(data,  width, height, width/2, height/2);
    //for (int i=0; i<length; i++)
    //data[i] =	data[i]==255 ? 0 : 255;
    ALPProjector alp;

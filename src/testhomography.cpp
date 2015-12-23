@@ -195,7 +195,7 @@ void drawFrame(GLFWwindow *window, CameraDirectLinearTransformation &cdlt)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     drawCalibrations3D();
     // Apply 90° rotation on the helicoid
-    //glRotated(90,1,0,0);glPointSize(0.1);
+    glRotated(90,1,0,0);
     obj->draw(GL_POINT);
     glPopMatrix();
 }

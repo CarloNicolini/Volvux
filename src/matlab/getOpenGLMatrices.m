@@ -15,11 +15,6 @@ end
 R(2,:)=-R(2,:); %working
 R(3,:)=-R(3,:); %working
 
-if det(R)<0
-    warning('det(R)<0 inverted');
-    %R=-R;
-end
-
 % Check that R is right handed, if not give warning
 if dot(cross(R(:,1), R(:,2)), R(:,3)) < 0
     warning('Note that rotation matrix is left handed');
