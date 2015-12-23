@@ -80,7 +80,7 @@ end
 
 % Now project the helicoid points in a PTB window
 % To check if calibration is OK
-VisualizeHelicoid(gl_Projection_matrix,gl_Modelview_matrix,X3D(:,1:3),x2D(:,1:2));
+VisualizeCalibration(gl_Projection_matrix,gl_Modelview_matrix,X3D(:,1:3),x2D(:,1:2));
 
 % To show the HELICOID DOTS
-%VisualizeHelicoid(gl_Projection_matrix,gl_Modelview_matrix,HELICOID,x2D(:,1:2));
+VisualizeHelicoid(gl_Projection_matrix,gl_Modelview_matrix,HELICOID);
