@@ -1,8 +1,8 @@
-function VisualizeHelicoid(gl_Projection_Matrix, gl_ModelViewMatrix,data)
+function VisualizeHelicoid(gl_Projection_Matrix, gl_ModelViewMatrix,data3D,data2D)
 Screen('Preference', 'Verbosity', 0);
 % Is the script running in OpenGL Psychtoolbox?
 AssertOpenGL;
-
+KbName('UnifyKeyNames');
 % Find the screen to use for display:
 screenid=max(Screen('Screens'));
 
@@ -29,14 +29,19 @@ glLoadMatrixd(gl_ModelViewMatrix);
 
 % Set background color to 'black':
 glClearColor(0,0,0,0);
-glColor3d(1,1,1);
 
 glViewport(0, 0, RectWidth(winRect), RectHeight(winRect));
 
+glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+
 % Animation loop: Run until key press...
-cols = (data + repmat(max(data),size(data,1),1));
+cols = (data3D + repmat(max(data3D),size(data3D,1),1));
 cols = cols./ repmat(max(cols),size(cols,1),1);
 
+glPointSize(2);
+rotangle=0;
 while true   
     % Setup cubes rotation around axis:
     glPushMatrix;
@@ -44,36 +49,53 @@ while true
     % proper occlusion handling:
     glClear;
     
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
+    glColor3d(1,1,1);
     glBegin(GL_LINE_LOOP);
     glVertex3dv([-50,-50,0]);
     glVertex3dv([50,-50,0]);
     glVertex3dv([50,50,0]);
     glVertex3dv([-50,50,0]);
     glEnd();
+    glPopAttrib();
     
-    glPointSize(5);
+    
     glBegin(GL_POINTS);
     glVertex3d(0,0,0);
     glEnd();
-    glRotated(90,1,0,0);
-    % Draw dots quickly:
-    %moglDrawDots3D(win, data', 0.01, [255 255 255]' , [0, 0, 0], 1, []);
     glPopMatrix;
+    
+    % Draw dots quickly:
+    glPushMatrix();
+    %glRotated(90,1,0,0);
+    glRotated(rotangle,0,0,1);
+    moglDrawDots3D(win, data3D', 0.01, [255 0 255]' , [0, 0, 0], 1, []);
+    glPopMatrix();
     
     % Finish OpenGL rendering into PTB window and check for OpenGL errors.
     Screen('EndOpenGL', win);
 
+    Screen('DrawDots',win,data2D',[1],[255 255 255],[],2);
     % Show rendered image at next vertical retrace:
     Screen('Flip', win);
-    im = Screen('GetImage',win);
-    imwrite(uint8((im(:,:,1)~=0)*255),'../../build/Debug/image.bmp');
+    %im = Screen('GetImage',win);
+    %imwrite(uint8((im(:,:,1)~=0)*255),'../../build/Debug/image.bmp');
     %break;
     % Switch to OpenGL rendering again for drawing of next frame:
     Screen('BeginOpenGL', win);
     
     % Check for keyboard press and exit, if so:
-    if KbCheck
-        break;
+    [keyPressed, secs, keyCode] = KbCheck();
+    if keyPressed
+        if keyCode(KbName('q')) || keyCode(KbName('ESCAPE'))
+            break;
+        end
+        if keyCode(KbName('a'))
+            rotangle = rotangle+1;
+        end
+        if keyCode(KbName('z'))
+            rotangle = rotangle-1;
+        end
     end;
 end
 
@@ -82,9 +104,6 @@ Screen('EndOpenGL', win);
 
 % Close onscreen window and release all other ressources:
 Screen('CloseAll');
-
-% Reenable Synctests after this simple demo:
-Screen('Preference','SkipSyncTests',1);
 
 % Well done!
 return

@@ -1,4 +1,4 @@
-function [gl_Projection, gl_ModelView,K,R,C,pp,pv] = getOpenGLMatrices(cameraMatrix,width,height,near,far)
+function [gl_Projection, gl_ModelView,K,R,C,pp,pv] = getOpenGLMatrices(cameraMatrix,width,height,near,far,invertStruct)
 
 [K,R,C,pp,pv]=decomposePmatrix(cameraMatrix);
 
@@ -7,13 +7,9 @@ if K(3,3)>0
     K(:,3) = -K(:,3);
 end
 % This we need because of OpenGL convention
-%K(:,2)=-K(:,2); %working
-%R(1,:)=-R(1,:); %working
-
-%K(:,1)-K(:,1);
-
-R(2,:)=-R(2,:); %working
-R(3,:)=-R(3,:); %working
+K(:,2)=-K(:,2); %working
+R(1,:)=-R(1,:); %working
+R=-R;
 
 % Check that R is right handed, if not give warning
 if dot(cross(R(:,1), R(:,2)), R(:,3)) < 0
@@ -57,7 +53,7 @@ T = -R*C;
 gl_ModelView = eye(4,4);
 gl_ModelView(1:3,1:3) = R;
 gl_ModelView(1:3,4)= -R*C;
-% 
+%
 % K
 % R
 % C

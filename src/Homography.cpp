@@ -150,11 +150,9 @@ void CameraDirectLinearTransformation::computeOpenGLMatrices(const Vector4i &gl_
         K.col(2) = -K.col(2);
 
     // This we need because of OpenGL convention
-    //K.col(1) = -K.col(1);
-    //R.row(0) = -R.row(0);
-
-    R.row(1) = -R.row(1);
-    R.row(2) = -R.row(2);
+    K.col(1) = -K.col(1);
+    R.row(0) = -R.row(0);
+    R=-R; // needed because otherwise the determinant is negative.
     double A = znear+zfar;
     double B = znear*zfar;
 

@@ -85,15 +85,19 @@ xlim([0 1024]);
 ylim([0 768]);
 colorbar;
  
- for i=1:size(x,1)
-     pgl(i,:)=glProject(gl_MVProj,gl_Viewport,X(i,:)',znear,zfar);
+for i=1:size(x2D,1)
+     pgl(i,:)=glProject(gl_MVProj,gl_Viewport,X3D(i,:)',znear,zfar);
  end
-% 
- errGL=0;
- for i=1:9
-     errGL = errGL + norm(pgl(i,1:2)-x(i,1:2));
- end
-
+ 
+errGL=0;
+for i=1:9
+    errGL = errGL + norm(pgl(i,1:2)-x2D(i,1:2));
+end
+ 
+ 
+%% Show the projections
+x=x2D;
+X=X3D;
 % viewport transformation
 % close all;
 figure;
