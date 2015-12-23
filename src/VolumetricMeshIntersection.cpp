@@ -102,7 +102,7 @@ void VolumetricMeshIntersection::initializeSurfaceShaders()
     uniform vec3 objOffset;
     void main()
     {
-        vec4 v=gl_Vertex;
+        vec4 v=gl_Vertex; v.w-=0.01;
         // This is to rotated the object
         v.xz = vec2(cos(step)*v.x+sin(step)*v.z,-sin(step)*v.x+cos(step)*v.z);
         // Compute the z position given x and y on a circular domain of radius 1 (diameter 2)
@@ -128,6 +128,7 @@ void VolumetricMeshIntersection::initializeSurfaceShaders()
         {
             gl_FragColor = uniformColor*texture3D(my_color_texture, texture_coordinate);
         }
+        gl_FragColor = vec4(1.0,1.0,0.5,0.5);
     }
     );
     meshStruct.shader= SM.loadfromMemory(vertexShader,fragmentShader);

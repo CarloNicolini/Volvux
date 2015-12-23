@@ -28,6 +28,7 @@
 #include "Grid.h"
 // Needed for fast generation of an Icosphere, triangulated sphere
 
+#include "BinVoxReader.h"
 // The constructor allocates the memory once, which is the heaviest operation
 /**
  * @brief VolumetricSurfaceIntersection::VolumetricSurfaceIntersection
@@ -880,7 +881,6 @@ void VolumetricSurfaceIntersection::loadSurfaceShaders(const string &vertexShade
  * @brief VolumetricSurfaceIntersection::loadTexture3DFile
  * @param filename
  */
-#include "BinVoxReader.h"
 void VolumetricSurfaceIntersection::loadTexture3DFile(const string &filename)
 {
     BinVoxReader r;

@@ -2,7 +2,8 @@ function p = glProject(gl_ModelViewProjectionMatrix,gl_Viewport,gl_Vertex,znear,
 
 % X is the world position vector
 ndc = gl_ModelViewProjectionMatrix*gl_Vertex;
-ndc = ndc/ndc(4);
+%ndc
+ndc(1:3) = ndc(1:3)/ndc(4);
 
 %offsetX=0;
 %offsetY=0;
@@ -17,4 +18,5 @@ y = gl_Viewport(2);
 w = gl_Viewport(3);
 h = gl_Viewport(4);
 
-p = [ w/2*xndc + (x + w/2) , h/2*yndc + (y+h/2),  (zfar-znear)/2*zndc + (zfar+znear)/2 ];
+%p = [ w/2*xndc + (x + w/2) , h/2*yndc + (y+h/2),  (zfar-znear)/2*zndc + (zfar+znear)/2 ];
+p = [ w/2*xndc + (x + w/2) , h/2*yndc + (y+h/2),  zndc ];

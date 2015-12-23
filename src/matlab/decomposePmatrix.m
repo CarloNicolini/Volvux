@@ -46,7 +46,7 @@
 % October  2010  Original version
 % November 2013  Description of rotation matrix R corrected (transposed)
 
-function [K, Rc_w, Pc, pp, pv] = decomposePmatrix(P)
+function [K, Rc_w, C, pp, pv] = decomposePmatrix(P)
 
     % Convenience variables for the columns of P
     p1 = P(:,1);
@@ -63,9 +63,9 @@ function [K, Rc_w, Pc, pp, pv] = decomposePmatrix(P)
     Z =  det([p1 p2 p4]);
     T = -det([p1 p2 p3]);
 
-    Pc = [X;Y;Z;T];
-    Pc = Pc/Pc(4);
-    Pc = Pc(1:3);     % Make inhomogeneous
+    C = [X;Y;Z;T];
+    C = C/C(4);
+    C = C(1:3);     % Make inhomogeneous
 
     % Pc = null(P,'r'); % numerical way of computing C
 

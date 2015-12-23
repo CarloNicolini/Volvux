@@ -153,8 +153,6 @@ void CameraDirectLinearTransformation::computeOpenGLMatrices(const Vector4i &gl_
     K.col(1) = -K.col(1);
     R.row(0) = -R.row(0);
 
-    this->T = -R*C;
-
     double A = znear+zfar;
     double B = znear*zfar;
 
@@ -177,10 +175,12 @@ void CameraDirectLinearTransformation::computeOpenGLMatrices(const Vector4i &gl_
             0,             0,           -2/(f-n),    -(f+n)/(f-n),
             0,             0,           0,          1;
 
+    // Compute the camera position
+    this->T = -R*C;
 
     this->gl_Projection_Matrix = NDC*Persp;
     this->gl_ModelView_Matrix.matrix().topLeftCorner<3,3>().matrix() = R;
-    this->gl_ModelView_Matrix.translation().matrix() << R*C; // XXX WARNING SEMBREREBBE SBAGLIATO!!!
+    this->gl_ModelView_Matrix.translation().matrix() << R*C;
     this->gl_ModelViewProjection_Matrix = gl_Projection_Matrix*gl_ModelView_Matrix;
 
     //cout << "gl_Projection\n" << gl_Projection_Matrix.matrix() << endl;
