@@ -44,11 +44,11 @@ unsigned char* readBMP(char* filename, int *width, int *height, int *size)
     *height = *(int*)&info[22];
 
     *size = 3 * (*width) * (*height);
-    unsigned char* data = new unsigned char[size]; // allocate 3 bytes per pixel
-    fread(data, sizeof(unsigned char), size, f); // read the rest of the data at once
+    unsigned char* data = new unsigned char[*size]; // allocate 3 bytes per pixel
+    fread(data, sizeof(unsigned char), *size, f); // read the rest of the data at once
     fclose(f);
 
-    for(i = 0; i < size; i += 3)
+    for(i = 0; i < *size; i += 3)
     {
             unsigned char tmp = data[i];
             data[i] = data[i+2];
@@ -80,14 +80,12 @@ int main( int argc, char *argv[] )
    unsigned long int nPictures=1;
    //unsigned long int width = 1024;
    //unsigned long int height = 768;
-   unsigned long int length = width*height*nPictures;
+   //unsigned long int length = width*height*nPictures;
 
-   int width,height,size;
-   unsigned char *bmp = readBMP("helicoid.bmp",width,height,size);
+   int width,height,length;
+   unsigned char *bmp = readBMP(argv[1], &width, &height, &length);
 
-   std::vector<unsigned char> data;
-   data.resize(size);
-   &data.at(0) = bmp;
+   std::vector<unsigned char> data(bmp, bmp + length);
 
    //fillSquare(data, width, height, width/2, height/2, 10,10);
    //fillPixel(data,  width, height, width/2, height/2);

@@ -36,10 +36,7 @@ glViewport(0, 0, RectWidth(winRect), RectHeight(winRect));
 % Animation loop: Run until key press...
 cols = (data + repmat(max(data),size(data,1),1));
 cols = cols./ repmat(max(cols),size(cols,1),1);
-%size(cols)
-%cols = ind2rgb(cols(:,3),parula);
-%size(cols)
-glPointSize(0.01);
+
 while true   
     % Setup cubes rotation around axis:
     glPushMatrix;
@@ -48,15 +45,19 @@ while true
     glClear;
     
     glBegin(GL_LINE_LOOP);
-    glVertex3dv([-120,-120,0]);
-    glVertex3dv([120,-120,0]);
-    glVertex3dv([120,120,0]);
-    glVertex3dv([-120,120,0]);
+    glVertex3dv([-50,-50,0]);
+    glVertex3dv([50,-50,0]);
+    glVertex3dv([50,50,0]);
+    glVertex3dv([-50,50,0]);
     glEnd();
     
+    glPointSize(5);
+    glBegin(GL_POINTS);
+    glVertex3d(0,0,0);
+    glEnd();
     glRotated(90,1,0,0);
     % Draw dots quickly:
-    moglDrawDots3D(win, data', 0.01, [255 255 255]' , [0, 0, 0], 1, []);
+    %moglDrawDots3D(win, data', 0.01, [255 255 255]' , [0, 0, 0], 1, []);
     glPopMatrix;
     
     % Finish OpenGL rendering into PTB window and check for OpenGL errors.
@@ -65,7 +66,7 @@ while true
     % Show rendered image at next vertical retrace:
     Screen('Flip', win);
     im = Screen('GetImage',win);
-    imwrite(im,'~/workspace/Volvux/src/matlab/image.bmp');
+    imwrite(uint8((im(:,:,1)~=0)*255),'../../build/Debug/image.bmp');
     %break;
     % Switch to OpenGL rendering again for drawing of next frame:
     Screen('BeginOpenGL', win);

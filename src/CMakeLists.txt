@@ -74,7 +74,7 @@ if(QT5_SUPPORT)
     add_executable(volvux volvux.cpp ${VOLVUX_SRCS} ${VOLVUX_HDRS} ${VOLVUX_FORMS_HDRS} ${VOLVUX_HELPERS})
 
     #Link the helloworld executable to the Qt 5 widgets library.
-    target_link_libraries(volvux Qt5::Gui Qt5::Widgets Qt5::OpenGL VOLVUXHELPER ${FREEGLUT_LIBRARIES} ${GLUT_LIBRARIES} glut)
+    target_link_libraries(volvux Qt5::Gui Qt5::Widgets Qt5::OpenGL VOLVUXHELPER ${FREEGLUT_LIBRARIES} ${GLUT_LIBRARIES} )
     if (WIN32)
     # http://stackoverflow.com/questions/16773789/qt5-static-build-yields-failed-to-load-platform-plugin-windows/17271172#17271172
     target_link_libraries(volvux Qt5::WinMain)
@@ -111,3 +111,6 @@ add_executable(testhomography testhomography.cpp)
 target_link_libraries(testhomography VOLVUXHELPER glut glfw3 dl )
 
 add_executable(testhomonogl testhomonogl.cpp Homography.cpp)
+
+add_executable(testALPProjector tests/testALPProjector.cpp ALPProjector.cpp)
+target_link_libraries(testALPProjector ${ALP_LIBRARY})
