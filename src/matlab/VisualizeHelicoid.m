@@ -42,6 +42,7 @@ cols = cols./ repmat(max(cols),size(cols,1),1);
 
 glPointSize(2);
 rotangle=0;
+count=1;
 while true   
     % Setup cubes rotation around axis:
     glPushMatrix;
@@ -69,13 +70,18 @@ while true
     glPushMatrix();
     %glRotated(90,1,0,0);
     glRotated(rotangle,0,0,1);
-    moglDrawDots3D(win, data3D', 0.01, [255 0 255]' , [0, 0, 0], 1, []);
+    moglDrawDots3D(win, data3D(count,:)', 5, [255 255 255]' , [0, 0, 0], 1, []);
     glPopMatrix();
     
     % Finish OpenGL rendering into PTB window and check for OpenGL errors.
     Screen('EndOpenGL', win);
 
-    Screen('DrawDots',win,data2D',[1],[255 255 255],[],2);
+    Screen('DrawDots',win,data2D',1,[255 0 255],[],2);
+    for k=1:size(data2D,1)
+        Screen('DrawText',win,['n=' num2str(k)], data2D(k,1)+5,data2D(k,2)+5,[255 255 255]);
+    end
+    Screen('DrawDots',win,[512 384]',[15],[0 255 0],[],2);
+    Screen('DrawText',win,['Visualizing point ' num2str(count)],512,40,[255 255 255]);
     % Show rendered image at next vertical retrace:
     Screen('Flip', win);
     %im = Screen('GetImage',win);
@@ -96,7 +102,15 @@ while true
         if keyCode(KbName('z'))
             rotangle = rotangle-1;
         end
-    end;
+        if keyCode(KbName('c'))
+            count=count+1;
+            if count > size(data2D,1)
+                count = 1;
+            end
+        end
+    end
+    while KbCheck
+    end
 end
 
 % Shut down OpenGL rendering:

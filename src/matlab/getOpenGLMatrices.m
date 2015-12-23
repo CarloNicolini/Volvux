@@ -1,20 +1,4 @@
-function [gl_Projection, gl_ModelView,K,R,C,pp,pv] = getOpenGLMatrices(cameraMatrix,width,height,near,far,invertStruct)
-
-[K,R,C,pp,pv]=decomposePmatrix(cameraMatrix);
-
-% If K(3,3) isn't -1 negate the 3rd column because OpenGL camera looks down z axis
-if K(3,3)>0
-    K(:,3) = -K(:,3);
-end
-% This we need because of OpenGL convention
-K(:,2)=-K(:,2); %working
-R(1,:)=-R(1,:); %working
-R=-R;
-
-% Check that R is right handed, if not give warning
-if dot(cross(R(:,1), R(:,2)), R(:,3)) < 0
-    warning('Note that rotation matrix is left handed');
-end
+function [gl_Projection, gl_ModelView,K,R,C,pp,pv] = getOpenGLMatrices(K,R,C,width,height,near,far)
 
 % K is now in the form
 % K = [a    s   -x0 ;
