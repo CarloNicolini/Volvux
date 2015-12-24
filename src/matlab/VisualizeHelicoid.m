@@ -1,4 +1,4 @@
-function VisualizeHelicoid(gl_Projection_Matrix, gl_ModelViewMatrix,data3D)
+function VisualizeHelicoid(gl_Projection_Matrix, gl_ModelViewMatrix,data3D,ANA)
 Screen('Preference', 'Verbosity', 0);
 % Is the script running in OpenGL Psychtoolbox?
 AssertOpenGL;
@@ -21,6 +21,8 @@ InitializeMatlabOpenGL(1);
 % draw into the onscreen window 'win':
 Screen('BeginOpenGL', win);
 
+% Load the vertex shader
+AnaShader = LoadGLSLProgramFromFiles({[pwd '/AnamorphicVertexShader.vert'],[pwd '/AnamorphicFragmentShader.frag']});
 glMatrixMode(GL_PROJECTION);
 glLoadMatrixd(gl_Projection_Matrix);
 
@@ -68,9 +70,14 @@ while true
     
     % Draw dots quickly:
     glPushMatrix();
-    glRotated(90,1,0,0);
+    %glRotated(90,1,0,0);
     %glRotated(rotangle,0,0,1);
-    moglDrawDots3D(win, data3D', 1, [255 255 255]' , [], 2);
+    glUseProgram(AnaShader);
+    %moglDrawDots3D(win, data3D', 1, data3D' , [], 2);
+    glutWireCube(120);
+    analoc = glGetUniformLocation(AnaShader,'ANA');
+    glUniformMatrix4fv(analoc,1,0,ANA);
+    glUseProgram(0);
     glPopMatrix();
     
     % Finish OpenGL rendering into PTB window and check for OpenGL errors.

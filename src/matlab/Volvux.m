@@ -65,7 +65,7 @@ ANA = [1   0  0  0;
      0   0  1  0;
      0   0  -1/norm(gl_Modelview_matrix(1:3,4))  1];
 
-%HELICOIDp = project(inv(ANA),[HELICOID ones(size(HELICOID,1),1)]);
+HELICOIDp = project(inv(ANA),[HELICOID ones(size(HELICOID,1),1)]);
 
 %% Compute the error of OpenGL
 for i=1:size(x2D,1)
@@ -83,4 +83,4 @@ end
 VisualizeCalibration(gl_Projection_matrix,gl_Modelview_matrix,X3D(:,1:3),x2D(:,1:2));
 
 % To show the HELICOID DOTS
-VisualizeHelicoid(gl_Projection_matrix,gl_Modelview_matrix,HELICOID);
+VisualizeHelicoid(gl_Projection_matrix,gl_Modelview_matrix,HELICOIDp(:,1:3),ANA);

@@ -102,7 +102,7 @@ void VolumetricMeshIntersection::initializeSurfaceShaders()
     uniform vec3 objOffset;
     void main()
     {
-        vec4 v=gl_Vertex; v.w-=0.01;
+        vec4 v=gl_Vertex;
         // This is to rotated the object
         v.xz = vec2(cos(step)*v.x+sin(step)*v.z,-sin(step)*v.x+cos(step)*v.z);
         // Compute the z position given x and y on a circular domain of radius 1 (diameter 2)
