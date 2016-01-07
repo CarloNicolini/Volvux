@@ -13,18 +13,18 @@ VolvuxWidgetPage::~VolvuxWidgetPage()
     delete ui;
 }
 
-VolvuxWidgetPage::onDoubleSpinboxOffsetXChanged(double)
+void VolvuxWidgetPage::onDoubleSpinboxOffsetXChanged(double)
 {
 
 }
 
 
-VolvuxWidgetPage::onDoubleSpinboxOffsetYChanged(double)
+void VolvuxWidgetPage::onDoubleSpinboxOffsetYChanged(double)
 {
 
 }
 
-VolvuxWidgetPage::onDoubleSpinboxOffsetZChanged(double)
+void VolvuxWidgetPage::onDoubleSpinboxOffsetZChanged(double)
 {
 
 }

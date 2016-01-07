@@ -81,6 +81,8 @@ StackedWidget::StackedWidget(QWidget *parent) :
     QObject::connect(calibrationWidgetpage->ui->volvuxCalibrationWidget,SIGNAL(points2Dupdated(QVector<QPoint>)),calibrationWidgetpage,SLOT(update2DPoints(QVector<QPoint>)));
 
     QObject::connect(calibrationWidgetpage,SIGNAL(calibrationEmitted(CameraDirectLinearTransformation&)),volvuxWidgetpage->ui->widget,SLOT(setCamera(CameraDirectLinearTransformation&)));
+
+
 }
 
 StackedWidget::~StackedWidget()
@@ -90,7 +92,8 @@ StackedWidget::~StackedWidget()
 
 //Show current widget
 void StackedWidget::showCurrentWidget(int curr_index){
-    if (widgets.count() > 0){
+    if (widgets.count() > 0)
+    {
         foreach (QWidget * widget, widgets)
             widget->hide();
         widgets.at(curr_index)->show();
@@ -101,7 +104,8 @@ void StackedWidget::showCurrentWidget(int curr_index){
 void StackedWidget::keyPressEvent(QKeyEvent *event){
     int keypressed = event->key();
     //Handles esc button pression
-    switch (keypressed){
+    switch (keypressed)
+    {
     case Qt::Key_Escape :
     {
         //this->saveData();
