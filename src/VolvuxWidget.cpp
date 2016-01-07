@@ -275,11 +275,14 @@ void VolvuxWidget::draw()
     volume->meshStruct.shader->setUniform1f(static_cast<GLcharARB*>((char*)"thickness"),volume->meshStruct.thickness);
     volume->meshStruct.shader->setUniform1f(static_cast<GLcharARB*>((char*)"curvature"),this->curvature);
 
+    // Draw the helicoid
     glPushMatrix();
     glRotated(-90,1,0,0);
     glTranslated(volume->meshStruct.x,volume->meshStruct.y,volume->meshStruct.z);
     volume->draw();
     glPopMatrix();
+
+
 }
 
 /**
