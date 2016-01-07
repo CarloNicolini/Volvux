@@ -119,7 +119,6 @@ protected:
 public:
     bool useOffscreenRendering;
     bool drawTextureCube;
-    bool isDrawingFrustum;
     bool useCalibratedGLView;
 
 

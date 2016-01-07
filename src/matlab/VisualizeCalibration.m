@@ -41,7 +41,6 @@ cols = (data3D + repmat(max(data3D),size(data3D,1),1));
 cols = cols./ repmat(max(cols),size(cols,1),1);
 
 glPointSize(2);
-rotangle=0;
 count=1;
 while true   
     % Setup cubes rotation around axis:
@@ -68,8 +67,6 @@ while true
     
     % Draw dots quickly:
     glPushMatrix();
-    %glRotated(90,1,0,0);
-    glRotated(rotangle,0,0,1);
     moglDrawDots3D(win, data3D(count,:)', 5, [255 255 255]' , [0, 0, 0], 1, []);
     glPopMatrix();
     
@@ -95,12 +92,6 @@ while true
     if keyPressed
         if keyCode(KbName('q')) || keyCode(KbName('ESCAPE'))
             break;
-        end
-        if keyCode(KbName('a'))
-            rotangle = rotangle+1;
-        end
-        if keyCode(KbName('z'))
-            rotangle = rotangle-1;
         end
         if keyCode(KbName('c'))
             count=count+1;

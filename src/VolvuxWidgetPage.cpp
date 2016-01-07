@@ -12,3 +12,19 @@ VolvuxWidgetPage::~VolvuxWidgetPage()
 {
     delete ui;
 }
+
+VolvuxWidgetPage::onDoubleSpinboxOffsetXChanged(double)
+{
+
+}
+
+
+VolvuxWidgetPage::onDoubleSpinboxOffsetYChanged(double)
+{
+
+}
+
+VolvuxWidgetPage::onDoubleSpinboxOffsetZChanged(double)
+{
+
+}

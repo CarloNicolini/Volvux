@@ -55,10 +55,10 @@ while true
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glColor3d(1,1,1);
     glBegin(GL_LINE_LOOP);
-    glVertex3dv([-50,-50,0]);
-    glVertex3dv([50,-50,0]);
-    glVertex3dv([50,50,0]);
-    glVertex3dv([-50,50,0]);
+    glVertex3dv([-30,-30,0]);
+    glVertex3dv([30,-30,0]);
+    glVertex3dv([30,30,0]);
+    glVertex3dv([-30,30,0]);
     glEnd();
     glPopAttrib();
     
@@ -70,13 +70,13 @@ while true
     
     % Draw dots quickly:
     glPushMatrix();
-    %glRotated(90,1,0,0);
-    %glRotated(rotangle,0,0,1);
+    glRotated(-90,1,0,0);
+    glRotated(rotangle,0,1,0);
     glUseProgram(AnaShader);
-    %moglDrawDots3D(win, data3D', 1, data3D' , [], 2);
-    for edge=30:10:200
-    glutWireCube(edge);
-    end
+    moglDrawDots3D(win, data3D', 1, data3D' , [], 2);
+    %for edge=30:10:200
+    %glutWireCube(edge);
+    %end
     analoc = glGetUniformLocation(AnaShader,'ANA');
     glUniformMatrix4fv(analoc,1,0,ANA);
     glUseProgram(0);
@@ -106,8 +106,8 @@ while true
             rotangle = rotangle-1;
         end
     end
-    while KbCheck
-    end
+    %while KbCheck
+    %end
 end
 
 % Shut down OpenGL rendering:

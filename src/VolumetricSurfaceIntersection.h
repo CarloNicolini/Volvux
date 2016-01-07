@@ -105,24 +105,7 @@ public:
         glsl::glShader *shader;
         double edge;
     } cubeSurface;
-	/*
-    struct PotatoParameters
-    {
-        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-        IcoSphere *sphere;
-        glsl::glShader *shader;
-        float scale;
-        float seed;
-        float normalScale;
-        float shininess;
-        float zScale;
-        Eigen::Vector4f ambientColor;//(0.5,0.5,0.5,1.0);
-        Eigen::Vector4f diffuseColor;//(0.6,0.0,0.0,1.0);
-        Eigen::Vector4f lightPosition;//(1.0f,0.0f,0.0f);
-        Eigen::Vector3f specularColor;//(0.6,0.6,0.6);
-        Eigen::Matrix<GLfloat,3,1> axis;
-    } potatoSurface;
-	*/
+
     const int getTextureSizeX() const;
     const int getTextureSizeY() const;
     const int getTextureSizeZ() const;

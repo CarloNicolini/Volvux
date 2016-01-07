@@ -68,28 +68,16 @@ if(QT5_SUPPORT)
     QT5_WRAP_UI(VOLVUX_FORMS_HDRS ${VOLVUX_FORMS})
     QT5_WRAP_CPP(VOLVUX_HDRS_MOC ${VOLVUX_HDRS})
 
-    #add_executable(volvux volvux.cpp ${VOLVUX_SRCS} ${VOLVUX_FORMS_HDRS})
-    #target_link_libraries(volvux Qt5::Widgets Qt5::OpenGL VOLVUXHELPER)
-    # Tell CMake to create the helloworld executable
+    # Tell CMake to create the volvux executable
     add_executable(volvux volvux.cpp ${VOLVUX_SRCS} ${VOLVUX_HDRS} ${VOLVUX_FORMS_HDRS} ${VOLVUX_HELPERS})
 
     #Link the helloworld executable to the Qt 5 widgets library.
-    target_link_libraries(volvux Qt5::Gui Qt5::Widgets Qt5::OpenGL VOLVUXHELPER ${FREEGLUT_LIBRARIES} ${GLUT_LIBRARIES} )
+    target_link_libraries(volvux Qt5::Gui Qt5::Widgets Qt5::OpenGL VOLVUXHELPER ${FREEGLUT_LIBRARIES} ${GLUT_LIBRARIES} glut)
     if (WIN32)
-    # http://stackoverflow.com/questions/16773789/qt5-static-build-yields-failed-to-load-platform-plugin-windows/17271172#17271172
-    target_link_libraries(volvux Qt5::WinMain)
+        # http://stackoverflow.com/questions/16773789/qt5-static-build-yields-failed-to-load-platform-plugin-windows/17271172#17271172
+        target_link_libraries(volvux Qt5::WinMain)
     endif(WIN32)
     qt5_use_modules(volvux Gui Widgets OpenGL)
-
-    #add_executable(welcomevolvux welcomevolvux.cpp ${VOLVUX_SRCS} ${VOLVUX_HDRS} ${VOLVUX_FORMS_HDRS})
-    #Link the helloworld executable to the Qt 5 widgets library.
-    #target_link_libraries(welcomevolvux Qt5::Gui Qt5::Widgets Qt5::OpenGL VOLVUXHELPER)
-    #if (WIN32)
-    # http://stackoverflow.com/questions/16773789/qt5-static-build-yields-failed-to-load-platform-plugin-windows/17271172#17271172
-    #target_link_libraries(welcomevolvux Qt5::WinMain)
-    #endif(WIN32)
-    #qt5_use_modules(welcomevolvux Gui Widgets OpenGL)
-
 endif(QT5_SUPPORT)
 
 
@@ -112,5 +100,7 @@ target_link_libraries(testhomography VOLVUXHELPER glut glfw3 dl )
 
 add_executable(testhomonogl testhomonogl.cpp Homography.cpp)
 
+if (ALP_SUPPORT)
 add_executable(testALPProjector tests/testALPProjector.cpp ALPProjector.cpp)
 target_link_libraries(testALPProjector ${ALP_LIBRARY})
+endif(ALP_SUPPORT)

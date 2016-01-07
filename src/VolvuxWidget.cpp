@@ -71,8 +71,6 @@ VolvuxWidget::VolvuxWidget(QWidget *parent) :
     QObject::connect(timer,SIGNAL(timeout()),this,SLOT(repaint()));
 
     drawTextureCube=true;
-
-    isDrawingFrustum=true;
     useCalibratedGLView=true;
     useOffscreenRendering=false;
 
@@ -209,8 +207,8 @@ void VolvuxWidget::initializeGL()
     );
 
     const GLcharARB fragmentShader[] = STATIC_STRINGIFY(
-                varying vec3 texture_coordinate;
-            uniform sampler3D my_color_texture;
+    varying vec3 texture_coordinate;
+    uniform sampler3D my_color_texture;
     uniform vec4 uniformColor;
     varying vec4 pvertex;
     uniform float thickness;
@@ -269,10 +267,7 @@ void VolvuxWidget::draw()
         applyOpenGLCameraFOV();
     }
 
-    glutWireSphere(500,50,50);
 
-    glEnable(GL_TEXTURE_3D);
-    volume->meshStruct.shader->begin();
     volume->meshStruct.shader->setUniform4f(static_cast<GLcharARB*>((char*)"uniformColor"),1.0f,1.0f,1.0f,1.0f);
     volume->meshStruct.shader->setUniform1f(static_cast<GLcharARB*>((char*)"step"),volume->meshStruct.rotationAngle);
     volume->meshStruct.shader->setUniform3f(static_cast<GLcharARB*>((char*)"objOffset"),volume->meshStruct.offsetX,volume->meshStruct.offsetY,volume->meshStruct.offsetZ);
@@ -281,22 +276,10 @@ void VolvuxWidget::draw()
     volume->meshStruct.shader->setUniform1f(static_cast<GLcharARB*>((char*)"curvature"),this->curvature);
 
     glPushMatrix();
-    glRotated(90,1,0,0);
+    glRotated(-90,1,0,0);
     glTranslated(volume->meshStruct.x,volume->meshStruct.y,volume->meshStruct.z);
-    volume->obj->draw();
-    glPopMatrix();
-    volume->meshStruct.shader->end();
-    glDisable(GL_TEXTURE_3D);
-
-    /*
-    glPushMatrix();
-    glLoadIdentity();
-    glTranslated(0,0,this->eyeZ);
-    arcball.applyRotationMatrix();
-    glRotated(90,1,0,0);
     volume->draw();
     glPopMatrix();
-    */
 }
 
 /**
@@ -486,7 +469,7 @@ void VolvuxWidget::randomizeSpheres(bool useRandomDots, int nSpheres, int minRad
     else
         volume->fillVolumeWithSpheres(nSpheres,minRadius,maxRadius);
 
-    volume->meshStruct.showMesh=false;
+    volume->meshStruct.showMesh=true;
     volume->initializeTexture();
 }
 
@@ -524,7 +507,7 @@ void VolvuxWidget::initVolume()
     this->volume->meshStruct.x = 0.0;
     this->volume->meshStruct.y = 0.0;
     this->volume->meshStruct.z = 0.0;
-    this->volume->meshStruct.thickness = 0.5f;
+    this->volume->meshStruct.thickness = 500.0f;
 }
 
 /*

@@ -64,11 +64,11 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     }
     if ( (key == GLFW_KEY_A ) && action == GLFW_REPEAT || action == GLFW_PRESS)
     {
-        surface.meshStruct.rotationAngle += 0.05;
+        surface.meshStruct.rotationAngle += 10;
     }
     if ( (key == GLFW_KEY_Z ) && action == GLFW_REPEAT || action == GLFW_PRESS)
     {
-        surface.meshStruct.rotationAngle -= 0.05;
+        surface.meshStruct.rotationAngle -= 10;
     }
     if ( (key == GLFW_KEY_S ) && action == GLFW_REPEAT || action == GLFW_PRESS)
     {
@@ -157,8 +157,8 @@ GLFWwindow *initOpenGLContext(const int width=1024, const int height=768, const 
 
 void drawCalibrations3D()
 {
+    glPointSize(1);
     glPushMatrix();
-
     glBegin(GL_POINTS);
     glColor3d(0,0,1);
     for (int i=0; i<9; i++)
@@ -196,7 +196,8 @@ void drawFrame(GLFWwindow *window, CameraDirectLinearTransformation &cdlt)
     drawCalibrations3D();
     // Apply 90° rotation on the helicoid
     glRotated(90,1,0,0);
-    obj->draw(GL_POINT);
+    glRotated(surface.meshStruct.rotationAngle,0,1,0);
+    obj->draw(GL_LINE);
     glPopMatrix();
 }
 

@@ -151,8 +151,15 @@ void CameraDirectLinearTransformation::computeOpenGLMatrices(const Vector4i &gl_
 
     // This we need because of OpenGL convention
     K.col(1) = -K.col(1);
+
+    Matrix3d ReflectKY;
+    ReflectKY << 1,     0,      0,
+                 0,    -1,      768,
+                 0,     0,      1;
+    this->K << (ReflectKY*K).eval();
     R.row(0) = -R.row(0);
-    R=-R; // needed because otherwise the determinant is negative.
+    R=-R.eval(); // needed because otherwise the determinant is negative.
+
     double A = znear+zfar;
     double B = znear*zfar;
 

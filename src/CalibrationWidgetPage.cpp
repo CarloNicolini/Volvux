@@ -58,7 +58,6 @@ const std::vector<Vector3d> &CalibrationWidgetPage::getPoints2D() const
 //Compute Homography
 void CalibrationWidgetPage::computeHomography(const vector<Vector3d> &points)
 {
-    points2D.clear();
     CDLT.init(points2D,points3D,Vector4i(0,0,PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT),1,1E4);
     emit calibrationEmitted(CDLT);
 }
@@ -97,15 +96,32 @@ void CalibrationWidgetPage::clearLayout(QLayout* layout, bool deleteWidgets)
  * @brief CalibrationWidgetPage::append2DPoint
  * @param p
  */
-//Append 2D Points SLOT
+//Append 2D Points
 void CalibrationWidgetPage::append2DPoint(const QPoint &p)
 {
+    // XXX TO CHANGE WITH REAL POINTS
+    qDebug("XXX RIMETTERE I PUNTI ORIGINALI INVECE CHE QUESTI");
+    points2D.clear();
+    points2D.push_back(Vector3d(512,384,1));
+    points2D.push_back(Vector3d(419,474,1));
+    points2D.push_back(Vector3d(409,294,1));
+    points2D.push_back(Vector3d(589,294,1));
+    points2D.push_back(Vector3d(589,474,1));
+    points2D.push_back(Vector3d(449,441,1));
+    points2D.push_back(Vector3d(449,321,1));
+    points2D.push_back(Vector3d(569,321,1));
+    points2D.push_back(Vector3d(569,441,1));
+    this->computeHomography(points2D);
+    this->CDLT.info();
+    /*
     points2D.push_back(Vector3d(p.x(),p.y(),1));
     if (points2D.size() == points3D.size())
     {
+
         this->computeHomography(points2D);
         this->CDLT.info();
     }
+    */
 }
 
 /**

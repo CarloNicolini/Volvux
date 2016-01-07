@@ -16,8 +16,12 @@ public:
     ~VolvuxWidgetPage();
     Ui::VolvuxWidgetPage *ui;
 
-private:
+public slots:
+    void onDoubleSpinboxOffsetXChanged(double);
+    void onDoubleSpinboxOffsetYChanged(double);
+    void onDoubleSpinboxOffsetZChanged(double);
 
+private:
 };
 
 #endif // VOLVUXWIDGETPAGE_H

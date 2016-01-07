@@ -77,10 +77,9 @@ for i=1:9
     errGL = errGL + norm(pgl(i,1:2)-x2D(i,1:2));
 end
  
-
 % Now project the helicoid points in a PTB window
 % To check if calibration is OK
 VisualizeCalibration(gl_Projection_matrix,gl_Modelview_matrix,X3D(:,1:3),x2D(:,1:2));
 
 % To show the HELICOID DOTS
-VisualizeHelicoid(gl_Projection_matrix,gl_Modelview_matrix,HELICOIDp(:,1:3),ANA);
+VisualizeHelicoid(gl_Projection_matrix,gl_Modelview_matrix,HELICOID(:,1:3),eye(4));
