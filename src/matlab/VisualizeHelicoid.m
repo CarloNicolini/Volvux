@@ -74,7 +74,9 @@ while true
     %glRotated(rotangle,0,0,1);
     glUseProgram(AnaShader);
     %moglDrawDots3D(win, data3D', 1, data3D' , [], 2);
-    glutWireCube(120);
+    for edge=30:10:200
+    glutWireCube(edge);
+    end
     analoc = glGetUniformLocation(AnaShader,'ANA');
     glUniformMatrix4fv(analoc,1,0,ANA);
     glUseProgram(0);
