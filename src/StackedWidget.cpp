@@ -93,7 +93,7 @@ StackedWidget::StackedWidget(QWidget *parent) :
         QObject::connect(volvuxWidgetpage->ui->doubleSpinboxHelicoidCxMm,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxHelicoidChanged(double)));
         QObject::connect(volvuxWidgetpage->ui->doubleSpinboxHelicoidCyMm,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxHelicoidChanged(double)));
         QObject::connect(volvuxWidgetpage->ui->doubleSpinboxHelicoidCzMm,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxHelicoidChanged(double)));
-        QObject::connect(volvuxWidgetpage->ui->doubleSpinBoxObjectSize,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDobuleSpinboxObjectSizeChanged(double)));
+        QObject::connect(volvuxWidgetpage->ui->doubleSpinBoxObjectSize,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxObjectSizeChanged(double)));
         //Stimulus tab connection
         QObject::connect(volvuxWidgetpage->ui->pushButtonStimulusRandomizeSpheres,SIGNAL(clicked()),volvuxWidgetpage,SLOT(onPushButtonRandomizeSpheresPressed()));
         QObject::connect(volvuxWidgetpage->ui->pushButtonGenerateFrames,SIGNAL(clicked()),volvuxWidgetpage,SLOT(onPushButtonGenerateFramesPressed()));
