@@ -41,7 +41,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabScene">
       <attribute name="title">
@@ -53,7 +53,7 @@
          <x>10</x>
          <y>10</y>
          <width>354</width>
-         <height>741</height>
+         <height>782</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -296,7 +296,7 @@
       <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
-         <x>50</x>
+         <x>0</x>
          <y>10</y>
          <width>313</width>
          <height>461</height>

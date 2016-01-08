@@ -59,6 +59,9 @@ StackedWidget::StackedWidget(QWidget *parent) :
     //Back
     QObject::connect(this->ui->pushButtonBack,SIGNAL(clicked()),this,SLOT(onBackButtonPressed()));
 
+    //Connection status bar
+    QObject::connect(volvuxWidgetpage,SIGNAL(writeOnStatusBar(QString,int)),this->ui->statusBar,SLOT(showMessage(QString,int)));
+
     //Projector control buttons
     //Initialize
     QObject::connect(projectorWidgetpage->ui->pushButtonProjectorInitialize,SIGNAL(clicked()),projectorWidgetpage,SLOT(onPushButtonProjectorInitializeClicked()));
@@ -91,6 +94,9 @@ StackedWidget::StackedWidget(QWidget *parent) :
         QObject::connect(volvuxWidgetpage->ui->doubleSpinboxHelicoidCyMm,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxHelicoidChanged(double)));
         QObject::connect(volvuxWidgetpage->ui->doubleSpinboxHelicoidCzMm,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxHelicoidChanged(double)));
         QObject::connect(volvuxWidgetpage->ui->doubleSpinBoxObjectSize,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDobuleSpinboxObjectSizeChanged(double)));
+        //Stimulus tab connection
+        QObject::connect(volvuxWidgetpage->ui->pushButtonStimulusRandomizeSpheres,SIGNAL(clicked()),volvuxWidgetpage,SLOT(onPushButtonRandomizeSpheresPressed()));
+        QObject::connect(volvuxWidgetpage->ui->pushButtonGenerateFrames,SIGNAL(clicked()),volvuxWidgetpage,SLOT(onPushButtonGenerateFramesPressed()));
 
 }
 
@@ -222,3 +228,4 @@ void StackedWidget::onActionCalibrationTriggered() {
     this->ui->menuBar->hide();
     this->ui->pushButtonNext->setEnabled(true);
 }
+

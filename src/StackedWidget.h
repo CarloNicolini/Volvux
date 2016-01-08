@@ -43,6 +43,7 @@ public slots:
     void onNextButtonPressed();
     void onBackButtonPressed();
 
+
 private slots:
     //Menu bar actions
     void onActionExitTriggered();

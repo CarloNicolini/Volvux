@@ -16,11 +16,16 @@ public:
     ~VolvuxWidgetPage();
     Ui::VolvuxWidgetPage *ui;
 
+
+signals:
+    void writeOnStatusBar(QString message,int time);
+
 public slots:
     void onDoubleSpinboxOffsetChanged(double);
     void onDoubleSpinboxHelicoidChanged(double);
     void onDoubleSpinboxObjectSizeChanged(double);
-
+    void onPushButtonRandomizeSpheresPressed();
+    void onPushButtonGenerateFramesPressed();
 
 private:
 };
