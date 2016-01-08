@@ -222,7 +222,7 @@ void StackedWidget::onActionProjectorMotorTriggered(){
     this->ui->pushButtonNext->setEnabled(true);
 }
 
-//Calibration
+//Calibration SLOT
 void StackedWidget::onActionCalibrationTriggered() {
     this->ui->stackedWidget->setCurrentIndex(CALIBRATION_PAGE_INDEX);
     this->ui->menuBar->hide();

@@ -33,13 +33,13 @@ void VolvuxWidgetPage::onDoubleSpinboxObjectSizeChanged(double){
 }
 
 //Stimulus tab
-//Randomize sphere
+//Randomize sphere SLOT
 void VolvuxWidgetPage::onPushButtonRandomizeSpheresPressed(){
     bool useRandomDots = this->ui->randomDotsCheckBox->isChecked();
     this->ui->widget->randomizeSpheres(useRandomDots,this->ui->spinBoxStimulusNSpheres->value(),this->ui->spinBoxStimulusSpheresRadiusMin->value(),this->ui->spinBoxStimulusSpheresRadiusMax->value());
 }
 
-//Generate frames
+//Generate frames SLOT
 void VolvuxWidgetPage::onPushButtonGenerateFramesPressed(){
     if (this->ui->checkBoxUseOffscreenRendering->isChecked())
     {
