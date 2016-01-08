@@ -113,12 +113,6 @@ void VolumetricSurfaceIntersection::resize(unsigned int _sizeX, unsigned int _si
     texture3DVolume.clear();
     texture3DVolume.resize(textureSizeX*textureSizeY*textureSizeZ);
     memset(&(texture3DVolume.at(0)),texture3DfillValue,sizeof(GLubyte)*textureSizeX*textureSizeY*textureSizeZ);
-#ifdef USE_OBJ
-    obj = new ObjLoader2();
-    obj->load("../data/objmodels/helicoid.obj");
-    obj->initializeBuffers();
-    obj->getInfo();
-#endif
 }
 /**
  * @brief VolumetricSurfaceIntersection::~VolumetricSurfaceIntersection
@@ -170,25 +164,8 @@ VolumetricSurfaceIntersection::~VolumetricSurfaceIntersection()
             delete cubeSurface.shader;
         break;
     }
-	/*
-    case SurfacePotato:
-    {
-        if (potatoSurface.shader)
-            delete potatoSurface.shader;
-        if (potatoSurface.sphere)
-            delete potatoSurface.sphere;
-        break;
-    }
-	*/
     }
 
-}
-
-int VolumetricSurfaceIntersection::sub2ind(int x, int y, int z)
-{
-    // http://nadeausoftware.com/articles/2012/06/c_c_tip_how_loop_through_multi_dimensional_arrays_quickly#Method2Nestedloopswithlineararrayandindexeswith3multiplies
-    //return x * textureSizeY* textureSizeZ+ y * textureSizeZ+ z;
-    return  textureSizeY* textureSizeX* z + textureSizeX* y + x;
 }
 
 /**
@@ -216,8 +193,7 @@ void VolumetricSurfaceIntersection::fillVolumeWithSpheres( int nSpheres, int min
     this->nSpheres = nSpheres;
     this->sphereRadiusMin = minRadius;
     this->sphereRadiusMax = maxRadius;
-    //    Timer timer;
-    //    timer.start();
+
     if ( texture3DVolume.empty() )
         this->resize(this->textureSizeX,this->textureSizeY,this->textureSizeZ);
     memset(&(texture3DVolume.at(0)),texture3DfillValue,sizeof(GLubyte)*textureSizeX*textureSizeY*textureSizeZ);
@@ -413,8 +389,8 @@ void VolumetricSurfaceIntersection::initializeTexture()
  */
 void VolumetricSurfaceIntersection::initializeSurfaceShaders(int surface)
 {
-    if (surface < SurfaceParaboloid || surface > SurfacePotato )
-        throw std::out_of_range("Surface not supported, values are in [0,6]");
+    if (surface < SurfaceParaboloid || surface > SurfaceCube )
+        throw std::out_of_range("Surface not supported, values are in [0,5]");
 
     this->currentSurface=surface;
 
@@ -605,34 +581,6 @@ void VolumetricSurfaceIntersection::initializeSurfaceShaders(int surface)
         }
         );
         cubeSurface.shader = SM.loadfromMemory(vertexShader,fragmentShader);
-        break;
-    }
-    case SurfacePotato:
-    {
-
-        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_REPEAT);
-
-        // Important to enable bilinear filtering and smoothing
-        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-#ifdef __linux__
-        char vertexShaderFile[] = "../experiments/texturing/potato_perlin_deformed.vert";
-        char fragmentShaderFile[] = "../experiments/texturing/potato_perlin_deformed.frag";
-#endif
-        
-#ifdef __APPLE__
-        char vertexShaderFile[] = "/Users/rs/workspace/cncsvision/experiments/texturing/potato_perlin_deformed.vert";
-        char fragmentShaderFile[] = "/Users/rs/workspace/cncsvision/experiments/texturing/potato_perlin_deformed.frag";
-#endif
-
-#ifdef _WIN32
-        char vertexShaderFile[] = "../../experiments/texturing/potato_perlin_deformed.vert";
-        char fragmentShaderFile[] = "../../experiments/texturing/potato_perlin_deformed.frag";
-#endif
-
-        //potatoSurface.shader = SM.loadfromFile(vertexShaderFile,fragmentShaderFile);
         break;
     }
     }
@@ -847,24 +795,6 @@ const int VolumetricSurfaceIntersection::getSphereRadiusMax() const
     return sphereRadiusMax;
 }
 
-/**
- * @brief VolumetricSurfaceIntersection::setOcclusionCulling
- * @param _useOcclusionCulling
- */
-void VolumetricSurfaceIntersection::setOcclusionCulling(bool _useOcclusionCulling)
-{
-    this->useOcclusionCulling=_useOcclusionCulling;
-}
-
-/**
- * @brief VolumetricSurfaceIntersection::setOcclusionCullingViewer
- * @param eye
- * @param FOV
- */
-void VolumetricSurfaceIntersection::setOcclusionCullingViewer(const Vector3d &eye, double FOV)
-{
-
-}
 
 /**
  * @brief VolumetricSurfaceIntersection::loadSurfaceShaders

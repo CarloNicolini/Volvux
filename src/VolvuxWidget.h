@@ -28,7 +28,6 @@
 
 #include <QApplication>
 #include <QtGui>
-#include <QGLWidget>
 #include <QGLFunctions>
 #include <QGLFramebufferObject>
 #include <Eigen/Core>
@@ -40,7 +39,6 @@
 #include "Screen.h"
 #include "ParametersLoader.h"
 #include "CalibrationWidgetPage.h"
-//#include "CalibrationHelper.h"
 
 #define PROJECTOR_SLICES_NUMBER 16
 

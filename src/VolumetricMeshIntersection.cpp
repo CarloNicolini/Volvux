@@ -187,12 +187,12 @@ void VolumetricMeshIntersection::draw()
     meshStruct.shader->setUniform1f(const_cast<GLcharARB*>("objSize"),meshStruct.radius);
     if (meshStruct.useParametricSurfaceFiltering)
         meshStruct.shader->setUniform1f("thickness",meshStruct.thickness);
-    //if (obj==NULL)
-    // throw std::runtime_error("Must load an OBJ file before drawing it. Call loadObj");
+
     glPushMatrix();
     glTranslated(meshStruct.x,meshStruct.y,meshStruct.z);
     obj->draw();
     glPopMatrix();
+
     meshStruct.shader->end();
     glDisable(GL_TEXTURE_3D);
 

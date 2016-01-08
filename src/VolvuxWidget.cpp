@@ -199,8 +199,8 @@ void VolvuxWidget::initializeGL()
         // This is to rotate the object
         v.xz = vec2(cos(step)*v.x+sin(step)*v.z,-sin(step)*v.x+cos(step)*v.z);
         // Compute the z position given x and y on a circular domain of radius 1 (diameter 2)
-        //texture_coordinate= vec3(((v.xz/radius+1.0)*0.5),(v.y-objOffset.y)/objSize);
-        texture_coordinate= vec3(   ((v.xz-objOffset.xz)/objSize+1.0)*0.5, ((v.y-objOffset.y)/objSize+1.0)*0.5);
+        texture_coordinate = vec3(((v.xz-objOffset.xz)/objSize+1.0)*0.5, ((v.y-objOffset.y)/objSize+1.0)*0.5);
+        //texture_coordinate= vec3(   ((v.xz-objOffset.xz)/objSize+1.0)*0.5, ((v.y-objOffset.y)/objSize+1.0)*0.5);
         gl_Position = gl_ModelViewProjectionMatrix*v;
         pvertex = v;
     }
@@ -210,12 +210,15 @@ void VolvuxWidget::initializeGL()
     varying vec3 texture_coordinate;
     uniform sampler3D my_color_texture;
     uniform vec4 uniformColor;
-    varying vec4 pvertex;
-    uniform float thickness;
-    uniform float curvature;
+    //varying vec4 pvertex;
+    //uniform float thickness;
+    //uniform float curvature;
     void main()
     {
+        //gl_FragColor = uniformColor*texture3D(my_color_texture, texture_coordinate);
         vec4 finalColor = uniformColor*texture3D(my_color_texture, texture_coordinate);
+        gl_FragColor = finalColor;
+        /*
         // Filter out the vertices outside a given surface normal
         float parametricSurfaceEquation = (pvertex.x*pvertex.x)/curvature;
         float normalLength = sqrt(1.0+(2.0*pvertex.x/curvature)*(2.0*pvertex.x/curvature));
@@ -228,6 +231,7 @@ void VolvuxWidget::initializeGL()
             // color the vertices outside that small volume around the surface to black
             gl_FragColor = vec4(0.0,0.0,0.0,1.0);
         }
+        */
     }
     );
 
@@ -267,7 +271,6 @@ void VolvuxWidget::draw()
         applyOpenGLCameraFOV();
     }
 
-
     volume->meshStruct.shader->setUniform4f(static_cast<GLcharARB*>((char*)"uniformColor"),1.0f,1.0f,1.0f,1.0f);
     volume->meshStruct.shader->setUniform1f(static_cast<GLcharARB*>((char*)"step"),volume->meshStruct.rotationAngle);
     volume->meshStruct.shader->setUniform3f(static_cast<GLcharARB*>((char*)"objOffset"),volume->meshStruct.offsetX,volume->meshStruct.offsetY,volume->meshStruct.offsetZ);
@@ -277,12 +280,10 @@ void VolvuxWidget::draw()
 
     // Draw the helicoid
     glPushMatrix();
-    glRotated(-90,1,0,0);
+    //glRotated(-90,1,0,0);
     glTranslated(volume->meshStruct.x,volume->meshStruct.y,volume->meshStruct.z);
     volume->draw();
     glPopMatrix();
-
-
 }
 
 /**
@@ -472,7 +473,7 @@ void VolvuxWidget::randomizeSpheres(bool useRandomDots, int nSpheres, int minRad
     else
         volume->fillVolumeWithSpheres(nSpheres,minRadius,maxRadius);
 
-    volume->meshStruct.showMesh=true;
+    volume->meshStruct.showMesh=false;
     volume->initializeTexture();
 }
 

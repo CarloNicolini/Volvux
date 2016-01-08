@@ -44,7 +44,7 @@ public:
     VolumetricSurfaceIntersection(unsigned int textureSizeX, unsigned int textureSizeY, unsigned int textureSizeZ);
     ~VolumetricSurfaceIntersection();
 
-    // Resize the allocated boost multidimensional array and fill it with zeros
+    // Resize the allocated vector of data and fill it with zeros
     void resize(unsigned int _sizeX, unsigned int _sizeY, unsigned int _sizeZ);
     void initializeSurfaceShaders(int surface);
     void loadSurfaceShaders(const std::string &vertexShaderName, const std::string &fragmentShaderName, const std::string &geometryShaderName);
@@ -52,12 +52,9 @@ public:
     void fillVolumeWithSpheres( int nSpheres, int minRadius, int maxRadius );
     void fillVolumeWithRandomDots(int nRandomDots, int size);
     void setUniformColor(const GLfloat color[4]);
-    void draw();
-    void setOcclusionCulling(bool _useOcclusionCulling);
-    void setOcclusionCullingViewer(const Eigen::Vector3d &eye, double FOV);
-
     void setTexture3DfillValue(int val);
     void loadTexture3DFile(const std::string &filename);
+    void draw();
 
     static const int SurfaceParaboloid=0;
     static const int SurfaceEllipticCylinder=1;
@@ -65,7 +62,6 @@ public:
     static const int SurfaceEllipsoid=3;
     static const int SurfaceCone=4;
     static const int SurfaceCube=5;
-    static const int SurfacePotato=6;
 
     struct ParabolaParameters
     {
@@ -132,8 +128,6 @@ protected:
     std::map<int,Circle3D<int> > spheres;
     // Private methods
     void writeSpheresToTexture(int value);
-    inline int sub2ind(int x,int y, int z);
-    void generateUnitIcoSphere(int recursion);
 };
 
 #endif // VOLUMETRICSURFACEINTERSECTION_H
