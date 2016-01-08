@@ -17,9 +17,10 @@ public:
     Ui::VolvuxWidgetPage *ui;
 
 public slots:
-    void onDoubleSpinboxOffsetXChanged(double);
-    void onDoubleSpinboxOffsetYChanged(double);
-    void onDoubleSpinboxOffsetZChanged(double);
+    void onDoubleSpinboxOffsetChanged(double);
+    void onDoubleSpinboxHelicoidChanged(double);
+    void onDoubleSpinboxObjectSizeChanged(double);
+
 
 private:
 };

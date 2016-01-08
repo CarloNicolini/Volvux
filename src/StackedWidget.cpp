@@ -82,6 +82,15 @@ StackedWidget::StackedWidget(QWidget *parent) :
 
     QObject::connect(calibrationWidgetpage,SIGNAL(calibrationEmitted(CameraDirectLinearTransformation&)),volvuxWidgetpage->ui->widget,SLOT(setCamera(CameraDirectLinearTransformation&)));
 
+    //Volvux Widget
+        //Scene tab connection
+        QObject::connect(volvuxWidgetpage->ui->doubleSpinBoxOffsetX,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxOffsetChanged(double)));
+        QObject::connect(volvuxWidgetpage->ui->doubleSpinBoxOffsetY,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxOffsetChanged(double)));
+        QObject::connect(volvuxWidgetpage->ui->doubleSpinBoxOffsetZ,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxOffsetChanged(double)));
+        QObject::connect(volvuxWidgetpage->ui->doubleSpinboxHelicoidCxMm,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxHelicoidChanged(double)));
+        QObject::connect(volvuxWidgetpage->ui->doubleSpinboxHelicoidCyMm,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxHelicoidChanged(double)));
+        QObject::connect(volvuxWidgetpage->ui->doubleSpinboxHelicoidCzMm,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxHelicoidChanged(double)));
+        QObject::connect(volvuxWidgetpage->ui->doubleSpinBoxObjectSize,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDobuleSpinboxObjectSizeChanged(double)));
 
 }
 
