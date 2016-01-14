@@ -151,10 +151,10 @@ void VolumetricMeshIntersection::initializeSurfaceShaders(const GLcharARB *verte
  * @brief VolumetricMeshIntersection::setObj
  * @param _obj
  */
-void VolumetricMeshIntersection::setObj(const ObjLoader2 *_obj)
+void VolumetricMeshIntersection::setObj(const ObjLoader *_obj)
 {
     if (!obj)
-        this->obj = const_cast<ObjLoader2*>(_obj);
+        this->obj = const_cast<ObjLoader*>(_obj);
     else
         throw std::runtime_error("Assigning non valid NULL pointer as mesh object");
 }
@@ -167,10 +167,10 @@ void VolumetricMeshIntersection::loadObj(const string &filename)
 {
     if (obj==NULL)
     {
-        obj = new ObjLoader2();
-        obj->load(filename);
-        obj->initializeBuffers();
-        obj->getInfo();
+        obj = new ObjLoader();
+        obj->load(filename.c_str());
+        //obj->initializeBuffers();
+        //obj->getInfo();
     }
 }
 

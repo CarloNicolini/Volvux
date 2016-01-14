@@ -28,8 +28,11 @@
 
 #define POINTS_PER_VERTEX 3
 #define TOTAL_FLOATS_IN_TRIANGLE 9
+
 #include <Eigen/Core>
 #include "IncludeGL.h"
+#include <vector>
+using std::vector;
 
 /**
  * \class ObjLoader
@@ -67,9 +70,6 @@ f 100828 100827 100953
 f 144179 100949 100954
  * \endcode
  **/
-
-#include <vector>
-using std::vector;
 
 class ObjLoader
 {

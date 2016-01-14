@@ -28,19 +28,19 @@
 
 #include <QApplication>
 #include <QtGui>
+#include <QtOpenGL/QGLShader>
 #include <QGLFunctions>
 #include <QGLFramebufferObject>
 #include <Eigen/Core>
 
-#include "Util.h"
-#include "GLUtils.h"
-#include "Arcball.h"
-#include "VRCamera.h"
-#include "Screen.h"
-#include "ParametersLoader.h"
 #include "CalibrationWidgetPage.h"
 
-#define PROJECTOR_SLICES_NUMBER 16
+#include "Util.h"
+#include "GLUtils.h"
+
+//#include "ParametersLoader.h"
+
+#define PROJECTOR_SLICES_NUMBER 400
 
 #define TEXTURE_RESOLUTION_X 512
 #define TEXTURE_RESOLUTION_Y 512
@@ -53,15 +53,22 @@
 #define GL_FRAGMENT_PRECISION_HIGH 1
 
 class QGLShaderProgram;
-typedef Eigen::Matrix<GLfloat,3,1> VectorGL3f;
-typedef Eigen::Transform<GLfloat,3,Eigen::Affine> AffineGL3f;
-typedef Eigen::Transform<GLfloat,3,Eigen::Projective> ProjectiveGL3f;
-typedef Eigen::AngleAxis <GLfloat> AngleAxisGLf;
-
 class VolumetricSurfaceIntersection;
-class VolumetricMeshIntersection;
+class ObjLoader;
 class CameraDirectLinearTransformation;
 
+struct MeshParameters
+{
+    GLfloat radius;
+    GLfloat height;
+    GLfloat rotationAngle;
+    GLfloat offsetX,offsetY,offsetZ;
+    GLfloat x,y,z;
+    GLfloat thickness;
+    GLfloat curvature;
+    bool useParametricSurfaceFiltering;
+    bool showMesh;
+};
 
 class VolvuxWidget : public QGLWidget, protected QGLFunctions
 {
@@ -74,7 +81,6 @@ public:
 
     // Object methods
     void initVolume();
-    //void loadBinvox(const std::string &filename);
 
     void setHelicoidOffset(double x, double y, double z);
     void setObjectOffset(double x, double y, double z);
@@ -89,7 +95,6 @@ public:
 
 
 public slots:
-
     // Projector methods
     void generateFrames();
     void setOffscreenRendering(bool val);
@@ -108,34 +113,29 @@ protected:
     void initializeGL();
     void paintGL();
     void resizeGL(int width, int height);
-
-
-    void applyOpenGLCameraFOV();
     void draw();
 
     // Variables for scene and calibration settings
 public:
+    bool useCalibratedGLView;
     bool useOffscreenRendering;
     bool drawTextureCube;
-    bool useCalibratedGLView;
 
-
-    // Volumetric mesh intersection instance
-    VolumetricMeshIntersection *volume;
+    // Volumetric surface intersection instance
+    QGLShaderProgram shader;
+    VolumetricSurfaceIntersection *volume2;
+    MeshParameters meshStruct;
     CameraDirectLinearTransformation *camCalibration;
-    //VRCamera cam;
 
+    ObjLoader *obj;
     // Background color
     Qt::GlobalColor currentGLColor;
 
+    // Projection related variables
     unsigned int slicesNumber;
     std::vector<unsigned char> allFrames;
 
     QGLFramebufferObject *fbo;
-    VolumetricMeshIntersection *getVolume() const;
-
-    GLfloat curvature;
-
 };
 
 #endif

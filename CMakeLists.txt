@@ -69,20 +69,20 @@ else()
 endif(NOT COMPILE_GLFW)
 
 # 4. Try to find GLEW
-if(NOT COMPILE_GLEW)
-    find_package(GLEW) #Looks for system-wise installed GLFW
-    include_directories(${GLEW_INCLUDE_DIR})
-    if (NOT GLEW_FOUND)
-        message(FATAL_ERROR "GLEW not found in system. Please select compile GLEW from scratch.Set COMPILE_GLEW=True option.")
-    endif()
-else() # compile glew 1.10 from cmake project source
-     add_subdirectory("${PROJECT_SOURCE_DIR}/libs/glew-1.10.0-src/")
-     set(GLEW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/glew-1.10.0-src/include")
-     include_directories(${GLEW_INCLUDE_DIR})
-    if (WIN32)
-        set(GLEW_LIBRARY glew32)
-    endif(WIN32)
-endif(NOT COMPILE_GLEW)
+#if(NOT COMPILE_GLEW)
+#    find_package(GLEW) #Looks for system-wise installed GLFW
+#    include_directories(${GLEW_INCLUDE_DIR})
+#    if (NOT GLEW_FOUND)
+#        message(FATAL_ERROR "GLEW not found in system. Please select compile GLEW from scratch.Set COMPILE_GLEW=True option.")
+#    endif()
+#else() # compile glew 1.10 from cmake project source
+#     add_subdirectory("${PROJECT_SOURCE_DIR}/libs/glew-1.10.0-src/")
+#     set(GLEW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/glew-1.10.0-src/include")
+#     include_directories(${GLEW_INCLUDE_DIR})
+#    if (WIN32)
+#        set(GLEW_LIBRARY glew32)
+#    endif(WIN32)
+#endif(NOT COMPILE_GLEW)
 
 # 5. Try to find Qt4 
 #if(QT4_SUPPORT)

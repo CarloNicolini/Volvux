@@ -24,11 +24,11 @@
 // CNCSVision. If not, see <http://www.gnu.org/licenses/>.
 
 // Only include GLEW in this way in order to ensure compatibility with QT OpenGL widget
-#include <GL/glew.h>
-#include "Homography.h"
+
 #include "VolvuxWidget.h"
-#include "VolumetricMeshIntersection.h"
-#include "Timer.h"
+#include "Homography.h"
+#include "VolumetricSurfaceIntersection.h"
+#include "ObjLoader.h"
 
 #ifdef __APPLE__
 std::string baseDir("/Users/rs/workspace/Volvux/");
@@ -64,7 +64,6 @@ VolvuxWidget::VolvuxWidget(QWidget *parent) :
     //    QGLWidget(parent)
     QGLWidget( parent)
 {
-    //cerr << "[VolvuxWidget] Constructor" << endl;
     currentGLColor = Qt::gray;
     // Create the timer for the widget
     QTimer *timer = new QTimer(this); timer->start(0);
@@ -77,14 +76,10 @@ VolvuxWidget::VolvuxWidget(QWidget *parent) :
     this->slicesNumber=PROJECTOR_SLICES_NUMBER;
     this->resize(PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT);
 
-    // Setup the calibration camera
-    //loadCameraSettings();
-    //this->setCameraParameters(3.0f,200.0f,30000.0f);
-    // Set the current focus in this OpenGL window
-    //this->setFocus();
-    this->curvature=240.0;
     this->initVolume();
-    //this->volume = NULL;
+    this->obj = new ObjLoader("/home/carlo/workspace/Volvux/data/objmodels/helicoid.obj");
+    this->meshStruct.curvature=240.0;
+
     this->fbo = NULL;
     // Setup the visualization volume
     this->camCalibration = NULL;
@@ -96,28 +91,16 @@ VolvuxWidget::VolvuxWidget(QWidget *parent) :
 VolvuxWidget::~VolvuxWidget()
 {
     cerr << "[VolvuxWidget] Destructor" << endl;
-    if (fbo)
-        delete fbo;
+    //if (fbo)
+      //  delete fbo; // no worry it's a QPointer
 
-    if (volume)
-        delete volume;
+    if (volume2)
+        delete volume2;
 }
 
 void VolvuxWidget::setCamera(CameraDirectLinearTransformation &cam)
 {
     this->camCalibration = &cam;
-}
-
-
-/**
- * @brief applyOpenGLCameraFOV
- * @param fieldOfView
- * @param zNear
- * @param zFar
- */
-void VolvuxWidget::applyOpenGLCameraFOV()
-{
-    // TO IMPLEMENT
 }
 
 
@@ -174,72 +157,23 @@ void VolvuxWidget::initializeGL()
     cerr << "[VolvuxWidget] Available GPU memory for texture 3D is " << result << " [MB]" << endl;
 
     // VERY IMPORTANT TO INITIALIZE GLEW BEFORE THE GLSL SHADERS
-    glewInit();
+    //glewInit();
     initializeGLFunctions();
-    volume->resize(TEXTURE_RESOLUTION_X,TEXTURE_RESOLUTION_Y,TEXTURE_RESOLUTION_Z);
+    //volume->resize(TEXTURE_RESOLUTION_X,TEXTURE_RESOLUTION_Y,TEXTURE_RESOLUTION_Z);
+    volume2->resize(TEXTURE_RESOLUTION_X,TEXTURE_RESOLUTION_Y,TEXTURE_RESOLUTION_Z);
     //volume->loadObj("C:\workspace\Volvux\data\objmodels\helicoid.obj");
-    volume->loadObj(objPath);
-    volume->setTexture3DfillValue(0);
-    volume->fillVolumeWithSpheres(VOLUME_N_SPHERES,SPHERES_MIN_RADIUS,SPHERES_MAX_RADIUS);
-    volume->meshStruct.showMesh=true;
-    volume->initializeTexture();
+    //volume->loadObj(objPath);
+    volume2->setTexture3DfillValue(0);
+    volume2->fillVolumeWithSpheres(VOLUME_N_SPHERES,SPHERES_MIN_RADIUS,SPHERES_MAX_RADIUS);
+    volume2->initializeTexture();
 
-    ////////////////////////////
-    const GLcharARB vertexShader[] = STATIC_STRINGIFY(
-                uniform float step;
-            varying vec3 texture_coordinate;
-    uniform float objSize;
-    uniform float thickness;
-    uniform float curvature;
-    varying vec4 pvertex;
-    uniform vec3 objOffset;
-    void main()
-    {
-        vec4 v=gl_Vertex;
-        // This is to rotate the object
-        v.xz = vec2(cos(step)*v.x+sin(step)*v.z,-sin(step)*v.x+cos(step)*v.z);
-        // Compute the z position given x and y on a circular domain of radius 1 (diameter 2)
-        texture_coordinate = vec3(((v.xz-objOffset.xz)/objSize+1.0)*0.5, ((v.y-objOffset.y)/objSize+1.0)*0.5);
-        //texture_coordinate= vec3(   ((v.xz-objOffset.xz)/objSize+1.0)*0.5, ((v.y-objOffset.y)/objSize+1.0)*0.5);
-        gl_Position = gl_ModelViewProjectionMatrix*v;
-        pvertex = v;
-    }
-    );
+    // HERE MUST LOAD THE SHADERS WITH QGLSHADERPROGRAM
+    shader.addShaderFromSourceFile(QGLShader::Vertex,"/home/carlo/workspace/Volvux/src/HelicoidPositionShader.vert");
+    shader.addShaderFromSourceFile(QGLShader::Fragment,"/home/carlo/workspace/Volvux/src/Texture3DShader.frag");
 
-    const GLcharARB fragmentShader[] = STATIC_STRINGIFY(
-    varying vec3 texture_coordinate;
-    uniform sampler3D my_color_texture;
-    uniform vec4 uniformColor;
-    //varying vec4 pvertex;
-    //uniform float thickness;
-    //uniform float curvature;
-    void main()
-    {
-        //gl_FragColor = uniformColor*texture3D(my_color_texture, texture_coordinate);
-        vec4 finalColor = uniformColor*texture3D(my_color_texture, texture_coordinate);
-        gl_FragColor = finalColor;
-        /*
-        // Filter out the vertices outside a given surface normal
-        float parametricSurfaceEquation = (pvertex.x*pvertex.x)/curvature;
-        float normalLength = sqrt(1.0+(2.0*pvertex.x/curvature)*(2.0*pvertex.x/curvature));
-        if ( abs((pvertex.z - parametricSurfaceEquation)/normalLength) <= thickness)
-        {
-            gl_FragColor = finalColor;
-        }
-        else
-        {
-            // color the vertices outside that small volume around the surface to black
-            gl_FragColor = vec4(0.0,0.0,0.0,1.0);
-        }
-        */
-    }
-    );
-
-    volume->initializeSurfaceShaders(vertexShader,fragmentShader);
-    ////////////////////////////
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glPointSize(0.1f);
     glLineWidth(0.1f);
+
     // Initializing frame buffer object
     // Here we create a framebuffer object with the smallest necessary precision, i.e. GL_RED in order to make
     // the subsequent calls to glReadPixels MUCH faster!
@@ -268,31 +202,35 @@ void VolvuxWidget::draw()
     }
     else
     {
-        applyOpenGLCameraFOV();
+        qDebug("non implemented gl camera FOV");
     }
 
-    volume->meshStruct.shader->setUniform4f(static_cast<GLcharARB*>((char*)"uniformColor"),1.0f,1.0f,1.0f,1.0f);
-    volume->meshStruct.shader->setUniform1f(static_cast<GLcharARB*>((char*)"step"),volume->meshStruct.rotationAngle);
-    volume->meshStruct.shader->setUniform3f(static_cast<GLcharARB*>((char*)"objOffset"),volume->meshStruct.offsetX,volume->meshStruct.offsetY,volume->meshStruct.offsetZ);
-    volume->meshStruct.shader->setUniform1f(static_cast<GLcharARB*>((char*)"objSize"),volume->meshStruct.radius);
-    volume->meshStruct.shader->setUniform1f(static_cast<GLcharARB*>((char*)"thickness"),volume->meshStruct.thickness);
-    volume->meshStruct.shader->setUniform1f(static_cast<GLcharARB*>((char*)"curvature"),this->curvature);
+    if (!shader.link())
+    {
+        qWarning() << "Shader Program Linker Error" << shader.log();
+    }
+    else
+        shader.bind();
 
-    // Draw the helicoid
+
+
+    // Set the shader parameters
+    shader.setUniformValue("uniformColor",1.0f,1.0f,1.0f,1.0f);
+    shader.setUniformValue("step",(float)meshStruct.rotationAngle);
+    shader.setUniformValue("objOffset",meshStruct.offsetX,meshStruct.offsetY,meshStruct.offsetZ);
+    shader.setUniformValue("objSize",meshStruct.radius);
+    shader.setUniformValue("thickness",meshStruct.thickness);
+    shader.setUniformValue("curvature",meshStruct.curvature);
+
+    // Enable GL_TEXTURE3D for the visualization of ball field and finally draw the helicoid on it
+    glEnable(GL_TEXTURE_3D);
     glPushMatrix();
-    //glRotated(-90,1,0,0);
-    glTranslated(volume->meshStruct.x,volume->meshStruct.y,volume->meshStruct.z);
-    volume->draw();
+    glRotated(-90,1,0,0);
+    glTranslated(meshStruct.x,meshStruct.y,meshStruct.z);
+    // Draw the helicoid
+    obj->draw();
     glPopMatrix();
-}
-
-/**
- * @brief VolvuxWidget::getVolume
- * @return
- */
-VolumetricMeshIntersection *VolvuxWidget::getVolume() const
-{
-    return volume;
+    glDisable(GL_TEXTURE_3D);
 }
 
 /**
@@ -322,7 +260,7 @@ void VolvuxWidget::setCurrentGLColor(Qt::GlobalColor val)
  */
 void VolvuxWidget::setHelicoidZeroColor(int value)
 {
-    volume->setTexture3DfillValue(value);
+    volume2->setTexture3DfillValue(value);
 }
 
 #ifdef WIN32
@@ -366,8 +304,8 @@ void VolvuxWidget::generateFrames()
     }
 
     glPushAttrib(GL_ALL_ATTRIB_BITS);
-    volume->meshStruct.rotationAngle=0;
-    Timer timer; timer.start();
+    meshStruct.rotationAngle=0;
+    //Timer timer; timer.start();
     double deltaAngle = (2.0*M_PI)/this->slicesNumber;
     // Start the loop of frames generation
     if ( !useOffscreenRendering )
@@ -377,7 +315,7 @@ void VolvuxWidget::generateFrames()
             int percentage = static_cast<int>(std::ceil(100.0/slicesNumber*(i+1)));
             emit framePercentageGenerated(percentage);
             this->repaint();
-            volume->meshStruct.rotationAngle += deltaAngle;
+            meshStruct.rotationAngle += deltaAngle;
         }
     }
     else
@@ -389,14 +327,14 @@ void VolvuxWidget::generateFrames()
             // Read the current frame buffer object
             glReadPixels(0, 0, w, h, GL_LUMINANCE, GL_UNSIGNED_BYTE, &allFrames.at(i*w*h));
             //fbo->toImage().save(QDir::currentPath()+"/ciccio_"+QString::number(i,'g',3)+".png","PNG");
-            volume->meshStruct.rotationAngle += deltaAngle;
+            meshStruct.rotationAngle += deltaAngle;
         }
         fbo->release();
     }
     getGLerrors();
 
-    cerr << "[VolvuxWidget] " << slicesNumber <<" frames generated, [ms]/frame = " << timer.getElapsedTimeInMilliSec()/slicesNumber << endl;
-    this->setHelicoidZeroColor(volume->getTexture3DfillValue());
+    //cerr << "[VolvuxWidget] " << slicesNumber <<" frames generated, [ms]/frame = " << timer.getElapsedTimeInMilliSec()/slicesNumber << endl;
+    this->setHelicoidZeroColor(volume2->getTexture3DfillValue());
     glPopAttrib();
 
     this->drawTextureCube=true;
@@ -422,9 +360,9 @@ void VolvuxWidget::resizeGL(int width, int height)
  */
 void VolvuxWidget::setObjectOffset(double x, double y, double z)
 {
-    this->volume->meshStruct.offsetX=x;
-    this->volume->meshStruct.offsetY=y;
-    this->volume->meshStruct.offsetZ=z;
+    this->meshStruct.offsetX=x;
+    this->meshStruct.offsetY=y;
+    this->meshStruct.offsetZ=z;
 }
 
 /**
@@ -435,9 +373,9 @@ void VolvuxWidget::setObjectOffset(double x, double y, double z)
  */
 void VolvuxWidget::setHelicoidOffset(double x, double y, double z)
 {
-    this->volume->meshStruct.x = x;
-    this->volume->meshStruct.y = y;
-    this->volume->meshStruct.z = z;
+    this->meshStruct.x = x;
+    this->meshStruct.y = y;
+    this->meshStruct.z = z;
 }
 
 /**
@@ -446,7 +384,7 @@ void VolvuxWidget::setHelicoidOffset(double x, double y, double z)
  */
 void VolvuxWidget::setObjectScale(double objScale)
 {
-    this->volume->meshStruct.radius=objScale;
+    this->meshStruct.radius=objScale;
 }
 
 /**
@@ -467,14 +405,14 @@ void VolvuxWidget::setSlicesNumber(int nSlices)
  */
 void VolvuxWidget::randomizeSpheres(bool useRandomDots, int nSpheres, int minRadius, int maxRadius)
 {
-    volume->setTexture3DfillValue(0);
+    volume2->setTexture3DfillValue(0);
     if (useRandomDots)
-        volume->fillVolumeWithRandomDots(nSpheres,minRadius);
+        volume2->fillVolumeWithRandomDots(nSpheres,minRadius);
     else
-        volume->fillVolumeWithSpheres(nSpheres,minRadius,maxRadius);
+        volume2->fillVolumeWithSpheres(nSpheres,minRadius,maxRadius);
 
-    volume->meshStruct.showMesh=false;
-    volume->initializeTexture();
+    meshStruct.showMesh=false;
+    volume2->initializeTexture();
 }
 
 /**
@@ -486,42 +424,41 @@ void VolvuxWidget::setOffscreenRendering(bool val)
     this->useOffscreenRendering = val;
 }
 
-
+/**
+ * @brief VolvuxWidget::onSurfaceThicknessChanged
+ * @param val
+ */
 void VolvuxWidget::onSurfaceThicknessChanged(double val)
 {
+    this->meshStruct.thickness=val;
     this->update();
-    this->volume->meshStruct.thickness=val;
 }
 
+/**
+ * @brief VolvuxWidget::onSurfaceCurvatureChanged
+ * @param val
+ */
 void VolvuxWidget::onSurfaceCurvatureChanged(double val)
 {
-    this->curvature=val;
+    this->meshStruct.curvature=val;
+    this->update();
 }
 
+/**
+ * @brief VolvuxWidget::initVolume
+ */
 void VolvuxWidget::initVolume()
 {
-    this->volume = new VolumetricMeshIntersection(TEXTURE_RESOLUTION_X, TEXTURE_RESOLUTION_Y, TEXTURE_RESOLUTION_Z);
-    this->volume->setUniformColor(glWhite);
-    this->volume->meshStruct.radius = 110.0;
-    this->volume->meshStruct.height = 1.0;
-    this->volume->meshStruct.rotationAngle = 0.0;
-    this->volume->meshStruct.offsetX = 0.0;
-    this->volume->meshStruct.offsetY = 0.0;
-    this->volume->meshStruct.offsetZ = 0.0;
-    this->volume->meshStruct.x = 0.0;
-    this->volume->meshStruct.y = 0.0;
-    this->volume->meshStruct.z = 0.0;
-    this->volume->meshStruct.thickness = 500.0f;
+    this->volume2 = new VolumetricSurfaceIntersection(TEXTURE_RESOLUTION_X, TEXTURE_RESOLUTION_Y, TEXTURE_RESOLUTION_Z);
+    //this->setUniformColor(glWhite);
+    this->meshStruct.radius = 110.0;
+    this->meshStruct.height = 1.0;
+    this->meshStruct.rotationAngle = 0.0;
+    this->meshStruct.offsetX = 0.0;
+    this->meshStruct.offsetY = 0.0;
+    this->meshStruct.offsetZ = 0.0;
+    this->meshStruct.x = 0.0;
+    this->meshStruct.y = 0.0;
+    this->meshStruct.z = 0.0;
+    this->meshStruct.thickness = 500.0f;
 }
-
-/*
-void VolvuxWidget::loadBinvox(const string &filename)
-{
-    volume->setTexture3DfillValue(0);
-    volume->loadTexture3DFile(filename);
-    QString informations("Texture size ");
-    informations += "[ "+QString::number(this->volume->getTextureSizeX())+","+QString::number(this->volume->getTextureSizeY())+","+QString::number(this->volume->getTextureSizeZ())+ "]";
-    emit binVoxLoaded(informations);
-    volume->initializeTexture();
-}
-*/

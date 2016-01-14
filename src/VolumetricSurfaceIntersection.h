@@ -27,15 +27,10 @@
 #define VOLUMETRICSURFACEINTERSECTION_H
 
 #include <map>
-#include "GLSL.h"
 #include "Mathcommon.h"
 #include "Util.h"
 #include "GLUtils.h"
 #include "Circle3D.h"
-#include "Icosphere.h"
-#include "ObjLoader2.h"
-
-#define ICOSPHERE_LEVEL 6
 
 class VolumetricSurfaceIntersection
 {
@@ -46,61 +41,12 @@ public:
 
     // Resize the allocated vector of data and fill it with zeros
     void resize(unsigned int _sizeX, unsigned int _sizeY, unsigned int _sizeZ);
-    void initializeSurfaceShaders(int surface);
-    void loadSurfaceShaders(const std::string &vertexShaderName, const std::string &fragmentShaderName, const std::string &geometryShaderName);
     void initializeTexture();
     void fillVolumeWithSpheres( int nSpheres, int minRadius, int maxRadius );
     void fillVolumeWithRandomDots(int nRandomDots, int size);
     void setUniformColor(const GLfloat color[4]);
     void setTexture3DfillValue(int val);
     void loadTexture3DFile(const std::string &filename);
-    void draw();
-
-    static const int SurfaceParaboloid=0;
-    static const int SurfaceEllipticCylinder=1;
-    static const int SurfaceParabolicCylinder=2;
-    static const int SurfaceEllipsoid=3;
-    static const int SurfaceCone=4;
-    static const int SurfaceCube=5;
-
-    struct ParabolaParameters
-    {
-        double curvature;
-        double centerX,centerY,centerZ;
-        glsl::glShader *shader;
-    } parabolaSurface;
-
-    struct ParabolicCylinderParameters
-    {
-        double curvature;
-        double centerX,centerY,centerZ;
-        glsl::glShader *shader;
-    } parabolicCylinderSurface;
-
-    struct EllipticCylinderParameters
-    {
-        double axisX,axisZ;
-        double height;
-        glsl::glShader *shader;
-    } ellipticCylinderSurface;
-
-    struct EllipsoidParameters
-    {
-        double axisX,axisY,axisZ;
-        glsl::glShader *shader;
-    } ellipsoidSurface;
-
-    struct ConeParameters
-    {
-        double c;
-        glsl::glShader *shader;
-    } coneSurface;
-
-    struct CubeParameters
-    {
-        glsl::glShader *shader;
-        double edge;
-    } cubeSurface;
 
     const int getTextureSizeX() const;
     const int getTextureSizeY() const;

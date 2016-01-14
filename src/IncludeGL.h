@@ -26,12 +26,7 @@
 #ifndef _INCLUDE_CNCSVISION_GL
 #define _INCLUDE_CNCSVISION_GL
 
-// This is to define GLEW conditionally if there are already some libraries that have include OpenGL
-// like Qt or others
-
-#if !defined(__gl_h_) && !defined(__GL_H__) && !defined(__X_GL_H)
-#include <GL/glew.h>
-#endif
+#include <QOpenGLFunctions>
 
 #ifdef __linux__
 #include <GL/glut.h>

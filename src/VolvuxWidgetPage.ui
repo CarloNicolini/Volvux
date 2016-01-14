@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1279</width>
-    <height>877</height>
+    <width>868</width>
+    <height>596</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -45,7 +45,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tabScene">
        <attribute name="title">
@@ -56,8 +56,8 @@
          <rect>
           <x>10</x>
           <y>10</y>
-          <width>354</width>
-          <height>782</height>
+          <width>235</width>
+          <height>726</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
@@ -448,40 +448,17 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_8">
-           <property name="title">
-            <string>Volume data</string>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_11">
-            <item>
-             <widget class="QPushButton" name="pushButtonLoadBinVox">
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Load a volumetric dataset in .binvox format ( http://www.cs.princeton.edu/~min/binvox/ )&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>Load .binvox model...</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="labelTextureInformations">
-              <property name="text">
-               <string>Texture informations:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="labelTextureInfo">
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-           </layout>
-           <zorder>pushButtonLoadBinVox</zorder>
-           <zorder>labelTextureInfo</zorder>
-           <zorder>labelTextureInformations</zorder>
-          </widget>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </widget>
@@ -589,8 +566,8 @@
          <rect>
           <x>50</x>
           <y>10</y>
-          <width>304</width>
-          <height>751</height>
+          <width>258</width>
+          <height>635</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_5">

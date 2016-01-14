@@ -28,7 +28,6 @@
 #include "Grid.h"
 // Needed for fast generation of an Icosphere, triangulated sphere
 
-#include "BinVoxReader.h"
 // The constructor allocates the memory once, which is the heaviest operation
 /**
  * @brief VolumetricSurfaceIntersection::VolumetricSurfaceIntersection
@@ -49,16 +48,6 @@ VolumetricSurfaceIntersection::VolumetricSurfaceIntersection(unsigned int _sizeX
     texture3DVolume.resize(textureSizeX*textureSizeY*textureSizeZ);
 
     memset(&(texture3DVolume.at(0)),texture3DfillValue,sizeof(GLubyte)*textureSizeX*textureSizeY*textureSizeZ);
-
-    parabolaSurface.shader=NULL;
-    parabolicCylinderSurface.shader=NULL;
-    cubeSurface.shader=NULL;
-    ellipsoidSurface.shader=NULL;
-    coneSurface.shader=NULL;
-    ellipticCylinderSurface.shader=NULL;
-    //potatoSurface.shader = NULL;
-
-    //potatoSurface.sphere = new IcoSphere(ICOSPHERE_LEVEL);
 }
 
 /**
@@ -73,30 +62,6 @@ VolumetricSurfaceIntersection::VolumetricSurfaceIntersection() : volume3DTexture
         this->uniformColor[i]=1.0;
 
     this->volume3DTextureID=0;
-    // Set the parabola surface things
-    this->parabolaSurface.centerX=parabolaSurface.centerY=parabolaSurface.centerZ=0.0;
-    this->parabolaSurface.curvature=1.0;
-
-    this->parabolicCylinderSurface.centerX=this->parabolicCylinderSurface.centerY=this->parabolicCylinderSurface.centerZ=0.0;
-    this->parabolicCylinderSurface.curvature=1.0;
-
-    // Set the elliptic cylinder things
-    this->ellipticCylinderSurface.axisX=1.0;
-    this->ellipticCylinderSurface.height=1.0;
-    this->ellipticCylinderSurface.axisZ=1.0;
-    this->cubeSurface.edge=1.0;
-	/*
-    this->potatoSurface.seed = 1.0;
-    this->potatoSurface.scale=1.0f;
-    this->potatoSurface.normalScale = 0.25f;
-    this->potatoSurface.sphere = new IcoSphere(ICOSPHERE_LEVEL);
-	*/
-    parabolaSurface.shader=NULL;
-    cubeSurface.shader=NULL;
-    ellipsoidSurface.shader=NULL;
-    coneSurface.shader=NULL;
-    ellipticCylinderSurface.shader=NULL;
-   // potatoSurface.shader=NULL;
 }
 
 /**
@@ -114,6 +79,7 @@ void VolumetricSurfaceIntersection::resize(unsigned int _sizeX, unsigned int _si
     texture3DVolume.resize(textureSizeX*textureSizeY*textureSizeZ);
     memset(&(texture3DVolume.at(0)),texture3DfillValue,sizeof(GLubyte)*textureSizeX*textureSizeY*textureSizeZ);
 }
+
 /**
  * @brief VolumetricSurfaceIntersection::~VolumetricSurfaceIntersection
  */
@@ -125,47 +91,6 @@ VolumetricSurfaceIntersection::~VolumetricSurfaceIntersection()
     //        delete texture3DVolume;
     if (uniformColor)
         delete[] uniformColor;
-
-    switch ( currentSurface )
-    {
-    case SurfaceParaboloid:
-    {
-        if (parabolaSurface.shader)
-            delete parabolaSurface.shader ;
-        break;
-    }
-    case SurfaceParabolicCylinder:
-    {
-        if (parabolicCylinderSurface.shader)
-            delete parabolicCylinderSurface.shader ;
-        break;
-    }
-    case SurfaceCone:
-    {
-        if (coneSurface.shader)
-            delete coneSurface.shader ;
-        break;
-    }
-    case SurfaceEllipsoid:
-    {
-        if (ellipsoidSurface.shader)
-            delete ellipsoidSurface.shader ;
-        break;
-    }
-    case SurfaceEllipticCylinder:
-    {
-        if (ellipticCylinderSurface.shader)
-            delete ellipticCylinderSurface.shader ;
-        break;
-    }
-    case SurfaceCube:
-    {
-        if (cubeSurface.shader)
-            delete cubeSurface.shader;
-        break;
-    }
-    }
-
 }
 
 /**
@@ -239,30 +164,6 @@ void VolumetricSurfaceIntersection::fillVolumeWithSpheres( int nSpheres, int min
         }
     }
 
-    /*
-    spheres.clear();
-    int gridSpacing = 16;
-    int k=0;
-    for (int x=gridSpacing;x<textureSizeX-gridSpacing; x+=gridSpacing)
-    {
-        for (int y=gridSpacing; y<textureSizeY-gridSpacing;y+=gridSpacing)
-        {
-            for (int z=gridSpacing; z<textureSizeZ-gridSpacing; z+=gridSpacing)
-            {
-                spheres.insert(std::pair<int,Circle3D<int> > (k++,Circle3D<int>(x,y,z,1 )));
-            }
-        }
-    }
-
-    radius = 8;
-    for (int i=0; i<spheres.size(); i++)
-    {
-        spheres[i].radius = mathcommon::unifRand(radius,radius);
-        spheres[i].centerx += mathcommon::unifRand(-textureSizeX/64,textureSizeX/64);
-        spheres[i].centery += mathcommon::unifRand(-textureSizeX/64,textureSizeX/64);
-        spheres[i].centerz += mathcommon::unifRand(-textureSizeX/64,textureSizeX/64);
-    }
-*/
     writeSpheresToTexture(255);
     spheres.clear();
     //    cerr << "Sphere filling time elapsed " << timer.getElapsedTimeInMilliSec() << " [ms]" << endl;
@@ -380,352 +281,6 @@ void VolumetricSurfaceIntersection::initializeTexture()
     glTexImage3D(GL_TEXTURE_3D, 0, GL_LUMINANCE, this->textureSizeX, this->textureSizeY, this->textureSizeZ, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE,(GLvoid *) &(texture3DVolume.at(0)));
     // We can clean the volume after it is loaded on GPU
     texture3DVolume.clear();
-
-}
-
-/**
- * @brief VolumetricSurfaceIntersection::initializeSurfaceShaders
- * @param surface
- */
-void VolumetricSurfaceIntersection::initializeSurfaceShaders(int surface)
-{
-    if (surface < SurfaceParaboloid || surface > SurfaceCube )
-        throw std::out_of_range("Surface not supported, values are in [0,5]");
-
-    this->currentSurface=surface;
-
-    switch ( surface )
-    {
-    case SurfaceParaboloid:
-    {
-        if (parabolaSurface.shader)
-            delete parabolaSurface.shader ;
-        parabolaSurface.shader = new glsl::glShader;
-        break;
-    }
-    case SurfaceParabolicCylinder:
-    {
-        if (parabolicCylinderSurface.shader)
-            delete parabolicCylinderSurface.shader ;
-        parabolicCylinderSurface.shader = new glsl::glShader;
-        break;
-    }
-    case SurfaceCone:
-    {
-        if (coneSurface.shader)
-            delete coneSurface.shader ;
-        coneSurface.shader = new glsl::glShader;
-        break;
-    }
-    case SurfaceEllipsoid:
-    {
-        if (ellipsoidSurface.shader)
-            delete ellipsoidSurface.shader ;
-        ellipsoidSurface.shader = new glsl::glShader;
-        break;
-    }
-    case SurfaceEllipticCylinder:
-    {
-        if (ellipticCylinderSurface.shader)
-            delete ellipticCylinderSurface.shader ;
-        ellipticCylinderSurface.shader = new glsl::glShader;
-        break;
-    }
-    case SurfaceCube:
-    {
-        if (cubeSurface.shader)
-            delete cubeSurface.shader;
-        cubeSurface.shader = new glsl::glShader;
-        break;
-    }
-	/*
-    case SurfacePotato:
-    {
-        if (potatoSurface.shader)
-            delete potatoSurface.shader;
-        potatoSurface.shader = new glsl::glShader;
-        break;
-    }
-	*/
-    }
-
-    glsl::glShaderManager SM;
-    // Fragment shader is the same for every surface
-    const GLcharARB fragmentShader[] =
-            STATIC_STRINGIFY(
-                const vec3 X = vec3(1.0,0.0,0.0);
-                const vec3 Y = vec3(0.0,1.0,0.0);
-                const vec3 Z = vec3(0.0,0.0,1.0);
-                varying vec3 texture_coordinate;
-            uniform sampler3D my_color_texture;
-    uniform vec4 uniformColor;
-    void main()
-    {
-        vec4 uniformColor = vec4(1.0,1.0,1.0,1.0);
-        vec4 finalColor;
-        //finalColor = (texture3D(my_color_texture, texture_coordinate+X)+texture3D(my_color_texture-X, texture_coordinate))*0.5
-        //        +(texture3D(my_color_texture, texture_coordinate+Y)+texture3D(my_color_texture-Y, texture_coordinate))*0.5
-        //        +(texture3D(my_color_texture, texture_coordinate+Z)+texture3D(my_color_texture-Z, texture_coordinate))*0.5;
-        if ( texture_coordinate.x <=0.0 || texture_coordinate.x >= 1.0 || texture_coordinate.z <= 0.0 || texture_coordinate.z >= 1.0 )
-            gl_FragColor =vec4(0.0,0.0,0.0,1.0); //Can be uniformColor to color again the thing
-        else
-            gl_FragColor = uniformColor*texture3D(my_color_texture, texture_coordinate);
-    }
-    );
-
-    // Set the correct vertex shader
-    switch ( surface )
-    {
-    case SurfaceParaboloid:
-    {
-        const GLcharARB vertexShader[] = STATIC_STRINGIFY(
-                    varying vec3 texture_coordinate;
-                uniform float curvature;
-        uniform float zToXYTextureRatio;
-        void main()
-        {
-            vec4 v=gl_Vertex;
-            v.z = curvature*(v.x*v.x+v.y*v.y)-curvature;
-            v.z = -v.z;
-            texture_coordinate = vec3(((v.xy+1.0)*0.5),(v.z)*zToXYTextureRatio);
-            gl_Position = gl_ModelViewProjectionMatrix*v;
-        }
-        );
-        parabolaSurface.shader = SM.loadfromMemory(vertexShader,fragmentShader);
-        break;
-    }
-    case SurfaceParabolicCylinder:
-    {
-        const GLcharARB vertexShader[] = STATIC_STRINGIFY(
-                    varying vec3 texture_coordinate;
-                uniform float curvature;
-        uniform float zToXYTextureRatio;
-        void main()
-        {
-            vec4 v=gl_Vertex;
-            v.z = curvature*(v.x*v.x)-curvature;
-            v.z = -v.z;
-            texture_coordinate = vec3(((v.xy+1.0)*0.5),v.z*zToXYTextureRatio);
-            gl_Position = gl_ModelViewProjectionMatrix*v;
-        }
-        );
-        parabolicCylinderSurface.shader = SM.loadfromMemory(vertexShader,fragmentShader);
-        break;
-    }
-    case SurfaceCone:
-    {
-        const GLcharARB vertexShader[] = STATIC_STRINGIFY(
-                    varying vec3 texture_coordinate;
-                uniform float c;
-        uniform float zToXYTextureRatio;
-        void main()
-        {
-            vec4 v=gl_Vertex;
-            v.z = -c*sqrt(v.x*v.x+v.y*v.y);
-            texture_coordinate = vec3((v.x+1.0)*0.5,(v.y+1.0)*0.5,(v.z+curvature)*0.5*zToXYTextureRatio);
-            gl_Position = gl_ModelViewProjectionMatrix*v;
-        }
-        );
-        coneSurface.shader = SM.loadfromMemory(vertexShader,fragmentShader);
-        break;
-    }
-    case SurfaceEllipsoid:
-    {
-        const GLcharARB vertexShader[] = STATIC_STRINGIFY(
-                    varying vec3 texture_coordinate;
-                uniform float axisX;
-        uniform float axisY;
-        uniform float axisZ;
-        void main()
-        {
-            vec4 v=gl_Vertex;
-            float den = v.x*v.x/(axisX*axisX)+v.y*v.y/(axisY*axisY);
-            v.z = sqrt( axisZ*axisZ*(1.0- den) );
-            texture_coordinate = vec3(v.x+0.5,v.y+0.5,v.z+0.5);
-            gl_Position = gl_ModelViewProjectionMatrix*v;
-        }
-        );
-        ellipsoidSurface.shader = SM.loadfromMemory(vertexShader,fragmentShader);
-        break;
-    }
-    case SurfaceEllipticCylinder:
-    {
-        const GLcharARB vertexShader[] = STATIC_STRINGIFY(
-                    varying vec3 texture_coordinate;
-                uniform float axisX;
-        uniform float height;
-        uniform float axisZ;
-        void main()
-        {
-            vec4 v=gl_Vertex;
-            texture_coordinate = v.xyz+vec3(0.5);
-            gl_Position = gl_ModelViewProjectionMatrix*v;
-        }
-        );
-        ellipticCylinderSurface.shader = SM.loadfromMemory(vertexShader,fragmentShader);
-        break;
-    }
-    case SurfaceCube:
-    {
-        const GLcharARB vertexShader[] = STATIC_STRINGIFY(
-                    varying vec3 texture_coordinate;
-                uniform float axisX;
-        uniform float height;
-        uniform float axisZ;
-        uniform float zToXYTextureRatio;
-        void main()
-        {
-            vec4 v=gl_Vertex;
-            texture_coordinate = vec3((v.xy+1.0)*0.5,((v.z)+1.0)*0.5*zToXYTextureRatio);
-            gl_Position = gl_ModelViewProjectionMatrix*v;
-        }
-        );
-        cubeSurface.shader = SM.loadfromMemory(vertexShader,fragmentShader);
-        break;
-    }
-    }
-}
-
-/**
- * @brief VolumetricSurfaceIntersection::draw
- * @param surface
- */
-void VolumetricSurfaceIntersection::draw()
-{
-    glPushAttrib(GL_ALL_ATTRIB_BITS);
-    glEnable(GL_TEXTURE_3D);
-
-    glBindTexture(GL_TEXTURE_3D, this->volume3DTextureID);
-
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_COLOR_MATERIAL);
-    glEnable (GL_BLEND);
-    glEnable(GL_DEPTH_TEST);
-    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_NORMALIZE);
-    glEnable(GL_COLOR_MATERIAL);
-    glDisable(GL_LIGHTING);
-
-    switch ( this->currentSurface )
-    {
-    case SurfaceParaboloid:
-    {
-        parabolaSurface.shader->begin();
-        parabolaSurface.shader->setUniform4f((GLcharARB*)"uniformColor",uniformColor[0],uniformColor[1],uniformColor[2],uniformColor[3]);
-        parabolaSurface.shader->setUniform1f((GLcharARB*)"curvature",parabolaSurface.curvature);
-        parabolaSurface.shader->setUniform1f((GLcharARB*)"zToXYTextureRatio",(float)textureSizeX/(float)textureSizeZ);
-        GLUquadric *quad = gluNewQuadric();
-        gluQuadricDrawStyle(quad,GLU_FILL);
-        gluDisk(quad,0.0,1.0,100,100);
-        gluDeleteQuadric(quad);
-
-        parabolaSurface.shader->end();
-        break;
-    }
-    case SurfaceParabolicCylinder:
-    {
-        parabolicCylinderSurface.shader->begin();
-        parabolicCylinderSurface.shader->setUniform4f((GLcharARB*)"uniformColor",uniformColor[0],uniformColor[1],uniformColor[2],uniformColor[3]);
-        parabolicCylinderSurface.shader->setUniform1f((GLcharARB*)"curvature",parabolicCylinderSurface.curvature);
-        parabolicCylinderSurface.shader->setUniform1f((GLcharARB*)"zToXYTextureRatio",(float)textureSizeX/(float)textureSizeZ);
-        // Prepares the domain where the cylinder with parabolic section will be drawn
-        Grid grid;
-        grid.setRowsAndCols(100,100);
-        grid.init(-1,1,-1,1);
-        bool fillGrid=true;
-        grid.draw(fillGrid);
-        parabolicCylinderSurface.shader->end();
-        break;
-    }
-    case SurfaceEllipsoid:
-    {
-        ellipsoidSurface.shader->begin();
-        ellipsoidSurface.shader->setUniform4f((GLcharARB*)"uniformColor",uniformColor[0],uniformColor[1],uniformColor[2],uniformColor[3]);
-        ellipsoidSurface.shader->setUniform1f((GLcharARB*)"axisX",ellipsoidSurface.axisX);
-        ellipsoidSurface.shader->setUniform1f((GLcharARB*)"axisY",ellipsoidSurface.axisY);
-        ellipsoidSurface.shader->setUniform1f((GLcharARB*)"axisZ",ellipsoidSurface.axisZ);
-        GLUquadric *quad = gluNewQuadric();
-        gluQuadricDrawStyle(quad,GLU_FILL);
-        gluDisk(quad,0.0,1.0,100,100);
-        gluDeleteQuadric(quad);
-        ellipsoidSurface.shader->end();
-        break;
-    }
-    case SurfaceCone:
-    {
-        coneSurface.shader->begin();
-        coneSurface.shader->setUniform4f((GLcharARB*)"uniformColor",uniformColor[0],uniformColor[1],uniformColor[2],uniformColor[3]);
-        coneSurface.shader->setUniform1f((GLcharARB*)"c",coneSurface.c);
-        GLUquadric *quad = gluNewQuadric();
-        gluQuadricDrawStyle(quad,GLU_FILL);
-        gluDisk(quad,0.0,1.0,100,100);
-        gluDeleteQuadric(quad);
-        coneSurface.shader->end();
-        break;
-    }
-    case SurfaceEllipticCylinder:
-    {
-        ellipticCylinderSurface.shader->begin();
-        ellipticCylinderSurface.shader->setUniform4f((GLcharARB*)"uniformColor",uniformColor[0],uniformColor[1],uniformColor[2],uniformColor[3]);
-        ellipticCylinderSurface.shader->setUniform1f((GLcharARB*)"axisX",ellipticCylinderSurface.axisX);
-        ellipticCylinderSurface.shader->setUniform1f((GLcharARB*)"axisZ",ellipticCylinderSurface.axisZ);
-        ellipticCylinderSurface.shader->setUniform1f((GLcharARB*)"height",ellipticCylinderSurface.height);
-        GLUquadric *quad = gluNewQuadric();
-        gluQuadricDrawStyle(quad,GLU_FILL);
-        gluCylinder(quad,1.0,1.0,1.0,100,100);
-        gluDeleteQuadric(quad);
-        ellipticCylinderSurface.shader->end();
-        break;
-    }
-    case SurfaceCube:
-    {
-        cubeSurface.shader->begin();
-        cubeSurface.shader->setUniform4f((GLcharARB*)"uniformColor",uniformColor[0],uniformColor[1],uniformColor[2],uniformColor[3]);
-        cubeSurface.shader->setUniform1f((GLcharARB*)"zToXYTextureRatio",(float)textureSizeX/(float)textureSizeZ);
-        glPushMatrix();
-        glutSolidCube(cubeSurface.edge);
-        glPopMatrix();
-        cubeSurface.shader->end();
-        break;
-    }
-	/*
-    case SurfacePotato:
-    {
-        glPushMatrix();
-        Eigen::Affine3f MV; // ModelView matrix
-        Eigen::Projective3f P; // Projection matrix
-        Eigen::Matrix3f N; // Normal Matrix
-
-        glGetFloatv(GL_MODELVIEW_MATRIX,MV.data()); // collect the modelview matrix
-        glGetFloatv(GL_PROJECTION_MATRIX,P.data()); // collect the projection matrix
-        Eigen::Projective3f MVP = P*MV; // ModelView Projection Matrix
-        N = MV.linear().inverse().transpose();
-
-        potatoSurface.shader->begin();
-        potatoSurface.shader->setUniformMatrix4fv((GLcharARB*)"GL_ModelViewProjectionMatrix",1,GL_FALSE,MVP.data());
-        potatoSurface.shader->setUniformMatrix4fv((GLcharARB*)"GL_ModelViewMatrix",1,GL_FALSE,MV.data());
-        potatoSurface.shader->setUniformMatrix3fv((GLcharARB*)"GL_NormalMatrix",1,GL_FALSE,N.data());
-
-        potatoSurface.shader->setUniform4fv((GLcharARB*)"GL_AmbientColor",1,potatoSurface.ambientColor.data());
-        potatoSurface.shader->setUniform4fv((GLcharARB*)"GL_DiffuseColor",1,potatoSurface.diffuseColor.data());
-        potatoSurface.shader->setUniform4fv((GLcharARB*)"GL_LightPosition",1,potatoSurface.lightPosition.data());
-
-        //potatoSurface.shader->setUniform3fv((GLcharARB*)"GL_SpecularColor",1,potatoSurface.specularColor.data());
-        //potatoSurface.shader->setUniform1f((GLcharARB*)"GL_Shininess",potatoSurface.shininess);
-
-        potatoSurface.shader->setUniform1f((GLcharARB*)"vertexScale",potatoSurface.scale);
-        potatoSurface.shader->setUniform1f((GLcharARB*)"normalScale",potatoSurface.normalScale);
-        potatoSurface.shader->setUniform1f((GLcharARB*)"zScale",potatoSurface.zScale);
-        potatoSurface.shader->setUniform1f((GLcharARB*)"seed",potatoSurface.seed);
-        potatoSurface.sphere->draw(ICOSPHERE_LEVEL);
-        potatoSurface.shader->end();
-        glPopMatrix();
-        break;
-    }
-	*/
-    }
-    glBindTexture(GL_TEXTURE_3D, 0);
-    glPopAttrib();
 }
 
 /**
@@ -795,31 +350,3 @@ const int VolumetricSurfaceIntersection::getSphereRadiusMax() const
     return sphereRadiusMax;
 }
 
-
-/**
- * @brief VolumetricSurfaceIntersection::loadSurfaceShaders
- * @param vertexShaderName
- * @param fragmentShaderName
- * @param geometryShaderName
- */
-void VolumetricSurfaceIntersection::loadSurfaceShaders(const string &vertexShaderName, const string &fragmentShaderName, const string &geometryShaderName)
-{
-
-}
-
-/**
- * @brief VolumetricSurfaceIntersection::loadTexture3DFile
- * @param filename
- */
-void VolumetricSurfaceIntersection::loadTexture3DFile(const string &filename)
-{
-    BinVoxReader r;
-    r.loadBinVoxFile(filename);
-    this->texture3DVolume.resize(r.voxels.size());
-    this->textureSizeX = r.width;
-    this->textureSizeY = r.height;
-    this->textureSizeZ = r.depth;
-
-    for (unsigned int i=0; i<r.voxels.size();i++)
-        this->texture3DVolume[i] = 255*r.voxels[i];
-}

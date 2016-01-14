@@ -23,8 +23,7 @@
 // License and a copy of the GNU General Public License along with
 // CNCSVision. If not, see <http://www.gnu.org/licenses/>.
 
-// Only include GLEW in this way in order to ensure compatibility with QT OpenGL widget
-#include <GL/glew.h>
+#include <iostream>
 #include "VolvuxExpWidget.h"
 
 // For issues about OpenGL inclusion when glew conflicts with OpenGL I suggest to look:
@@ -65,8 +64,8 @@ void VolvuxExpWidget::initMonitor(int resX, int resY, int sizeX_mm, int sizeY_mm
 
     this->resize(resX,resY);
     // Camera calibrations done on the flight
-    this->cam.init(Screen(sizeX_mm,sizeY_mm,0,0,eyeZ));
-    this->cam.setNearFarPlanes(0.01f,1E5f);
+    //this->cam.init(Screen(sizeX_mm,sizeY_mm,0,0,eyeZ));
+    //this->cam.setNearFarPlanes(0.01f,1E5f);
 }
 
 /**
@@ -79,7 +78,7 @@ void VolvuxExpWidget::applyOpenGLCameraFOV()
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    cam.setEye(Eigen::Vector3d(0,0,0));
+    //cam.setEye(Eigen::Vector3d(0,0,0));
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
@@ -90,7 +89,7 @@ void VolvuxExpWidget::applyOpenGLCameraFOV()
 VolvuxExpWidget::~VolvuxExpWidget()
 {
     //QMessageBox::information(this,"Experiment finished","The experiment is finished.");
-    cerr << "[VolvuxExpWidget] Destructor" << endl;
+    std::cerr << "[VolvuxExpWidget] Destructor" << endl;
 }
 
 /**
@@ -130,7 +129,7 @@ void VolvuxExpWidget::setCameraParameters(GLfloat _eyeZ, GLfloat _FOV, GLfloat _
  */
 void VolvuxExpWidget::initializeGL()
 {
-    cerr << "[VolvuxExpWidget] initializing GL context" << endl;
+    std::cerr << "[VolvuxExpWidget] initializing GL context" << endl;
     this->makeCurrent();
     qglClearColor(Qt::black);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -182,7 +181,7 @@ void VolvuxExpWidget::paintGL()
     glPushMatrix();
     glLoadIdentity();
     glTranslated(0,0,eyeZ);
-    glColor3fv(glWhite);
+    glColor3f(1.0f,1.0f,1.0f);
     glutWireCube(100);
     drawSideParabola(xRange,displayedCurvature/xRange);
     glPopMatrix();

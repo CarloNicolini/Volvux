@@ -27,6 +27,7 @@
 #define VOLUMETRIC_MESH_INTERSECTION_H
 
 #include "VolumetricSurfaceIntersection.h"
+#include "ObjLoader.h"
 
 
 class VolumetricMeshIntersection : public VolumetricSurfaceIntersection
@@ -37,7 +38,7 @@ public:
 
     ~VolumetricMeshIntersection();
     void loadObj(const std::string &filename);
-    void setObj(const ObjLoader2 *obj);
+    void setObj(const ObjLoader *obj);
 
     void initializeSurfaceShaders();
     void initializeSurfaceShaders(const GLcharARB *vertexShader,const GLcharARB *fragmentShader);
@@ -46,7 +47,6 @@ public:
 
     struct MeshParameters
     {
-        glsl::glShader *shader;
         double radius;
         double height;
         double rotationAngle;
@@ -57,7 +57,7 @@ public:
         double thickness;
     } meshStruct;
 
-    ObjLoader2 *obj;
+    ObjLoader *obj;
 };
 
 #endif // VOLUMETRIC_MESH_INTERSECTION_H

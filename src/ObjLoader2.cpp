@@ -110,7 +110,6 @@ void ObjLoader2::initializeBuffers()
         glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, vectorsizeof<unsigned int>(shapes.at(i).mesh.indices), 0, GL_STATIC_DRAW_ARB);
 
         glBufferSubDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0,vectorsizeof<unsigned int>(shapes.at(i).mesh.indices), &(shapes.at(i).mesh.indices[0]));
-
         try
         {
             glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, 0,vectorsizeof<GLfloat>(shapes.at(i).mesh.positions), &(shapes.at(i).mesh.positions.at(0)));

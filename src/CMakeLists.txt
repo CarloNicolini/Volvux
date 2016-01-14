@@ -15,21 +15,14 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Building VOLVUXHELPER library that consists
 
 set(VOLVUXHELPER_SRCS
-Arcball.cpp
-BinVoxReader.cpp
-GLSL.cpp
 GLUtils.cpp
 Grid.cpp
 Homography.cpp
-Icosphere.cpp
 Imageloader.cpp
 Mathcommon.cpp
-ObjLoader2.cpp
+ObjLoader.cpp
 ParametersLoader.cpp
-Screen.cpp
 Timer.cpp
-TinyObjLoader.cpp
-VolumetricMeshIntersection.cpp
 VolumetricSurfaceIntersection.cpp
 VRCamera.cpp)
 
@@ -42,8 +35,8 @@ endif(SMI_SUPPORT)
 
 add_library(VOLVUXHELPER ${VOLVUXHELPER_SRCS})
 
-#link_libraries(${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${Boost_LIBRARIES} VOLVUXHELPER)
-target_link_libraries(VOLVUXHELPER ${OPENGL_LIBRARIES} ${FREEGLUT_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARY} ${GLFW_LIBRARY} ${ALP_LIBRARY})
+link_libraries(${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} Qt5::OpenGL VOLVUXHELPER)
+target_link_libraries(VOLVUXHELPER ${OPENGL_LIBRARIES} ${FREEGLUT_LIBRARIES} ${GLUT_LIBRARIES} ${GLFW_LIBRARY} ${ALP_LIBRARY})
 if(ALP_SUPPORT)
 target_link_libraries(VOLVUXHELPER ${ALP_LIBRARY})
 endif(ALP_SUPPORT)
@@ -53,10 +46,9 @@ endif(ALP_SUPPORT)
 #endif(SMI_SUPPORT)
 
 # Volvux Main files
-set(VOLVUX_HDRS VolvuxCalibrationWidget.h StackedWidget.h ProjectorWidgetPage.h CalibrationWidgetPage.h VolvuxWidgetPage.h VolvuxExpWidget.h VolvuxWidget.h) #VolvuxExpWidget.h  VolvuxMainWindow.h VolvuxWidget.h 
-set(VOLVUX_SRCS VolvuxCalibrationWidget.cpp StackedWidget.cpp ProjectorWidgetPage.cpp CalibrationWidgetPage.cpp VolvuxWidgetPage.cpp VolvuxExpWidget.cpp VolvuxWidget.cpp ) #VolvuxExpWidget.cpp  VolvuxMainWindow.cpp VolvuxWidget.cpp 
-set(VOLVUX_FORMS StackedWidget.ui ProjectorWidgetPage.ui CalibrationWidgetPage.ui VolvuxWidgetPage.ui) #VolvuxMainWindow.ui
-#set(VOLVUX_HELPERS StackedWidgetHelper.cpp StackedWidgetHelper.h CalibrationHelper.cpp CalibrationHelper.h)
+set(VOLVUX_HDRS VolvuxCalibrationWidget.h StackedWidget.h ProjectorWidgetPage.h CalibrationWidgetPage.h VolvuxWidgetPage.h VolvuxExpWidget.h VolvuxWidget.h)
+set(VOLVUX_SRCS VolvuxCalibrationWidget.cpp StackedWidget.cpp ProjectorWidgetPage.cpp CalibrationWidgetPage.cpp VolvuxWidgetPage.cpp VolvuxExpWidget.cpp VolvuxWidget.cpp)
+set(VOLVUX_FORMS StackedWidget.ui ProjectorWidgetPage.ui CalibrationWidgetPage.ui VolvuxWidgetPage.ui)
 
 if(QT5_SUPPORT)
     # Tell CMake to run moc when necessary:
@@ -81,22 +73,8 @@ if(QT5_SUPPORT)
 endif(QT5_SUPPORT)
 
 
-#if(QT4_SUPPORT)
-#QT4_WRAP_UI(VOLVUX_FORMS_HDRS ${VOLVUX_FORMS})
-#QT4_WRAP_CPP(VOLVUX_HDRS_MOC ${VOLVUX_HDRS})
-
-#add_executable(volvux volvux.cpp ${VOLVUX_SRCS} ${VOLVUX_HDRS} ${VOLVUX_HDRS_MOC} ${VOLVUX_FORMS_HDRS})
-#target_link_libraries(volvux ${QT_LIBRARIES} ${OPENGL_LIBRARIES} ${FREEGLUT_LIBRARIES} ${GLEW_LIBRARY} ${GLFW_LIBRARY} VOLVUXHELPER)
-
-#if (WIN32)
-#    set_target_properties(volvux PROPERTIES LINK_FLAGS_RELWITHDEBINFO "/SUBSYSTEM:CONSOLE")
-#    set_target_properties(volvux PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:CONSOLE")
-#    set_target_properties(volvux PROPERTIES LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE")
-#endif(WIN32)
-#endif(QT4_SUPPORT)
-
-add_executable(testhomography testhomography.cpp)
-target_link_libraries(testhomography VOLVUXHELPER glut glfw3 dl )
+#add_executable(testhomography testhomography.cpp)
+#target_link_libraries(testhomography VOLVUXHELPER glut glfw3 dl )
 
 add_executable(testhomonogl testhomonogl.cpp Homography.cpp)
 

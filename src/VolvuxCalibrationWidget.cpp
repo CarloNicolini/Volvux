@@ -186,12 +186,8 @@ void VolvuxCalibrationWidget::paintEvent(QPaintEvent *event)
     {
         painter.drawText(40,PROJECTOR_RESOLUTION_HEIGHT-20,QString("(x,y)=(")+ QString::number(lastPoint.x())+","+QString::number(lastPoint.y())+")");
         painter.drawText(800,PROJECTOR_RESOLUTION_HEIGHT-20,QString("(x,y)=(")+ QString::number(lastPoint.x()-PROJECTOR_RESOLUTION_WIDTH/2)+","+QString::number(lastPoint.y()-PROJECTOR_RESOLUTION_HEIGHT/2)+")");
-        //painter.drawText(80,PROJECTOR_RESOLUTION_HEIGHT-20,QString::number(lastPoint.y()));
-        painter.drawText(120,PROJECTOR_RESOLUTION_HEIGHT-60,"Press S to select the output file name");
-        painter.drawText(120,PROJECTOR_RESOLUTION_HEIGHT-80,"Press Q to quit and save");
         painter.drawText(120,PROJECTOR_RESOLUTION_HEIGHT-100,"RightMouse to save/erase points");
         painter.drawText(120,PROJECTOR_RESOLUTION_HEIGHT-120,"Press T to toggle this text");
-        painter.drawText(120,PROJECTOR_RESOLUTION_HEIGHT-140,"Press R to save this point");
 
         QRect rect;
         QPen pen; pen.setWidth(1);pen.setColor(Qt::white);
@@ -201,11 +197,6 @@ void VolvuxCalibrationWidget::paintEvent(QPaintEvent *event)
         painter.drawRect(rect);
     }
     painter.end();
-
-    // Copy the current frame to the projector so that it can display it
-    //QImage frame;// = this->grabFrameBuffer();
-    //vector <unsigned char> frame;frame.resize(1024 * 768);
-    //frame.at(1024 * 768 / 2) = 255;
 }
 
 /**

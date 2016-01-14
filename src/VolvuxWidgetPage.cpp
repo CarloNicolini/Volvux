@@ -50,6 +50,7 @@ void VolvuxWidgetPage::onPushButtonGenerateFramesPressed(){
     emit writeOnStatusBar(message,0);
 
     this->ui->widget->updateGL();
+    QObject::connect(ui->widget,SIGNAL(memoryAllocatedMegaBytes(int)),ui->spinBoxMemoryAllocated,SLOT(setValue(int)));
     this->ui->widget->generateFrames();
 
     message = "Frames generation done";

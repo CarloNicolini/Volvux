@@ -96,7 +96,6 @@ void IcoSphere::_subdivide(void)
   mListIds.push_back(0);
 }
 
-#include <GL/glew.h>
 void IcoSphere::draw(int level)
 {
   while (level>=int(mIndices.size()))
