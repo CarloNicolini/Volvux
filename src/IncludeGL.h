@@ -33,7 +33,6 @@
 #endif
 
 #if defined _WIN32 || defined WIN32
-//#include <windows.h>
 #include "glut.h"
 #endif
 

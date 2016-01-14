@@ -28,9 +28,7 @@
 
 #include "Util.h"
 #include "Mathcommon.h"
-#include "Imageloader.h"
 #include "Grid.h"
-#include "Circle.h"
 #include "Circle3D.h"
 
 

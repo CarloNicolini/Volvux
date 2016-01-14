@@ -30,8 +30,8 @@
 #define TOTAL_FLOATS_IN_TRIANGLE 9
 
 #include <Eigen/Core>
-#include "IncludeGL.h"
 #include <vector>
+#include "IncludeGL.h"
 using std::vector;
 
 /**
@@ -75,9 +75,9 @@ class ObjLoader
 {
 public:
    ObjLoader();
-   ObjLoader(char *filename);
+   ObjLoader(const char *filename);
    ~ObjLoader();
-   int load(char *filename); // Loads the model
+   int load(const char *filename); // Loads the model
    void draw(GLuint mode=GL_FILL); // Draws the model on the screen
    void drawOnlyVertices();
    float *getTriangles();

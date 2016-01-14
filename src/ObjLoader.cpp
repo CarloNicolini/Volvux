@@ -55,7 +55,7 @@ ObjLoader::ObjLoader()
  * @brief ObjLoader::ObjLoader
  * @param filename
  */
-ObjLoader::ObjLoader(char *filename)
+ObjLoader::ObjLoader(const char *filename)
 {
     center << 0,0,0;
     minX =minY = minZ = std::numeric_limits<float>::max();
@@ -139,7 +139,7 @@ void ObjLoader::centerToUnitBoundingBox()
 * @param filename string representing the full name of obj mesh file
 * @return 0 always
 **/
-int ObjLoader::load(char* filename)
+int ObjLoader::load(const char* filename)
 {
     center << 0,0,0;
     minX =minY = minZ = std::numeric_limits<float>::max();

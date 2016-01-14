@@ -18,7 +18,6 @@ set(VOLVUXHELPER_SRCS
 GLUtils.cpp
 Grid.cpp
 Homography.cpp
-Imageloader.cpp
 Mathcommon.cpp
 ObjLoader.cpp
 ParametersLoader.cpp
@@ -64,7 +63,7 @@ if(QT5_SUPPORT)
     add_executable(volvux volvux.cpp ${VOLVUX_SRCS} ${VOLVUX_HDRS} ${VOLVUX_FORMS_HDRS} ${VOLVUX_HELPERS})
 
     #Link the helloworld executable to the Qt 5 widgets library.
-    target_link_libraries(volvux Qt5::Gui Qt5::Widgets Qt5::OpenGL VOLVUXHELPER ${FREEGLUT_LIBRARIES} ${GLUT_LIBRARIES} glut)
+    target_link_libraries(volvux Qt5::Gui Qt5::Widgets Qt5::OpenGL VOLVUXHELPER ${FREEGLUT_LIBRARIES} ${GLUT_LIBRARIES} )
     if (WIN32)
         # http://stackoverflow.com/questions/16773789/qt5-static-build-yields-failed-to-load-platform-plugin-windows/17271172#17271172
         target_link_libraries(volvux Qt5::WinMain)

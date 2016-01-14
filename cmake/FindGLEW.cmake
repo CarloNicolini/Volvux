@@ -8,7 +8,7 @@
 #
 if( WIN32 )
    set( GLEW_INCLUDE_DIR  "${CMAKE_CURRENT_SOURCE_DIR}/libs/glew-1.13-win32" )
-   
+   message(STATUS "GLEW include dir ${GLEW_INCLUDE_DIR}")
    include_directories(${GLEW_INCLUDE_DIR})
    include_directories(${GLEW_INCLUDE_DIR}/include)
    include_directories(${GLEW_INCLUDE_DIR}/bin)

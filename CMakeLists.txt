@@ -8,11 +8,10 @@ set(LIBRARY_OUTPUT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/" CACHE PATH "Single 
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/" CACHE PATH "Single directory for all executables")
 
 ####################### COMPILE OPTIONS  ##################################
-option(QT4_SUPPORT "Compile the executable with Qt4 libraries" OFF)
 option(QT5_SUPPORT "Compile the executable with Qt5 libraries" ON)
 option(COMPILE_GLFW "Compile the GLFW library for OpenGL context creation" OFF)
-option(COMPILE_GLEW "Compile the glew library from source" OFF)
 option(COMPILE_FREEGLUT "Compile the FreeGLUT library from souce" OFF)
+#option(COMPILE_GLEW "Compile the glew library from source" OFF)
 
 ####################### FIND PACKAGES AND LIBRARIES ####################
 set(CMAKE_CXX_COMPILER_FLAGS "${CMAKE_CXX_COMPILER_FLAGS} -Wall")
@@ -26,7 +25,23 @@ if (NOT OPENGL_FOUND)
     message(FATAL_ERROR "OpenGL not found in system. Please install an OpenGL driver on the system.")
 endif()
 
-# 2. Try to find FreeGLUT or GLUT
+# 2. Try to find GLEW
+# if(NOT COMPILE_GLEW)
+    # find_package(GLEW) #Looks for system-wise installed GLFW
+    # include_directories(${GLEW_INCLUDE_DIR})
+    # if (NOT GLEW_FOUND)
+        # message(FATAL_ERROR "GLEW not found in system. Please select compile GLEW from scratch.Set COMPILE_GLEW=True option.")
+    # endif()
+# else() # compile glew 1.10 from cmake project source
+     # add_subdirectory("${PROJECT_SOURCE_DIR}/libs/glew-1.10.0-src/")
+     # set(GLEW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/glew-1.10.0-src/include")
+     # include_directories(${GLEW_INCLUDE_DIR})
+    # if (WIN32)
+        # set(GLEW_LIBRARY glew32)
+    # endif(WIN32)
+# endif(NOT COMPILE_GLEW)
+
+# 3. Try to find FreeGLUT or GLUT
 if (NOT COMPILE_FREEGLUT)
     # On Apple use the system provided GLUT
     if(APPLE)
@@ -48,7 +63,7 @@ else()
     set(GLUT_LIBRARIES "freeglut;${GLUT_LIBRARIES}")
 endif()
 
-# 3. Try to find GLFW
+# 4. Try to find GLFW
 if(NOT COMPILE_GLFW)
     find_package(GLFW) #Looks for system-wise installed GLFW
     include_directories(${GLFW_INCLUDE_DIR})
@@ -67,22 +82,6 @@ else()
     set(GLFW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/glfw/include")
     include_directories(${GLFW_INCLUDE_DIR})
 endif(NOT COMPILE_GLFW)
-
-# 4. Try to find GLEW
-#if(NOT COMPILE_GLEW)
-#    find_package(GLEW) #Looks for system-wise installed GLFW
-#    include_directories(${GLEW_INCLUDE_DIR})
-#    if (NOT GLEW_FOUND)
-#        message(FATAL_ERROR "GLEW not found in system. Please select compile GLEW from scratch.Set COMPILE_GLEW=True option.")
-#    endif()
-#else() # compile glew 1.10 from cmake project source
-#     add_subdirectory("${PROJECT_SOURCE_DIR}/libs/glew-1.10.0-src/")
-#     set(GLEW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/glew-1.10.0-src/include")
-#     include_directories(${GLEW_INCLUDE_DIR})
-#    if (WIN32)
-#        set(GLEW_LIBRARY glew32)
-#    endif(WIN32)
-#endif(NOT COMPILE_GLEW)
 
 # 5. Try to find Qt4 
 #if(QT4_SUPPORT)

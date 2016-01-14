@@ -32,7 +32,7 @@
 
 #ifdef __APPLE__
 std::string baseDir("/Users/rs/workspace/Volvux/");
-std::string objPath("/Users/rs/workspace/VolvobjPatux/data/objmodels/helicoid.obj");
+std::string objPath("/Users/rs/workspace/Volvux/data/objmodels/helicoid.obj");
 #endif
 
 #ifdef __linux__
@@ -77,7 +77,7 @@ VolvuxWidget::VolvuxWidget(QWidget *parent) :
     this->resize(PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT);
 
     this->initVolume();
-    this->obj = new ObjLoader("/home/carlo/workspace/Volvux/data/objmodels/helicoid.obj");
+    this->obj = new ObjLoader(objPath.c_str());
     this->meshStruct.curvature=240.0;
 
     this->fbo = NULL;
@@ -166,10 +166,10 @@ void VolvuxWidget::initializeGL()
     volume2->setTexture3DfillValue(0);
     volume2->fillVolumeWithSpheres(VOLUME_N_SPHERES,SPHERES_MIN_RADIUS,SPHERES_MAX_RADIUS);
     volume2->initializeTexture();
-
+	
     // HERE MUST LOAD THE SHADERS WITH QGLSHADERPROGRAM
-    shader.addShaderFromSourceFile(QGLShader::Vertex,"/home/carlo/workspace/Volvux/src/HelicoidPositionShader.vert");
-    shader.addShaderFromSourceFile(QGLShader::Fragment,"/home/carlo/workspace/Volvux/src/Texture3DShader.frag");
+    shader.addShaderFromSourceFile(QGLShader::Vertex,baseDir+"\\src\\HelicoidPositionShader.vert");
+	shader.addShaderFromSourceFile(QGLShader::Fragment, baseDir+"\\src\\Texture3DShader.frag");
 
     glPointSize(0.1f);
     glLineWidth(0.1f);
