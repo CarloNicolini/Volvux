@@ -168,8 +168,8 @@ void VolvuxWidget::initializeGL()
     volume2->initializeTexture();
 	
     // HERE MUST LOAD THE SHADERS WITH QGLSHADERPROGRAM
-    shader.addShaderFromSourceFile(QGLShader::Vertex,baseDir+"\\src\\HelicoidPositionShader.vert");
-	shader.addShaderFromSourceFile(QGLShader::Fragment, baseDir+"\\src\\Texture3DShader.frag");
+    shader.addShaderFromSourceFile(QGLShader::Vertex,QString(baseDir.c_str())+QString("\\src\\HelicoidPositionShader.vert"));
+	shader.addShaderFromSourceFile(QGLShader::Fragment, QString(baseDir.c_str()) + QString("\\src\\Texture3DShader.frag"));
 
     glPointSize(0.1f);
     glLineWidth(0.1f);

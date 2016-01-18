@@ -9,7 +9,7 @@ set(EXECUTABLE_OUTPUT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/" CACHE PATH "Sing
 
 ####################### COMPILE OPTIONS  ##################################
 option(QT5_SUPPORT "Compile the executable with Qt5 libraries" ON)
-option(COMPILE_GLFW "Compile the GLFW library for OpenGL context creation" OFF)
+#option(COMPILE_GLFW "Compile the GLFW library for OpenGL context creation" OFF)
 option(COMPILE_FREEGLUT "Compile the FreeGLUT library from souce" OFF)
 #option(COMPILE_GLEW "Compile the glew library from source" OFF)
 
@@ -64,40 +64,29 @@ else()
 endif()
 
 # 4. Try to find GLFW
-if(NOT COMPILE_GLFW)
-    find_package(GLFW) #Looks for system-wise installed GLFW
-    include_directories(${GLFW_INCLUDE_DIR})
-    if (NOT GLFW_FOUND)
-        message(FATAL_ERROR "GLFW not found in system. Please select compile GLFW from scratch.Set COMPILE_GLFW=True option.")
-    endif()
-else()
-    # Override demos building http://stackoverflow.com/questions/3766740/overriding-a-default-option-value-in-cmake-from-a-parent-cmakelists-txt
-    set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Disable glfw examples building")
-    set(GLFW_BUILD_TESTS OFF CACHE BOOL "Disable glfw tests building")
-    set(GLFW_BUILD_DOCS OFF CACHE BOOL "Disable glfw documentation building")
-    set(GLFW_INSTALL OFF CACHE BOOL "Disable glfw installation")
-    set(GLFW_DOCUMENT_INTERNALS OFF CACHE BOOL "Disable glfw internal documentation")
-    # Now add glfw
-    add_subdirectory("${PROJECT_SOURCE_DIR}/libs/glfw")
-    set(GLFW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/glfw/include")
-    include_directories(${GLFW_INCLUDE_DIR})
-endif(NOT COMPILE_GLFW)
-
-# 5. Try to find Qt4 
-#if(QT4_SUPPORT)
-#    set(QT_MIN_VERSION "4.7.0")
-#    set(QT_USE_QTMAIN TRUE)
-#    set(QT_USE_OPENGL TRUE)
-#    find_package(Qt4 ${QT_MIN_VERSION} COMPONENTS QtGui QtCore QtOpenGL REQUIRED )
-#    include(${QT_USE_FILE})
-#    include_directories(${QT_INCLUDE_PATH} ${QT_QTGUI_INCLUDE_DIR} ${QT_QTCORE_INCLUDE_DIR})
-#endif(QT4_SUPPORT)
+#if(NOT COMPILE_GLFW)
+#    find_package(GLFW) #Looks for system-wise installed GLFW
+#    include_directories(${GLFW_INCLUDE_DIR})
+#    if (NOT GLFW_FOUND)
+#        message(FATAL_ERROR "GLFW not found in system. Please select compile GLFW from scratch.Set COMPILE_GLFW=True option.")
+#    endif()
+#else()
+#    # Override demos building http://stackoverflow.com/questions/3766740/overriding-a-default-option-value-in-cmake-from-a-parent-cmakelists-txt
+#    set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Disable glfw examples building")
+#    set(GLFW_BUILD_TESTS OFF CACHE BOOL "Disable glfw tests building")
+#    set(GLFW_BUILD_DOCS OFF CACHE BOOL "Disable glfw documentation building")
+#    set(GLFW_INSTALL OFF CACHE BOOL "Disable glfw installation")
+#    set(GLFW_DOCUMENT_INTERNALS OFF CACHE BOOL "Disable glfw internal documentation")
+#    # Now add glfw
+#    add_subdirectory("${PROJECT_SOURCE_DIR}/libs/glfw")
+#    set(GLFW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/glfw/include")
+#    include_directories(${GLFW_INCLUDE_DIR})
+#endif(NOT COMPILE_GLFW)
 
 # 6. Try to find Boost
 find_package(Boost)# COMPONENTS ${BOOST_LIBS} REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 #add_definitions("DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED")
-
 
 # 7. Include Eigen
 include_directories(libs/eigen)

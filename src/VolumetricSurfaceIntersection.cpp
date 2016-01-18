@@ -252,7 +252,7 @@ void VolumetricSurfaceIntersection::writeSpheresToTexture(int value)
 /**
  * @brief VolumetricSurfaceIntersection::updateTexture
  */
-PFNGLTEXIMAGE3DPROC glTexImage3D = NULL;
+PFNGLTEXIMAGE3DEXTPROC glTexImage3D = NULL;
 void VolumetricSurfaceIntersection::initializeTexture()
 {
     getGLerrors();

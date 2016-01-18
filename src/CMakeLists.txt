@@ -35,7 +35,7 @@ endif(SMI_SUPPORT)
 add_library(VOLVUXHELPER ${VOLVUXHELPER_SRCS})
 
 link_libraries(${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} Qt5::OpenGL VOLVUXHELPER)
-target_link_libraries(VOLVUXHELPER ${OPENGL_LIBRARIES} ${FREEGLUT_LIBRARIES} ${GLUT_LIBRARIES} ${GLFW_LIBRARY} ${ALP_LIBRARY})
+target_link_libraries(VOLVUXHELPER ${OPENGL_LIBRARIES} ${FREEGLUT_LIBRARIES} ${GLUT_LIBRARIES} ${ALP_LIBRARY})
 if(ALP_SUPPORT)
 target_link_libraries(VOLVUXHELPER ${ALP_LIBRARY})
 endif(ALP_SUPPORT)
@@ -71,9 +71,6 @@ if(QT5_SUPPORT)
     qt5_use_modules(volvux Gui Widgets OpenGL)
 endif(QT5_SUPPORT)
 
-
-#add_executable(testhomography testhomography.cpp)
-#target_link_libraries(testhomography VOLVUXHELPER glut glfw3 dl )
 
 add_executable(testhomonogl testhomonogl.cpp Homography.cpp)
 
