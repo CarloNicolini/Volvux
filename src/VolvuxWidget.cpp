@@ -23,12 +23,15 @@
 // License and a copy of the GNU General Public License along with
 // CNCSVision. If not, see <http://www.gnu.org/licenses/>.
 
-// Only include GLEW in this way in order to ensure compatibility with QT OpenGL widget
-
 #include "VolvuxWidget.h"
 #include "Homography.h"
 #include "VolumetricSurfaceIntersection.h"
 #include "ObjLoader.h"
+// These files have been embedded from the corresponding Texture3DShader.frag and HelicoidPositionShader.vert
+// with the command xxd -i (see http://stackoverflow.com/questions/410980/include-a-text-file-in-a-c-program-as-a-char )
+#include "Texture3DShader_frag.h"
+#include "HelicoidPositionShader_vert.h"
+#include "helicoid_obj.h"
 
 #ifdef __APPLE__
 std::string baseDir("/Users/rs/workspace/Volvux/");
@@ -51,9 +54,6 @@ std::string objPath("C:\\workspace\\Volvux\\data\\objmodels\\helicoid.obj");
 
 // This is helpful to understand how to draw off-screen with OpenGL
 // http://stackoverflow.com/questions/14785007/can-i-use-opengl-for-off-screen-rendering?rq=1
-
-// For issues about OpenGL inclusion when glew conflicts with OpenGL I suggest to look:
-// http://stackoverflow.com/questions/15048729/where-is-glgenbuffers-in-qt5
 
 /**
  * @brief VolvuxWidget::VolvuxWidget
@@ -92,7 +92,7 @@ VolvuxWidget::~VolvuxWidget()
 {
     cerr << "[VolvuxWidget] Destructor" << endl;
     //if (fbo)
-      //  delete fbo; // no worry it's a QPointer
+    //  delete fbo; // no worry it's a QPointer
 
     if (volume2)
         delete volume2;
@@ -156,20 +156,18 @@ void VolvuxWidget::initializeGL()
     glGetIntegerv(GL_MAX_3D_TEXTURE_SIZE, &result);
     cerr << "[VolvuxWidget] Available GPU memory for texture 3D is " << result << " [MB]" << endl;
 
-    // VERY IMPORTANT TO INITIALIZE GLEW BEFORE THE GLSL SHADERS
-    //glewInit();
     initializeGLFunctions();
-    //volume->resize(TEXTURE_RESOLUTION_X,TEXTURE_RESOLUTION_Y,TEXTURE_RESOLUTION_Z);
     volume2->resize(TEXTURE_RESOLUTION_X,TEXTURE_RESOLUTION_Y,TEXTURE_RESOLUTION_Z);
-    //volume->loadObj("C:\workspace\Volvux\data\objmodels\helicoid.obj");
-    //volume->loadObj(objPath);
     volume2->setTexture3DfillValue(0);
     volume2->fillVolumeWithSpheres(VOLUME_N_SPHERES,SPHERES_MIN_RADIUS,SPHERES_MAX_RADIUS);
     volume2->initializeTexture();
-	
+
     // HERE MUST LOAD THE SHADERS WITH QGLSHADERPROGRAM
-    shader.addShaderFromSourceFile(QGLShader::Vertex,QString(baseDir.c_str())+QString("\\src\\HelicoidPositionShader.vert"));
-	shader.addShaderFromSourceFile(QGLShader::Fragment, QString(baseDir.c_str()) + QString("\\src\\Texture3DShader.frag"));
+    shader.addShaderFromSourceCode(QGLShader::Vertex, src_HelicoidPositionShader_vert);
+    shader.addShaderFromSourceCode(QGLShader::Fragment, src_Texture3DShader_frag);
+
+    if (!shader.link())
+        qWarning() << "Shader Program Linker Error" << shader.log();
 
     glPointSize(0.1f);
     glLineWidth(0.1f);
@@ -202,21 +200,16 @@ void VolvuxWidget::draw()
     }
     else
     {
-        qDebug("non implemented gl camera FOV");
+        glMatrixMode(GL_PROJECTION);
+        glOrtho(-250,250,-250,250,-250,250);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
     }
 
-    if (!shader.link())
-    {
-        qWarning() << "Shader Program Linker Error" << shader.log();
-    }
-    else
-        shader.bind();
-
-
-
+    shader.bind();
     // Set the shader parameters
     shader.setUniformValue("uniformColor",1.0f,1.0f,1.0f,1.0f);
-    shader.setUniformValue("step",(float)meshStruct.rotationAngle);
+    shader.setUniformValue("step",meshStruct.rotationAngle);
     shader.setUniformValue("objOffset",meshStruct.offsetX,meshStruct.offsetY,meshStruct.offsetZ);
     shader.setUniformValue("objSize",meshStruct.radius);
     shader.setUniformValue("thickness",meshStruct.thickness);
@@ -228,9 +221,30 @@ void VolvuxWidget::draw()
     glRotated(-90,1,0,0);
     glTranslated(meshStruct.x,meshStruct.y,meshStruct.z);
     // Draw the helicoid
-    obj->draw();
+    //obj->draw();
+    //glutSolidTeapot(120);
     glPopMatrix();
     glDisable(GL_TEXTURE_3D);
+
+    shader.release(); // always remember to release the shader at the end!
+    drawCalibration();
+}
+
+/**
+ * @brief VolvuxWidget::drawCalibration
+ */
+void VolvuxWidget::drawCalibration()
+{
+    glPushAttrib(GL_POINT_BIT);
+    glPointSize(5);
+    glBegin(GL_POINTS);
+    for (int i=0; i<9; i++)
+    {
+        Vector4d v = this->camCalibration->getPoints3D().at(i);
+        glVertex3d(v.x(),v.y(),v.z());
+    }
+    glEnd();
+    glPopAttrib();
 }
 
 /**
@@ -240,8 +254,6 @@ void VolvuxWidget::paintGL()
 {
     qglClearColor(this->currentGLColor);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
     draw();
 }
 
@@ -410,8 +422,6 @@ void VolvuxWidget::randomizeSpheres(bool useRandomDots, int nSpheres, int minRad
         volume2->fillVolumeWithRandomDots(nSpheres,minRadius);
     else
         volume2->fillVolumeWithSpheres(nSpheres,minRadius,maxRadius);
-
-    meshStruct.showMesh=false;
     volume2->initializeTexture();
 }
 
@@ -461,4 +471,9 @@ void VolvuxWidget::initVolume()
     this->meshStruct.y = 0.0;
     this->meshStruct.z = 0.0;
     this->meshStruct.thickness = 500.0f;
+}
+
+void VolvuxWidget::onFramesSentToProjectorAsked(bool val)
+{
+    emit dataFrameGenerated(this->allFrames.data());
 }

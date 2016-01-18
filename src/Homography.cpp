@@ -386,6 +386,10 @@ void CameraDirectLinearTransformation::info()
     std::cout << "OpenGL ModelViewMatrix=[\n" << this->gl_ModelView_Matrix.matrix() << "]" << endl;
 }
 
+const stlalignedvector4d &CameraDirectLinearTransformation::getPoints3D() const
+{
+    return this->points3D;
+}
 
 //When putting these values in the projection matrix:
 /*

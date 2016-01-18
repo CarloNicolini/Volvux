@@ -6,6 +6,7 @@
 #include <QWidget>
 #include <QMessageBox>
 #include "ALPProjector.h"
+#include "CalibrationWidgetPage.h"
 
 namespace Ui {
 class ProjectorWidgetPage;
@@ -40,6 +41,7 @@ public slots:
     void onPushButtonMotorInitializeClicked();
     //Motor settings
     void onSpinboxFlickerRateChanged(double flickerRate);
+    void projectDataFrames(unsigned char *data);
 
 
 signals:

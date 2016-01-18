@@ -252,9 +252,13 @@ void VolumetricSurfaceIntersection::writeSpheresToTexture(int value)
 /**
  * @brief VolumetricSurfaceIntersection::updateTexture
  */
-PFNGLTEXIMAGE3DEXTPROC glTexImage3D = NULL;
+
 void VolumetricSurfaceIntersection::initializeTexture()
 {
+#ifdef WIN32
+    PFNGLTEXIMAGE3DEXTPROC glTexImage3D = NULL;
+    glTexImage3D = (PFNGLTEXIMAGE3DEXTPROC)wglGetProcAddress("glTexImage3D");
+#endif
     getGLerrors();
     if (this->volume3DTextureID)
         glDeleteTextures(1,&(this->volume3DTextureID));
@@ -279,7 +283,7 @@ void VolumetricSurfaceIntersection::initializeTexture()
     //glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glTexImage3D = (PFNGLTEXIMAGE3DEXTPROC)wglGetProcAddress("glTexImage3D");
+
     glTexImage3D(GL_TEXTURE_3D, 0, GL_LUMINANCE, this->textureSizeX, this->textureSizeY, this->textureSizeZ, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE,(GLvoid *) &(texture3DVolume.at(0)));
     // We can clean the volume after it is loaded on GPU
     texture3DVolume.clear();

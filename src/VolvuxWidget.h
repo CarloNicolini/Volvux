@@ -38,10 +38,6 @@
 #include "Util.h"
 #include "GLUtils.h"
 
-//#include "ParametersLoader.h"
-
-#define PROJECTOR_SLICES_NUMBER 400
-
 #define TEXTURE_RESOLUTION_X 512
 #define TEXTURE_RESOLUTION_Y 512
 #define TEXTURE_RESOLUTION_Z 512
@@ -67,7 +63,6 @@ struct MeshParameters
     GLfloat thickness;
     GLfloat curvature;
     bool useParametricSurfaceFiltering;
-    bool showMesh;
 };
 
 class VolvuxWidget : public QGLWidget, protected QGLFunctions
@@ -100,13 +95,14 @@ public slots:
     void setOffscreenRendering(bool val);
     void onSurfaceThicknessChanged(double);
     void onSurfaceCurvatureChanged(double);
+    void onFramesSentToProjectorAsked(bool);
 
     // Calibration methods
     void setCamera(CameraDirectLinearTransformation &cam);
 signals:
     void framePercentageGenerated(double);
     void memoryAllocatedMegaBytes(int);
-    void binVoxLoaded(QString);
+    void dataFrameGenerated(unsigned char *data);
 
     // Inherited QGLWidget methods for GUI control
 protected:
@@ -114,6 +110,7 @@ protected:
     void paintGL();
     void resizeGL(int width, int height);
     void draw();
+    void drawCalibration();
 
     // Variables for scene and calibration settings
 public:

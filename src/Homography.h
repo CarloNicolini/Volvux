@@ -75,6 +75,7 @@ public:
     const Eigen::Projective3d &getOpenGLProjectionMatrix();
     void info();
 
+    const stlalignedvector4d &getPoints3D() const;
 private:
     void rq3(const Matrix3d &A, Matrix3d &R, Matrix3d& Q);
     /**

@@ -52,6 +52,7 @@ if (NOT COMPILE_FREEGLUT)
     # On Linux look for Freeglut
     if (UNIX)
         find_package(FreeGLUT REQUIRED)
+    set(GLUT_LIBRARIES "glut;${GLUT_LIBRARIES}")
     endif(UNIX)
 else()
     # Include the FreeGLUT project for the necessary FreeGLUT implementation

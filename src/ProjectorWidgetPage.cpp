@@ -312,3 +312,12 @@ void ProjectorWidgetPage::onPushButtonMotorInitializeClicked()
     }
 }
 
+/**
+ * @brief ProjectorWidgetPage::projectDataFrames
+ */
+void ProjectorWidgetPage::projectDataFrames(unsigned char *data)
+{
+    palp->cleanAllSequences();
+    palp->loadSequence(PROJECTOR_SLICES_NUMBER,data);
+    palp->start();
+}

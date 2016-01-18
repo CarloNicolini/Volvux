@@ -56,7 +56,3 @@ void VolvuxWidgetPage::onPushButtonGenerateFramesPressed(){
     message = "Frames generation done";
     emit writeOnStatusBar(message,2000);
 }
-
-
-
-
