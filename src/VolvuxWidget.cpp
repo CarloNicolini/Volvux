@@ -205,6 +205,10 @@ void VolvuxWidget::draw()
         glLoadIdentity();
     }
 
+	Eigen::Matrix3d R = camCalibration->getOpenGLModelViewMatrix().rotation().transpose().eval();
+	Eigen::AngleAxisd aa(R);
+	double angle = aa.angle();
+	Vector3d axis = aa.axis();
     shader.bind();
     // Set the shader parameters
     shader.setUniformValue("uniformColor",1.0f,1.0f,1.0f,1.0f);
@@ -219,9 +223,10 @@ void VolvuxWidget::draw()
     glPushMatrix();
     glRotated(-90,1,0,0);
     glTranslated(meshStruct.x,meshStruct.y,meshStruct.z);
+	//glRotated(-angle, axis.x(), axis.y(), axis.z());
     // Draw the helicoid
     //obj->draw();
-    //glutSolidTeapot(120);
+    //glutSolidTeapot(60);
     glPopMatrix();
     glDisable(GL_TEXTURE_3D);
 
@@ -244,6 +249,22 @@ void VolvuxWidget::drawCalibration()
     }
     glEnd();
     glPopAttrib();
+
+	static double zp = 0;
+	glPushAttrib(GL_POINT_BIT | GL_COLOR_BUFFER_BIT);
+	glPointSize(2);
+	glBegin(GL_POINTS);
+	glColor3d(1.0, 0.0, 0.0);
+	for (int i = 0; i<9; i++)
+	{
+		Vector4d v = this->camCalibration->getPoints3D().at(i);
+		glVertex3d(v.x(), v.y(), v.z()+zp);
+	}
+	glEnd();
+	glPopAttrib();
+	zp += 5;
+	if (zp > 500)
+		zp = 0;
 }
 
 /**
@@ -341,6 +362,7 @@ void VolvuxWidget::generateFrames()
             meshStruct.rotationAngle += deltaAngle;
         }
         fbo->release();
+		emit dataFrameGenerated(allFrames.data());
     }
     getGLerrors();
 
@@ -428,7 +450,7 @@ void VolvuxWidget::randomizeSpheres(bool useRandomDots, int nSpheres, int minRad
  * @brief VolvuxWidget::setOffscreenRendering
  * @param val
  */
-void VolvuxWidget::setOffscreenRendering(bool val)
+void VolvuxWidget::setOffscreenRendering(int val)
 {
     this->useOffscreenRendering = val;
 }
@@ -470,9 +492,4 @@ void VolvuxWidget::initVolume()
     this->meshStruct.y = 0.0;
     this->meshStruct.z = 0.0;
     this->meshStruct.thickness = 500.0f;
-}
-
-void VolvuxWidget::onFramesSentToProjectorAsked(bool val)
-{
-    emit dataFrameGenerated(this->allFrames.data());
 }

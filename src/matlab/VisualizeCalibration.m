@@ -42,6 +42,8 @@ cols = cols./ repmat(max(cols),size(cols,1),1);
 
 glPointSize(2);
 count=1;
+data3Dz=data3D;
+z=0;
 while true   
     % Setup cubes rotation around axis:
     glPushMatrix;
@@ -68,6 +70,7 @@ while true
     % Draw dots quickly:
     glPushMatrix();
     moglDrawDots3D(win, data3D(count,:)', 5, [255 255 255]' , [0, 0, 0], 1, []);
+    moglDrawDots3D(win, data3Dz(count,:)', 5, [255 64 64]' , [0, 0, 0], 1, []);
     glPopMatrix();
     
     % Finish OpenGL rendering into PTB window and check for OpenGL errors.
@@ -99,6 +102,14 @@ while true
                 count = 1;
             end
         end
+        
+        if keyCode(KbName('+'))
+            z = z+5;
+        end
+        if keyCode(KbName('-'))
+            z = z-5;
+        end
+        data3Dz(:,3) = data3D(:,3)+z;
     end
     while KbCheck
     end

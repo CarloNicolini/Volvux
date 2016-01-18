@@ -44,7 +44,8 @@ cols = cols./ repmat(max(cols),size(cols,1),1);
 
 glPointSize(2);
 rotangle=0;
-
+z=0;
+data3Dz=data3D;
 while true   
     % Setup cubes rotation around axis:
     glPushMatrix;
@@ -74,6 +75,7 @@ while true
     glRotated(rotangle,0,1,0);
     glUseProgram(AnaShader);
     moglDrawDots3D(win, data3D', 1, data3D' , [], 2);
+    moglDrawDots3D(win, data3Dz', 1, data3Dz' , [], 2);
     %for edge=30:10:200
     %glutWireCube(edge);
     %end
@@ -105,6 +107,14 @@ while true
         if keyCode(KbName('z'))
             rotangle = rotangle-1;
         end
+        if keyCode(KbName('s'))
+            z = z+5;
+        end
+        if keyCode(KbName('x'))
+            z = z-5;
+        end
+        data3Dz = data3D;
+        data3Dz(:,2) = data3D(:,2)+z;
     end
     %while KbCheck
     %end

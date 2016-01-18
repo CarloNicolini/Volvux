@@ -21,16 +21,6 @@ x2D=[ 512 384   1 ;
     569 441   1 ;
     ];
 
-% x2D=[512 384 1;
-% 413 493 1;
-% 413 300 1;
-% 596 304 1;
-% 594 492 1;
-% 450 457  1;
-% 448 331 1;
-% 569 332 1;
-% 573 456 1];
-
 %% Compute the camera matrix P
 [P,A,U,S,V] = homography(x2D',X3D');
 
@@ -60,22 +50,22 @@ HELICOID=load('../../data/objmodels/helicoid.vert');
 
 %% Make the anamorphic transformation to delete the projection of helicoid points 
 
-ANA = [1   0  0  0;
-     0   1  0  0;
-     0   0  1  0;
-     0   0  -1/norm(gl_Modelview_matrix(1:3,4))  1];
-
-HELICOIDp = project(inv(ANA),[HELICOID ones(size(HELICOID,1),1)]);
-
-%% Compute the error of OpenGL
-for i=1:size(x2D,1)
-    pgl(i,:)=glProject(gl_MVP,gl_Viewport,X3D(i,:)',znear,zfar);
-end
- 
-errGL=0;
-for i=1:9
-    errGL = errGL + norm(pgl(i,1:2)-x2D(i,1:2));
-end
+% ANA = [1   0  0  0;
+%      0   1  0  0;
+%      0   0  1  0;
+%      0   0  -1/norm(gl_Modelview_matrix(1:3,4))  1];
+% 
+% HELICOIDp = project(inv(ANA),[HELICOID ones(size(HELICOID,1),1)]);
+% 
+% %% Compute the error of OpenGL
+% for i=1:size(x2D,1)
+%     pgl(i,:)=glProject(gl_MVP,gl_Viewport,X3D(i,:)',znear,zfar);
+% end
+%  
+% errGL=0;
+% for i=1:9
+%     errGL = errGL + norm(pgl(i,1:2)-x2D(i,1:2));
+% end
  
 % Now project the helicoid points in a PTB window
 % To check if calibration is OK

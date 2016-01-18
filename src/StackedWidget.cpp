@@ -93,7 +93,8 @@ StackedWidget::StackedWidget(QWidget *parent) :
     QObject::connect(volvuxWidgetpage->ui->doubleSpinboxHelicoidCyMm,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxHelicoidChanged(double)));
     QObject::connect(volvuxWidgetpage->ui->doubleSpinboxHelicoidCzMm,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxHelicoidChanged(double)));
     QObject::connect(volvuxWidgetpage->ui->doubleSpinBoxObjectSize,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxObjectSizeChanged(double)));
-    //Stimulus tab connection
+	QObject::connect(volvuxWidgetpage->ui->checkBoxUseOffscreenRendering, SIGNAL(stateChanged(int)), volvuxWidgetpage->ui->widget, SLOT(setOffscreenRendering(int)));
+	//Stimulus tab connection
     QObject::connect(volvuxWidgetpage->ui->pushButtonStimulusRandomizeSpheres,SIGNAL(clicked()),volvuxWidgetpage,SLOT(onPushButtonRandomizeSpheresPressed()));
     // On generate frames pressed
     QObject::connect(volvuxWidgetpage->ui->pushButtonGenerateFrames,SIGNAL(clicked()),volvuxWidgetpage,SLOT(onPushButtonGenerateFramesPressed()));
@@ -102,8 +103,8 @@ StackedWidget::StackedWidget(QWidget *parent) :
     // Convolute mechanism to avoid adaptation of classes: Stacked widget handles all connections
     QObject::connect(this->volvuxWidgetpage->ui->widget,SIGNAL(dataFrameGenerated(unsigned char *)),
                      this->projectorWidgetpage, SLOT(projectDataFrames(unsigned char *)));
-    QObject::connect(this->volvuxWidgetpage->ui->pushButtonProjectorStartProjection,SIGNAL(clicked(bool)),
-                     this->volvuxWidgetpage->ui->widget, SLOT(onFramesSentToProjectorAsked(bool)) );
+//    QObject::connect(this->volvuxWidgetpage->ui->pushButtonProjectorStartProjection,SIGNAL(clicked(bool)),
+//                     this->volvuxWidgetpage->ui->widget, SLOT(onFramesSentToProjectorAsked(bool)) );
 }
 
 StackedWidget::~StackedWidget()

@@ -22,7 +22,6 @@ CalibrationWidgetPage::CalibrationWidgetPage(QWidget *parent) :
     }
     //Write 3D points
     this->write3DPoints();
-    //Set ALP projector
 
 }
 

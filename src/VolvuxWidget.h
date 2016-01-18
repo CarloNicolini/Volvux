@@ -92,10 +92,9 @@ public:
 public slots:
     // Projector methods
     void generateFrames();
-    void setOffscreenRendering(bool val);
+    void setOffscreenRendering(int val);
     void onSurfaceThicknessChanged(double);
     void onSurfaceCurvatureChanged(double);
-    void onFramesSentToProjectorAsked(bool);
 
     // Calibration methods
     void setCamera(CameraDirectLinearTransformation &cam);
