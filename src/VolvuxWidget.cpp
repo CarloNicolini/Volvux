@@ -31,7 +31,6 @@
 // with the command xxd -i (see http://stackoverflow.com/questions/410980/include-a-text-file-in-a-c-program-as-a-char )
 #include "Texture3DShader_frag.h"
 #include "HelicoidPositionShader_vert.h"
-#include "helicoid_obj.h"
 
 #ifdef __APPLE__
 std::string baseDir("/Users/rs/workspace/Volvux/");
