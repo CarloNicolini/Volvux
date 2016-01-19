@@ -322,3 +322,4 @@ void ProjectorWidgetPage::projectDataFrames(unsigned char *data)
     palp->loadSequence(PROJECTOR_SLICES_NUMBER,data);
     palp->start();
 }
+
