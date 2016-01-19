@@ -57,7 +57,7 @@ const std::vector<Vector3d> &CalibrationWidgetPage::getPoints2D() const
 //Compute Homography
 void CalibrationWidgetPage::computeHomography(const vector<Vector3d> &points)
 {
-    CDLT.init(points2D,points3D,Vector4i(0,0,PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT),1,1E4);
+    CDLT.init(points2D,points3D,Vector4i(0,0,PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT),1,1E6);
     emit calibrationEmitted(CDLT);
 }
 
@@ -70,6 +70,7 @@ void CalibrationWidgetPage::write3DPoints()
                 QString::number(this->getPoints3D().at(i).y(),'g',2) + QString(",") +
                 QString::number(this->getPoints3D().at(i).z(),'g',2) + QString(",");
         QLabel *lab = new QLabel(valuePoint3D,this);
+        //cerr << this->getPoints3D().at(i).transpose() << " ;" << endl;
         this->ui->verticalLayout3Dpoints->addWidget(lab);
     }
 }

@@ -14,7 +14,7 @@ K(:,2)=-K(:,2); %working
 % with the y-axis pointing upward. To convert, you'll first negate the image y-coordinate a
 % nd then translate upward by the image height, h. 
 % The resulting intrinsic matrix K' is given by:
-K = [1 0 0; 0 1 768; 0 0 1]*[1 0 0; 0 -1 0; 0 0 1]*K;
+%K = [1 0 0; 0 1 768; 0 0 1]*[1 0 0; 0 -1 0; 0 0 1]*K;
 
 R(1,:)=-R(1,:); %working
 R=-R;

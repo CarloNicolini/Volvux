@@ -72,4 +72,4 @@ HELICOID=load('../../data/objmodels/helicoid.vert');
 VisualizeCalibration(gl_Projection_matrix,gl_Modelview_matrix,X3D(:,1:3),x2D(:,1:2));
 
 % To show the HELICOID DOTS
-VisualizeHelicoid(gl_Projection_matrix,gl_Modelview_matrix,HELICOID(:,1:3),eye(4));
+%VisualizeHelicoid(gl_Projection_matrix,gl_Modelview_matrix,HELICOID(:,1:3),eye(4));

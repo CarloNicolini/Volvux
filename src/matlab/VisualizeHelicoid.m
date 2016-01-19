@@ -71,7 +71,7 @@ while true
     
     % Draw dots quickly:
     glPushMatrix();
-    glRotated(-90,1,0,0);
+    %glRotated(-90,1,0,0);
     glRotated(rotangle,0,1,0);
     glUseProgram(AnaShader);
     moglDrawDots3D(win, data3D', 1, data3D' , [], 2);
@@ -79,9 +79,9 @@ while true
     %for edge=30:10:200
     %glutWireCube(edge);
     %end
-    analoc = glGetUniformLocation(AnaShader,'ANA');
-    glUniformMatrix4fv(analoc,1,0,ANA);
-    glUseProgram(0);
+    %analoc = glGetUniformLocation(AnaShader,'ANA');
+    %glUniformMatrix4fv(analoc,1,0,ANA);
+    %glUseProgram(0);
     glPopMatrix();
     
     % Finish OpenGL rendering into PTB window and check for OpenGL errors.

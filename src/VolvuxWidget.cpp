@@ -162,8 +162,10 @@ void VolvuxWidget::initializeGL()
     volume2->initializeTexture();
 
     // HERE MUST LOAD THE SHADERS WITH QGLSHADERPROGRAM
-    shader.addShaderFromSourceCode(QGLShader::Vertex, src_HelicoidPositionShader_vert);
-    shader.addShaderFromSourceCode(QGLShader::Fragment, src_Texture3DShader_frag);
+    //shader.addShaderFromSourceCode(QGLShader::Vertex, src_HelicoidPositionShader_vert);
+    //shader.addShaderFromSourceCode(QGLShader::Fragment, src_Texture3DShader_frag);
+    shader.addShaderFromSourceFile(QGLShader::Vertex,"../src/HelicoidPositionShader.vert");
+    shader.addShaderFromSourceFile(QGLShader::Fragment,"../src/Texture3DShader.frag");
 
     if (!shader.link())
         qWarning() << "Shader Program Linker Error" << shader.log();
@@ -195,7 +197,8 @@ void VolvuxWidget::draw()
         glMatrixMode(GL_PROJECTION);
         glLoadMatrixd(camCalibration->getOpenGLProjectionMatrix().data());
         glMatrixMode(GL_MODELVIEW);
-        glLoadMatrixd(camCalibration->getOpenGLModelViewMatrix().data());
+        glLoadIdentity();
+        glMultMatrixd(camCalibration->getOpenGLModelViewMatrix().data());
     }
     else
     {
@@ -205,10 +208,10 @@ void VolvuxWidget::draw()
         glLoadIdentity();
     }
 
-	Eigen::Matrix3d R = camCalibration->getOpenGLModelViewMatrix().rotation().transpose().eval();
-	Eigen::AngleAxisd aa(R);
-	double angle = aa.angle();
-	Vector3d axis = aa.axis();
+    Eigen::Matrix3d R = camCalibration->getOpenGLModelViewMatrix().rotation().transpose().eval();
+    Eigen::AngleAxisd aa(R);
+    double angle = aa.angle();
+    Vector3d axis = aa.axis();
     shader.bind();
     // Set the shader parameters
     shader.setUniformValue("uniformColor",1.0f,1.0f,1.0f,1.0f);
@@ -221,17 +224,18 @@ void VolvuxWidget::draw()
     // Enable GL_TEXTURE3D for the visualization of ball field and finally draw the helicoid on it
     glEnable(GL_TEXTURE_3D);
     glPushMatrix();
-    glRotated(-90,1,0,0);
+    //glRotated(-90,1,0,0);
     glTranslated(meshStruct.x,meshStruct.y,meshStruct.z);
-	//glRotated(-angle, axis.x(), axis.y(), axis.z());
+    //glRotated(-angle, axis.x(), axis.y(), axis.z());
     // Draw the helicoid
     //obj->draw();
     //glutSolidTeapot(60);
+    drawCalibration();
     glPopMatrix();
     glDisable(GL_TEXTURE_3D);
 
     shader.release(); // always remember to release the shader at the end!
-    drawCalibration();
+
 }
 
 /**
@@ -250,21 +254,21 @@ void VolvuxWidget::drawCalibration()
     glEnd();
     glPopAttrib();
 
-	static double zp = 0;
-	glPushAttrib(GL_POINT_BIT | GL_COLOR_BUFFER_BIT);
-	glPointSize(2);
-	glBegin(GL_POINTS);
-	glColor3d(1.0, 0.0, 0.0);
-	for (int i = 0; i<9; i++)
-	{
-		Vector4d v = this->camCalibration->getPoints3D().at(i);
-		glVertex3d(v.x(), v.y(), v.z()+zp);
-	}
-	glEnd();
-	glPopAttrib();
-	zp += 5;
-	if (zp > 500)
-		zp = 0;
+    static double zp = 0;
+    glPushAttrib(GL_POINT_BIT | GL_COLOR_BUFFER_BIT);
+    glPointSize(2);
+    glBegin(GL_POINTS);
+    glColor3d(1.0, 0.0, 0.0);
+    for (int i = 0; i<9; i++)
+    {
+        Vector4d v = this->camCalibration->getPoints3D().at(i);
+        glVertex3d(v.x(), v.y(), v.z()+zp);
+    }
+    glEnd();
+    glPopAttrib();
+    zp += 5;
+    if (zp > 500)
+        zp = 0;
 }
 
 /**
@@ -362,7 +366,7 @@ void VolvuxWidget::generateFrames()
             meshStruct.rotationAngle += deltaAngle;
         }
         fbo->release();
-		emit dataFrameGenerated(allFrames.data());
+        emit dataFrameGenerated(allFrames.data());
     }
     getGLerrors();
 

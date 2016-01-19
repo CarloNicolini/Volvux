@@ -44,7 +44,7 @@ glPointSize(2);
 count=1;
 data3Dz=data3D;
 z=0;
-while true   
+while true
     % Setup cubes rotation around axis:
     glPushMatrix;
     % Clear out the backbuffer: This also cleans the depth-buffer for
@@ -71,11 +71,13 @@ while true
     glPushMatrix();
     moglDrawDots3D(win, data3D(count,:)', 5, [255 255 255]' , [0, 0, 0], 1, []);
     moglDrawDots3D(win, data3Dz(count,:)', 5, [255 64 64]' , [0, 0, 0], 1, []);
+    D = data3D; D(:,3)=data3D(:,3)+z;
+    moglDrawDots3D(win, D', 5, [64 255 255]' , [0, 0, 0], 1, []);
     glPopMatrix();
     
     % Finish OpenGL rendering into PTB window and check for OpenGL errors.
     Screen('EndOpenGL', win);
-
+    
     Screen('DrawDots',win,data2D',1,[255 0 255],[],2);
     for k=1:size(data2D,1)
         Screen('DrawText',win,['n=' num2str(k)], data2D(k,1)+5,data2D(k,2)+5,[255 255 255]);
@@ -103,15 +105,20 @@ while true
             end
         end
         
-        if keyCode(KbName('+'))
-            z = z+5;
-        end
-        if keyCode(KbName('-'))
-            z = z-5;
-        end
-        data3Dz(:,3) = data3D(:,3)+z;
+        %         if keyCode(KbName('+'))
+        %             z = z+5;
+        %         end
+        %         if keyCode(KbName('-'))
+        %             z = z-5;
+        %         end
+        %
     end
-    while KbCheck
+    %     while KbCheck
+    %     end
+    z = z + 5;
+    data3Dz(:,3) = data3D(:,3)+z;
+    if z > 500
+        z = 0;
     end
 end
 
