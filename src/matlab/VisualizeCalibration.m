@@ -69,7 +69,7 @@ while true
     
     % Draw dots quickly:
     glPushMatrix();
-    moglDrawDots3D(win, data3D(count,:)', 5, [255 255 255]' , [0, 0, 0], 1, []);
+    moglDrawDots3D(win, data3D(count,:)', 15, [0 255 255]' , [0, 0, 0], 1, []);
     moglDrawDots3D(win, data3Dz(count,:)', 5, [255 64 64]' , [0, 0, 0], 1, []);
     D = data3D; D(:,3)=data3D(:,3)+z;
     moglDrawDots3D(win, D', 5, [64 255 255]' , [0, 0, 0], 1, []);
@@ -113,8 +113,8 @@ while true
         %         end
         %
     end
-    %     while KbCheck
-    %     end
+    while KbCheck
+    end
     z = z + 5;
     data3Dz(:,3) = data3D(:,3)+z;
     if z > 500

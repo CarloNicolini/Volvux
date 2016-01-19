@@ -162,10 +162,14 @@ void VolvuxWidget::initializeGL()
     volume2->initializeTexture();
 
     // HERE MUST LOAD THE SHADERS WITH QGLSHADERPROGRAM
-    //shader.addShaderFromSourceCode(QGLShader::Vertex, src_HelicoidPositionShader_vert);
-    //shader.addShaderFromSourceCode(QGLShader::Fragment, src_Texture3DShader_frag);
-    shader.addShaderFromSourceFile(QGLShader::Vertex,"../src/HelicoidPositionShader.vert");
-    shader.addShaderFromSourceFile(QGLShader::Fragment,"../src/Texture3DShader.frag");
+    shader.addShaderFromSourceCode(QGLShader::Vertex, src_HelicoidPositionShader_vert);
+    shader.addShaderFromSourceCode(QGLShader::Fragment, src_Texture3DShader_frag);
+    //shader.addShaderFromSourceFile(QGLShader::Vertex,"../src/HelicoidPositionShader.vert");
+    //shader.addShaderFromSourceFile(QGLShader::Fragment,"../src/Texture3DShader.frag");
+
+	//shader.addShaderFromSourceFile(QGLShader::Vertex, "C:/workspace/Volvux/src/HelicoidPositionShader.vert");
+	//shader.addShaderFromSourceFile(QGLShader::Fragment, "C:\workspace\Volvux\src/Texture3DShader.frag");
+
 
     if (!shader.link())
         qWarning() << "Shader Program Linker Error" << shader.log();
@@ -224,18 +228,17 @@ void VolvuxWidget::draw()
     // Enable GL_TEXTURE3D for the visualization of ball field and finally draw the helicoid on it
     glEnable(GL_TEXTURE_3D);
     glPushMatrix();
-    //glRotated(-90,1,0,0);
+    glRotated(-90,1,0,0);
     glTranslated(meshStruct.x,meshStruct.y,meshStruct.z);
     //glRotated(-angle, axis.x(), axis.y(), axis.z());
     // Draw the helicoid
-    //obj->draw();
+    obj->draw();
     //glutSolidTeapot(60);
-    drawCalibration();
     glPopMatrix();
     glDisable(GL_TEXTURE_3D);
+	shader.release(); // always remember to release the shader at the end!
 
-    shader.release(); // always remember to release the shader at the end!
-
+	drawCalibration();
 }
 
 /**
@@ -243,29 +246,19 @@ void VolvuxWidget::draw()
  */
 void VolvuxWidget::drawCalibration()
 {
-    glPushAttrib(GL_POINT_BIT);
+	static double zp = 0;
+	glPushAttrib(GL_POINT_BIT | GL_COLOR_BUFFER_BIT);
     glPointSize(5);
     glBegin(GL_POINTS);
     for (int i=0; i<9; i++)
     {
         Vector4d v = this->camCalibration->getPoints3D().at(i);
         glVertex3d(v.x(),v.y(),v.z());
+		glVertex3d(v.x(), v.y(), v.z() + zp);
     }
     glEnd();
     glPopAttrib();
 
-    static double zp = 0;
-    glPushAttrib(GL_POINT_BIT | GL_COLOR_BUFFER_BIT);
-    glPointSize(2);
-    glBegin(GL_POINTS);
-    glColor3d(1.0, 0.0, 0.0);
-    for (int i = 0; i<9; i++)
-    {
-        Vector4d v = this->camCalibration->getPoints3D().at(i);
-        glVertex3d(v.x(), v.y(), v.z()+zp);
-    }
-    glEnd();
-    glPopAttrib();
     zp += 5;
     if (zp > 500)
         zp = 0;
@@ -322,6 +315,7 @@ void VolvuxWidget::generateFrames()
     unsigned long int h = static_cast<unsigned long int>(this->height());
     // Important to use unsigned integers to avoid overflow error
     unsigned long int length = w*h*slicesNumber;
+	cerr << "W H L =  " << w << " " << h << " " << length << endl;
     // Reset space for all frames sequence
     allFrames.clear();
     emit memoryAllocatedMegaBytes(length*sizeof(unsigned char)/1E6);

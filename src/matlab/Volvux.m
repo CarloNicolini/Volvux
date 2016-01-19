@@ -1,4 +1,5 @@
 % Load the calibration data
+clear all;
 X3D=[ 0 0 0 1 ;
     -35.5  35.5     0     1 ;
     35.5 35.5    0    1 ;
@@ -9,6 +10,8 @@ X3D=[ 0 0 0 1 ;
     25 -25  10   1 ;
     -25 -25  10   1 ;
     ];
+
+X3D(:,[1 2])=X3D(:,[2 1]);
 
 x2D=[ 512 384   1 ;
     419 474   1 ;
@@ -25,16 +28,16 @@ x2D=[ 512 384   1 ;
 [P,A,U,S,V] = homography(x2D',X3D');
 
 %% Evaluate camera error
-for i=1:9
-    p(:,i) = P*(X3D(i,:)');
-    p(:,i) = p(:,i)/p(3,i);
-end
+% for i=1:9
+%     p(:,i) = P*(X3D(i,:)');
+%     p(:,i) = p(:,i)/p(3,i);
+% end
 
-err=0;
-for i=1:9
-    err = err + norm(p(:,i)-x2D(i,:)');
-end
-fprintf('Camera matrix error = %f\n',err);
+% err=0;
+% for i=1:9
+%     err = err + norm(p(:,i)-x2D(i,:)');
+% end
+%fprintf('Camera matrix error = %f\n',err);
 
 %% Compute the OpenGL matrices from the camera matrix with znear and zfar
 %% specified
