@@ -52,6 +52,28 @@ while true
     glClear;
     
     glPushAttrib(GL_ALL_ATTRIB_BITS);
+    glLineWidth(4);
+    d=30;
+    glPushMatrix();
+    glRotated(180,0,1,0);
+    glRotated(270,0,0,1);
+    glBegin(GL_LINES);
+    glColor3d(1,0,0);
+    glVertex3d(0,0,0);
+    glVertex3d(d,0,0);
+
+    glColor3d(0,1,0);
+    glVertex3d(0,0,0);
+    glVertex3d(0,d,0);
+
+    glColor3d(0,0,1);
+    glVertex3d(0,0,0);
+    glVertex3d(0,0,d);
+    glEnd();
+    glPopMatrix();
+    glPopAttrib();
+    
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
     glColor3d(1,1,1);
     glBegin(GL_LINE_LOOP);
     glVertex3dv([-50,-50,0]);
@@ -83,6 +105,7 @@ while true
         Screen('DrawText',win,['n=' num2str(k)], data2D(k,1)+5,data2D(k,2)+5,[255 255 255]);
     end
     Screen('DrawDots',win,[512 384]',[15],[0 255 0],[],2);
+    Screen('DrawDots',win,[644 372]',[20],[64 255 64],[],2);
     Screen('DrawText',win,['Visualizing point ' num2str(count)],512,40,[255 255 255]);
     % Show rendered image at next vertical retrace:
     Screen('Flip', win);
@@ -117,7 +140,7 @@ while true
     end
     z = z + 5;
     data3Dz(:,3) = data3D(:,3)+z;
-    if z > 500
+    if z > 250
         z = 0;
     end
 end

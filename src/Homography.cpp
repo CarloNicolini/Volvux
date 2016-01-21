@@ -93,18 +93,6 @@ void CameraDirectLinearTransformation::init(const std::vector<Vector3d> &x, cons
  */
 void CameraDirectLinearTransformation::decomposePMatrix(const Eigen::Matrix<double,3,4> &P)
 {
-    /*
-    Vector3d p1 = P.col(0);
-    Vector3d p2 = P.col(1);
-    Vector3d p3 = P.col(2);
-    Vector3d p4 = P.col(3);
-
-    Matrix3d M;
-    M.col(0) = p1;
-    M.col(1) = p2;
-    M.col(2) = p3;
-    */
-
     Matrix3d M = P.topLeftCorner<3,3>();
     Vector3d m3 = M.row(2).transpose();
     // Follow the HartleyZisserman - "Multiple view geometry in computer vision" implementation chapter 3
@@ -144,7 +132,7 @@ void CameraDirectLinearTransformation::computeOpenGLMatrices(const Vector4i &gl_
     // Implementation of http://ksimek.github.io/2013/06/03/calibrated_cameras_in_opengl/
     // with inversion of second column on K and first row of R to match the inverted OpenGL axes when reprojected via the
     // light projector with a mirror
-	/*
+	
     // If K(3,3) isn't -1 negate the 3rd column because OpenGL camera looks down z axis
     if (K(2,2)>0)
         K.col(2) = -K.col(2);
@@ -160,19 +148,11 @@ void CameraDirectLinearTransformation::computeOpenGLMatrices(const Vector4i &gl_
 				 0, 1, 0,
 		 		 0, 0, 1;
 
-	//this->K << (ReflectKX*K).eval();
+	this->K << (ReflectKY*K).eval();
 	
 	R.row(0) = -R.row(0);
     R=-R.eval(); // needed because otherwise the determinant is negative.
-	*/
-	Matrix3d H; H << 1, 0, 0, 0, 1, 0, 0, 0, -1;
-	K.col(0) = -K.col(0);
-	R.row(0) = -R.row(0);
-
-	K.col(1) = -K.col(1);
-	R = (H*R).eval();
-
-	K.col(2) = -K.col(2);
+	
 
     double A = znear+zfar;
     double B = znear*zfar;

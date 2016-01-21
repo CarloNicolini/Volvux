@@ -232,11 +232,31 @@ void VolvuxWidget::draw()
     glTranslated(meshStruct.x,meshStruct.y,meshStruct.z);
     //glRotated(-angle, axis.x(), axis.y(), axis.z());
     // Draw the helicoid
-    obj->draw();
+    //obj->draw();
     //glutSolidTeapot(60);
     glPopMatrix();
     glDisable(GL_TEXTURE_3D);
 	shader.release(); // always remember to release the shader at the end!
+
+	double d = 10;
+	glPushMatrix();
+	glPushAttrib(GL_COLOR_BUFFER_BIT);
+	glBegin(GL_LINES);
+	glColor3d(1, 0, 0);
+	glVertex3d(0, 0, 0);
+	glVertex3d(d, 0, 0);
+
+	glColor3d(0, 1, 0);
+	glVertex3d(0, 0, 0);
+	glVertex3d(0, d, 0);
+
+	glColor3d(0, 0, 1);
+	glVertex3d(0, 0, 0);
+	glVertex3d(0, 0, d);
+	glEnd();
+	glPopAttrib();
+	glPopMatrix();
+	
 
 	drawCalibration();
 }
@@ -249,6 +269,7 @@ void VolvuxWidget::drawCalibration()
 	static double zp = 0;
 	glPushAttrib(GL_POINT_BIT | GL_COLOR_BUFFER_BIT);
     glPointSize(5);
+	glColor3d(1, 1, 1);
     glBegin(GL_POINTS);
     for (int i=0; i<9; i++)
     {
@@ -259,8 +280,8 @@ void VolvuxWidget::drawCalibration()
     glEnd();
     glPopAttrib();
 
-    zp += 5;
-    if (zp > 500)
+    zp += 1;
+    if (zp > 200)
         zp = 0;
 }
 
