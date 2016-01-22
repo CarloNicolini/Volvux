@@ -34,7 +34,7 @@
 
 #ifdef __APPLE__
 std::string baseDir("/Users/rs/workspace/Volvux/");
-std::string objPath("/Users/rs/workspace/Volvux/data/objmodels/helicoid.obj");
+std::string objPath("/Users/rs/workspace/Volvux/data/objmodels/helicoid_mws.obj");
 #endif
 
 #ifdef __linux__
