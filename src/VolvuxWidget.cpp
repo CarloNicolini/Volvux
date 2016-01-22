@@ -203,6 +203,7 @@ void VolvuxWidget::draw()
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         glMultMatrixd(camCalibration->getOpenGLModelViewMatrix().data());
+		glRotated(180, 1, 0, 0);
     }
     else
     {
@@ -238,9 +239,10 @@ void VolvuxWidget::draw()
     glDisable(GL_TEXTURE_3D);
 	shader.release(); // always remember to release the shader at the end!
 
-	double d = 10;
+	double d = 30;
 	glPushMatrix();
-	glPushAttrib(GL_COLOR_BUFFER_BIT);
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
+	glLineWidth(2);
 	glBegin(GL_LINES);
 	glColor3d(1, 0, 0);
 	glVertex3d(0, 0, 0);
@@ -283,6 +285,20 @@ void VolvuxWidget::drawCalibration()
     zp += 1;
     if (zp > 200)
         zp = 0;
+
+	glPushAttrib(GL_POINT_BIT | GL_COLOR_BUFFER_BIT);
+	glPointSize(5);
+	glColor3d(1, 1, 1);
+	glPushMatrix();
+	glTranslated(meshStruct.x, meshStruct.y, meshStruct.z);
+	//glTranslated(0, 0, -37.5);
+	double radius = 25;
+	glBegin(GL_LINE_LOOP);
+	for (double i = 0; i < 2 * M_PI; i += 0.05)
+		glVertex3d(radius*cos(i), radius*sin(i), 0);
+	glEnd();
+	glPopMatrix();
+	glPopAttrib();
 }
 
 /**

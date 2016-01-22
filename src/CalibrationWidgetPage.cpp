@@ -128,6 +128,7 @@ void CalibrationWidgetPage::append2DPoint(const QPoint &p)
 	points2D.push_back(Vector3d(p.x(), p.y(), 1));
 	if (points2D.size() == points3D.size())
 	{
+		/*
 		ofstream p2dtxt; p2dtxt.open("points2d.csv",'w');
 		for (int i = 0; i < points2D.size(); ++i)
 		{
@@ -138,6 +139,7 @@ void CalibrationWidgetPage::append2DPoint(const QPoint &p)
 			Vector3d kk = points2D.at(i);
 			p2dtxt << "points2D.push_back(Vector3d(" << kk.x() << "," << kk.y() << "," << "1 ));" << endl;
 		}
+		*/
 		this->computeHomography(points2D);
 		this->CDLT.info();
 	}

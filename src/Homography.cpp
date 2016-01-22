@@ -133,6 +133,7 @@ void CameraDirectLinearTransformation::computeOpenGLMatrices(const Vector4i &gl_
     // with inversion of second column on K and first row of R to match the inverted OpenGL axes when reprojected via the
     // light projector with a mirror
 	
+	/*
     // If K(3,3) isn't -1 negate the 3rd column because OpenGL camera looks down z axis
     if (K(2,2)>0)
         K.col(2) = -K.col(2);
@@ -152,7 +153,17 @@ void CameraDirectLinearTransformation::computeOpenGLMatrices(const Vector4i &gl_
 	
 	R.row(0) = -R.row(0);
     R=-R.eval(); // needed because otherwise the determinant is negative.
-	
+	*/
+
+	R.row(0) = -R.row(0);
+	K.col(1) = -K.col(1);
+	R.row(1) = -R.row(1);
+
+	K.col(2) = -K.col(2);
+
+	if (R.determinant() < 0)
+		R = -R.eval();
+
 
     double A = znear+zfar;
     double B = znear*zfar;

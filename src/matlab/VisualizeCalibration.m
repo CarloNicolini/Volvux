@@ -26,7 +26,7 @@ glLoadMatrixd(gl_Projection_Matrix);
 
 glMatrixMode(GL_MODELVIEW);
 glLoadMatrixd(gl_ModelViewMatrix);
-
+%glRotated(180,1,0,0);
 % Set background color to 'black':
 glClearColor(0,0,0,0);
 
@@ -106,6 +106,13 @@ while true
     glPopAttrib();
     
     
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
+    glColor3d(1,1,1);
+    glBegin(GL_POINTS);
+    glVertex3dv([0,0,-150]);
+    glEnd();
+    glPopAttrib();
+    
     glBegin(GL_POINTS);
     glVertex3d(0,0,0);
     glEnd();
@@ -123,11 +130,11 @@ while true
     Screen('EndOpenGL', win);
     
     Screen('DrawDots',win,data2D',1,[255 0 255],[],2);
+    Screen('DrawDots',win,[516 321]',10,[255 0 255],[],2); % is the point (0,0,150) once projected
     for k=1:size(data2D,1)
         Screen('DrawText',win,['n=' num2str(k)], data2D(k,1)+5,data2D(k,2)+5,[255 255 255]);
     end
-    Screen('DrawDots',win,[512 384]',[15],[0 255 0],[],2);
-    Screen('DrawDots',win,[644 372]',[20],[64 255 64],[],2);
+    
     Screen('DrawText',win,['Visualizing point ' num2str(count)],512,40,[255 255 255]);
     % Show rendered image at next vertical retrace:
     Screen('Flip', win);
@@ -160,9 +167,9 @@ while true
     end
     while KbCheck
     end
-    z = z + 5;
+    z = z + 2;
     data3Dz(:,3) = data3D(:,3)+z;
-    if z > 250
+    if z > 150
         z = 0;
     end
 end
