@@ -45,7 +45,7 @@ std::string objPath("/home/carlo/Downloads/helicoid2.obj");
 
 #ifdef WIN32
 std::string baseDir("C:\\workspace\\Volvux\\");
-std::string objPath("C:\\workspace\\Volvux\\data\\objmodels\\helicoid.obj");
+std::string objPath("C:\\workspace\\Volvux\\data\\objmodels\\helicoid_mws2.obj");
 #endif
 
 #ifndef GL_MULTISAMPLE
@@ -163,13 +163,13 @@ void VolvuxWidget::initializeGL()
     volume2->initializeTexture();
 
     // HERE MUST LOAD THE SHADERS WITH QGLSHADERPROGRAM
-    shader.addShaderFromSourceCode(QGLShader::Vertex, src_HelicoidPositionShader_vert);
-    shader.addShaderFromSourceCode(QGLShader::Fragment, src_Texture3DShader_frag);
+    //shader.addShaderFromSourceCode(QGLShader::Vertex, src_HelicoidPositionShader_vert);
+    //shader.addShaderFromSourceCode(QGLShader::Fragment, src_Texture3DShader_frag);
     //shader.addShaderFromSourceFile(QGLShader::Vertex,"../src/HelicoidPositionShader.vert");
     //shader.addShaderFromSourceFile(QGLShader::Fragment,"../src/Texture3DShader.frag");
 
-	//shader.addShaderFromSourceFile(QGLShader::Vertex, "C:/workspace/Volvux/src/HelicoidPositionShader.vert");
-	//shader.addShaderFromSourceFile(QGLShader::Fragment, "C:\workspace\Volvux\src/Texture3DShader.frag");
+	shader.addShaderFromSourceFile(QGLShader::Vertex, "C://workspace//Volvux//src//HelicoidPositionShader.vert");
+	shader.addShaderFromSourceFile(QGLShader::Fragment, "C://workspace//Volvux//src//Texture3DShader.frag");
 
 
     if (!shader.link())
@@ -204,7 +204,7 @@ void VolvuxWidget::draw()
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         glMultMatrixd(camCalibration->getOpenGLModelViewMatrix().data());
-		glRotated(180, 1, 0, 0);
+		//glRotated(180, 1, 0, 0);
     }
     else
     {
@@ -230,7 +230,7 @@ void VolvuxWidget::draw()
     // Enable GL_TEXTURE3D for the visualization of ball field and finally draw the helicoid on it
     glEnable(GL_TEXTURE_3D);
     glPushMatrix();
-    glRotated(90,1,0,0);
+    //glRotated(90,1,0,0);
     glTranslated(meshStruct.x,meshStruct.y,meshStruct.z);
     //glRotated(-angle, axis.x(), axis.y(), axis.z());
     // Draw the helicoid

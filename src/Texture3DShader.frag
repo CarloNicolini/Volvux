@@ -14,5 +14,5 @@ void main()
     if ( texture_coordinate.x <=0.0 || texture_coordinate.x >= 1.0 || texture_coordinate.z <= 0.0 || texture_coordinate.z >= 1.0 )
         gl_FragColor =vec4(0.0,0.0,0.0,1.0); //Can be uniformColor to color again the thing
     else
-        gl_FragColor = vec4(1.0,0.0,0.0,1.0);//uniformColor*texture3D(my_color_texture, texture_coordinate);
+        gl_FragColor = uniformColor*texture3D(my_color_texture, texture_coordinate);
 }

@@ -100,46 +100,22 @@ void CalibrationWidgetPage::clearLayout(QLayout* layout, bool deleteWidgets)
 void CalibrationWidgetPage::append2DPoint(const QPoint &p)
 {
 	// XXX TO CHANGE WITH REAL POINTS
-	//qDebug("XXX RIMETTERE I PUNTI ORIGINALI INVECE CHE QUESTI");
-	//points2D.clear();
-	/*
-	points2D.push_back(Vector3d(512,384,1));
-	points2D.push_back(Vector3d(419,474,1));
-	points2D.push_back(Vector3d(409,294,1));
-	points2D.push_back(Vector3d(589,294,1));
-	points2D.push_back(Vector3d(589,474,1));
-	points2D.push_back(Vector3d(449,441,1));
-	points2D.push_back(Vector3d(449,321,1));
-	points2D.push_back(Vector3d(569,321,1));
-	points2D.push_back(Vector3d(569,441,1));
-	*/
-	// CALIBRATION 20 JANUARY 2016
-	/*
-	points2D.push_back(Vector3d(512, 401, 1));
-	points2D.push_back(Vector3d(445,334, 1));
-	points2D.push_back(Vector3d(573,336, 1));
-	points2D.push_back(Vector3d(570,465, 1));
-	points2D.push_back(Vector3d(445,465, 1));
-	points2D.push_back(Vector3d(409,301, 1));
-	points2D.push_back(Vector3d(599,306, 1));
-	points2D.push_back(Vector3d(596,500, 1));
-	points2D.push_back(Vector3d(406,500, 1));
-	*/
-	points2D.push_back(Vector3d(p.x(), p.y(), 1));
+	// CALIBRATION 22 JANUARY 2016
+	
+	points2D.clear();
+	points2D.push_back(Vector3d(512, 374, 1));
+	points2D.push_back(Vector3d(438, 301, 1));
+	points2D.push_back(Vector3d(581, 299, 1));
+	points2D.push_back(Vector3d(580, 445, 1));
+	points2D.push_back(Vector3d(439, 443, 1));
+	points2D.push_back(Vector3d(401, 264, 1));
+	points2D.push_back(Vector3d(621, 265, 1));
+	points2D.push_back(Vector3d(617, 485, 1));
+	points2D.push_back(Vector3d(403, 486, 1));
+	
+	//points2D.push_back(Vector3d(p.x(), p.y(), 1));
 	if (points2D.size() == points3D.size())
 	{
-		/*
-		ofstream p2dtxt; p2dtxt.open("points2d.csv",'w');
-		for (int i = 0; i < points2D.size(); ++i)
-		{
-			p2dtxt << points2D.at(i).transpose() << endl;
-		}
-		for (int i = 0; i < points2D.size(); ++i)
-		{
-			Vector3d kk = points2D.at(i);
-			p2dtxt << "points2D.push_back(Vector3d(" << kk.x() << "," << kk.y() << "," << "1 ));" << endl;
-		}
-		*/
 		this->computeHomography(points2D);
 		this->CDLT.info();
 	}
