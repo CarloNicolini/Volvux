@@ -39,8 +39,7 @@ std::string objPath("/Users/rs/workspace/Volvux/data/objmodels/helicoid_mws.obj"
 
 #ifdef __linux__
 std::string baseDir("~/workspace/Volvux/");
-//std::string objPath("../data/objmodels/helicoid.obj");
-std::string objPath("/home/carlo/Downloads/helicoid2.obj");
+std::string objPath("../data/objmodels/helicoid_mws.obj");
 #endif
 
 #ifdef WIN32
