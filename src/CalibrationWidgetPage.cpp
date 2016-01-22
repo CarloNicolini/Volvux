@@ -128,7 +128,7 @@ void CalibrationWidgetPage::append2DPoint(const QPoint &p)
 	points2D.push_back(Vector3d(p.x(), p.y(), 1));
 	if (points2D.size() == points3D.size())
 	{
-		ofstream p2dtxt; p2dtxt.open("points2d.csv",'w');
+        ofstream p2dtxt; p2dtxt.open("points2d.csv");
 		for (int i = 0; i < points2D.size(); ++i)
 		{
 			p2dtxt << points2D.at(i).transpose() << endl;
