@@ -318,6 +318,7 @@ void ProjectorWidgetPage::onPushButtonMotorInitializeClicked()
 void ProjectorWidgetPage::projectDataFrames(unsigned char *data)
 {
 	palp->stop();
+	palp->setPicturesTimeus(125);
 	palp->cleanAllSequences();
     palp->loadSequence(PROJECTOR_SLICES_NUMBER,data);
     palp->start();

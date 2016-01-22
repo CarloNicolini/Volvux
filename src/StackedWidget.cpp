@@ -71,7 +71,9 @@ StackedWidget::StackedWidget(QWidget *parent) :
     QObject::connect(projectorWidgetpage,SIGNAL(enableNextButton(bool)),this->ui->pushButtonNext,SLOT(setEnabled(bool)));
 
     //Projector settings
-    QObject::connect(projectorWidgetpage->ui->spinBoxProjectorNSlices,SIGNAL(valueChanged(int)),projectorWidgetpage,SLOT(onSpinboxProjectorNSlicesChanged(int)));
+	projectorWidgetpage->onSpinboxProjectorNSlicesChanged(PROJECTOR_SLICES_NUMBER);
+	QObject::connect(projectorWidgetpage->ui->spinBoxProjectorNSlices,SIGNAL(valueChanged(int)),projectorWidgetpage,SLOT(onSpinboxProjectorNSlicesChanged(int)));
+	QObject::connect(projectorWidgetpage->ui->doubleSpinBoxMotorFlickerRate, SIGNAL(valueChanged(double)), projectorWidgetpage, SLOT(onSpinboxFlickerRateChanged(double)));
     //LED settings
     QObject::connect(projectorWidgetpage->ui->spinBoxProjectorLEDcurrent,SIGNAL(valueChanged(int)),projectorWidgetpage,SLOT(onSpinboxProjectorLEDCurrentChanged(int)));
     QObject::connect(projectorWidgetpage->ui->doubleSpinBoxProjectorLEDpercentage,SIGNAL(valueChanged(double)),projectorWidgetpage,SLOT(onSpinboxProjectorLEDPercentageChanged(double)));

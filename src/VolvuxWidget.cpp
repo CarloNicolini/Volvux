@@ -44,7 +44,7 @@ std::string objPath("../data/objmodels/helicoid_mws.obj");
 
 #ifdef WIN32
 std::string baseDir("C:\\workspace\\Volvux\\");
-std::string objPath("C:\\workspace\\Volvux\\data\\objmodels\\helicoid_mws2.obj");
+std::string objPath("C:\\workspace\\Volvux\\data\\objmodels\\helicoid_mws.obj");
 #endif
 
 #ifndef GL_MULTISAMPLE
@@ -229,16 +229,21 @@ void VolvuxWidget::draw()
     // Enable GL_TEXTURE3D for the visualization of ball field and finally draw the helicoid on it
     glEnable(GL_TEXTURE_3D);
     glPushMatrix();
-    //glRotated(90,1,0,0);
     glTranslated(meshStruct.x,meshStruct.y,meshStruct.z);
-    //glRotated(-angle, axis.x(), axis.y(), axis.z());
     // Draw the helicoid
-    obj->draw();
-    //glutSolidTeapot(60);
+    obj->draw();    
     glPopMatrix();
     glDisable(GL_TEXTURE_3D);
 	shader.release(); // always remember to release the shader at the end!
-
+	/*
+	glPushMatrix();
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
+	glColor3d(1, 1, 0);
+	glTranslated(meshStruct.x, meshStruct.y, meshStruct.z);
+	obj->drawOnlyVertices();
+	glPopAttrib();
+	glPopMatrix();
+	*/
 	double d = 30;
 	glPushMatrix();
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
