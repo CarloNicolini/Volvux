@@ -44,6 +44,7 @@ glPointSize(2);
 count=1;
 data3Dz=data3D;
 z=0;
+d=100;
 while true
     % Setup cubes rotation around axis:
     glPushMatrix;
@@ -52,11 +53,32 @@ while true
     glClear;
     
     glPushAttrib(GL_ALL_ATTRIB_BITS);
-    glLineWidth(4);
-    d=30;
     glPushMatrix();
-    glRotated(180,0,1,0);
-    glRotated(270,0,0,1);
+    glColor3d(1,0,0);
+    glRotated(90,0,1,0);
+    glTranslated(0,0,d);
+    glutWireCone(5,5,20,20);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glColor3d(0,1,0);
+    glRotated(-90,1,0,0);
+    glTranslated(0,0,d);
+    glutWireCone(5,5,20,20);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glColor3d(0,0,1);
+    glTranslated(0,0,d);
+    glutWireCone(5,5,20,20);
+    glPopMatrix();
+    
+    glPopAttrib();
+    
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
+    glLineWidth(4);
+    
+    glPushMatrix();
     glBegin(GL_LINES);
     glColor3d(1,0,0);
     glVertex3d(0,0,0);

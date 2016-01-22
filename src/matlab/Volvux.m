@@ -35,6 +35,7 @@ X3D = [ 0	0	0;
         +WB/2 +WB/2  0;
         -WB/2 +WB/2  0;
         ];
+    
 X3D=[X3D ones(9,1)];
 x2D = [512 401;
 445 334;
@@ -70,32 +71,23 @@ gl_Viewport=[0 0 1024 768];
 [K,R,C] = getCameraIntrinsicExtrinsic(P);
 
 [gl_Projection_matrix,gl_Modelview_matrix] = getOpenGLMatrices(K,R,C,gl_Viewport(3),gl_Viewport(4),znear,zfar);
+
 gl_MVP = gl_Projection_matrix*gl_Modelview_matrix;
 gl_IMVP = inv(gl_MVP);
-HELICOID=load('../../data/objmodels/helicoid.vert');
 
-%% Make the anamorphic transformation to delete the projection of helicoid points 
-
+%% Make the anamorphic transformation to delete the projection of helicoid points
 % ANA = [1   0  0  0;
 %      0   1  0  0;
 %      0   0  1  0;
 %      0   0  -1/norm(gl_Modelview_matrix(1:3,4))  1];
 % 
 % HELICOIDp = project(inv(ANA),[HELICOID ones(size(HELICOID,1),1)]);
-% 
-% %% Compute the error of OpenGL
-% for i=1:size(x2D,1)
-%     pgl(i,:)=glProject(gl_MVP,gl_Viewport,X3D(i,:)',znear,zfar);
-% end
-%  
-% errGL=0;
-% for i=1:9
-%     errGL = errGL + norm(pgl(i,1:2)-x2D(i,1:2));
-% end
+
  
 % Now project the helicoid points in a PTB window
 % To check if calibration is OK
 VisualizeCalibration(gl_Projection_matrix,gl_Modelview_matrix,X3D(:,1:3),x2D(:,1:2));
 
 % To show the HELICOID DOTS
+%HELICOID=load('../../data/objmodels/helicoid.vert');
 %VisualizeHelicoid(gl_Projection_matrix,gl_Modelview_matrix,HELICOID(:,1:3),eye(4));

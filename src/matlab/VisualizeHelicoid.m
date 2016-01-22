@@ -71,7 +71,8 @@ while true
     
     % Draw dots quickly:
     glPushMatrix();
-    %glRotated(-90,1,0,0);
+    glRotated(180,0,1,0);
+    glRotated(90,1,0,0);
     glRotated(rotangle,0,1,0);
     glUseProgram(AnaShader);
     moglDrawDots3D(win, data3D', 1, data3D' , [], 2);

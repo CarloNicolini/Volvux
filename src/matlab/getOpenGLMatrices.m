@@ -27,8 +27,8 @@ Persp = [K(1,1)    K(1,2)    K(1,3)   0;
 
 l=0;
 r=width;
-b=height;
-t=0;
+b=0;
+t=height;
 
 NDC = glortho(l,r,b,t,near,far);
 
