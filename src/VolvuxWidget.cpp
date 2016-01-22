@@ -39,8 +39,7 @@ std::string objPath("/Users/rs/workspace/Volvux/data/objmodels/helicoid_mws.obj"
 
 #ifdef __linux__
 std::string baseDir("~/workspace/Volvux/");
-//std::string objPath("../data/objmodels/helicoid.obj");
-std::string objPath("/home/carlo/Downloads/helicoid2.obj");
+std::string objPath("../data/objmodels/helicoid_mws.obj");
 #endif
 
 #ifdef WIN32
@@ -230,7 +229,7 @@ void VolvuxWidget::draw()
     // Enable GL_TEXTURE3D for the visualization of ball field and finally draw the helicoid on it
     glEnable(GL_TEXTURE_3D);
     glPushMatrix();
-    glRotated(90,1,0,0);
+    //glRotated(90,1,0,0);
     glTranslated(meshStruct.x,meshStruct.y,meshStruct.z);
     //glRotated(-angle, axis.x(), axis.y(), axis.z());
     // Draw the helicoid
