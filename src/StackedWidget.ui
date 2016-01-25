@@ -123,7 +123,7 @@
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -214,6 +214,11 @@
   <action name="actionSMI_manual">
    <property name="text">
     <string>SMI manual</string>
+   </property>
+  </action>
+  <action name="actionProjectorSettings">
+   <property name="text">
+    <string>ProjectorSettings</string>
    </property>
   </action>
  </widget>

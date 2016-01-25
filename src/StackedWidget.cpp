@@ -4,6 +4,8 @@
 #include "ui_CalibrationWidgetPage.h"
 #include "ui_VolvuxWidgetPage.h"
 
+
+
 StackedWidget::StackedWidget(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::StackedWidget)
@@ -40,6 +42,8 @@ StackedWidget::StackedWidget(QWidget *parent) :
     this->ui->stackedWidget->addWidget(volvuxWidgetpage);
     widgets.append(volvuxWidgetpage);
 
+	//Initialize NSlices and FlickerRate using default value
+	projectorWidgetpage->onSpinboxProjectorNSlicesChanged(PROJECTOR_SLICES_NUMBER);
 
     //Menu bar
     //Exit Action
@@ -71,7 +75,6 @@ StackedWidget::StackedWidget(QWidget *parent) :
     QObject::connect(projectorWidgetpage,SIGNAL(enableNextButton(bool)),this->ui->pushButtonNext,SLOT(setEnabled(bool)));
 
     //Projector settings
-	projectorWidgetpage->onSpinboxProjectorNSlicesChanged(PROJECTOR_SLICES_NUMBER);
 	QObject::connect(projectorWidgetpage->ui->spinBoxProjectorNSlices,SIGNAL(valueChanged(int)),projectorWidgetpage,SLOT(onSpinboxProjectorNSlicesChanged(int)));
 	QObject::connect(projectorWidgetpage->ui->doubleSpinBoxMotorFlickerRate, SIGNAL(valueChanged(double)), projectorWidgetpage, SLOT(onSpinboxFlickerRateChanged(double)));
     //LED settings
@@ -225,10 +228,16 @@ void StackedWidget::onActionExitTriggered()
 
 //Projector and  Motor Action SLOT
 void StackedWidget::onActionProjectorMotorTriggered(){
-    this->ui->stackedWidget->setCurrentIndex(PROJECTORMOTOR_PAGE_INDEX);
+    /*this->ui->stackedWidget->setCurrentIndex(PROJECTORMOTOR_PAGE_INDEX);
     this->ui->menuBar->hide();
     this->ui->pushButtonBack->setEnabled(false);
-    this->ui->pushButtonNext->setEnabled(true);
+    this->ui->pushButtonNext->setEnabled(true);*/
+	/*NOT WORKING
+	//Initialize helper window
+	extraWindow = new ExtraWindow(this);
+	extraWindow->receiveWidget(projectorWidgetpage);
+	extraWindow->show();
+	*/
 }
 
 //Calibration SLOT
@@ -237,4 +246,5 @@ void StackedWidget::onActionCalibrationTriggered() {
     this->ui->menuBar->hide();
     this->ui->pushButtonNext->setEnabled(true);
 }
+
 

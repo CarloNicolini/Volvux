@@ -324,3 +324,4 @@ void ProjectorWidgetPage::projectDataFrames(unsigned char *data)
     palp->start();
 }
 
+
