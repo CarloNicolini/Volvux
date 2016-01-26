@@ -46,11 +46,11 @@ void VolvuxWidgetPage::onPushButtonGenerateFramesPressed(){
         QObject::connect(this->ui->widget,SIGNAL(memoryAllocatedMegaBytes(int)),this->ui->spinBoxMemoryAllocated,SLOT(setValue(int)));
     }
 
-    QString message = "Generating "+QString::number(ui->widget->slicesNumber)+ " frames...";
+	QString message = "Generating " + QString::number(this->ui->widget->slicesNumber) + " frames...";
     emit writeOnStatusBar(message,0);
 
     this->ui->widget->updateGL();
-    QObject::connect(ui->widget,SIGNAL(memoryAllocatedMegaBytes(int)),ui->spinBoxMemoryAllocated,SLOT(setValue(int)));
+	QObject::connect(this->ui->widget, SIGNAL(memoryAllocatedMegaBytes(int)), this->ui->spinBoxMemoryAllocated, SLOT(setValue(int)));
     this->ui->widget->generateFrames();
 
     message = "Frames generation done";

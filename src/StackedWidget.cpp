@@ -28,7 +28,7 @@ StackedWidget::StackedWidget(QWidget *parent) :
     //Disable Back button for the first page
     if(this->ui->stackedWidget->currentIndex() == PROJECTORMOTOR_PAGE_INDEX)
     {
-        ui->pushButtonBack->setEnabled(false);
+		this->ui->pushButtonBack->setEnabled(false);
     }
 
     //Initialize and add the stacked widget pages
@@ -232,12 +232,12 @@ void StackedWidget::onActionProjectorMotorTriggered(){
     this->ui->menuBar->hide();
     this->ui->pushButtonBack->setEnabled(false);
     this->ui->pushButtonNext->setEnabled(true);*/
-	/*NOT WORKING
+	//NOT WORKING
 	//Initialize helper window
-	extraWindow = new ExtraWindow(this);
-	extraWindow->receiveWidget(projectorWidgetpage);
-	extraWindow->show();
-	*/
+	//extraWindow = new ExtraWindow(this);
+	//extraWindow->receiveWidget(projectorWidgetpage);
+	//extraWindow->show();
+	
 }
 
 //Calibration SLOT

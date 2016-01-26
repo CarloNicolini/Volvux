@@ -35,11 +35,12 @@
 #error include 'stdafx.h' before including this file for PCH
 #endif
 */
-#include "stdafx.h"
 #include <afx.h>
-#import "..\\libs\\drivers\\SMI\\IntegMotorInterface.tlb" rename_namespace("INTEGMOTORINTERFACELib")
 #include "SMIDefs.h"
+#include "stdafx.h"
 #include <comdef.h>
+//Problem with tlb import: http://www.codeguru.com/cpp/com-tech/activex/tutorials/article.php/c5567/Step-by-Step-COM-Tutorial.htm
+#import "..\\libs\\drivers\\SMI\\IntegMotorInterface.tlb" rename_namespace("INTEGMOTORINTERFACELib")
 
  
 

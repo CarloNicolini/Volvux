@@ -24,14 +24,14 @@ ALPProjector *ProjectorWidgetPage::getALP(){
 //Update Motor Rate
 void ProjectorWidgetPage::updateMotorRate(int nSlices, double tFrameMicroSeconds){
     double motorRate = (1E6/(nSlices*tFrameMicroSeconds)) * MOTOR_UNITS_TO_REV_MIN;
-    ui->spinBoxMotorSpeed->setValue((int)motorRate);
-    if ( motorRate > ui->spinBoxMotorSpeed->maximum() )
+    this->ui->spinBoxMotorSpeed->setValue((int)motorRate);
+    if ( motorRate > this->ui->spinBoxMotorSpeed->maximum() )
     {
-        ui->spinBoxMotorSpeed->setEnabled(false);
+        this->ui->spinBoxMotorSpeed->setEnabled(false);
     }
     else
     {
-        ui->spinBoxMotorSpeed->setEnabled(true);
+        this->ui->spinBoxMotorSpeed->setEnabled(true);
     }
 }
 
@@ -84,12 +84,12 @@ void ProjectorWidgetPage::onpushButtonProjectorReleaseClicked()
         QMessageBox::warning(this,"Error in ALP projector",QString(e.what()));
     }
     //Enable and disable buttons and spinboxes
-    ui->spinBoxProjectorNSlices->setEnabled(false);
-    ui->spinBoxProjectorLEDcurrent->setEnabled(false);
-    ui->doubleSpinBoxProjectorLEDpercentage->setEnabled(false);
-    ui->spinBoxProjectorMicrosecondsPerFrame->setEnabled(false);
-    ui->pushButtonProjectorRelease->setEnabled(false);
-    ui->pushButtonProjectorInitialize->setEnabled(true);
+    this->ui->spinBoxProjectorNSlices->setEnabled(false);
+    this->ui->spinBoxProjectorLEDcurrent->setEnabled(false);
+	this->ui->doubleSpinBoxProjectorLEDpercentage->setEnabled(false);
+	this->ui->spinBoxProjectorMicrosecondsPerFrame->setEnabled(false);
+	this->ui->pushButtonProjectorRelease->setEnabled(false);
+	this->ui->pushButtonProjectorInitialize->setEnabled(true);
 
     //Send signal to MainWindow to disable next button
     emit enableNextButton(false);
@@ -107,10 +107,10 @@ void ProjectorWidgetPage::onSpinboxProjectorLEDCurrentChanged(int current){
         if (!palp->m_bAlpLEDInit)
         {
             palp->initLED();
-            palp->setLED(current,ui->doubleSpinBoxProjectorLEDpercentage->value());
+			palp->setLED(current, this->ui->doubleSpinBoxProjectorLEDpercentage->value());
         }
         else
-           palp->setLED(current,ui->doubleSpinBoxProjectorLEDpercentage->value());
+			palp->setLED(current, this->ui->doubleSpinBoxProjectorLEDpercentage->value());
     }
 }
 
@@ -125,10 +125,10 @@ void ProjectorWidgetPage::onSpinboxProjectorLEDPercentageChanged(double percenta
         if (!palp->m_bAlpLEDInit)
         {
             palp->initLED();
-            palp->setLED(ui->spinBoxProjectorLEDcurrent->value(),static_cast<long int>(std::ceil(percentage)));
+			palp->setLED(this->ui->spinBoxProjectorLEDcurrent->value(), static_cast<long int>(std::ceil(percentage)));
         }
         else
-            palp->setLED(ui->spinBoxProjectorLEDcurrent->value(),static_cast<long int>(std::ceil(percentage)));
+			palp->setLED(this->ui->spinBoxProjectorLEDcurrent->value(), static_cast<long int>(std::ceil(percentage)));
     }
 }
 
@@ -139,19 +139,19 @@ void ProjectorWidgetPage::onSpinboxProjectorLEDPercentageChanged(double percenta
 //Spinbox NSlices SLOT
 void ProjectorWidgetPage::onSpinboxProjectorNSlicesChanged(int nSlices){
     //Calculates the number of slices
-    double flickerRateHz = ui->doubleSpinBoxMotorFlickerRate->value();
+	double flickerRateHz = this->ui->doubleSpinBoxMotorFlickerRate->value();
     double tFrameSec = 1.0/(nSlices*flickerRateHz);
     double tFrameMicroSeconds = 1E6*tFrameSec;
-    ui->spinBoxProjectorMicrosecondsPerFrame->setValue( static_cast<int>(tFrameMicroSeconds) );
+	this->ui->spinBoxProjectorMicrosecondsPerFrame->setValue(static_cast<int>(tFrameMicroSeconds));
 
     //The number must be an int
     if ( std::fabs(fmod(tFrameMicroSeconds,1.0)) <= std::numeric_limits<double>::epsilon() )
     {
-        ui->spinBoxProjectorMicrosecondsPerFrame->setEnabled(true);
+		this->ui->spinBoxProjectorMicrosecondsPerFrame->setEnabled(true);
     }
     else
     {
-        ui->spinBoxProjectorMicrosecondsPerFrame->setDisabled(true);
+		this->ui->spinBoxProjectorMicrosecondsPerFrame->setDisabled(true);
     }
     updateMotorRate(nSlices,tFrameMicroSeconds);
 }
@@ -160,8 +160,8 @@ void ProjectorWidgetPage::onSpinboxProjectorNSlicesChanged(int nSlices){
 //Start motor SLOT
 void ProjectorWidgetPage::onPushButtonMotorStartClicked(bool value)
 {
-    ui->pushButtonMotorStart->setEnabled(false);
-    /*
+	this->ui->pushButtonMotorStart->setEnabled(false);
+	/*
 #if defined (SMI_SUPPORT) && (WIN32)
     cerr << "[MainWindow] Starting motor" << endl;
     long Version = 0;
@@ -175,41 +175,40 @@ void ProjectorWidgetPage::onPushButtonMotorStartClicked(bool value)
     {
         QMessageBox::warning(this,"!!! WARNING !!!","This speed is not safe for the system");
     }
-#endif
-    */
-    ui->pushButtonMotorStop->setEnabled(true);
+#endif */
+	this->ui->pushButtonMotorStop->setEnabled(true);
 }
 
 //Stop motor SLOT
 void ProjectorWidgetPage::onPushButtonMotorStopClicked(bool value)
 {
-    ui->pushButtonMotorStart->setEnabled(true);
+	this->ui->pushButtonMotorStart->setEnabled(true);
     /*
 #if defined (SMI_SUPPORT) && (WIN32)
     cerr << "[MainWindow] Stopping motor" << endl;
     this->startRotation(0);
 #endif
     */
-    ui->pushButtonMotorStop->setEnabled(false);
+	this->ui->pushButtonMotorStop->setEnabled(false);
 }
 
 //Motor settings
 //Flicker Rate SLOT
 void ProjectorWidgetPage::onSpinboxFlickerRateChanged(double flickerRate)
 {
-    int nSlices = ui->spinBoxProjectorNSlices->value();
+	int nSlices = this->ui->spinBoxProjectorNSlices->value();
     double tFrameSeconds = 1.0/(nSlices*flickerRate);
     double tFrameMicroSeconds = tFrameSeconds*1E6;
 
-    ui->spinBoxProjectorMicrosecondsPerFrame->setValue( static_cast<int>(tFrameMicroSeconds) );
+	this->ui->spinBoxProjectorMicrosecondsPerFrame->setValue(static_cast<int>(tFrameMicroSeconds));
     // Checks the remainder
     if ( std::fabs(fmod(tFrameMicroSeconds,1.0)) <= std::numeric_limits<double>::epsilon() )
     {
-        ui->spinBoxProjectorMicrosecondsPerFrame->setEnabled(true);
+		this->ui->spinBoxProjectorMicrosecondsPerFrame->setEnabled(true);
     }
     else
     {
-        ui->spinBoxProjectorMicrosecondsPerFrame->setDisabled(true);
+		this->ui->spinBoxProjectorMicrosecondsPerFrame->setDisabled(true);
     }
     updateMotorRate(nSlices,tFrameMicroSeconds);
 }
@@ -221,7 +220,7 @@ void ProjectorWidgetPage::onSpinboxFlickerRateChanged(double flickerRate)
  */
 void ProjectorWidgetPage::onPushButtonMotorInitializeClicked()
 {
-    if (ui->pushButtonMotorInitialize->isEnabled())
+	if (this->ui->pushButtonMotorInitialize->isEnabled())
     {
 
         //#if defined (SMI_SUPPORT) && (WIN32)
@@ -304,7 +303,7 @@ void ProjectorWidgetPage::onPushButtonMotorInitializeClicked()
 #endif
         */
         //emit motorInitialized(true);
-        ui->pushButtonMotorInitialize->setEnabled(false);
+		this->ui->pushButtonMotorInitialize->setEnabled(false);
     }
     else
     {
