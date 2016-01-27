@@ -9,6 +9,7 @@ ProjectorWidgetPage::ProjectorWidgetPage(QWidget *parent) :
 {
     ui->setupUi(this);
     palp = new ALPProjector();
+	motor = new SmartMotor();
 }
 
 ProjectorWidgetPage::~ProjectorWidgetPage()
@@ -157,38 +158,61 @@ void ProjectorWidgetPage::onSpinboxProjectorNSlicesChanged(int nSlices){
 }
 
 //Motor buttons
+/**
+* @brief VolvuxMainWindow::onPushButtonMotorInitializeClicked
+*/
+void ProjectorWidgetPage::onPushButtonMotorInitializeClicked()
+{
+	if (this->ui->pushButtonMotorInitialize->isEnabled())
+	{
+		#if defined (SMI_SUPPORT) && (WIN32)
+		//Initilize motor
+		motor->initialize();
+		//Open port Com4
+		motor->openPort();
+		// Detect RS232
+		motor->detect232();
+		// Establish chain
+		motor->addressChain();
+		#endif
+		//emit motorInitialized(true);
+		this->ui->pushButtonMotorInitialize->setEnabled(false);
+		this->ui->pushButtonMotorStart->setEnabled(true);
+	}
+	else
+	{
+		qDebug("already enabled");
+	}
+}
+
 //Start motor SLOT
-void ProjectorWidgetPage::onPushButtonMotorStartClicked(bool value)
+void ProjectorWidgetPage::onPushButtonMotorStartClicked()
 {
 	this->ui->pushButtonMotorStart->setEnabled(false);
-	/*
-#if defined (SMI_SUPPORT) && (WIN32)
-    cerr << "[MainWindow] Starting motor" << endl;
-    long Version = 0;
-    Version = CommInterface->EngineVersion;
+	#if defined (SMI_SUPPORT) && (WIN32)
+	motor->startMotor();
     if ( this->ui->spinBoxMotorSpeed->isEnabled() )
     {
         int speed = this->ui->spinBoxMotorSpeed->value();
-        this->startRotation(speed);
+        motor->startRotation(speed);
     }
     else
     {
+		//XXX BETTER WARNING IN CASE SPEED IS TOO HIGH
         QMessageBox::warning(this,"!!! WARNING !!!","This speed is not safe for the system");
     }
-#endif */
+	#endif
 	this->ui->pushButtonMotorStop->setEnabled(true);
 }
 
 //Stop motor SLOT
-void ProjectorWidgetPage::onPushButtonMotorStopClicked(bool value)
+void ProjectorWidgetPage::onPushButtonMotorStopClicked()
 {
 	this->ui->pushButtonMotorStart->setEnabled(true);
-    /*
-#if defined (SMI_SUPPORT) && (WIN32)
-    cerr << "[MainWindow] Stopping motor" << endl;
-    this->startRotation(0);
-#endif
-    */
+	#if defined (SMI_SUPPORT) && (WIN32)
+		cerr << "[MainWindow] Stopping motor" << endl;
+		motor	->startRotation(0);
+	#endif
 	this->ui->pushButtonMotorStop->setEnabled(false);
 }
 
@@ -211,104 +235,6 @@ void ProjectorWidgetPage::onSpinboxFlickerRateChanged(double flickerRate)
 		this->ui->spinBoxProjectorMicrosecondsPerFrame->setDisabled(true);
     }
     updateMotorRate(nSlices,tFrameMicroSeconds);
-}
-
-
-
-/**
- * @brief VolvuxMainWindow::onPushButtonMotorInitializeClicked
- */
-void ProjectorWidgetPage::onPushButtonMotorInitializeClicked()
-{
-	if (this->ui->pushButtonMotorInitialize->isEnabled())
-    {
-
-        //#if defined (SMI_SUPPORT) && (WIN32)
-        //CoInitialize(NULL);
-        /*
-    if(!AfxOleInit())
-    {
-        throw std::runtime_error("OLE initialization failed.  Make sure that the OLE libraries are the correct version.");
-    }
-    AfxEnableControlContainer();*/
-        /*
-        HRESULT hr = CommInterface.CreateInstance(__uuidof(INTEGMOTORINTERFACELib::SMIHost));
-        if(FAILED(hr))
-        {
-            QMessageBox::warning(this,"Error","Cannot create an instance of \"SMIHost\" class!");
-            return;
-        }
-
-        cerr << "[MainWindow] Starting motor" << endl;
-        long portResult=-1;
-        try
-        {
-            CommInterface->BaudRate = 9600;
-            portResult = CommInterface->OpenPort("Com4");
-        }
-        catch (_com_error e)
-        {
-            throw std::exception("Error opening COM4 port");
-        }
-        // Detect RS232
-        cerr << "[Smart Motor] Detecting RS232...";
-        UINT x= 10;//GetDlgItemInt(IDC_MAXADDRESS);
-        long MaxAddress=10;
-        long flags=0;
-        long result = CommInterface->DetectRS232(MaxAddress,flags);
-        switch(result)
-        {
-        case CER_SOMEADDRESSED:
-            cerr << "Some Motors are not addressed!"<<" IntegMotorInterface Error!"<< endl;
-            break;
-
-        case CER_BIGADDRESS:
-            cerr << "Some Motors have big addresses!" <<" IntegMotorInterface Error!" << endl;
-            break;
-
-        case CER_DUPLICATEADDR:
-            cerr << "Some Motors have duplicate addresses!"<<" IntegMotorInterface Error!"<< endl;
-            break;
-
-        case CER_NOTADDRESSED:
-            cerr << "Motors are not addressed!"<<" IntegMotorInterface Error!"<< endl;
-            break;
-
-        case CER_COMMERROR:
-            cerr << "Communication Error!"<<" IntegMotorInterface Error!"<< endl;
-            break;
-
-        case CER_NOMOTOR:
-            cerr << "No Motor Found!"<<" IntegMotorInterface Error!" << endl;
-            break;
-        default:
-            cerr << CommInterface->NoOfMotors << endl;
-            //cerr << CommInterface->DefaultMotor = long(1);//GetDlgItemInt(IDC_CURRENTMOTOR);
-        }
-
-        // Establish chain
-        cerr << "[Smart Motor] Addressing motor chain...";
-        try
-        {
-            // Establish chain
-            CommInterface->AddressMotorChain();
-            CommInterface->DefaultMotor = 1;
-        }
-        catch (_com_error e )
-        {
-            //AfxMessageBox(e.Description());
-            throw std::runtime_error(BSTR2STR(e.Description()));
-        }
-        cerr << "DONE" << endl;
-#endif
-        */
-        //emit motorInitialized(true);
-		this->ui->pushButtonMotorInitialize->setEnabled(false);
-    }
-    else
-    {
-        qDebug("already enabled");
-    }
 }
 
 /**

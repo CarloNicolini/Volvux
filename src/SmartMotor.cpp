@@ -49,6 +49,32 @@ SmartMotor::~SmartMotor()
    this->closePort();
 }
 
+void SmartMotor::initialize(){
+	CoInitialize(NULL);
+	/*
+	if(!AfxOleInit())
+	{
+	throw std::runtime_error("OLE initialization failed.  Make sure that the OLE libraries are the correct version.");
+	}
+	AfxEnableControlContainer();
+	*/
+	HRESULT hr = CommInterface.CreateInstance(__uuidof(INTEGMOTORINTERFACELib::SMIHost));
+	if (FAILED(hr))
+	{
+		cerr << "Error:" "Cannot create an instance of \"SMIHost\" class!" << endl;
+		return;
+	}
+	cerr << "[MainWindow] Starting motor" << endl;
+	// Set baud rate
+	CommInterface->BaudRate = 9600;
+}
+
+void SmartMotor::startMotor(){
+	cerr << "[MainWindow] Starting motor" << endl;
+	long Version = 0;
+	Version = CommInterface->EngineVersion;
+}
+
 /**
  * @brief SmartMotor::init
  */
@@ -118,8 +144,9 @@ void SmartMotor::openPort()
    {  CommInterface->OpenPort("Com4");
    }
    catch (_com_error e)
-   {  AfxMessageBox(e.Description());
-      throw std::runtime_error(BSTR2STR(e.Description()));
+   {  //AfxMessageBox(e.Description());
+	   throw std::exception("Error opening COM4 port");
+      //throw std::runtime_error(BSTR2STR(e.Description()));
    }
    cerr << "DONE!" << endl;
 }

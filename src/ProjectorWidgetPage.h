@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include "ALPProjector.h"
 #include "CalibrationWidgetPage.h"
+#include "SmartMotor.h"
 
 namespace Ui {
 class ProjectorWidgetPage;
@@ -23,6 +24,7 @@ public:
     //ALP Projector
     ALPProjector *palp;
     ALPProjector* getALP();
+	SmartMotor *motor;
 
 private:
     void updateMotorRate(int nSlices, double tFrameMicroSeconds);
@@ -36,8 +38,8 @@ public slots:
     void onSpinboxProjectorLEDCurrentChanged(int current);
     void onSpinboxProjectorLEDPercentageChanged(double percentage);
     //Motor control buttons
-    void onPushButtonMotorStartClicked(bool value);
-    void onPushButtonMotorStopClicked(bool value);
+    void onPushButtonMotorStartClicked();
+    void onPushButtonMotorStopClicked();
     void onPushButtonMotorInitializeClicked();
     //Motor settings
     void onSpinboxFlickerRateChanged(double flickerRate);

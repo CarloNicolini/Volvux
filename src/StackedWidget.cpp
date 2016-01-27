@@ -81,6 +81,12 @@ StackedWidget::StackedWidget(QWidget *parent) :
     QObject::connect(projectorWidgetpage->ui->spinBoxProjectorLEDcurrent,SIGNAL(valueChanged(int)),projectorWidgetpage,SLOT(onSpinboxProjectorLEDCurrentChanged(int)));
     QObject::connect(projectorWidgetpage->ui->doubleSpinBoxProjectorLEDpercentage,SIGNAL(valueChanged(double)),projectorWidgetpage,SLOT(onSpinboxProjectorLEDPercentageChanged(double)));
 
+	//Motor control buttons
+	//Initialize
+	QObject::connect(projectorWidgetpage->ui->pushButtonMotorInitialize, SIGNAL(clicked()), projectorWidgetpage, SLOT(onPushButtonMotorInitializeClicked()));
+	QObject::connect(projectorWidgetpage->ui->pushButtonMotorStart, SIGNAL(clicked()), projectorWidgetpage, SLOT(onPushButtonMotorStartClicked()));
+	QObject::connect(projectorWidgetpage->ui->pushButtonMotorStop, SIGNAL(clicked()), projectorWidgetpage, SLOT(onPushButtonMotorStopClicked()));
+
     //Calibration Widget
     //Insert and remove points
     QObject::connect(calibrationWidgetpage->ui->volvuxCalibrationWidget,SIGNAL(lastPointPressed(QPoint)),calibrationWidgetpage,SLOT(append2DPoint(QPoint)));

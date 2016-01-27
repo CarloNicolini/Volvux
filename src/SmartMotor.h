@@ -27,19 +27,20 @@
 #ifndef _SMART_MOTOR_H_
 #define _SMART_MOTOR_H_
 
-//#if !defined(AFX_USEENGINE_H__7FD37733_0C30_4AD7_ACA1_13FA5962DC2F__INCLUDED_)
-//#define AFX_USEENGINE_H__7FD37733_0C30_4AD7_ACA1_13FA5962DC2F__INCLUDED_
+#if !defined(AFX_USEENGINE_H__7FD37733_0C30_4AD7_ACA1_13FA5962DC2F__INCLUDED_)
+#define AFX_USEENGINE_H__7FD37733_0C30_4AD7_ACA1_13FA5962DC2F__INCLUDED_
+#endif
 
 /*
 #ifndef __AFXWIN_H__
 #error include 'stdafx.h' before including this file for PCH
 #endif
 */
-#include <afx.h>
-#include "SMIDefs.h"
+
+//#include <afx.h>
 #include "stdafx.h"
+#include "SMIDefs.h"
 #include <comdef.h>
-//Problem with tlb import: http://www.codeguru.com/cpp/com-tech/activex/tutorials/article.php/c5567/Step-by-Step-COM-Tutorial.htm
 #import "..\\libs\\drivers\\SMI\\IntegMotorInterface.tlb" rename_namespace("INTEGMOTORINTERFACELib")
 
  
@@ -63,6 +64,9 @@ public:
     SmartMotor();
 	~SmartMotor();
 	void init();
+	//NEW
+	void initialize();
+	void startMotor();
 
 	void openPort();
 	void addressChain();
