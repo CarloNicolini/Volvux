@@ -42,18 +42,6 @@
 
 #include <sys/stat.h>
 
-#ifndef Q_MOC_RUN
-#include <boost/lexical_cast.hpp>
-#include <boost/algorithm/string/trim.hpp>
-#include <boost/math/special_functions.hpp>
-#endif
-
-/*
-#include <boost/lexical_cast.hpp>
-#include <boost/algorithm/string/trim.hpp>
-#include <boost/math/special_functions.hpp> */
-//#include <boost/filesystem.hpp>
-
 #define STATIC_STRINGIFY(A)  #A
 using namespace std;
 /**
@@ -158,9 +146,13 @@ inline void tokenizeString(const string& str, vector<string>& tokens, const stri
 * \param str String to cast
 * \return lexically casted type
 **/
+#include <sstream>
 template <class T> T str2num( const std::string& s )
 {  
-    return boost::lexical_cast<T>(s);
+	sstring ss(s);
+	T out;
+	ss >> out;
+	return out;
 }
 
 /**
@@ -218,6 +210,7 @@ template <> inline double  str2num<double>( const std::string& s )
 * \param delimiter String delimiter
 * \return lexically casted vector
 **/
+/*
 template <class T> vector<T> str2num( const std::string& ss, const std::string &delimiter )
 {
     string s=ss;
@@ -228,7 +221,7 @@ template <class T> vector<T> str2num( const std::string& ss, const std::string &
     std::transform(tokenized.begin(),tokenized.end(), ret.begin(), boost::lexical_cast<T,string> );
     return ret;
 }
-
+*/
 
 
 /**
@@ -288,13 +281,14 @@ template <class T> string stringify(const T &t)
 * \param t The vector to cast to vector of strings
 * \return the output vector of strings string
 **/
+/*
 template <class T> vector<string> num2str( const std::vector< T >& s )
 {  
     vector<string> ret(s.size());
     std::transform(s.begin(), s.end(), ret.begin(), boost::lexical_cast<string,T> );
     return ret;
-
 }
+*/
 
 /**
 * \ingroup Util

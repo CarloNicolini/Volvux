@@ -28,18 +28,6 @@
 
 #include <QOpenGLFunctions>
 
-#ifdef __linux__
-#include <GL/glut.h>
-#endif
-
-#if defined _WIN32 || defined WIN32
-#include "glut.h"
-#endif
-
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#endif
-
 #ifndef GL_MULTISAMPLE
 #define GL_MULTISAMPLE 0x809D
 #endif

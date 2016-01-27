@@ -182,7 +182,7 @@ void VolvuxExpWidget::paintGL()
     glLoadIdentity();
     glTranslated(0,0,eyeZ);
     glColor3f(1.0f,1.0f,1.0f);
-    glutWireCube(100);
+    //glutWireCube(100);
     drawSideParabola(xRange,displayedCurvature/xRange);
     glPopMatrix();
 }

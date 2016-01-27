@@ -71,9 +71,8 @@ Eigen::Vector3d toRadians( const Eigen::Vector3d &x )
 * \return a uniform number in [0,1].
 **/
 double unifRand()
-{  boost::uniform_real<> c(0.0,1.0);
-   boost::variate_generator<boost::mt19937&, boost::uniform_real<> > u(rng, c);             // glues randomness with mapping
-   return u();
+{  
+	return double(std::rand()) / RAND_MAX;
 }
 /**
 * \ingroup Mathcommon
@@ -85,11 +84,7 @@ double unifRand()
 **/
 double unifRand(double a, double b)
 {
-    if (a==b)
-        return a;
-   boost::uniform_real<> c(a,b);
-   boost::variate_generator<boost::mt19937&, boost::uniform_real<> > u(rng, c);             // glues randomness with mapping
-   return u();
+	return unifRand()*(b - a) + a;
 }
 
 /**
@@ -100,9 +95,8 @@ double unifRand(double a, double b)
 *
 **/
 double unifRandExc(double range)
-{  boost::uniform_real<> c;
-   boost::variate_generator<boost::mt19937&, boost::uniform_real<> > u(rng, c);             // glues randomness with mapping
-   return u()*range;
+{  
+	return unifRand()*range;
 }
 
 /**
@@ -114,56 +108,11 @@ double unifRandExc(double range)
 *
 **/
 int unifRand(int a, int b)
-{  boost::uniform_int<> c(a,b);
-   boost::variate_generator<boost::mt19937&, boost::uniform_int<> > u(rng, c);             // glues randomness with mapping
-   return u();
+{  
+	return unifRand()*(b - a) + a;
 }
 
-/**
-* \ingroup Mathcommon
-* \brief Generate a random integer between 1 and a given value.
-* \param n the largest value
-* \return a uniform random value in [1,...,n]
-**/
-long unifRand(long n)
-{  boost::uniform_int<> c(1,n);
-   boost::variate_generator<boost::mt19937&, boost::uniform_int<> > u(rng, c);             // glues randomness with mapping
-   return (long) u();
-}
 
-/**
-* \ingroup Mathcommon
-* \brief  Generate a random integer 1 or -1.
-* \return a uniform random value in \f$\{ 1, \ldots ,n \} \f$
-**/
-int unifPosOrNeg()
-{  int res=0;
-   (unifRand(1)== 0) ? res=1 : res= -1;
-   return res;
-}
-
-/**
-* \ingroup Mathcommon
-* \brief Return a random number picked from the standard (0 mean, 1 variance ) gaussian distribution via Box-Muller transform
-* \return A random number sampled from normal distribution
-**/
-double gaussRand()
-{  boost::variate_generator<boost::mt19937, boost::normal_distribution<> >
-   generator(boost::mt19937(std::time(0)+rand()),
-             boost::normal_distribution<>());
-
-   double r = generator();
-   return r;
-}
-
-/**
-* \ingroup Mathcommon
-* \brief  Return a random number picked from the gaussian distribution with specified mean and standard deviation
-* \return A random number sampled from gaussian distribution with given mean and standard deviation
-**/
-double gaussRand(double mean, double stddev)
-{  return gaussRand()*stddev + mean;
-}
 
 /**
 * \ingroup Mathcommon
@@ -172,7 +121,6 @@ double gaussRand(double mean, double stddev)
 void randomizeStart()
 {  std::srand(time(0));
    cerr << "Seed set to " << static_cast<unsigned long >(rand()) << endl;
-   rng.seed(static_cast<unsigned long >(rand()));
 }
 
 /** \ingroup Mathcommon

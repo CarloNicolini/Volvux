@@ -132,8 +132,6 @@ void VolvuxWidget::initializeGL()
     cerr << "[VolvuxWidget] initializing GL context" << endl;
     int argc = 1;
     char *argv[] = {"1","2"};
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_INDEX ); // Set up a basic display buffer (only single buffered for now)
 
     qglClearColor(this->currentGLColor);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

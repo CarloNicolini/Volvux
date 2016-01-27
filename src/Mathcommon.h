@@ -41,12 +41,6 @@
 #include <typeinfo>
 
 // For thread-safe random number generation
-#ifndef Q_MOC_RUN
-#include <boost/random.hpp>
-#endif
-
-//#include <boost/random.hpp>
-
 #ifndef M_PI
 #define M_PI 3.141592653589793238462643
 #endif
@@ -64,7 +58,6 @@
 using namespace std;
 using namespace Eigen;
 
-static boost::mt19937 rng ;  // a core engine class, set the seed to be somewhat random
 /**
 *
 * \defgroup Mathcommon
@@ -86,9 +79,7 @@ namespace mathcommon
     int   unifRand(int a, int b);
     double unifRandExc(double);
     long   unifRand(long n);
-    int unifPosOrNeg();
-    double gaussRand();
-    double gaussRand(double , double );
+    
     void randomizeStart();
     double mod(double x, double y);
     bool isVisible(const Vector3d &v);

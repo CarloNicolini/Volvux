@@ -39,12 +39,14 @@
  */
 void glError(const char *file, int line)
 {
+	/*
     GLenum glErr;
     int retCode = 0;
 
     glErr = glGetError();
     while (glErr != GL_NO_ERROR)
-    {  const GLubyte* sError = gluErrorString(glErr);
+	{
+		const GLubyte* sError; // = gluErrorString(glErr); XXX fixare
 
         if (sError)
             cerr << "GL Error #" << glErr << "(" << gluErrorString(glErr) << ") " << " in File " << file << " at line: " << line << endl;
@@ -54,4 +56,5 @@ void glError(const char *file, int line)
         retCode = 1;
         glErr = glGetError();
     }
+	*/
 }

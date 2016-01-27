@@ -34,7 +34,7 @@
 #include <string>
 
 #ifdef ALP_SUPPORT
-#include <windows.h>
+//#include <windows.h>
 #include "alp.h"
 #endif
 

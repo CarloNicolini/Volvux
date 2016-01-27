@@ -10,7 +10,7 @@ set(EXECUTABLE_OUTPUT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/" CACHE PATH "Sing
 ####################### COMPILE OPTIONS  ##################################
 option(QT5_SUPPORT "Compile the executable with Qt5 libraries" ON)
 #option(COMPILE_GLFW "Compile the GLFW library for OpenGL context creation" OFF)
-option(COMPILE_FREEGLUT "Compile the FreeGLUT library from souce" OFF)
+#option(COMPILE_FREEGLUT "Compile the FreeGLUT library from souce" OFF)
 #option(COMPILE_GLEW "Compile the glew library from source" OFF)
 
 ####################### FIND PACKAGES AND LIBRARIES ####################
@@ -42,27 +42,27 @@ endif()
 # endif(NOT COMPILE_GLEW)
 
 # 3. Try to find FreeGLUT or GLUT
-if (NOT COMPILE_FREEGLUT)
-    # On Apple use the system provided GLUT
-    if(APPLE)
-        include_directories( /System/Library/Frameworks )
-        find_package(GLUT REQUIRED)
-        find_library(GLUT_LIBRARY GLUT)
-    endif(APPLE)
-    # On Linux look for Freeglut
-    if (UNIX)
-        find_package(FreeGLUT REQUIRED)
-    set(GLUT_LIBRARIES "glut;${GLUT_LIBRARIES}")
-    endif(UNIX)
-else()
-    # Include the FreeGLUT project for the necessary FreeGLUT implementation
-    set(FREEGLUT_SRC_DIR "${PROJECT_SOURCE_DIR}/libs/FreeGLUT/freeglut/freeglut")
-    # Override demos building http://stackoverflow.com/questions/3766740/overriding-a-default-option-value-in-cmake-from-a-parent-cmakelists-txt
-    set(FREEGLUT_BUILD_DEMOS OFF CACHE BOOL "Disable freeglut demos building")
-    add_subdirectory(${FREEGLUT_SRC_DIR})
-    include_directories(${FREEGLUT_SRC_DIR}/include/GL)
-    set(GLUT_LIBRARIES "freeglut;${GLUT_LIBRARIES}")
-endif()
+# if (NOT COMPILE_FREEGLUT)
+    # # On Apple use the system provided GLUT
+    # if(APPLE)
+        # include_directories( /System/Library/Frameworks )
+        # find_package(GLUT REQUIRED)
+        # find_library(GLUT_LIBRARY GLUT)
+    # endif(APPLE)
+    # # On Linux look for Freeglut
+    # if (UNIX)
+        # find_package(FreeGLUT REQUIRED)
+    # set(GLUT_LIBRARIES "glut;${GLUT_LIBRARIES}")
+    # endif(UNIX)
+# else()
+    # # Include the FreeGLUT project for the necessary FreeGLUT implementation
+    # set(FREEGLUT_SRC_DIR "${PROJECT_SOURCE_DIR}/libs/FreeGLUT/freeglut/freeglut")
+    # # Override demos building http://stackoverflow.com/questions/3766740/overriding-a-default-option-value-in-cmake-from-a-parent-cmakelists-txt
+    # set(FREEGLUT_BUILD_DEMOS OFF CACHE BOOL "Disable freeglut demos building")
+    # add_subdirectory(${FREEGLUT_SRC_DIR})
+    # include_directories(${FREEGLUT_SRC_DIR}/include/GL)
+    # set(GLUT_LIBRARIES "freeglut;${GLUT_LIBRARIES}")
+# endif()
 
 # 4. Try to find GLFW
 #if(NOT COMPILE_GLFW)
@@ -83,11 +83,6 @@ endif()
 #    set(GLFW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/glfw/include")
 #    include_directories(${GLFW_INCLUDE_DIR})
 #endif(NOT COMPILE_GLFW)
-
-# 6. Try to find Boost
-find_package(Boost)# COMPONENTS ${BOOST_LIBS} REQUIRED)
-include_directories(${Boost_INCLUDE_DIR})
-#add_definitions("DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED")
 
 # 7. Include Eigen
 include_directories(libs/eigen)
