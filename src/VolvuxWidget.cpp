@@ -90,9 +90,10 @@ VolvuxWidget::VolvuxWidget(QWidget *parent) :
 VolvuxWidget::~VolvuxWidget()
 {
     cerr << "[VolvuxWidget] Destructor" << endl;
-    //if (fbo)
-    //  delete fbo; // no worry it's a QPointer
-
+    if (fbo)
+      delete fbo; // no worry it's a QPointer
+    if (obj)
+        delete obj;
     if (volume2)
         delete volume2;
 }
