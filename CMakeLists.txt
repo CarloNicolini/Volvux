@@ -9,9 +9,6 @@ set(EXECUTABLE_OUTPUT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/" CACHE PATH "Sing
 
 ####################### COMPILE OPTIONS  ##################################
 option(QT5_SUPPORT "Compile the executable with Qt5 libraries" ON)
-#option(COMPILE_GLFW "Compile the GLFW library for OpenGL context creation" OFF)
-#option(COMPILE_FREEGLUT "Compile the FreeGLUT library from souce" OFF)
-#option(COMPILE_GLEW "Compile the glew library from source" OFF)
 
 ####################### FIND PACKAGES AND LIBRARIES ####################
 set(CMAKE_CXX_COMPILER_FLAGS "${CMAKE_CXX_COMPILER_FLAGS} -Wall")
@@ -25,83 +22,21 @@ if (NOT OPENGL_FOUND)
     message(FATAL_ERROR "OpenGL not found in system. Please install an OpenGL driver on the system.")
 endif()
 
-# 2. Try to find GLEW
-# if(NOT COMPILE_GLEW)
-    # find_package(GLEW) #Looks for system-wise installed GLFW
-    # include_directories(${GLEW_INCLUDE_DIR})
-    # if (NOT GLEW_FOUND)
-        # message(FATAL_ERROR "GLEW not found in system. Please select compile GLEW from scratch.Set COMPILE_GLEW=True option.")
-    # endif()
-# else() # compile glew 1.10 from cmake project source
-     # add_subdirectory("${PROJECT_SOURCE_DIR}/libs/glew-1.10.0-src/")
-     # set(GLEW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/glew-1.10.0-src/include")
-     # include_directories(${GLEW_INCLUDE_DIR})
-    # if (WIN32)
-        # set(GLEW_LIBRARY glew32)
-    # endif(WIN32)
-# endif(NOT COMPILE_GLEW)
-
-# 3. Try to find FreeGLUT or GLUT
-# if (NOT COMPILE_FREEGLUT)
-    # # On Apple use the system provided GLUT
-    # if(APPLE)
-        # include_directories( /System/Library/Frameworks )
-        # find_package(GLUT REQUIRED)
-        # find_library(GLUT_LIBRARY GLUT)
-    # endif(APPLE)
-    # # On Linux look for Freeglut
-    # if (UNIX)
-        # find_package(FreeGLUT REQUIRED)
-    # set(GLUT_LIBRARIES "glut;${GLUT_LIBRARIES}")
-    # endif(UNIX)
-# else()
-    # # Include the FreeGLUT project for the necessary FreeGLUT implementation
-    # set(FREEGLUT_SRC_DIR "${PROJECT_SOURCE_DIR}/libs/FreeGLUT/freeglut/freeglut")
-    # # Override demos building http://stackoverflow.com/questions/3766740/overriding-a-default-option-value-in-cmake-from-a-parent-cmakelists-txt
-    # set(FREEGLUT_BUILD_DEMOS OFF CACHE BOOL "Disable freeglut demos building")
-    # add_subdirectory(${FREEGLUT_SRC_DIR})
-    # include_directories(${FREEGLUT_SRC_DIR}/include/GL)
-    # set(GLUT_LIBRARIES "freeglut;${GLUT_LIBRARIES}")
-# endif()
-
-# 4. Try to find GLFW
-#if(NOT COMPILE_GLFW)
-#    find_package(GLFW) #Looks for system-wise installed GLFW
-#    include_directories(${GLFW_INCLUDE_DIR})
-#    if (NOT GLFW_FOUND)
-#        message(FATAL_ERROR "GLFW not found in system. Please select compile GLFW from scratch.Set COMPILE_GLFW=True option.")
-#    endif()
-#else()
-#    # Override demos building http://stackoverflow.com/questions/3766740/overriding-a-default-option-value-in-cmake-from-a-parent-cmakelists-txt
-#    set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Disable glfw examples building")
-#    set(GLFW_BUILD_TESTS OFF CACHE BOOL "Disable glfw tests building")
-#    set(GLFW_BUILD_DOCS OFF CACHE BOOL "Disable glfw documentation building")
-#    set(GLFW_INSTALL OFF CACHE BOOL "Disable glfw installation")
-#    set(GLFW_DOCUMENT_INTERNALS OFF CACHE BOOL "Disable glfw internal documentation")
-#    # Now add glfw
-#    add_subdirectory("${PROJECT_SOURCE_DIR}/libs/glfw")
-#    set(GLFW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/glfw/include")
-#    include_directories(${GLFW_INCLUDE_DIR})
-#endif(NOT COMPILE_GLFW)
-
-# 7. Include Eigen
+# 2. Include Eigen
 include_directories(libs/eigen)
 
-# 8. Include the Smart Motor interfaces and ALP support *ONLY* on Windows
+# 3. Include the Smart Motor interfaces and ALP support *ONLY* on Windows
 if(WIN32)
     MESSAGE(STATUS "MSVC_VERSION=${MSVC_VERSION}")
     # This set the following defines when compiling on windows
         if(MSVC)
-        add_definitions("-D_WIN32 -DNOMINMAX /EHsc /wd4127 /wd4129 /wd4505 /wd4714 /wd4800 /wd4181 /wd4244 /wd4996 /wd4250 -D_WIN32_WINNT=0x0501")
-		add_definitions("-DUNICODE")
-		add_definitions("-D_UNICODE")
+        add_definitions("-D_WIN32 -DNOMINMAX /EHsc /wd4127 /wd4129 /wd4505 /wd4714 /wd4800 /wd4181 /wd4244 /wd4996 /wd4250 -D_WIN32_WINNT=0x0501 -DUNICODE -D_UNICODE")
         endif(MSVC)
 
-
-	IF(CMAKE_BUILD_TYPE MATCHES DEBUG)
-		message(STATUS "Compiling in Debug mode")
-		add_definitions("/Wall")
-	ENDIF(CMAKE_BUILD_TYPE MATCHES DEBUG)
+    IF(CMAKE_BUILD_TYPE MATCHES DEBUG)
+        message(STATUS "Compiling in Debug mode")
+        add_definitions("/Wall")
+    ENDIF(CMAKE_BUILD_TYPE MATCHES DEBUG)
 
     if( NOT SMI_SUPPORT)
         if(MSVC)
@@ -123,46 +58,46 @@ if(WIN32)
 
     # Smart Motors Support
     if(SMI_SUPPORT)
-		add_definitions("-DSMI_SUPPORT")
+        add_definitions("-DSMI_SUPPORT")
         find_package(SmartMotor)
     endif(SMI_SUPPORT)
 endif(WIN32)
 
 
-## 9. Qt5 support
-if (QT5_SUPPORT)
-    if (WIN32)
-        set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};C:/Qt/5.5/msvc2012/lib/cmake/")
-    endif()
-    if(NOT CMAKE_PREFIX_PATH)
-        message(FATAL_ERROR "Must specify where Qt5 modules are to be found. Use cmake -DCMAKE_PREFIX_PATH=/path/to/cmakeqt5modules")
-    endif()
-    # Find includes in corresponding build directories
-    set(CMAKE_INCLUDE_CURRENT_DIR ON)
-    # Find the QtWidgets library
-    find_package(Qt5Widgets)
-    find_package(Qt5OpenGL)
-    find_package(Qt5Gui)
-    # Add the include directories for the Qt 5 Widgets module to
-    # the compile lines.
-    include_directories(${Qt5Gui_INCLUDE_DIRS})
-    include_directories(${Qt5Widgets_INCLUDE_DIRS})
-    # Use the compile definitions defined in the Qt 5 Widgets module
-    add_definitions(${Qt5Widgets_DEFINITIONS})
-    add_definitions(${Qt5Gui_DEFINITIONS})
-    # Add compiler flags for building executables (-fPIE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
-    # Enable the C++11 standard
-    #set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} --std=c++11)
-    message(STATUS "Found Qt5 include directories: ${Qt5Widgets_INCLUDE_DIRS}")
-    message(STATUS "Found Qt5 libs directories: ${Qt5Widgets_LIBRARIES}")
-endif(QT5_SUPPORT)
+## 4. Use Qt5
 
-# 9. Disable stupid warnings on GCC
+if (WIN32)
+    set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};C:/Qt/5.5/msvc2012/lib/cmake/")
+endif()
+if(NOT CMAKE_PREFIX_PATH)
+    message(FATAL_ERROR "Must specify where Qt5 modules are to be found. Use cmake -DCMAKE_PREFIX_PATH=/path/to/cmakeqt5modules")
+endif()
+# Find includes in corresponding build directories
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+# Find the QtWidgets library
+find_package(Qt5Widgets)
+find_package(Qt5OpenGL)
+find_package(Qt5Gui)
+# Add the include directories for the Qt 5 Widgets module to
+# the compile lines.
+include_directories(${Qt5Gui_INCLUDE_DIRS})
+include_directories(${Qt5Widgets_INCLUDE_DIRS})
+# Use the compile definitions defined in the Qt 5 Widgets module
+add_definitions(${Qt5Widgets_DEFINITIONS})
+add_definitions(${Qt5Gui_DEFINITIONS})
+# Add compiler flags for building executables (-fPIE)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+# Enable the C++11 standard
+#set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} --std=c++11)
+message(STATUS "Found Qt5 include directories: ${Qt5Widgets_INCLUDE_DIRS}")
+message(STATUS "Found Qt5 libs directories: ${Qt5Widgets_LIBRARIES}")
+
+
+# 5. Disable stupid warnings on GCC
 if (UNIX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-write-strings")
 endif()
 
-# 9. Finally add the project directory
+# 6. Finally add the project directory
 add_subdirectory(src)
 include_directories(src)

@@ -39,7 +39,7 @@
 #include <iomanip>
 #include <limits>
 #include <iostream>
-
+#include <stdexcept>
 #include <sys/stat.h>
 
 #define STATIC_STRINGIFY(A)  #A
@@ -77,13 +77,13 @@ inline std::ifstream& goToLine(std::ifstream& file, unsigned int num)
 **/
 inline bool fileExists(const string &file)
 {
-	string junkSubString("junk");
-	if (file.find(junkSubString) != string::npos)
-	{
-		return false; // if the substring "junk" is found then always return false
-	}
+    string junkSubString("junk");
+    if (file.find(junkSubString) != string::npos)
+    {
+        return false; // if the substring "junk" is found then always return false
+    }
     struct stat buf;
-	int res = stat(file.c_str(), &buf);
+    int res = stat(file.c_str(), &buf);
     return (res == 0);
 }
 
@@ -95,7 +95,7 @@ inline bool fileExists(const string &file)
 inline std::string readFile(const std::string &file)
 {
     if (!fileExists(file))
-    throw std::runtime_error(file + std::string("doesn't exist"));
+        throw std::runtime_error(file + std::string("doesn't exist"));
 
     // Using this method
     // http://stackoverflow.com/questions/2602013/read-whole-ascii-file-into-c-stdstring
@@ -107,7 +107,7 @@ inline std::string readFile(const std::string &file)
     t.seekg(0, std::ios::beg);
 
     str.assign((std::istreambuf_iterator<char>(t)),
-                std::istreambuf_iterator<char>());
+               std::istreambuf_iterator<char>());
     return str;
 }
 
@@ -146,13 +146,12 @@ inline void tokenizeString(const string& str, vector<string>& tokens, const stri
 * \param str String to cast
 * \return lexically casted type
 **/
-#include <sstream>
 template <class T> T str2num( const std::string& s )
 {  
-	sstring ss(s);
-	T out;
-	ss >> out;
-	return out;
+    std::stringstream ss(s);
+    T out;
+    ss >> out;
+    return out;
 }
 
 /**
@@ -188,40 +187,6 @@ template <> inline double  str2num<double>( const std::string& s )
     }
     return r;
 }
-
-/**
-* \ingroup Util
-* Cast a string to a vector of numbers if the string contains a delimiter
-* \code
-* string x("923,12,43,214,12");
-* vector<int> y = str2num<int>(x,",");
-* for (int i=0; i<y.size(); i++ )
-* cout << y.at(i) << endl;
-* \endcode
-* Will print:
-* \code
-* 923
-* 12
-* 43
-* 214
-* 12
-* \endcode
-* \param s String to cast to vector
-* \param delimiter String delimiter
-* \return lexically casted vector
-**/
-/*
-template <class T> vector<T> str2num( const std::string& ss, const std::string &delimiter )
-{
-    string s=ss;
-    boost::algorithm::trim(s);
-    vector<string> tokenized;
-    tokenizeString(s,tokenized,delimiter);
-    vector<T> ret(tokenized.size());
-    std::transform(tokenized.begin(),tokenized.end(), ret.begin(), boost::lexical_cast<T,string> );
-    return ret;
-}
-*/
 
 
 /**

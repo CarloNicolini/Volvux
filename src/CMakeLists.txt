@@ -27,7 +27,6 @@ VRCamera.cpp)
 
 set(VOLVUXHELPER_SRCS ${VOLVUXHELPER_SRCS} ALPProjector.cpp)
 
-
 if(SMI_SUPPORT)
     set(VOLVUXHELPER_SRCS ${VOLVUXHELPER_SRCS} SmartMotor.cpp StdAfx.cpp)
 endif(SMI_SUPPORT)

@@ -7,7 +7,9 @@
 #include <QMessageBox>
 #include "ALPProjector.h"
 #include "CalibrationWidgetPage.h"
+#if defined (SMI_SUPPORT) && (WIN32)
 #include "SmartMotor.h"
+#endif
 
 namespace Ui {
 class ProjectorWidgetPage;
@@ -24,7 +26,10 @@ public:
     //ALP Projector
     ALPProjector *palp;
     ALPProjector* getALP();
-	SmartMotor *motor;
+    #if defined (SMI_SUPPORT) && (WIN32)
+    SmartMotor *motor;
+    #endif
+
 
 private:
     void updateMotorRate(int nSlices, double tFrameMicroSeconds);

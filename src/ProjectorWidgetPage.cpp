@@ -1,7 +1,9 @@
+#include <cmath>
+#include <limits>
+
 #include "ProjectorWidgetPage.h"
 #include "ui_ProjectorWidgetPage.h"
-#include "cmath"
-#include "limits"
+
 
 ProjectorWidgetPage::ProjectorWidgetPage(QWidget *parent) :
     QWidget(parent),
@@ -9,7 +11,9 @@ ProjectorWidgetPage::ProjectorWidgetPage(QWidget *parent) :
 {
     ui->setupUi(this);
     palp = new ALPProjector();
-	motor = new SmartMotor();
+    #ifdef SMI_SUPPORT
+    motor = new SmartMotor();
+    #endif
 }
 
 ProjectorWidgetPage::~ProjectorWidgetPage()
