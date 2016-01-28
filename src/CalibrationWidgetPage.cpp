@@ -12,6 +12,7 @@ CalibrationWidgetPage::CalibrationWidgetPage(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::CalibrationWidgetPage)
 {
+	CDLT = new CameraDirectLinearTransformation();
     ui->setupUi(this);
     //Set 3D points
     for (int i=0; i<9; ++i)
@@ -27,6 +28,7 @@ CalibrationWidgetPage::CalibrationWidgetPage(QWidget *parent) :
 
 CalibrationWidgetPage::~CalibrationWidgetPage()
 {
+	delete CDLT;
     delete ui;
 }
 
@@ -57,8 +59,8 @@ const std::vector<Vector3d> &CalibrationWidgetPage::getPoints2D() const
 //Compute Homography
 void CalibrationWidgetPage::computeHomography(const vector<Vector3d> &points)
 {
-    CDLT.init(points2D,points3D,Vector4i(0,0,PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT),1,1E6);
-    emit calibrationEmitted(CDLT);
+    CDLT->init(points2D,points3D,Vector4i(0,0,PROJECTOR_RESOLUTION_WIDTH,PROJECTOR_RESOLUTION_HEIGHT),1,1E6);
+    emit calibrationEmitted(*CDLT);
 }
 
 //Write 3D points
@@ -117,7 +119,7 @@ void CalibrationWidgetPage::append2DPoint(const QPoint &p)
 	if (points2D.size() == points3D.size())
 	{
 		this->computeHomography(points2D);
-		this->CDLT.info();
+		this->CDLT->info();
 	}
     /*
     points2D.push_back(Vector3d(p.x(),p.y(),1));

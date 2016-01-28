@@ -42,7 +42,7 @@ public:
 private:
     std::vector<Vector3d> points2D;
     stlalignedvector4d points3D;
-    CameraDirectLinearTransformation CDLT;
+    CameraDirectLinearTransformation *CDLT;
 
     void computeHomography(const vector<Vector3d> &points);
     void clearLayout(QLayout* layout, bool deleteWidgets);
