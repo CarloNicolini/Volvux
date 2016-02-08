@@ -26,9 +26,6 @@ public:
     //ALP Projector
     ALPProjector *palp;
     ALPProjector* getALP();
-    #if defined (SMI_SUPPORT) && (WIN32)
-    SmartMotor *motor;
-    #endif
 
 
 private:

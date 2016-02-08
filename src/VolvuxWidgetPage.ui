@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1173</width>
-    <height>786</height>
+    <height>877</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -38,6 +38,12 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>830</height>
+       </size>
+      </property>
       <property name="maximumSize">
        <size>
         <width>99999</width>
@@ -45,7 +51,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="tabScene">
        <attribute name="title">
@@ -54,7 +60,7 @@
        <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>60</x>
           <y>10</y>
           <width>269</width>
           <height>782</height>
@@ -300,8 +306,8 @@
        <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
-          <x>0</x>
-          <y>10</y>
+          <x>40</x>
+          <y>60</y>
           <width>313</width>
           <height>461</height>
          </rect>
