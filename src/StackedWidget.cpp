@@ -165,6 +165,7 @@ void StackedWidget::onNextButtonPressed()
     //Manage page settings
     switch(curIndex){
     case CALIBRATION_PAGE_INDEX:
+        this->resize(1353,876);
         //Set focus on VolvuxCalibrationWidget
         calibrationWidgetpage->ui->volvuxCalibrationWidget->setFocusPolicy(Qt::StrongFocus);
         //Set ALP pointer in Volvux Calibration Widget
@@ -180,6 +181,7 @@ void StackedWidget::onNextButtonPressed()
 
         break;
     case MAINWINDOW_PAGE_INDEX:
+        this->showMaximized();
         //Enable back button
         this->ui->pushButtonBack->setEnabled(true);
         //Show menu and status bar
@@ -205,6 +207,7 @@ void StackedWidget::onBackButtonPressed()
     //Manage page settings
     switch(curIndex) {
     case PROJECTORMOTOR_PAGE_INDEX:
+        this->resize(450,590);
         //Hide menu and status bar
         this->ui->menuBar->hide();
         this->ui->statusBar->hide();
@@ -212,6 +215,7 @@ void StackedWidget::onBackButtonPressed()
         this->ui->pushButtonBack->setEnabled(false);
         break;
     case CALIBRATION_PAGE_INDEX:
+        this->resize(1353,876);
         //Hide menu and status bar
         this->ui->menuBar->hide();
         this->ui->statusBar->hide();
@@ -232,13 +236,13 @@ void StackedWidget::onActionExitTriggered()
 
 //Projector and  Motor Action SLOT
 void StackedWidget::onActionProjectorMotorTriggered(){
-    projectorMotorSettings = new SettingsWindowWidget();
+    /*projectorMotorSettings = new SettingsWindowWidget();
     projectorMotorSettings->receiveWidget(projectorWidgetpage);
-    projectorMotorSettings->show();
-    /*this->ui->stackedWidget->setCurrentIndex(PROJECTORMOTOR_PAGE_INDEX);
+    projectorMotorSettings->show();*/
+    this->ui->stackedWidget->setCurrentIndex(PROJECTORMOTOR_PAGE_INDEX);
     this->ui->menuBar->hide();
     this->ui->pushButtonBack->setEnabled(false);
-    this->ui->pushButtonNext->setEnabled(true);*/
+    this->ui->pushButtonNext->setEnabled(true);
     //NOT WORKING
     //Initialize helper window
     //extraWindow = new ExtraWindow(this);

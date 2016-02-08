@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -22,9 +22,11 @@
      <height>281</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="3,0">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QWidget" name="SettingWidget" native="true"/>
+     <widget class="QStackedWidget" name="SettingsStackedWidget">
+      <widget class="QWidget" name="page"/>
+     </widget>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
