@@ -67,7 +67,6 @@ VolvuxWidget::VolvuxWidget(QWidget *parent) :
     // Create the timer for the widget
     QTimer *timer = new QTimer(this); timer->start(0);
     QObject::connect(timer,SIGNAL(timeout()),this,SLOT(repaint()));
-
     drawTextureCube=true;
     useCalibratedGLView=true;
     useOffscreenRendering=false;
@@ -168,8 +167,7 @@ void VolvuxWidget::initializeGL()
 
 	shader.addShaderFromSourceFile(QGLShader::Vertex, "C://workspace//Volvux//src//HelicoidPositionShader.vert");
 	shader.addShaderFromSourceFile(QGLShader::Fragment, "C://workspace//Volvux//src//Texture3DShader.frag");
-
-
+	
     if (!shader.link())
         qWarning() << "Shader Program Linker Error" << shader.log();
 

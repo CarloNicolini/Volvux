@@ -247,10 +247,15 @@ void ProjectorWidgetPage::onSpinboxFlickerRateChanged(double flickerRate)
 void ProjectorWidgetPage::projectDataFrames(unsigned char *data)
 {
 	palp->stop();
-	palp->setPicturesTimeus(125);
+	if (data == NULL)
+		return;
+	int microsec = 125;
+	if (this->ui->spinBoxProjectorMicrosecondsPerFrame->isEnabled())
+		microsec = this->ui->spinBoxProjectorMicrosecondsPerFrame->value();
+	else
+		QMessageBox::warning(this, "Timing error","Non correct timing for projector, check flicker rate");
+	palp->setPicturesTimeus(microsec);
 	palp->cleanAllSequences();
     palp->loadSequence(PROJECTOR_SLICES_NUMBER,data);
     palp->start();
 }
-
-

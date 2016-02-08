@@ -41,6 +41,7 @@ public slots:
     void onSpinboxProjectorNSlicesChanged(int nSlices);
     void onSpinboxProjectorLEDCurrentChanged(int current);
     void onSpinboxProjectorLEDPercentageChanged(double percentage);
+
     //Motor control buttons
     void onPushButtonMotorStartClicked();
     void onPushButtonMotorStopClicked();
@@ -48,10 +49,12 @@ public slots:
     //Motor settings
     void onSpinboxFlickerRateChanged(double flickerRate);
     void projectDataFrames(unsigned char *data);
-
-
+	
 signals:
     void enableNextButton(bool);
+
+private:
+	unsigned char *lastframe;
 };
 
 #endif // PROJECTORWIDGETPAGE_H

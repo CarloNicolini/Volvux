@@ -103,7 +103,8 @@ void CalibrationWidgetPage::append2DPoint(const QPoint &p)
 {
 	// XXX TO CHANGE WITH REAL POINTS
 	// CALIBRATION 22 JANUARY 2016
-	
+#define USEALREADYCALIBRATED
+#ifdef USEALREADYCALIBRATED
 	points2D.clear();
 	points2D.push_back(Vector3d(512, 374, 1));
 	points2D.push_back(Vector3d(438, 301, 1));
@@ -114,22 +115,14 @@ void CalibrationWidgetPage::append2DPoint(const QPoint &p)
 	points2D.push_back(Vector3d(621, 265, 1));
 	points2D.push_back(Vector3d(617, 485, 1));
 	points2D.push_back(Vector3d(403, 486, 1));
-	
-	//points2D.push_back(Vector3d(p.x(), p.y(), 1));
+#else
+	points2D.push_back(Vector3d(p.x(), p.y(), 1));
+#endif
 	if (points2D.size() == points3D.size())
 	{
 		this->computeHomography(points2D);
 		this->CDLT->info();
 	}
-    /*
-    points2D.push_back(Vector3d(p.x(),p.y(),1));
-    if (points2D.size() == points3D.size())
-    {
-
-        this->computeHomography(points2D);
-        this->CDLT.info();
-    }
-    */
 }
 
 /**

@@ -27,7 +27,9 @@ public slots:
     void onPushButtonRandomizeSpheresPressed();
     void onPushButtonGenerateFramesPressed();
 
-private:
+	// Projector actions
+	void onPushButtonStartProjectionPressed();
+	void onPushButtonStopProjectionPressed();
 };
 
 #endif // VOLVUXWIDGETPAGE_H

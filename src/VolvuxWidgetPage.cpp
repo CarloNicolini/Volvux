@@ -16,19 +16,22 @@ VolvuxWidgetPage::~VolvuxWidgetPage()
 //SLOTS
 //Scene tab
 //Offset SLOT
-void VolvuxWidgetPage::onDoubleSpinboxOffsetChanged(double){
+void VolvuxWidgetPage::onDoubleSpinboxOffsetChanged(double)
+{
     this->ui->widget->setObjectOffset(this->ui->doubleSpinBoxOffsetX->value(),this->ui->doubleSpinBoxOffsetY->value(),this->ui->doubleSpinBoxOffsetZ->value());
     this->ui->widget->update();
 }
 
 //Helicoid SLOT
-void VolvuxWidgetPage::onDoubleSpinboxHelicoidChanged(double){
+void VolvuxWidgetPage::onDoubleSpinboxHelicoidChanged(double)
+{
     this->ui->widget->setHelicoidOffset(this->ui->doubleSpinboxHelicoidCxMm->value(),this->ui->doubleSpinboxHelicoidCyMm->value(),this->ui->doubleSpinboxHelicoidCzMm->value());
     this->ui->widget->update();
 }
 
 //Object size SLOT
-void VolvuxWidgetPage::onDoubleSpinboxObjectSizeChanged(double){
+void VolvuxWidgetPage::onDoubleSpinboxObjectSizeChanged(double)
+{
     this->ui->widget->setObjectScale(this->ui->doubleSpinBoxObjectSize->value());
 }
 
@@ -40,7 +43,8 @@ void VolvuxWidgetPage::onPushButtonRandomizeSpheresPressed(){
 }
 
 //Generate frames SLOT
-void VolvuxWidgetPage::onPushButtonGenerateFramesPressed(){
+void VolvuxWidgetPage::onPushButtonGenerateFramesPressed()
+{
     if (this->ui->checkBoxUseOffscreenRendering->isChecked())
     {
         QObject::connect(this->ui->widget,SIGNAL(memoryAllocatedMegaBytes(int)),this->ui->spinBoxMemoryAllocated,SLOT(setValue(int)));
@@ -55,4 +59,19 @@ void VolvuxWidgetPage::onPushButtonGenerateFramesPressed(){
 
     message = "Frames generation done";
     emit writeOnStatusBar(message,2000);
+}
+
+
+void VolvuxWidgetPage::onPushButtonStartProjectionPressed()
+{
+	if (!this->ui->widget->allFrames.empty())
+	{
+		auto *curdata = this->ui->widget->allFrames.data();
+		emit this->ui->widget->dataFrameGenerated(curdata);
+	}
+}
+
+void VolvuxWidgetPage::onPushButtonStopProjectionPressed()
+{
+	emit this->ui->widget->dataFrameGenerated(NULL);
 }

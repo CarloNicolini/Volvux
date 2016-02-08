@@ -107,6 +107,10 @@ StackedWidget::StackedWidget(QWidget *parent) :
     // On generate frames pressed
     QObject::connect(volvuxWidgetpage->ui->pushButtonGenerateFrames,SIGNAL(clicked()),volvuxWidgetpage,SLOT(onPushButtonGenerateFramesPressed()));
 
+	// On start/stop projection pressed
+	QObject::connect(volvuxWidgetpage->ui->pushButtonProjectorStartProjection, SIGNAL(clicked()), volvuxWidgetpage, SLOT(onPushButtonStartProjectionPressed()));
+	QObject::connect(volvuxWidgetpage->ui->pushButtonProjectorStopProjection, SIGNAL(clicked()), volvuxWidgetpage, SLOT(onPushButtonStopProjectionPressed()));
+
     // Data projection connection (CARLO)
     // Convolute mechanism to avoid adaptation of classes: Stacked widget handles all connections
     QObject::connect(this->volvuxWidgetpage->ui->widget,SIGNAL(dataFrameGenerated(unsigned char *)),
@@ -163,33 +167,38 @@ void StackedWidget::onNextButtonPressed()
     curIndex = curIndex + 1;
 
     //Manage page settings
-    switch(curIndex){
-    case CALIBRATION_PAGE_INDEX:
-        this->resize(1353,876);
-        //Set focus on VolvuxCalibrationWidget
-        calibrationWidgetpage->ui->volvuxCalibrationWidget->setFocusPolicy(Qt::StrongFocus);
-        //Set ALP pointer in Volvux Calibration Widget
-        calibrationWidgetpage->ui->volvuxCalibrationWidget->setALP(projectorWidgetpage->palp);
-        timer->start(10);
-        //To send frame to the projector
-        QObject::connect(this->timer, SIGNAL(timeout()), calibrationWidgetpage->ui->volvuxCalibrationWidget, SLOT(transferFrame()));
-        //Enable back button
-        this->ui->pushButtonBack->setEnabled(true);
-        //Hide menu and status bar
-        this->ui->menuBar->hide();
-        this->ui->statusBar->hide();
-
-        break;
-    case MAINWINDOW_PAGE_INDEX:
-        this->showMaximized();
-        //Enable back button
-        this->ui->pushButtonBack->setEnabled(true);
-        //Show menu and status bar
-        this->ui->menuBar->show();
-        this->ui->statusBar->show();
-        //Disable next button
-        this->ui->pushButtonNext->setEnabled(false);
-        break;
+	switch (curIndex)
+	{
+	case CALIBRATION_PAGE_INDEX:
+	{
+		this->resize(1353, 876);
+		//Set focus on VolvuxCalibrationWidget
+		calibrationWidgetpage->ui->volvuxCalibrationWidget->setFocusPolicy(Qt::StrongFocus);
+		//Set ALP pointer in Volvux Calibration Widget
+		calibrationWidgetpage->ui->volvuxCalibrationWidget->setALP(projectorWidgetpage->palp);
+		timer->start(10);
+		//To send frame to the projector
+		QObject::connect(this->timer, SIGNAL(timeout()), calibrationWidgetpage->ui->volvuxCalibrationWidget, SLOT(transferFrame()));
+		//Enable back button
+		this->ui->pushButtonBack->setEnabled(true);
+		//Hide menu and status bar
+		this->ui->menuBar->hide();
+		this->ui->statusBar->hide();
+		break;
+	}
+	case MAINWINDOW_PAGE_INDEX:
+	{
+		QObject::disconnect(this->timer, SIGNAL(timeout()), calibrationWidgetpage->ui->volvuxCalibrationWidget, SLOT(transferFrame()));
+		this->showMaximized();
+		//Enable back button
+		this->ui->pushButtonBack->setEnabled(true);
+		//Show menu and status bar
+		this->ui->menuBar->show();
+		this->ui->statusBar->show();
+		//Disable next button
+		this->ui->pushButtonNext->setEnabled(false);
+		break;
+	}
     }
 
     //Next action
