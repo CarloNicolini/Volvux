@@ -111,12 +111,16 @@ StackedWidget::StackedWidget(QWidget *parent) :
 	QObject::connect(volvuxWidgetpage->ui->pushButtonProjectorStartProjection, SIGNAL(clicked()), volvuxWidgetpage, SLOT(onPushButtonStartProjectionPressed()));
 	QObject::connect(volvuxWidgetpage->ui->pushButtonProjectorStopProjection, SIGNAL(clicked()), volvuxWidgetpage, SLOT(onPushButtonStopProjectionPressed()));
 
+	// Surface properties changed
+	QObject::connect(volvuxWidgetpage->ui->doubleSpinBoxSurfaceThickness, SIGNAL(valueChanged(double)), volvuxWidgetpage, SLOT(onDoubleSpinboxSurfaceThicknessChanged(double)));
+
+
     // Data projection connection (CARLO)
     // Convolute mechanism to avoid adaptation of classes: Stacked widget handles all connections
     QObject::connect(this->volvuxWidgetpage->ui->widget,SIGNAL(dataFrameGenerated(unsigned char *)),
                      this->projectorWidgetpage, SLOT(projectDataFrames(unsigned char *)));
-//    QObject::connect(this->volvuxWidgetpage->ui->pushButtonProjectorStartProjection,SIGNAL(clicked(bool)),
-//                     this->volvuxWidgetpage->ui->widget, SLOT(onFramesSentToProjectorAsked(bool)) );
+
+
 }
 
 StackedWidget::~StackedWidget()

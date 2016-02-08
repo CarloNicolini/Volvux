@@ -4,16 +4,28 @@ const vec3 Z = vec3(0.0,0.0,1.0);
 varying vec3 texture_coordinate;
 uniform sampler3D my_color_texture;
 uniform vec4 uniformColor;
+uniform float curvature;
+uniform float thickness;
 varying vec4 pvertex;
+
 void main()
 {
 	vec4 uniformColor = vec4(1.0,1.0,1.0,1.0);
-    vec4 finalColor;
-    //finalColor = (texture3D(my_color_texture, texture_coordinate+X)+texture3D(my_color_texture-X, texture_coordinate))*0.5
-    //        +(texture3D(my_color_texture, texture_coordinate+Y)+texture3D(my_color_texture-Y, texture_coordinate))*0.5
-    //        +(texture3D(my_color_texture, texture_coordinate+Z)+texture3D(my_color_texture-Z, texture_coordinate))*0.5;
+    vec4 finalColor = uniformColor*texture3D(my_color_texture, texture_coordinate);
+
     if ( texture_coordinate.x <=0.0 || texture_coordinate.x >= 1.0 || texture_coordinate.z <= 0.0 || texture_coordinate.z >= 1.0 )
         gl_FragColor =vec4(0.0,0.0,0.0,1.0); //Can be uniformColor to color again the thing
+    
+	
+	float parametricSurfaceEquation = (pvertex.x*pvertex.x)/curvature;
+    float normalLength = sqrt(1.0+(2.0*pvertex.x/curvature)*(2.0*pvertex.x/curvature));
+    if ( abs((pvertex.y - parametricSurfaceEquation)/normalLength) <= thickness)
+    {
+		gl_FragColor = finalColor;
+    }
     else
-        gl_FragColor = uniformColor*texture3D(my_color_texture, texture_coordinate);
+     {
+		// color the vertices outside that small volume around the surface to black
+        gl_FragColor = vec4(0.0,0.0,0.0,1.0);
+     }
 }

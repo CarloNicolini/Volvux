@@ -241,6 +241,7 @@ void VolvuxWidget::draw()
 	glPopAttrib();
 	glPopMatrix();
 	*/
+	/*
 	double d = 30;
 	glPushMatrix();
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
@@ -260,9 +261,8 @@ void VolvuxWidget::draw()
 	glEnd();
 	glPopAttrib();
 	glPopMatrix();
-	
-
 	drawCalibration();
+	*/
 }
 
 /**

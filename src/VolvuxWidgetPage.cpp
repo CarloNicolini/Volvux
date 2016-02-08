@@ -75,3 +75,13 @@ void VolvuxWidgetPage::onPushButtonStopProjectionPressed()
 {
 	emit this->ui->widget->dataFrameGenerated(NULL);
 }
+
+void VolvuxWidgetPage::onDoubleSpinboxSurfaceCurvatureChanged(double val)
+{
+	this->ui->widget->meshStruct.curvature = val;
+}
+
+void VolvuxWidgetPage::onDoubleSpinboxSurfaceThicknessChanged(double val)
+{
+	this->ui->widget->meshStruct.thickness = val;
+}
