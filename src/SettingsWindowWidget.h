@@ -14,10 +14,12 @@ class SettingsWindowWidget : public QWidget
 public:
     explicit SettingsWindowWidget(QWidget *parent = 0);
     ~SettingsWindowWidget();
+    void receiveWidget(QWidget *widget);
 
 private:
     Ui::SettingsWindowWidget *ui;
     QWidget *grabbedWidget;
+
 };
 
 #endif // SETTINGSWINDOWWIDGET_H

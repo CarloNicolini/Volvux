@@ -10,7 +10,7 @@
 #include "ProjectorWidgetPage.h"
 #include "CalibrationWidgetPage.h"
 #include "VolvuxWidgetPage.h"
-#include "ExtraWindow.h"
+#include "SettingsWindowWidget.h"
 
 namespace Ui {
 class StackedWidget;
@@ -29,7 +29,7 @@ public:
     CalibrationWidgetPage *calibrationWidgetpage;
     VolvuxWidgetPage *volvuxWidgetpage;
     QTimer *timer;
-	ExtraWindow *extraWindow;
+    SettingsWindowWidget *projectorMotorSettings;
 
 private:
     Ui::StackedWidget *ui;
@@ -44,7 +44,6 @@ public slots:
     void onQuitButtonPressed();
     void onNextButtonPressed();
     void onBackButtonPressed();
-
 
 private slots:
     //Menu bar actions

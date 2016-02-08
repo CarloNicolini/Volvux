@@ -17,7 +17,7 @@ SettingsWindowWidget::~SettingsWindowWidget()
 void SettingsWindowWidget::receiveWidget(QWidget *widget)
 {
     if(grabbedWidget != 0)
-        qWarning() << "You might have lost a widget just now.";
+        //qWarning() << "You might have lost a widget just now.";
 
     grabbedWidget = widget;
     this->ui->SettingWidget = grabbedWidget;

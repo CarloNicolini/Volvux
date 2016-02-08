@@ -232,6 +232,9 @@ void StackedWidget::onActionExitTriggered()
 
 //Projector and  Motor Action SLOT
 void StackedWidget::onActionProjectorMotorTriggered(){
+    projectorMotorSettings = new SettingsWindowWidget();
+    projectorMotorSettings->receiveWidget(projectorWidgetpage);
+    projectorMotorSettings->show();
     /*this->ui->stackedWidget->setCurrentIndex(PROJECTORMOTOR_PAGE_INDEX);
     this->ui->menuBar->hide();
     this->ui->pushButtonBack->setEnabled(false);
