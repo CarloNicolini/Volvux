@@ -28,22 +28,19 @@ StackedWidget::StackedWidget(QWidget *parent) :
     //Disable Back button for the first page
     if(this->ui->stackedWidget->currentIndex() == PROJECTORMOTOR_PAGE_INDEX)
     {
-		this->ui->pushButtonBack->setEnabled(false);
+        this->ui->pushButtonBack->setEnabled(false);
     }
 
     //Initialize and add the stacked widget pages
     projectorWidgetpage = new ProjectorWidgetPage(this);
     this->ui->stackedWidget->addWidget(projectorWidgetpage);
-    widgets.append(projectorWidgetpage);
     calibrationWidgetpage = new CalibrationWidgetPage(this);
     this->ui->stackedWidget->addWidget(calibrationWidgetpage);
-    widgets.append(calibrationWidgetpage);
     volvuxWidgetpage = new VolvuxWidgetPage(this);
     this->ui->stackedWidget->addWidget(volvuxWidgetpage);
-    widgets.append(volvuxWidgetpage);
 
-	//Initialize NSlices and FlickerRate using default value
-	projectorWidgetpage->onSpinboxProjectorNSlicesChanged(PROJECTOR_SLICES_NUMBER);
+    //Initialize NSlices and FlickerRate using default value
+    projectorWidgetpage->onSpinboxProjectorNSlicesChanged(PROJECTOR_SLICES_NUMBER);
 
     //Menu bar
     //Exit Action
@@ -81,11 +78,11 @@ StackedWidget::StackedWidget(QWidget *parent) :
     QObject::connect(projectorWidgetpage->ui->spinBoxProjectorLEDcurrent,SIGNAL(valueChanged(int)),projectorWidgetpage,SLOT(onSpinboxProjectorLEDCurrentChanged(int)));
     QObject::connect(projectorWidgetpage->ui->doubleSpinBoxProjectorLEDpercentage,SIGNAL(valueChanged(double)),projectorWidgetpage,SLOT(onSpinboxProjectorLEDPercentageChanged(double)));
 
-	//Motor control buttons
-	//Initialize
-	QObject::connect(projectorWidgetpage->ui->pushButtonMotorInitialize, SIGNAL(clicked()), projectorWidgetpage, SLOT(onPushButtonMotorInitializeClicked()));
-	QObject::connect(projectorWidgetpage->ui->pushButtonMotorStart, SIGNAL(clicked()), projectorWidgetpage, SLOT(onPushButtonMotorStartClicked()));
-	QObject::connect(projectorWidgetpage->ui->pushButtonMotorStop, SIGNAL(clicked()), projectorWidgetpage, SLOT(onPushButtonMotorStopClicked()));
+    //Motor control buttons
+    //Initialize
+    QObject::connect(projectorWidgetpage->ui->pushButtonMotorInitialize, SIGNAL(clicked()), projectorWidgetpage, SLOT(onPushButtonMotorInitializeClicked()));
+    QObject::connect(projectorWidgetpage->ui->pushButtonMotorStart, SIGNAL(clicked()), projectorWidgetpage, SLOT(onPushButtonMotorStartClicked()));
+    QObject::connect(projectorWidgetpage->ui->pushButtonMotorStop, SIGNAL(clicked()), projectorWidgetpage, SLOT(onPushButtonMotorStopClicked()));
 
     //Calibration Widget
     //Insert and remove points
@@ -104,8 +101,8 @@ StackedWidget::StackedWidget(QWidget *parent) :
     QObject::connect(volvuxWidgetpage->ui->doubleSpinboxHelicoidCyMm,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxHelicoidChanged(double)));
     QObject::connect(volvuxWidgetpage->ui->doubleSpinboxHelicoidCzMm,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxHelicoidChanged(double)));
     QObject::connect(volvuxWidgetpage->ui->doubleSpinBoxObjectSize,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxObjectSizeChanged(double)));
-	QObject::connect(volvuxWidgetpage->ui->checkBoxUseOffscreenRendering, SIGNAL(stateChanged(int)), volvuxWidgetpage->ui->widget, SLOT(setOffscreenRendering(int)));
-	//Stimulus tab connection
+    QObject::connect(volvuxWidgetpage->ui->checkBoxUseOffscreenRendering, SIGNAL(stateChanged(int)), volvuxWidgetpage->ui->widget, SLOT(setOffscreenRendering(int)));
+    //Stimulus tab connection
     QObject::connect(volvuxWidgetpage->ui->pushButtonStimulusRandomizeSpheres,SIGNAL(clicked()),volvuxWidgetpage,SLOT(onPushButtonRandomizeSpheresPressed()));
     // On generate frames pressed
     QObject::connect(volvuxWidgetpage->ui->pushButtonGenerateFrames,SIGNAL(clicked()),volvuxWidgetpage,SLOT(onPushButtonGenerateFramesPressed()));
@@ -122,7 +119,7 @@ StackedWidget::~StackedWidget()
 {
     delete ui;
 }
-
+/*
 //Show current widget
 void StackedWidget::showCurrentWidget(int curr_index){
     if (widgets.count() > 0)
@@ -133,6 +130,7 @@ void StackedWidget::showCurrentWidget(int curr_index){
         updateGeometry();
     }
 }
+*/
 
 void StackedWidget::keyPressEvent(QKeyEvent *event){
     int keypressed = event->key();
@@ -238,12 +236,12 @@ void StackedWidget::onActionProjectorMotorTriggered(){
     this->ui->menuBar->hide();
     this->ui->pushButtonBack->setEnabled(false);
     this->ui->pushButtonNext->setEnabled(true);*/
-	//NOT WORKING
-	//Initialize helper window
-	//extraWindow = new ExtraWindow(this);
-	//extraWindow->receiveWidget(projectorWidgetpage);
-	//extraWindow->show();
-	
+    //NOT WORKING
+    //Initialize helper window
+    //extraWindow = new ExtraWindow(this);
+    //extraWindow->receiveWidget(projectorWidgetpage);
+    //extraWindow->show();
+
 }
 
 //Calibration SLOT

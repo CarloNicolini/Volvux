@@ -33,8 +33,8 @@ public:
 
 private:
     Ui::StackedWidget *ui;
-    QList<QWidget *> widgets;
-    void showCurrentWidget(int curr_index);
+    //QList<QWidget *> widgets;
+    //void showCurrentWidget(int curr_index);
 
 protected:
     void keyPressEvent(QKeyEvent *event);
