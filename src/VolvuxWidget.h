@@ -62,6 +62,8 @@ struct MeshParameters
     GLfloat x,y,z;
     GLfloat thickness;
     GLfloat curvature;
+	GLfloat firstOrderCoeff;
+	GLfloat zeroOrderCoeff;
     bool useParametricSurfaceFiltering;
 };
 

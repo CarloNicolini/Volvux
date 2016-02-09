@@ -72,12 +72,14 @@ protected:
     void mousePressEvent(QMouseEvent *event);
 
 private:
-    QVector<QPoint> points2D;
+    
     bool drawingText;
     QPoint lastPoint;
     std::ofstream outputPoints;
-
     ALPProjector *alp;
+
+public:
+	QVector<QPoint> points2D;
 
 };
 

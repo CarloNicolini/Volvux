@@ -113,13 +113,16 @@ StackedWidget::StackedWidget(QWidget *parent) :
 
 	// Surface properties changed
 	QObject::connect(volvuxWidgetpage->ui->doubleSpinBoxSurfaceThickness, SIGNAL(valueChanged(double)), volvuxWidgetpage, SLOT(onDoubleSpinboxSurfaceThicknessChanged(double)));
+	QObject::connect(volvuxWidgetpage->ui->doubleSpinBox0thOrderCoeff, SIGNAL(valueChanged(double)), volvuxWidgetpage, SLOT(onDoubleSpinboxSurfaceZeroOrderCoeffChanged(double)));
+	QObject::connect(volvuxWidgetpage->ui->doubleSpinBox1stOrderCoeff, SIGNAL(valueChanged(double)), volvuxWidgetpage, SLOT(onDoubleSpinboxSurfaceFirstOrderCoeffChanged(double)));
+	QObject::connect(volvuxWidgetpage->ui->doubleSpinBox2ndOrderCoeff, SIGNAL(valueChanged(double)), volvuxWidgetpage, SLOT(onDoubleSpinboxSurfaceSecondOrderCoeffChanged(double)));
 
+	// Save points connect
+	QObject::connect(calibrationWidgetpage->ui->pushButtonLoad2DPoints, SIGNAL(clicked()), calibrationWidgetpage, SLOT(load2DpointsFromFile()));
+	QObject::connect(calibrationWidgetpage->ui->pushButtonSave2DPoints, SIGNAL(clicked()), calibrationWidgetpage, SLOT(write2DpointsToFile()));
 
-    // Data projection connection (CARLO)
-    // Convolute mechanism to avoid adaptation of classes: Stacked widget handles all connections
-    QObject::connect(this->volvuxWidgetpage->ui->widget,SIGNAL(dataFrameGenerated(unsigned char *)),
-                     this->projectorWidgetpage, SLOT(projectDataFrames(unsigned char *)));
-
+    // Data projection connection
+    QObject::connect(this->volvuxWidgetpage->ui->widget,SIGNAL(dataFrameGenerated(unsigned char *)), this->projectorWidgetpage, SLOT(projectDataFrames(unsigned char *)));
 
 }
 

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1173</width>
+    <width>1174</width>
     <height>877</height>
    </rect>
   </property>
@@ -205,7 +205,14 @@
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QDoubleSpinBox" name="doubleSpinBox2ndOrderCoeff"/>
+               <widget class="QDoubleSpinBox" name="doubleSpinBox2ndOrderCoeff">
+                <property name="minimum">
+                 <double>-1000.000000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>1000.000000000000000</double>
+                </property>
+               </widget>
               </item>
               <item row="2" column="0">
                <widget class="QLabel" name="firstOrderCoeffLabel">
@@ -215,7 +222,14 @@
                </widget>
               </item>
               <item row="2" column="1">
-               <widget class="QDoubleSpinBox" name="doubleSpinBox1stOrderCoeff"/>
+               <widget class="QDoubleSpinBox" name="doubleSpinBox1stOrderCoeff">
+                <property name="minimum">
+                 <double>-1000.000000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>1000.000000000000000</double>
+                </property>
+               </widget>
               </item>
               <item row="3" column="0">
                <widget class="QLabel" name="zerothOrderCoeffLabel">
@@ -225,7 +239,17 @@
                </widget>
               </item>
               <item row="3" column="1">
-               <widget class="QDoubleSpinBox" name="doubleSpinBox0thOrderCoeff"/>
+               <widget class="QDoubleSpinBox" name="doubleSpinBox0thOrderCoeff">
+                <property name="minimum">
+                 <double>-1000.000000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>1000.000000000000000</double>
+                </property>
+                <property name="value">
+                 <double>1.000000000000000</double>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>
@@ -288,6 +312,9 @@
                 </property>
                 <property name="maximum">
                  <double>1000000.000000000000000</double>
+                </property>
+                <property name="value">
+                 <double>-120.000000000000000</double>
                 </property>
                </widget>
               </item>
@@ -522,27 +549,6 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButtonUploadCurrentSequence">
-                <property name="text">
-                 <string>Upload Sequence</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButtonProjectorChangeSequence">
-                <property name="text">
-                 <string>Change to sequence</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButtonRemoveSequence">
-                <property name="text">
-                 <string>Remove sequence</string>
-                </property>
-               </widget>
-              </item>
-              <item>
                <spacer name="verticalSpacer_4">
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
@@ -750,102 +756,6 @@
                  </widget>
                 </item>
                </layout>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_10">
-           <property name="title">
-            <string>External Monitor Settings</string>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_24">
-            <item>
-             <layout class="QFormLayout" name="formLayout_8">
-              <property name="fieldGrowthPolicy">
-               <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-              </property>
-              <item row="0" column="0">
-               <widget class="QLabel" name="monitorWidthMMLabel">
-                <property name="text">
-                 <string>Monitor Width MM</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QDoubleSpinBox" name="monitorWidthMMDoubleSpinBox">
-                <property name="toolTip">
-                 <string>The width of stimuli presentation monitor in millimeters.</string>
-                </property>
-                <property name="maximum">
-                 <double>10000.000000000000000</double>
-                </property>
-                <property name="value">
-                 <double>300.000000000000000</double>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="monitorHeightMMLabel">
-                <property name="text">
-                 <string>Monitor Height MM</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QDoubleSpinBox" name="monitorHeightMMDoubleSpinBox">
-                <property name="toolTip">
-                 <string>The height of stimuli presentation monitor in millimeters.</string>
-                </property>
-                <property name="maximum">
-                 <double>10000.000000000000000</double>
-                </property>
-                <property name="value">
-                 <double>200.000000000000000</double>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="0">
-               <widget class="QLabel" name="monitorResolutionXLabel">
-                <property name="text">
-                 <string>Monitor Resolution X</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QSpinBox" name="monitorResolutionXSpinBox">
-                <property name="toolTip">
-                 <string>The horizontal resolution of stimuli presentation monitor in pixels.</string>
-                </property>
-                <property name="maximum">
-                 <number>10000</number>
-                </property>
-                <property name="value">
-                 <number>1280</number>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="0">
-               <widget class="QLabel" name="monitorResolutionYLabel">
-                <property name="text">
-                 <string>Monitor Resolution Y</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="1">
-               <widget class="QSpinBox" name="monitorResolutionYSpinBox">
-                <property name="toolTip">
-                 <string>The vertical resolution of stimuli presentation monitor in pixels.</string>
-                </property>
-                <property name="maximum">
-                 <number>10000</number>
-                </property>
-                <property name="value">
-                 <number>1024</number>
-                </property>
-               </widget>
               </item>
              </layout>
             </item>

@@ -221,7 +221,9 @@ void VolvuxWidget::draw()
     shader.setUniformValue("objOffset",meshStruct.offsetX,meshStruct.offsetY,meshStruct.offsetZ);
     shader.setUniformValue("objSize",meshStruct.radius);
     shader.setUniformValue("thickness",meshStruct.thickness);
-    shader.setUniformValue("curvature",meshStruct.curvature);
+    shader.setUniformValue("a",meshStruct.curvature);
+	shader.setUniformValue("b", meshStruct.firstOrderCoeff);
+	shader.setUniformValue("c", meshStruct.zeroOrderCoeff);
 
     // Enable GL_TEXTURE3D for the visualization of ball field and finally draw the helicoid on it
     glEnable(GL_TEXTURE_3D);

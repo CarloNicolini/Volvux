@@ -76,9 +76,19 @@ void VolvuxWidgetPage::onPushButtonStopProjectionPressed()
 	emit this->ui->widget->dataFrameGenerated(NULL);
 }
 
-void VolvuxWidgetPage::onDoubleSpinboxSurfaceCurvatureChanged(double val)
+void VolvuxWidgetPage::onDoubleSpinboxSurfaceSecondOrderCoeffChanged(double val)
 {
 	this->ui->widget->meshStruct.curvature = val;
+}
+
+void VolvuxWidgetPage::onDoubleSpinboxSurfaceFirstOrderCoeffChanged(double val)
+{
+	this->ui->widget->meshStruct.firstOrderCoeff = val;
+}
+
+void VolvuxWidgetPage::onDoubleSpinboxSurfaceZeroOrderCoeffChanged(double val)
+{
+	this->ui->widget->meshStruct.zeroOrderCoeff = val;
 }
 
 void VolvuxWidgetPage::onDoubleSpinboxSurfaceThicknessChanged(double val)

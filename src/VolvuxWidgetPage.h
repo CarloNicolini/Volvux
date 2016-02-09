@@ -27,7 +27,9 @@ public slots:
     void onPushButtonRandomizeSpheresPressed();
     void onPushButtonGenerateFramesPressed();
 	void onDoubleSpinboxSurfaceThicknessChanged(double);
-	void onDoubleSpinboxSurfaceCurvatureChanged(double);
+	void onDoubleSpinboxSurfaceSecondOrderCoeffChanged(double);
+	void onDoubleSpinboxSurfaceFirstOrderCoeffChanged(double);
+	void onDoubleSpinboxSurfaceZeroOrderCoeffChanged(double);
 
 	// Projector actions
 	void onPushButtonStartProjectionPressed();

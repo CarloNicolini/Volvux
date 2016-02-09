@@ -4,9 +4,17 @@ const vec3 Z = vec3(0.0,0.0,1.0);
 varying vec3 texture_coordinate;
 uniform sampler3D my_color_texture;
 uniform vec4 uniformColor;
-uniform float curvature;
+uniform float a;
+uniform float b;
+uniform float c;
 uniform float thickness;
 varying vec4 pvertex;
+
+
+float square(float x)
+{
+	return x*x;
+}
 
 void main()
 {
@@ -17,11 +25,11 @@ void main()
         gl_FragColor =vec4(0.0,0.0,0.0,1.0); //Can be uniformColor to color again the thing
     
 	
-	float parametricSurfaceEquation = (pvertex.x*pvertex.x)/curvature;
-    float normalLength = sqrt(1.0+(2.0*pvertex.x/curvature)*(2.0*pvertex.x/curvature));
+	float parametricSurfaceEquation = (pvertex.x*pvertex.x)/a + b*pvertex.x + c;
+    float normalLength = sqrt(1.0+square(2.0*pvertex.x/a ));
     if ( abs((pvertex.y - parametricSurfaceEquation)/normalLength) <= thickness)
     {
-		gl_FragColor = finalColor;
+		gl_FragColor = vec4(1.0,0.0,0.0,1.0);
     }
     else
      {

@@ -1,6 +1,7 @@
 #include "CalibrationWidgetPage.h"
 #include "ui_CalibrationWidgetPage.h"
 
+#include <QFileDialog>
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
@@ -103,7 +104,7 @@ void CalibrationWidgetPage::append2DPoint(const QPoint &p)
 {
 	// XXX TO CHANGE WITH REAL POINTS
 	// CALIBRATION 22 JANUARY 2016
-#define USEALREADYCALIBRATED
+//#define USEALREADYCALIBRATED
 #ifdef USEALREADYCALIBRATED
 	points2D.clear();
 	points2D.push_back(Vector3d(512, 374, 1));
@@ -149,3 +150,31 @@ void CalibrationWidgetPage::update2DPoints(const QVector<QPoint> &points2D){
     }
 }
 
+void CalibrationWidgetPage::load2DpointsFromFile()
+{
+	std::string points2Dfilename("C:\\workspace\\Volvux\\build\\lastpoints.txt");
+
+	std::ifstream pointsfile;
+	pointsfile.open(points2Dfilename);
+	int x, y;
+	this->points2D.clear();
+	while (pointsfile >> x >> y )
+	{
+		this->append2DPoint(QPoint(x, y));
+		this->ui->volvuxCalibrationWidget->points2D.push_back(QPoint(x, y)); // xxx da non mettere pubblico e cambiare il metodo addPoint() in addPoint(QPoint &)
+	}
+	pointsfile.close();
+	emit this->ui->volvuxCalibrationWidget->points2Dupdated(this->ui->volvuxCalibrationWidget->points2D);
+}
+
+void CalibrationWidgetPage::write2DpointsToFile()
+{
+	std::string points2Dfilename("C:\\workspace\\Volvux\\build\\lastpoints.txt");
+	std::ofstream outfile;
+	outfile.open(points2Dfilename);
+	for (size_t i = 0; i < points2D.size(); ++i)
+	{
+		outfile << points2D.at(i).x() << " " << points2D.at(i).y() << std::endl;
+	}
+	outfile.close();
+}

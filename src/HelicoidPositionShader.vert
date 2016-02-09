@@ -2,7 +2,7 @@ uniform float step;
 uniform float objSize;
 uniform vec3 objOffset;
 uniform float thickness;
-uniform float curvature;
+uniform float a;
 varying vec3 texture_coordinate;
 varying vec4 pvertex;
 

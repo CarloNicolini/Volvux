@@ -55,6 +55,8 @@ public slots:
     void append2DPoint(const QPoint &p);
     void remove2DPoint(const QPoint &p);
     void update2DPoints(const QVector<QPoint> &points2D);
+	void load2DpointsFromFile();
+	void write2DpointsToFile();
 };
 /*
 static const double calibrationtoy[]  = {0,0,0,
