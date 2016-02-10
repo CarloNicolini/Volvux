@@ -18,9 +18,6 @@ StackedWidget::StackedWidget(QWidget *parent) :
     this->ui->menuBar->hide();
     this->ui->statusBar->hide();
 
-    //Fullscreen
-    //this->showFullScreen();
-
     //Start timer
     timer = new QTimer(this);
     timer->start();
@@ -42,7 +39,7 @@ StackedWidget::StackedWidget(QWidget *parent) :
     //Initialize NSlices and FlickerRate using default value
     projectorWidgetpage->onSpinboxProjectorNSlicesChanged(PROJECTOR_SLICES_NUMBER);
 
-    //Menu bar
+    //Connection Menu bar
     //Exit Action
     QObject::connect(this->ui->actionExit,SIGNAL(triggered()),this,SLOT(onActionExitTriggered()));
     //Projector Action
@@ -63,6 +60,8 @@ StackedWidget::StackedWidget(QWidget *parent) :
     //Connection status bar
     QObject::connect(volvuxWidgetpage,SIGNAL(writeOnStatusBar(QString,int)),this->ui->statusBar,SLOT(showMessage(QString,int)));
 
+
+	//Connections Projector Page
     //Projector control buttons
     //Initialize
     QObject::connect(projectorWidgetpage->ui->pushButtonProjectorInitialize,SIGNAL(clicked()),projectorWidgetpage,SLOT(onPushButtonProjectorInitializeClicked()));
@@ -84,45 +83,47 @@ StackedWidget::StackedWidget(QWidget *parent) :
     QObject::connect(projectorWidgetpage->ui->pushButtonMotorStart, SIGNAL(clicked()), projectorWidgetpage, SLOT(onPushButtonMotorStartClicked()));
     QObject::connect(projectorWidgetpage->ui->pushButtonMotorStop, SIGNAL(clicked()), projectorWidgetpage, SLOT(onPushButtonMotorStopClicked()));
 
+
+	//Connection Calibration Page
     //Calibration Widget
     //Insert and remove points
     QObject::connect(calibrationWidgetpage->ui->volvuxCalibrationWidget,SIGNAL(lastPointPressed(QPoint)),calibrationWidgetpage,SLOT(append2DPoint(QPoint)));
     QObject::connect(calibrationWidgetpage->ui->volvuxCalibrationWidget,SIGNAL(pointRemoved(QPoint)),calibrationWidgetpage,SLOT(remove2DPoint(QPoint)));
     QObject::connect(calibrationWidgetpage->ui->volvuxCalibrationWidget,SIGNAL(points2Dupdated(QVector<QPoint>)),calibrationWidgetpage,SLOT(update2DPoints(QVector<QPoint>)));
-
     QObject::connect(calibrationWidgetpage,SIGNAL(calibrationEmitted(CameraDirectLinearTransformation&)),volvuxWidgetpage->ui->widget,SLOT(setCamera(CameraDirectLinearTransformation&)));
+	//Points saving and loading
+	QObject::connect(calibrationWidgetpage->ui->pushButtonLoad2DPoints, SIGNAL(clicked()), calibrationWidgetpage, SLOT(load2DpointsFromFile()));
+	QObject::connect(calibrationWidgetpage->ui->pushButtonSave2DPoints, SIGNAL(clicked()), calibrationWidgetpage, SLOT(write2DpointsToFile()));
 
-    //Volvux Widget
-    //Scene tab connection
+
+    //Volvux Widget connections
+	// Data projection connection
+	QObject::connect(this->volvuxWidgetpage->ui->widget, SIGNAL(dataFrameGenerated(unsigned char *)), this->projectorWidgetpage, SLOT(projectDataFrames(unsigned char *)));
+    //Scene tab
+	//Texture Object Parameters
     QObject::connect(volvuxWidgetpage->ui->doubleSpinBoxOffsetX,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxOffsetChanged(double)));
     QObject::connect(volvuxWidgetpage->ui->doubleSpinBoxOffsetY,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxOffsetChanged(double)));
     QObject::connect(volvuxWidgetpage->ui->doubleSpinBoxOffsetZ,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxOffsetChanged(double)));
-    QObject::connect(volvuxWidgetpage->ui->doubleSpinboxHelicoidCxMm,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxHelicoidChanged(double)));
-    QObject::connect(volvuxWidgetpage->ui->doubleSpinboxHelicoidCyMm,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxHelicoidChanged(double)));
-    QObject::connect(volvuxWidgetpage->ui->doubleSpinboxHelicoidCzMm,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxHelicoidChanged(double)));
-    QObject::connect(volvuxWidgetpage->ui->doubleSpinBoxObjectSize,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxObjectSizeChanged(double)));
-    QObject::connect(volvuxWidgetpage->ui->checkBoxUseOffscreenRendering, SIGNAL(stateChanged(int)), volvuxWidgetpage->ui->widget, SLOT(setOffscreenRendering(int)));
-    //Stimulus tab connection
-    QObject::connect(volvuxWidgetpage->ui->pushButtonStimulusRandomizeSpheres,SIGNAL(clicked()),volvuxWidgetpage,SLOT(onPushButtonRandomizeSpheresPressed()));
-    // On generate frames pressed
-    QObject::connect(volvuxWidgetpage->ui->pushButtonGenerateFrames,SIGNAL(clicked()),volvuxWidgetpage,SLOT(onPushButtonGenerateFramesPressed()));
-
-	// On start/stop projection pressed
-	QObject::connect(volvuxWidgetpage->ui->pushButtonProjectorStartProjection, SIGNAL(clicked()), volvuxWidgetpage, SLOT(onPushButtonStartProjectionPressed()));
-	QObject::connect(volvuxWidgetpage->ui->pushButtonProjectorStopProjection, SIGNAL(clicked()), volvuxWidgetpage, SLOT(onPushButtonStopProjectionPressed()));
-
-	// Surface properties changed
+	QObject::connect(volvuxWidgetpage->ui->doubleSpinBoxObjectSize, SIGNAL(valueChanged(double)), volvuxWidgetpage, SLOT(onDoubleSpinboxObjectSizeChanged(double)));
+	//Surface filter
 	QObject::connect(volvuxWidgetpage->ui->doubleSpinBoxSurfaceThickness, SIGNAL(valueChanged(double)), volvuxWidgetpage, SLOT(onDoubleSpinboxSurfaceThicknessChanged(double)));
 	QObject::connect(volvuxWidgetpage->ui->doubleSpinBox0thOrderCoeff, SIGNAL(valueChanged(double)), volvuxWidgetpage, SLOT(onDoubleSpinboxSurfaceZeroOrderCoeffChanged(double)));
 	QObject::connect(volvuxWidgetpage->ui->doubleSpinBox1stOrderCoeff, SIGNAL(valueChanged(double)), volvuxWidgetpage, SLOT(onDoubleSpinboxSurfaceFirstOrderCoeffChanged(double)));
 	QObject::connect(volvuxWidgetpage->ui->doubleSpinBox2ndOrderCoeff, SIGNAL(valueChanged(double)), volvuxWidgetpage, SLOT(onDoubleSpinboxSurfaceSecondOrderCoeffChanged(double)));
+	//Helicoid Position Parameters
+    QObject::connect(volvuxWidgetpage->ui->doubleSpinboxHelicoidCxMm,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxHelicoidChanged(double)));
+    QObject::connect(volvuxWidgetpage->ui->doubleSpinboxHelicoidCyMm,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxHelicoidChanged(double)));
+    QObject::connect(volvuxWidgetpage->ui->doubleSpinboxHelicoidCzMm,SIGNAL(valueChanged(double)),volvuxWidgetpage,SLOT(onDoubleSpinboxHelicoidChanged(double)));
+    
+	//Stimulus tab
+	//Job info
+    QObject::connect(volvuxWidgetpage->ui->checkBoxUseOffscreenRendering, SIGNAL(stateChanged(int)), volvuxWidgetpage->ui->widget, SLOT(setOffscreenRendering(int)));
+    QObject::connect(volvuxWidgetpage->ui->pushButtonStimulusRandomizeSpheres,SIGNAL(clicked()),volvuxWidgetpage,SLOT(onPushButtonRandomizeSpheresPressed()));
+    QObject::connect(volvuxWidgetpage->ui->pushButtonGenerateFrames,SIGNAL(clicked()),volvuxWidgetpage,SLOT(onPushButtonGenerateFramesPressed()));
 
-	// Save points connect
-	QObject::connect(calibrationWidgetpage->ui->pushButtonLoad2DPoints, SIGNAL(clicked()), calibrationWidgetpage, SLOT(load2DpointsFromFile()));
-	QObject::connect(calibrationWidgetpage->ui->pushButtonSave2DPoints, SIGNAL(clicked()), calibrationWidgetpage, SLOT(write2DpointsToFile()));
-
-    // Data projection connection
-    QObject::connect(this->volvuxWidgetpage->ui->widget,SIGNAL(dataFrameGenerated(unsigned char *)), this->projectorWidgetpage, SLOT(projectDataFrames(unsigned char *)));
+	//Projector Sequence tab
+	QObject::connect(volvuxWidgetpage->ui->pushButtonProjectorStartProjection, SIGNAL(clicked()), volvuxWidgetpage, SLOT(onPushButtonStartProjectionPressed()));
+	QObject::connect(volvuxWidgetpage->ui->pushButtonProjectorStopProjection, SIGNAL(clicked()), volvuxWidgetpage, SLOT(onPushButtonStopProjectionPressed()));
 
 }
 
@@ -252,18 +253,10 @@ void StackedWidget::onActionExitTriggered()
 
 //Projector and  Motor Action SLOT
 void StackedWidget::onActionProjectorMotorTriggered(){
-    /*projectorMotorSettings = new SettingsWindowWidget();
-    projectorMotorSettings->receiveWidget(projectorWidgetpage);
-    projectorMotorSettings->show();*/
     this->ui->stackedWidget->setCurrentIndex(PROJECTORMOTOR_PAGE_INDEX);
     this->ui->menuBar->hide();
     this->ui->pushButtonBack->setEnabled(false);
     this->ui->pushButtonNext->setEnabled(true);
-    //NOT WORKING
-    //Initialize helper window
-    //extraWindow = new ExtraWindow(this);
-    //extraWindow->receiveWidget(projectorWidgetpage);
-    //extraWindow->show();
 
 }
 
