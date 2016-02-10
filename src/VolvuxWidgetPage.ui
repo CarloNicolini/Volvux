@@ -51,7 +51,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tabScene">
        <attribute name="title">
@@ -97,10 +97,10 @@
                  <bool>true</bool>
                 </property>
                 <property name="minimum">
-                 <double>-500.000000000000000</double>
+                 <double>-1000000.000000000000000</double>
                 </property>
                 <property name="maximum">
-                 <double>500.000000000000000</double>
+                 <double>1000000.000000000000000</double>
                 </property>
                </widget>
               </item>
@@ -120,10 +120,10 @@
                  <bool>true</bool>
                 </property>
                 <property name="minimum">
-                 <double>-500.000000000000000</double>
+                 <double>-1000000.000000000000000</double>
                 </property>
                 <property name="maximum">
-                 <double>500.000000000000000</double>
+                 <double>1000000.000000000000000</double>
                 </property>
                </widget>
               </item>
@@ -143,10 +143,10 @@
                  <bool>true</bool>
                 </property>
                 <property name="minimum">
-                 <double>-500.000000000000000</double>
+                 <double>-1000000.000000000000000</double>
                 </property>
                 <property name="maximum">
-                 <double>500.000000000000000</double>
+                 <double>1000000.000000000000000</double>
                 </property>
                </widget>
               </item>
@@ -159,8 +159,11 @@
               </item>
               <item row="3" column="1">
                <widget class="QDoubleSpinBox" name="doubleSpinBoxObjectSize">
+                <property name="minimum">
+                 <double>-1000000.000000000000000</double>
+                </property>
                 <property name="maximum">
-                 <double>600.000000000000000</double>
+                 <double>1000000.000000000000000</double>
                 </property>
                 <property name="value">
                  <double>100.000000000000000</double>

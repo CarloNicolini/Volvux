@@ -25,7 +25,7 @@ void VolvuxWidgetPage::onDoubleSpinboxOffsetChanged(double)
 //Helicoid SLOT
 void VolvuxWidgetPage::onDoubleSpinboxHelicoidChanged(double)
 {
-    this->ui->widget->setHelicoidOffset(this->ui->doubleSpinboxHelicoidCxMm->value(),this->ui->doubleSpinboxHelicoidCyMm->value(),this->ui->doubleSpinboxHelicoidCzMm->value());
+    this->ui-> widget->setHelicoidOffset(this->ui->doubleSpinboxHelicoidCxMm->value(),this->ui->doubleSpinboxHelicoidCyMm->value(),this->ui->doubleSpinboxHelicoidCzMm->value());
     this->ui->widget->update();
 }
 
@@ -33,6 +33,7 @@ void VolvuxWidgetPage::onDoubleSpinboxHelicoidChanged(double)
 void VolvuxWidgetPage::onDoubleSpinboxObjectSizeChanged(double)
 {
     this->ui->widget->setObjectScale(this->ui->doubleSpinBoxObjectSize->value());
+	
 }
 
 //Stimulus tab

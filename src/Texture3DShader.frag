@@ -21,10 +21,14 @@ void main()
 	vec4 uniformColor = vec4(1.0,1.0,1.0,1.0);
     vec4 finalColor = uniformColor*texture3D(my_color_texture, texture_coordinate);
 
-    if ( texture_coordinate.x <=0.0 || texture_coordinate.x >= 1.0 || texture_coordinate.z <= 0.0 || texture_coordinate.z >= 1.0 )
+    if ( texture_coordinate.x <=0.0 || texture_coordinate.x >= 1.0 ||
+		  texture_coordinate.y <=0.0 || texture_coordinate.y >= 1.0 || 
+		  texture_coordinate.z <= 0.0 || texture_coordinate.z >= 1.0 )
         gl_FragColor =vec4(0.0,0.0,0.0,1.0); //Can be uniformColor to color again the thing
-    
+	else
+		gl_FragColor =vec4(1.0); 
 	
+/*    
 	float parametricSurfaceEquation = (pvertex.x*pvertex.x)/a + b*pvertex.x + c;
     float normalLength = sqrt(1.0+square(2.0*pvertex.x/a ));
     if ( abs((pvertex.y - parametricSurfaceEquation)/normalLength) <= thickness)
@@ -36,4 +40,5 @@ void main()
 		// color the vertices outside that small volume around the surface to black
         gl_FragColor = vec4(0.0,0.0,0.0,1.0);
      }
+*/
 }

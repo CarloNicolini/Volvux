@@ -23,7 +23,8 @@ void main()
     // This is to rotate the object
 	v.xy = rotateZ(v.xy, step);
     // Compute the z position given x and y on a circular domain of radius 1 (diameter 2)
-    texture_coordinate = vec3(((v.xy-objOffset.xy)/objSize+1.0)*0.5, ((v.z-objOffset.z)/objSize+1.0)*0.5);
+    //texture_coordinate = vec3(((v.xy-objOffset.xy)/objSize+1.0)*0.5, ((v.z-objOffset.z)/objSize+1.0)*0.5);
+	texture_coordinate = ((v.xyz-objOffset)/objSize + vec3(1.0))/2.0;
     //texture_coordinate= vec3(   ((v.xz-objOffset.xz)/objSize+1.0)*0.5, ((v.y-objOffset.y)/objSize+1.0)*0.5);
     gl_Position = gl_ModelViewProjectionMatrix*v;
     pvertex = v;
