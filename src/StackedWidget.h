@@ -10,7 +10,6 @@
 #include "ProjectorWidgetPage.h"
 #include "CalibrationWidgetPage.h"
 #include "VolvuxWidgetPage.h"
-#include "SettingsWindowWidget.h"
 
 namespace Ui {
 class StackedWidget;
@@ -29,7 +28,6 @@ public:
     CalibrationWidgetPage *calibrationWidgetpage;
     VolvuxWidgetPage *volvuxWidgetpage;
     QTimer *timer;
-    SettingsWindowWidget *projectorMotorSettings;
 
 private:
     Ui::StackedWidget *ui;

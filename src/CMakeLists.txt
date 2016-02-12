@@ -44,9 +44,9 @@ endif(ALP_SUPPORT)
 #endif(SMI_SUPPORT)
 
 # Volvux Main files
-set(VOLVUX_HDRS VolvuxCalibrationWidget.h StackedWidget.h ProjectorWidgetPage.h CalibrationWidgetPage.h VolvuxWidgetPage.h VolvuxExpWidget.h VolvuxWidget.h SettingsWindowWidget.h)
-set(VOLVUX_SRCS VolvuxCalibrationWidget.cpp StackedWidget.cpp ProjectorWidgetPage.cpp CalibrationWidgetPage.cpp VolvuxWidgetPage.cpp VolvuxExpWidget.cpp VolvuxWidget.cpp SettingsWindowWidget.cpp)
-set(VOLVUX_FORMS StackedWidget.ui ProjectorWidgetPage.ui CalibrationWidgetPage.ui VolvuxWidgetPage.ui SettingsWindowWidget.ui)
+set(VOLVUX_HDRS VolvuxCalibrationWidget.h StackedWidget.h ProjectorWidgetPage.h CalibrationWidgetPage.h VolvuxWidgetPage.h VolvuxExpWidget.h VolvuxWidget.h testSMI.h)
+set(VOLVUX_SRCS VolvuxCalibrationWidget.cpp StackedWidget.cpp ProjectorWidgetPage.cpp CalibrationWidgetPage.cpp VolvuxWidgetPage.cpp VolvuxExpWidget.cpp VolvuxWidget.cpp testSMI.cpp)
+set(VOLVUX_FORMS StackedWidget.ui ProjectorWidgetPage.ui CalibrationWidgetPage.ui VolvuxWidgetPage.ui testSMI.ui)
 
 if(QT5_SUPPORT)
     # Tell CMake to run moc when necessary:

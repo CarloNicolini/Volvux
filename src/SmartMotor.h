@@ -58,8 +58,11 @@ class SmartMotor
 {
 public:
     INTEGMOTORINTERFACELib::ISMICommPtr		CommInterface;
+	INTEGMOTORINTERFACELib::ISMIMotorPtr	MotorInterface;
     //INTEGMOTORINTERFACELib::ISMICMotionPtr	CMotionInterface;
     //INTEGMOTORINTERFACELib::ISMIPathPtr		PathInterface;
+
+	long position;
 
     SmartMotor();
 	~SmartMotor();
@@ -75,6 +78,9 @@ public:
 
 	void rotateAngle(double angle);
     void startRotation(int speed=1075000);
+
+	long getAbsolutePosition();
+
 };
 
 #endif

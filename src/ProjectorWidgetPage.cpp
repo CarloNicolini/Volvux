@@ -207,6 +207,7 @@ void ProjectorWidgetPage::onPushButtonMotorStartClicked()
     }
 	#endif
 	this->ui->pushButtonMotorStop->setEnabled(true);
+	this->getMotorAbsolutePosition();
 }
 
 //Stop motor SLOT
@@ -215,7 +216,7 @@ void ProjectorWidgetPage::onPushButtonMotorStopClicked()
 	this->ui->pushButtonMotorStart->setEnabled(true);
 	#if defined (SMI_SUPPORT) && (WIN32)
 		cerr << "[MainWindow] Stopping motor" << endl;
-		motor	->startRotation(0);
+		motor->startRotation(0);
 	#endif
 	this->ui->pushButtonMotorStop->setEnabled(false);
 }
@@ -258,4 +259,10 @@ void ProjectorWidgetPage::projectDataFrames(unsigned char *data)
 	palp->cleanAllSequences();
     palp->loadSequence(PROJECTOR_SLICES_NUMBER,data);
     palp->start();
+}
+
+void ProjectorWidgetPage::getMotorAbsolutePosition(){
+	long pos;
+	pos = motor->getAbsolutePosition();
+	this->ui->spinBoxPosition->setValue(static_cast<int>(pos));
 }

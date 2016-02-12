@@ -32,6 +32,7 @@ public:
 
 private:
     void updateMotorRate(int nSlices, double tFrameMicroSeconds);
+	void getMotorAbsolutePosition();
 
 public slots:
     //Projector control buttons

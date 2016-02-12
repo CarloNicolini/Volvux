@@ -296,3 +296,12 @@ void SmartMotor::startRotation(int speed)
       throw std::runtime_error(BSTR2STR(e.Description()));
    }
 }
+
+long SmartMotor::getAbsolutePosition()
+{
+	ISMIMotorPtr motor = CommInterface->GetMotor(1);
+	position = motor->GetPosition();
+	//position = MotorInterface->GetPosition();
+	cerr << "Current position: " << position << endl;
+	return position;
+}
