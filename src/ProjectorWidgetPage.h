@@ -26,13 +26,14 @@ public:
     //ALP Projector
     ALPProjector *palp;
     ALPProjector* getALP();
+	//bool isMoving;
 #if defined (SMI_SUPPORT) && (WIN32)
 	SmartMotor *motor;
 #endif
 
 private:
     void updateMotorRate(int nSlices, double tFrameMicroSeconds);
-	void getMotorAbsolutePosition();
+	
 
 public slots:
     //Projector control buttons
@@ -47,6 +48,8 @@ public slots:
     void onPushButtonMotorStartClicked();
     void onPushButtonMotorStopClicked();
     void onPushButtonMotorInitializeClicked();
+	//Motor position
+	void getMotorAbsolutePosition();
     //Motor settings
     void onSpinboxFlickerRateChanged(double flickerRate);
     void projectDataFrames(unsigned char *data);

@@ -207,7 +207,10 @@ void ProjectorWidgetPage::onPushButtonMotorStartClicked()
     }
 	#endif
 	this->ui->pushButtonMotorStop->setEnabled(true);
-	this->getMotorAbsolutePosition();
+
+	//Gets motor current position
+	//isMoving = true;
+	//this->getMotorAbsolutePosition();
 }
 
 //Stop motor SLOT
@@ -263,6 +266,8 @@ void ProjectorWidgetPage::projectDataFrames(unsigned char *data)
 
 void ProjectorWidgetPage::getMotorAbsolutePosition(){
 	long pos;
-	pos = motor->getAbsolutePosition();
-	this->ui->spinBoxPosition->setValue(static_cast<int>(pos));
+	while (true) {
+		pos = motor->getAbsolutePosition();
+		this->ui->spinBoxPosition->setValue(static_cast<int>(pos));
+	}
 }

@@ -82,6 +82,8 @@ StackedWidget::StackedWidget(QWidget *parent) :
     QObject::connect(projectorWidgetpage->ui->pushButtonMotorInitialize, SIGNAL(clicked()), projectorWidgetpage, SLOT(onPushButtonMotorInitializeClicked()));
     QObject::connect(projectorWidgetpage->ui->pushButtonMotorStart, SIGNAL(clicked()), projectorWidgetpage, SLOT(onPushButtonMotorStartClicked()));
     QObject::connect(projectorWidgetpage->ui->pushButtonMotorStop, SIGNAL(clicked()), projectorWidgetpage, SLOT(onPushButtonMotorStopClicked()));
+	//Motor position
+	QObject::connect(projectorWidgetpage->ui->pushButtonMotorStart, SIGNAL(clicked()), projectorWidgetpage, SLOT(getMotorAbsolutePosition()));
 
 
 	//Connection Calibration Page
@@ -266,5 +268,4 @@ void StackedWidget::onActionCalibrationTriggered() {
     this->ui->menuBar->hide();
     this->ui->pushButtonNext->setEnabled(true);
 }
-
 
