@@ -269,12 +269,14 @@ void ProjectorWidgetPage::getMotorAbsolutePosition(){
 	long pos;
 	pos = motor->getAbsolutePosition();
 	this->ui->spinBoxPosition->setValue(static_cast<int>(pos));
+	cerr << "Current position: " << pos << endl;
 }
 
 //Set motor position to 0
 void ProjectorWidgetPage::setMotorDefaultPosition() {
+	/*
 	if (!(this->ui->pushButtonMotorStop->isEnabled())){
 		this->ui->pushButtonMotorStop->setEnabled(true);
-	}
+	}*/
 	motor->goToDefaultPosition(this->ui->spinBoxMotorSpeed->value());
 }

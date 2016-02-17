@@ -304,33 +304,37 @@ long SmartMotor::getAbsolutePosition()
 	ISMIMotorPtr motor = CommInterface->GetMotor(1);
 	position = motor->GetPosition();
 	//position = MotorInterface->GetPosition();
-	cerr << "Current position: " << position << endl;
 	return position;
 }
 
 void SmartMotor::goToDefaultPosition(int speed)
 {
-	string speedString = "VT="+ to_string(speed);
-	try
-	{
-		CommInterface->ClearBuffer();
-		CommInterface->WriteCommand("EIGN(W,0)");
-		CommInterface->WriteCommand("ADT=1");
-		CommInterface->WriteCommand(STR2BSTR(speedString));
-		CommInterface->WriteCommand("ZS");
-		CommInterface->WriteCommand("EL=-1");
-		CommInterface->WriteCommand("MP");
-
-		CommInterface->WriteCommand("PT=0");
-		CommInterface->WriteCommand("G");
-		CommInterface->WriteCommand("TWAIT");
+	long position = getAbsolutePosition();
+	if (position == 0){
+		cerr << "Motor already at 0" << endl;
 	}
-	catch (_com_error e)
-	{
-		AfxMessageBox(e.Description());
-		throw std::runtime_error(BSTR2STR(e.Description()));
+	else {
+		string speedString = "VT=" + to_string(speed);
+		try
+		{
+			CommInterface->ClearBuffer();
+			CommInterface->WriteCommand("EIGN(W,0)");
+			CommInterface->WriteCommand("ADT=1");
+			CommInterface->WriteCommand(STR2BSTR(speedString));
+			CommInterface->WriteCommand("ZS");
+			CommInterface->WriteCommand("EL=-1");
+			CommInterface->WriteCommand("MP");
+
+			CommInterface->WriteCommand("PT=0");
+			CommInterface->WriteCommand("G");
+			CommInterface->WriteCommand("TWAIT");
+		}
+		catch (_com_error e)
+		{
+			AfxMessageBox(e.Description());
+			throw std::runtime_error(BSTR2STR(e.Description()));
+		}
+
+		cerr << "[Smart Motor] Setting motor at position 0, wait until it stops..." << endl;
 	}
-
-	cerr << "[Smart Motor] Motor currently at position 0" << endl;
-
 }
