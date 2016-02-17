@@ -87,6 +87,7 @@ StackedWidget::StackedWidget(QWidget *parent) :
     QObject::connect(projectorWidgetpage->ui->pushButtonMotorStop, SIGNAL(clicked()), projectorWidgetpage, SLOT(onPushButtonMotorStopClicked()));
 	//Motor position
 	QObject::connect(projectorWidgetpage->ui->pushButtonMotorStart, SIGNAL(clicked()), projectorWidgetpage, SLOT(getMotorAbsolutePosition()));
+	//Set motor position to 0
 	QObject::connect(projectorWidgetpage->ui->pushButtonMotorDefault, SIGNAL(clicked()), projectorWidgetpage, SLOT(setMotorDefaultPosition()));
 
 

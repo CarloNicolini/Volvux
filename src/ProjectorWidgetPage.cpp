@@ -264,12 +264,14 @@ void ProjectorWidgetPage::projectDataFrames(unsigned char *data)
     palp->start();
 }
 
+//Get motor current position
 void ProjectorWidgetPage::getMotorAbsolutePosition(){
 	long pos;
 	pos = motor->getAbsolutePosition();
 	this->ui->spinBoxPosition->setValue(static_cast<int>(pos));
 }
 
+//Set motor position to 0
 void ProjectorWidgetPage::setMotorDefaultPosition() {
 	if (!(this->ui->pushButtonMotorStop->isEnabled())){
 		this->ui->pushButtonMotorStop->setEnabled(true);
