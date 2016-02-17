@@ -21,11 +21,9 @@ Homography.cpp
 Mathcommon.cpp
 ObjLoader.cpp
 ParametersLoader.cpp
-Thread.cpp
 Timer.cpp
 VolumetricSurfaceIntersection.cpp
-VRCamera.cpp
-Worker.cpp)
+VRCamera.cpp)
 
 set(VOLVUXHELPER_SRCS ${VOLVUXHELPER_SRCS} ALPProjector.cpp)
 

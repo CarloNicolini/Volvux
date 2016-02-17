@@ -64,13 +64,13 @@ void SmartMotor::initialize(){
 		cerr << "Error:" "Cannot create an instance of \"SMIHost\" class!" << endl;
 		return;
 	}
-	cerr << "[MainWindow] Starting motor" << endl;
+	cerr << "[Smart Motor] Starting motor" << endl;
 	// Set baud rate
 	CommInterface->BaudRate = 9600;
 }
 
 void SmartMotor::startMotor(){
-	cerr << "[MainWindow] Starting motor" << endl;
+	cerr << "[Smart Motor] Starting motor" << endl;
 	long Version = 0;
 	Version = CommInterface->EngineVersion;
 }
@@ -270,8 +270,10 @@ void SmartMotor::startRotation(int speed)
       speedstring+=util::stringify<int>(speed);
       CommInterface->ClearBuffer();
       CommInterface->WriteCommand("EIGN(W,0)");
-      CommInterface->WriteCommand("O=0");
-      CommInterface->WriteCommand("ZS");
+      //CommInterface->WriteCommand("O=0");
+	  CommInterface->WriteCommand("PT=0");
+	  CommInterface->WriteCommand("G");
+	  CommInterface->WriteCommand("ZS");
       CommInterface->WriteCommand("EL=-1");
       // Set the PID settings
       CommInterface->WriteCommand("KP=560");
@@ -304,4 +306,31 @@ long SmartMotor::getAbsolutePosition()
 	//position = MotorInterface->GetPosition();
 	cerr << "Current position: " << position << endl;
 	return position;
+}
+
+void SmartMotor::goToDefaultPosition(int speed)
+{
+	string speedString = "VT="+ to_string(speed);
+	try
+	{
+		CommInterface->ClearBuffer();
+		CommInterface->WriteCommand("EIGN(W,0)");
+		CommInterface->WriteCommand("ADT=1");
+		CommInterface->WriteCommand(STR2BSTR(speedString));
+		CommInterface->WriteCommand("ZS");
+		CommInterface->WriteCommand("EL=-1");
+		CommInterface->WriteCommand("MP");
+
+		CommInterface->WriteCommand("PT=0");
+		CommInterface->WriteCommand("G");
+		CommInterface->WriteCommand("TWAIT");
+	}
+	catch (_com_error e)
+	{
+		AfxMessageBox(e.Description());
+		throw std::runtime_error(BSTR2STR(e.Description()));
+	}
+
+	cerr << "[Smart Motor] Motor currently at position 0" << endl;
+
 }

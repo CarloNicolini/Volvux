@@ -218,7 +218,7 @@ void ProjectorWidgetPage::onPushButtonMotorStopClicked()
 {
 	this->ui->pushButtonMotorStart->setEnabled(true);
 	#if defined (SMI_SUPPORT) && (WIN32)
-		cerr << "[MainWindow] Stopping motor" << endl;
+		cerr << "[Smart Motor] Stopping motor" << endl;
 		motor->startRotation(0);
 	#endif
 	this->ui->pushButtonMotorStop->setEnabled(false);
@@ -266,8 +266,13 @@ void ProjectorWidgetPage::projectDataFrames(unsigned char *data)
 
 void ProjectorWidgetPage::getMotorAbsolutePosition(){
 	long pos;
-	while (true) {
-		pos = motor->getAbsolutePosition();
-		this->ui->spinBoxPosition->setValue(static_cast<int>(pos));
+	pos = motor->getAbsolutePosition();
+	this->ui->spinBoxPosition->setValue(static_cast<int>(pos));
+}
+
+void ProjectorWidgetPage::setMotorDefaultPosition() {
+	if (!(this->ui->pushButtonMotorStop->isEnabled())){
+		this->ui->pushButtonMotorStop->setEnabled(true);
 	}
+	motor->goToDefaultPosition(this->ui->spinBoxMotorSpeed->value());
 }

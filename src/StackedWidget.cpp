@@ -38,6 +38,9 @@ StackedWidget::StackedWidget(QWidget *parent) :
 
     //Initialize NSlices and FlickerRate using default value
     projectorWidgetpage->onSpinboxProjectorNSlicesChanged(PROJECTOR_SLICES_NUMBER);
+	projectorWidgetpage->onPushButtonMotorInitializeClicked();
+	projectorWidgetpage->getMotorAbsolutePosition();
+	
 
     //Connection Menu bar
     //Exit Action
@@ -84,6 +87,7 @@ StackedWidget::StackedWidget(QWidget *parent) :
     QObject::connect(projectorWidgetpage->ui->pushButtonMotorStop, SIGNAL(clicked()), projectorWidgetpage, SLOT(onPushButtonMotorStopClicked()));
 	//Motor position
 	QObject::connect(projectorWidgetpage->ui->pushButtonMotorStart, SIGNAL(clicked()), projectorWidgetpage, SLOT(getMotorAbsolutePosition()));
+	QObject::connect(projectorWidgetpage->ui->pushButtonMotorDefault, SIGNAL(clicked()), projectorWidgetpage, SLOT(setMotorDefaultPosition()));
 
 
 	//Connection Calibration Page

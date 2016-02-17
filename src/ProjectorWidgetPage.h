@@ -11,6 +11,8 @@
 #include "SmartMotor.h"
 #endif
 
+
+
 namespace Ui {
 class ProjectorWidgetPage;
 }
@@ -50,6 +52,7 @@ public slots:
     void onPushButtonMotorInitializeClicked();
 	//Motor position
 	void getMotorAbsolutePosition();
+	void setMotorDefaultPosition();
     //Motor settings
     void onSpinboxFlickerRateChanged(double flickerRate);
     void projectDataFrames(unsigned char *data);

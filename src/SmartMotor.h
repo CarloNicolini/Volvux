@@ -80,6 +80,7 @@ public:
     void startRotation(int speed=1075000);
 
 	long getAbsolutePosition();
+	void goToDefaultPosition(int speed);
 
 };
 
