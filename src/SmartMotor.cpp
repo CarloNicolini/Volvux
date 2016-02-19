@@ -45,7 +45,7 @@ SmartMotor::SmartMotor()
  * @brief SmartMotor::~SmartMotor
  */
 SmartMotor::~SmartMotor()
-{  CommInterface->BaudRate = 9600;
+{
    this->closePort();
 }
 
@@ -66,7 +66,7 @@ void SmartMotor::initialize(){
 	}
 	cerr << "[Smart Motor] Starting motor" << endl;
 	// Set baud rate
-	CommInterface->BaudRate = 9600;
+	CommInterface->BaudRate = 38400;
 }
 
 void SmartMotor::startMotor(){
@@ -320,12 +320,13 @@ void SmartMotor::goToDefaultPosition(int speed)
 			CommInterface->ClearBuffer();
 			CommInterface->WriteCommand("EIGN(W,0)");
 			CommInterface->WriteCommand("ADT=1");
+			CommInterface->WriteCommand("PML=8000");
 			CommInterface->WriteCommand(STR2BSTR(speedString));
 			CommInterface->WriteCommand("ZS");
 			CommInterface->WriteCommand("EL=-1");
 			CommInterface->WriteCommand("MP");
 
-			CommInterface->WriteCommand("PT=0");
+			CommInterface->WriteCommand("PMT=0");
 			CommInterface->WriteCommand("G");
 			CommInterface->WriteCommand("TWAIT");
 		}

@@ -207,10 +207,6 @@ void ProjectorWidgetPage::onPushButtonMotorStartClicked()
     }
 	#endif
 	this->ui->pushButtonMotorStop->setEnabled(true);
-
-	//Gets motor current position
-	//isMoving = true;
-	//this->getMotorAbsolutePosition();
 }
 
 //Stop motor SLOT

@@ -80,130 +80,45 @@
 #define IDC_CLOSE                       1039
 #define IDC_CHECK1                      1040
 #define IDC_CUSTOM1                     1041
+#define INCREMENTS_PER_REVOLUTION		8000
 
 using namespace INTEGMOTORINTERFACELib;
 
-
+#include <iostream>
+#include <fstream>
 using namespace std;
 
 int main()
-{  /*
-   ISMICommPtr		CommInterface;
-    ISMICMotionPtr	CMotionInterface;
-    ISMIPathPtr		PathInterface;
-   CoInitialize(NULL);
-    if(!AfxOleInit())
-    {
-        throw std::runtime_error("OLE initialization failed.  Make sure that the OLE libraries are the correct version.");
-    }
-    AfxEnableControlContainer();
-   try
-   {
-   	// Create SMIHost object and interfaces
-   	HRESULT hr = CommInterface.CreateInstance(__uuidof(SMIHost));
-   	if(FAILED(hr))
-   	{
-   		AfxMessageBox("Cannot create an instance of \"SMIHost\" class!");
-   	}
-   	hr = CommInterface.QueryInterface(__uuidof(ISMICMotion),&CMotionInterface);
-   	if(FAILED(hr))
-   	{
-   		AfxMessageBox("The interface \"ISMICMotion\" not found!");
-   	}
-   	hr = CommInterface.QueryInterface(__uuidof(ISMIPath),&PathInterface);
-   	if(FAILED(hr))
-   	{
-   		AfxMessageBox("The interface \"ISMIPath\" not found!");
-   	}
-
-   	CString Str = "N/A";
-   	long Version = CommInterface->EngineVersion;
-   	if(Version)
-   	{
-   		Str.Format("IntegMotorInterface Version: %d.%d%d%d",
-   		HIBYTE(HIWORD(Version)),
-   		LOBYTE(HIWORD(Version)),
-   		HIBYTE(LOWORD(Version)),
-   		LOBYTE(LOWORD(Version)));
-   		AfxMessageBox(Str);
-   	}
-
-   	// Open PORT 4
-   	try
-   	{
-   	CommInterface->BaudRate = 9600;
-   	CommInterface->OpenPort("Com4");
-   	}
-   	catch (_com_error e)
-   	{
-   		throw std::exception("Error opening COM4 port");
-   	}
-   	// Detect RS232
-   	UINT x= 10;//GetDlgItemInt(IDC_MAXADDRESS);
-   	switch(CommInterface->DetectRS232(10,0))
-   	{
-   		case CER_SOMEADDRESSED:
-   			cerr << "Some Motors are not addressed!"<<" IntegMotorInterface Error!"<< endl;
-   			break;
-
-   		case CER_BIGADDRESS:
-   			cerr << "Some Motors have big addresses!" <<" IntegMotorInterface Error!" << endl;
-   			break;
-
-   		case CER_DUPLICATEADDR:
-   			cerr << "Some Motors have duplicate addresses!"<<" IntegMotorInterface Error!"<< endl;
-   			break;
-
-   		case CER_NOTADDRESSED:
-   			cerr << "Motors are not addressed!"<<" IntegMotorInterface Error!"<< endl;
-   			break;
-
-   		case CER_COMMERROR:
-   			cerr << "Communication Error!"<<" IntegMotorInterface Error!"<< endl;
-   			break;
-
-   		case CER_NOMOTOR:
-   			cerr << "No Motor Found!"<<" IntegMotorInterface Error!" << endl;
-   			break;
-   		default:
-   			cerr << CommInterface->NoOfMotors << endl;
-   			//cerr << CommInterface->DefaultMotor = long(1);//GetDlgItemInt(IDC_CURRENTMOTOR);
-   	}
-   	// Establish chain
-   	//CommInterface->EstablishChain();
-   	// Address Chain
-   	long n = CommInterface->AddressMotorChain();
-   	cerr << CommInterface->GetDefaultMotor() << endl;
-   	CommInterface->DefaultMotor = 1;
-   	cerr << CommInterface->GetDefaultMotor() << endl;
-   	CommInterface->ClearBuffer();
-   	CommInterface->WriteCommand("ZS");
-   	CommInterface->WriteCommand("EIGN(W,0)");
-   	CommInterface->WriteCommand("O=0");
-   	CommInterface->WriteCommand("ZS");
-   	CommInterface->WriteCommand("EL=-1");
-
-   	CommInterface->WriteCommand("MP");
-   	CommInterface->WriteCommand("ADT=1");
-   	CommInterface->WriteCommand("VT=100000");
-   	CommInterface->WriteCommand("PRT=8000");
-   	CommInterface->WriteCommand("G");
-   }
-   catch(_com_error e)
-   {
-   	//MessageBox(e.Description(),"IntegMotorInterface Error!",MB_ICONWARNING);
-   }
-   */
+{ 
+   std::ofstream outfile; outfile.open("C:\\workspace\\Volvux\\build\\Debug\\data.txt",'w');
+   
    SmartMotor smart;
+   long abspos; 
    smart.init();
    try
-   {  smart.openPort();
-      smart.detect232();
-      smart.addressChain();
+   {  
+	   smart.startRotation(0);
+	   smart.openPort();
+	   smart.detect232();
+	   smart.addressChain();
+	   if (smart.getAbsolutePosition() != 0) 
+	   {
+		   smart.goToDefaultPosition(1000000);
+	   }
+	   abspos = 0;
+	   smart.startRotation(100000);
+	   while (true)
+	   {
+		   abspos = smart.getAbsolutePosition();
+		   int r = abspos%INCREMENTS_PER_REVOLUTION;
+		   outfile << r << endl;
+		   if (r< 8000 && r>7990)
+			   Beep(440, 200);
+	   }
+	   smart.startRotation(0);
    }
    catch (_com_error e)
-   {  throw std::runtime_error(BSTR2STR(e.Description()));
+   {
+	   throw std::runtime_error(BSTR2STR(e.Description()));
    }
-
-   smart.startRotation(0);
 }

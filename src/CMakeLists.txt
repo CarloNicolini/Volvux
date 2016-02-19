@@ -77,3 +77,8 @@ if (ALP_SUPPORT)
 add_executable(testALPProjector tests/testALPProjector.cpp ALPProjector.cpp)
 target_link_libraries(testALPProjector ${ALP_LIBRARY})
 endif(ALP_SUPPORT)
+
+if (SMI_SUPPORT)
+add_executable(testSMI tests/testSMI.cpp)
+target_link_libraries(testSMI ${VOLVUX_HELPER})
+endif (SMI_SUPPORT)
